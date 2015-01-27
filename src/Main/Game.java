@@ -4,6 +4,7 @@ package Main;
  * Created by Wyatt on 12/29/2014.
  */
 import Manager.FileManager;
+import Manager.GameStateManager;
 import Manager.InputManager;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class Game implements Runnable{
     BufferStrategy bufferStrategy;
     InputManager inputManager;
     FileManager fileManager;
+    GameStateManager gsm;
 
     public Game(){
         frame = new JFrame("WarmVector Singleplayer V2");
@@ -55,7 +57,8 @@ public class Game implements Runnable{
         inputManager.addKeyMapping("RIGHT", KeyEvent.VK_RIGHT);
         inputManager.addMouseMapping("LEFTMOUSE", MouseEvent.BUTTON1);
         inputManager.addMouseMapping("RIGHTMOUSE", MouseEvent.BUTTON3);
-
+        fileManager = new FileManager();
+        gsm = new GameStateManager(inputManager);
     }
 
     public void run(){
@@ -65,44 +68,16 @@ public class Game implements Runnable{
         }
     }
 
-    //TESTING
-    private double x = 0;
-    private double y = 0;
-    private double a = 0;
-    private double b = 0;
-
-    protected void render(Graphics2D g, int x, int y, int w, int h ){
-        g.fillRect(x, y, w, h);
-    }
-
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0, 0, WIDTH, HEIGHT);
-        render(g,(int)x,(int)y,100,100);
-        render(g,(int)a,(int)b,100,100);
+        gsm.draw(g);
         g.dispose();
         bufferStrategy.show();
     }
 
-
-    /**
-     * Rewrite this method for your game
-     */
     protected void update() {
-
-        if (inputManager.isKeyPressed("LEFT")) x -= 0.2;
-        if (inputManager.isKeyPressed("RIGHT")) x += 0.2;
-        if (inputManager.isKeyPressed("UP")) y -= 0.2;
-        if (inputManager.isKeyPressed("DOWN")) y += 0.2;
-
-        if (inputManager.mouse.inScreen) {
-            a = inputManager.mouse.x;
-            b = inputManager.mouse.y;
-        }
-        if (inputManager.isMouseClicked("LEFTMOUSE")) {
-            a = 60;
-            b = 60;
-        }
+       gsm.update();
     }
 
 }

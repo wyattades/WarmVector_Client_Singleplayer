@@ -1,18 +1,24 @@
 package Entity;
 
-import Default.Info;
+import Entity.Weapon.Weapon;
+import Map.TileMap;
+
+import java.awt.*;
 
 /**
  * Created by Wyatt on 1/22/2015.
  */
 public class Player extends Entity {
 
-    Weapon weapon;
+    public Weapon weapon;
     double vx,vy,life;
+    public static final int topSpeed = 4;
+    TileMap tileMap;
 
-    public Player(double x, double y, double w, double h, double orient, Weapon weapon) {
+    public Player(double x, double y, double w, double h, double orient, Weapon weapon, TileMap tileMap) {
         super(x,y,w,h,orient);
         this.weapon = weapon;
+        this.tileMap = tileMap;
         vx = vy = 0;
         life = 100.0;
     }
@@ -22,11 +28,21 @@ public class Player extends Entity {
         y += vy;
     }
 
-    void updateVelX(double velX) {
+    public void updateLife() {
+        if (life < 0) life = 0;
+    }
+
+    public void update() {
+
+    }
+
+    public void draw(Graphics2D g) {}
+
+    public void updateVelX(double velX) {
         if ((velX > 0 && !collideTile(w/2, 0, 0, h*0.3)) || (velX < 0  && !collideTile(-w/2, 0, 0,h*0.3))) vx = velX;
     }
 
-    void updateVelY(double velY) {
+    public void updateVelY(double velY) {
         if ((velY > 0 && !collideTile(0, h/2,h*0.3, 0)) || (velY < 0  && !collideTile(0, -h/2,w*0.3, 0))) vy = velY;
     }
 
@@ -36,9 +52,9 @@ public class Player extends Entity {
     }
 
     boolean inTile(double x, double y) {
-        x = x/ Info.tileSize;
-        y = y/Info.tileSize;
-        if (tilesArray[int(x)][int(y)] != Info.TILE_EMPTY) return true;
+        x = x/ tileMap.tileSize;
+        y = y/tileMap.tileSize;
+        if (tileMap.mapArray[(int)x][(int)y] != TileMap.EMPTY) return true;
         return false;
     }
 }

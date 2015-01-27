@@ -27,9 +27,9 @@ public class GameStateManager {
     public static final int PLAY = 2;
     public static final int GAMEOVER = 3;
 
-    public GameStateManager() {
+    public GameStateManager(InputManager inputManager) {
         paused = false;
-        pauseState = new PauseState(this);
+        pauseState = new PauseState(this,inputManager);
 
         gameStates = new GameState[NUM_STATES];
         setState(INTRO);
@@ -39,22 +39,21 @@ public class GameStateManager {
         previousState = currentState;
         unloadState(previousState);
         currentState = i;
-        if(i == INTRO) {
-            gameStates[i] = new IntroState(this);
-            gameStates[i].init();
+        switch (i){
+            case(INTRO):
+                gameStates[i] = new IntroState(this);
+                break;
+            case(MENU):
+                gameStates[i] = new MenuState(this);
+                break;
+            case(PLAY):
+                gameStates[i] = new PlayState(this);
+                break;
+            case(GAMEOVER):
+                gameStates[i] = new GameOverState(this);
+                break;
         }
-        else if(i == MENU) {
-            gameStates[i] = new MenuState(this);
-            gameStates[i].init();
-        }
-        else if(i == PLAY) {
-            gameStates[i] = new PlayState(this);
-            gameStates[i].init();
-        }
-        else if(i == GAMEOVER) {
-            gameStates[i] = new GameOverState(this);
-            gameStates[i].init();
-        }
+        gameStates[i].init();
     }
 
     public void unloadState(int i) {

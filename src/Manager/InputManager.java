@@ -11,13 +11,14 @@ public class InputManager implements MouseListener,KeyListener,MouseMotionListen
 
     protected class Key {
         public boolean pressed;
-        public int keyCode,pressCount;
+        public int keyCode,pressCount,pressTime;
         public String name;
 
         public Key(String name, int keyCode) {
             this.name = name;
             this.keyCode = keyCode;
             pressed = false;
+            pressTime = 0;
         }
 
         public void toggle(boolean toggle) {
@@ -32,7 +33,7 @@ public class InputManager implements MouseListener,KeyListener,MouseMotionListen
 
     protected class Click {
         public String name;
-        public int mouseCode,clickCount,pressCount;
+        public int mouseCode,clickCount,pressCount, pressTime;
         public boolean pressed,clicked;
 
         public Click(String name, int mouseCode) {
@@ -40,6 +41,7 @@ public class InputManager implements MouseListener,KeyListener,MouseMotionListen
             this.mouseCode = mouseCode;
             pressed = false;
             clicked = false;
+            pressTime = 0;
         }
 
         public void togglePressed(boolean toggle) {
@@ -70,9 +72,9 @@ public class InputManager implements MouseListener,KeyListener,MouseMotionListen
 
     }
 
-    public Mouse mouse;
-    public ArrayList<Key> keys;
-    public ArrayList<Click> clicks;
+    public static Mouse mouse;
+    public static ArrayList<Key> keys;
+    public static ArrayList<Click> clicks;
 
     public InputManager(Canvas c) {
         c.addKeyListener(this);
@@ -91,7 +93,6 @@ public class InputManager implements MouseListener,KeyListener,MouseMotionListen
         clicks.add(new Click(s,mouseCode));
     }
 
-    @Override
     public void mousePressed(MouseEvent e) {
         for (int i = 0; i < clicks.size(); i++) {
             if (e.getButton() == clicks.get(i).mouseCode) {
@@ -100,7 +101,6 @@ public class InputManager implements MouseListener,KeyListener,MouseMotionListen
         }
     }
 
-    @Override
     public void mouseReleased(MouseEvent e) {
         for (int i = 0; i < clicks.size(); i++) {
             if (e.getButton() == clicks.get(i).mouseCode) {
@@ -109,7 +109,7 @@ public class InputManager implements MouseListener,KeyListener,MouseMotionListen
         }
     }
 
-    public boolean isKeyPressed(String s) {
+    public static boolean isKeyPressed(String s) {
         for (int i = 0; i < keys.size(); i++) {
             if (s.equals(keys.get(i).name)) {
                 return keys.get(i).pressed;
@@ -118,7 +118,41 @@ public class InputManager implements MouseListener,KeyListener,MouseMotionListen
         return false;
     }
 
-    public boolean isMouseClicked(String s) {
+    public static int getKeyTime(String s) {
+        for (int i = 0; i < keys.size(); i++) {
+            if (s.equals(keys.get(i).name)) {
+                return keys.get(i).pressTime;
+            }
+        }
+        return 0;
+    }
+
+    public static int getMouseTime(String s) {
+        for (int i = 0; i < clicks.size(); i++) {
+            if (s.equals(clicks.get(i).name)) {
+                return clicks.get(i).pressTime;
+            }
+        }
+        return 0;
+    }
+
+    public static void setKeyTime(String s, int n) {
+        for (int i = 0; i < keys.size(); i++) {
+            if (s.equals(keys.get(i).name)) {
+                keys.get(i).pressTime = n;
+            }
+        }
+    }
+
+    public static void setMouseTime(String s, int n) {
+        for (int i = 0; i < clicks.size(); i++) {
+            if (s.equals(clicks.get(i).name)) {
+                clicks.get(i).pressTime = n;
+            }
+        }
+    }
+
+    public static boolean isMouseClicked(String s) {
         for (int i = 0; i < clicks.size(); i++) {
             if (s.equals(clicks.get(i).name)) {
                 if (clicks.get(i).clicked) {
@@ -132,7 +166,7 @@ public class InputManager implements MouseListener,KeyListener,MouseMotionListen
         return false;
     }
 
-    public boolean isMousePressed(String s) {
+    public static boolean isMousePressed(String s) {
         for (int i = 0; i < clicks.size(); i++) {
             if (s.equals(clicks.get(i).name)) {
                 return clicks.get(i).pressed;
