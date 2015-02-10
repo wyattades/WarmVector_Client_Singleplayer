@@ -1,11 +1,6 @@
 package Manager;
 
-import GameState.IntroState;
-import GameState.PauseState;
-import GameState.GameOverState;
-import GameState.MenuState;
-import GameState.PlayState;
-import GameState.GameState;
+import GameState.*;
 
 import java.awt.*;
 
@@ -27,12 +22,12 @@ public class GameStateManager {
     public static final int PLAY = 2;
     public static final int GAMEOVER = 3;
 
-    public GameStateManager(InputManager inputManager) {
+    public GameStateManager() {
         paused = false;
-        pauseState = new PauseState(this,inputManager);
+        pauseState = new PauseState(this);
 
         gameStates = new GameState[NUM_STATES];
-        setState(INTRO);
+        setState(PLAY);
     }
 
     public void setState(int i) {
@@ -65,19 +60,20 @@ public class GameStateManager {
     }
 
     public void update() {
-        if(paused) {
+        if (gameStates[currentState] != null) gameStates[currentState].inputHandle();
+        if (paused) {
             pauseState.update();
         }
-        else if(gameStates[currentState] != null) {
+        else if (gameStates[currentState] != null) {
             gameStates[currentState].update();
         }
     }
 
     public void draw(Graphics2D g) {
-        if(paused) {
+        if (paused) {
             pauseState.draw(g);
         }
-        else if(gameStates[currentState] != null) {
+        else if (gameStates[currentState] != null) {
             gameStates[currentState].draw(g);
         }
     }

@@ -1,7 +1,6 @@
 package GameState;
 
 import Manager.GameStateManager;
-import Manager.InputManager;
 
 import java.awt.*;
 
@@ -9,8 +8,8 @@ import java.awt.*;
  * Created by Wyatt on 1/25/2015.
  */
 public class PauseState extends GameState {
-    public PauseState(GameStateManager gsm, InputManager input) {
-        super(gsm,input);
+    public PauseState(GameStateManager gsm) {
+        super(gsm);
     }
 
     public void init() {

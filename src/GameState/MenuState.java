@@ -1,7 +1,6 @@
 package GameState;
 
 import Manager.GameStateManager;
-import Manager.InputManager;
 
 import java.awt.*;
 
@@ -10,7 +9,7 @@ import java.awt.*;
  */
 public class MenuState extends GameState {
     public MenuState(GameStateManager gsm) {
-        super(gsm,input);
+        super(gsm);
     }
 
     public void init() {

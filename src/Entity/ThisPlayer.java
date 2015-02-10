@@ -1,25 +1,27 @@
 package Entity;
 
 import Entity.Weapon.Weapon;
+import Main.Game;
+import Manager.FileManager;
 import Map.TileMap;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by Wyatt on 1/22/2015.
  */
 public class ThisPlayer extends Player {
 
-    long initTime;
-
-    public ThisPlayer(double x, double y, double w, double h, double orient, Weapon weapon, TileMap tileMap) {
-        super(x, y, w, h, orient, weapon, tileMap);
+    public ThisPlayer(double x, double y, double w, double h, double orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
+        super(x, y, w, h, orient, weapon, tileMap, tiles);
+        hitColor = Color.green;
+        sprite = FileManager.PLAYER0;
+        dx = Game.WIDTH/2;
+        dy = Game.HEIGHT/2;
     }
 
-    public void update() {
-        updateLife();
-        updatePosition();
-    }
-
-    private void updateAngle(double cursorx, double cursory) {
+    public void updateAngle(double cursorx, double cursory) {
         orient = Math.atan2(cursory-dy, cursorx-dx);
     }
 }

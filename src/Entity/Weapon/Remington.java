@@ -1,7 +1,5 @@
 package Entity.Weapon;
 
-import java.awt.*;
-
 /**
  * Created by Wyatt on 1/25/2015.
  */
@@ -13,19 +11,21 @@ public class Remington extends Weapon {
         super(x, y, w, h, orient, ammo);
         name = "Remington";
         type = 2;
+        bVel = 7;
+        amount = 6;
+        spread = 0.3;
+        damage = 15;
     }
     public Remington(int ammo){
         super(ammo);
         name = "Remington";
         type = 2;
+        bVel= 7;
+        amount = 6;
+        spread = 0.3;
+        damage = 15;
     }
 
-    @Override
-    public void draw(Graphics2D g) {
-
-    }
-
-    @Override
     public void update() {
 
     }

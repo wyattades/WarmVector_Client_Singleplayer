@@ -15,8 +15,8 @@ import java.awt.image.BufferStrategy;
 
 public class Game implements Runnable{
 
-    final int WIDTH = 1200;
-    final int HEIGHT = 600;
+    public final static int WIDTH = 1200;
+    public final static int HEIGHT = 600;
 
     boolean running = true;
 
@@ -51,14 +51,15 @@ public class Game implements Runnable{
         canvas.requestFocus();
 
         inputManager = new InputManager(canvas);
-        inputManager.addKeyMapping("UP", KeyEvent.VK_UP);
-        inputManager.addKeyMapping("DOWN", KeyEvent.VK_DOWN);
-        inputManager.addKeyMapping("LEFT", KeyEvent.VK_LEFT);
-        inputManager.addKeyMapping("RIGHT", KeyEvent.VK_RIGHT);
+        inputManager.addKeyMapping("UP", KeyEvent.VK_W);
+        inputManager.addKeyMapping("DOWN", KeyEvent.VK_S);
+        inputManager.addKeyMapping("LEFT", KeyEvent.VK_A);
+        inputManager.addKeyMapping("RIGHT", KeyEvent.VK_D);
         inputManager.addMouseMapping("LEFTMOUSE", MouseEvent.BUTTON1);
         inputManager.addMouseMapping("RIGHTMOUSE", MouseEvent.BUTTON3);
-        fileManager = new FileManager();
-        gsm = new GameStateManager(inputManager);
+        //fileManager = new FileManager();
+        gsm = new GameStateManager();
+        run();
     }
 
     public void run(){

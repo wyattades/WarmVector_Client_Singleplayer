@@ -1,7 +1,5 @@
 package Entity.Weapon;
 
-import java.awt.*;
-
 /**
  * Created by Wyatt on 1/25/2015.
  */
@@ -13,18 +11,23 @@ public class M4rifle extends Weapon {
         super(x, y, w, h, orient, ammo);
         name = "M4Rifle";
         type = 1;
+        bVel = 8;
+        amount = 1;
+        spread = 0.05;
+        damage = 15;
     }
     public M4rifle(int ammo){
         super(ammo);
         name = "M4Rifle";
         type = 1;
-    }
-
-    public void draw(Graphics2D g) {
-
+        bVel = 8;
+        amount = 1;
+        spread = 0.05;
+        damage = 15;
     }
 
     public void update() {
 
     }
+
 }
