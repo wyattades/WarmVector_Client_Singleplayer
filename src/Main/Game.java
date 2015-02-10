@@ -24,7 +24,6 @@ public class Game implements Runnable{
     Canvas canvas;
     BufferStrategy bufferStrategy;
     InputManager inputManager;
-    FileManager fileManager;
     GameStateManager gsm;
 
     public Game(){
@@ -71,7 +70,8 @@ public class Game implements Runnable{
 
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-        g.clearRect(0, 0, WIDTH, HEIGHT);
+        g.setColor(new Color(120,120,120));
+        g.fillRect(0, 0, WIDTH, HEIGHT);
         gsm.draw(g);
         g.dispose();
         bufferStrategy.show();

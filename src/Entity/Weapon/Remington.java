@@ -9,21 +9,21 @@ public class Remington extends Weapon {
 
     public Remington(double x, double y, double w, double h, double orient, int ammo) {
         super(x, y, w, h, orient, ammo);
-        name = "Remington";
-        type = 2;
-        bVel = 7;
-        amount = 6;
-        spread = 0.3;
-        damage = 15;
+        setConstants();
     }
     public Remington(int ammo){
         super(ammo);
+        setConstants();
+    }
+
+    protected void setConstants() {
         name = "Remington";
         type = 2;
         bVel= 7;
         amount = 6;
         spread = 0.3;
         damage = 15;
+        rate = 400;
     }
 
     public void update() {

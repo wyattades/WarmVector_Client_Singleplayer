@@ -2,6 +2,7 @@ package GameState;
 
 import Entity.*;
 import Entity.Weapon.M4rifle;
+import Entity.Weapon.Remington;
 import Manager.FileManager;
 import Manager.GameStateManager;
 import Manager.InputManager;
@@ -34,7 +35,7 @@ public class PlayState extends GameState {
         entityList.put("bullet", new ArrayList<Entity>());
         tileMap = new TileMap(level, FileManager.TILESET1);
         int ts = TileMap.tileSize;
-        entityList.get("thisPlayer").add(new ThisPlayer(400,400,4*ts,4*ts,0,new M4rifle(M4rifle.maxAmmo),tileMap,entityList.get("tile")));
+        entityList.get("thisPlayer").add(new ThisPlayer(400,400,4*ts,4*ts,0,new Remington(Remington.maxAmmo),tileMap,entityList.get("tile")));
         for (int i = 0; i < tileMap.width; i++) {
             for (int j = 0; j < tileMap.height; j++) {
                 int t = tileMap.tileArray[i][j];
@@ -56,14 +57,15 @@ public class PlayState extends GameState {
         double px = entityList.get("thisPlayer").get(0).x;
         double py = entityList.get("thisPlayer").get(0).y;
 
+        for(Bullet b : bullets) {
+            b.draw(g,px,py);
+        }
+
         for(HashMap.Entry<String,ArrayList<Entity>> entry : entityList.entrySet()) {
             for(Entity e : entry.getValue()) {
                 if (!entry.getKey().equals("thisPlayer")) e.updateDispPos(px,py);
                 e.draw(g);
             }
-        }
-        for(Bullet b : bullets) {
-            b.draw(g,px,py);
         }
     }
 
@@ -76,7 +78,10 @@ public class PlayState extends GameState {
 //                if (!e.state) iterator.remove();
 //            }
 //        }
-
+        for(int i = bullets.size()-1; i >= 0; i--) {
+            Bullet b = bullets.get(i);
+            if (!b.state) bullets.remove(b); // <-- remove object or index location???
+        }
 
         entityList.get("thisPlayer").get(0).update();
         for(Bullet b : bullets) {
@@ -93,10 +98,7 @@ public class PlayState extends GameState {
                     e.goTowards(px, py, (float) 1);
                 }
                 if (e.lookingAt(px, py, (float) 0.05)) {
-                    if ((int) System.currentTimeMillis()-e.shootTime > 300) {
-                        addBullet(e);
-                        e.shootTime = (int) System.currentTimeMillis();
-                    }
+                    addBullets(e);
                 } else {
                     e.orientTo(px, py, (float) 0.1);
                 }
@@ -111,8 +113,14 @@ public class PlayState extends GameState {
         }
     }
 
-    private void addBullet(Player p) {
-        bullets.add(new Bullet(p.x,p.y,p.orient,p.weapon.spread,p.weapon.damage,entityList));
+    private void addBullets(Player p) {
+//         \/ put (int) here to fix lag
+        if (System.currentTimeMillis()-p.shootTime > p.weapon.rate && p.weapon.ammo > 0) {
+            for (int i = 0; i < p.weapon.amount; i++){
+                bullets.add(new Bullet(p.x, p.y, p.orient, p.weapon.spread, p.weapon.damage, entityList));
+            }
+            p.shootTime = (int) System.currentTimeMillis();
+        }
     }
 
     public void inputHandle() {
@@ -127,7 +135,9 @@ public class PlayState extends GameState {
         else if (InputManager.isKeyPressed("UP") ) thisPlayer.updateVelY(-ThisPlayer.topSpeed);
         else if (InputManager.isKeyPressed("DOWN") ) thisPlayer.updateVelY(ThisPlayer.topSpeed);
 
-        if (InputManager.isMousePressed("LEFT")) addBullet(thisPlayer);
+        if (InputManager.isMousePressed("LEFTMOUSE")) {
+            addBullets(thisPlayer);
+        }
 
         if (InputManager.isMousePressed("RIGHT") && System.currentTimeMillis()-InputManager.getMouseTime("RIGHT")>500) {
             InputManager.setMouseTime("RIGHT", (int) System.currentTimeMillis());

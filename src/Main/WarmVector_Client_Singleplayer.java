@@ -10,8 +10,6 @@ public class WarmVector_Client_Singleplayer {
         new Thread(game).start();
     }
 
-    public static double random(double min, double max) {
-        return Math.random() * (max - min) + min;
-    }
+
 
 }

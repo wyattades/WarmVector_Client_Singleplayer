@@ -27,6 +27,8 @@ public class Tile extends Entity {
 
     public void draw(Graphics2D g) {
         g.setColor(hitColor);
+        g.fillRect((int) (dx - w / 2), (int) (dy - h / 2), (int) w, (int) h);
+        g.setColor(new Color(200,200,200));
         g.drawRect((int)(dx-w/2),(int)(dy-h/2),(int)w,(int)h);
     }
 

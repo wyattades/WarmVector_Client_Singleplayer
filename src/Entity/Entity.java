@@ -32,7 +32,7 @@ public abstract class Entity {
 
     public void draw(Graphics2D g){
         AffineTransform oldTForm = g.getTransform();
-        g.rotate(orient, dx, dy);
+        if (orient != 0) g.rotate(orient, dx, dy);
         g.drawImage(sprite, (int)(dx-w/2),(int)(dy-h/2),(int)w,(int)h,null);
         g.setTransform(oldTForm);
     }
