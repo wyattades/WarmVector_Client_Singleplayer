@@ -117,7 +117,7 @@ public class PlayState extends GameState {
 //         \/ put (int) here to fix lag
         if (System.currentTimeMillis()-p.shootTime > p.weapon.rate && p.weapon.ammo > 0) {
             for (int i = 0; i < p.weapon.amount; i++){
-                bullets.add(new Bullet(p.x, p.y, p.orient, p.weapon.spread, p.weapon.damage, entityList));
+                bullets.add(new Bullet(p.x, p.y, p.orient, p.weapon.spread, p.weapon.damage, entityList,p));
             }
             p.shootTime = (int) System.currentTimeMillis();
         }

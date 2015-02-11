@@ -47,6 +47,7 @@ public abstract class Player extends Entity {
     public void update() {
         updatePosition();
         updateLife();
+        updateCollideBox();
     }
 
     public void updateVelX(double velX) {

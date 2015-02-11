@@ -18,7 +18,7 @@ public class Bullet {
     public boolean state;
     private double gunLength = 20;
 
-    public Bullet(double x, double y, double orient, double spread, int damage, HashMap<String,ArrayList<Entity>> allEnts) {
+    public Bullet(double x, double y, double orient, double spread, int damage, HashMap<String,ArrayList<Entity>> allEnts, Player shooter) {
         state = true;
         displayTime = System.currentTimeMillis();
         orient += random(-spread, spread);
@@ -30,7 +30,7 @@ public class Bullet {
         double length = checkLine;
         for(HashMap.Entry<String,ArrayList<Entity>> entry : allEnts.entrySet()) {
             for(Entity e : entry.getValue()) {
-                if (e.collideBox.intersectsLine(ix, iy, fx, fy)) {
+                if (e.collideBox.intersectsLine(ix, iy, fx, fy) && !e.equals(shooter)) {
                     double dist = Math.sqrt((ix - e.x)*(ix - e.x) + (iy - e.y)*(iy - e.y));
                     if (dist < length) {
                         length = dist;
@@ -46,8 +46,10 @@ public class Bullet {
     }
 
     public void draw(Graphics2D g, double px, double py) {
-        g.setColor(new Color(200,200,0,240));
-        g.drawLine(Entity.dispPosX(ix,px),Entity.dispPosY(iy,py),Entity.dispPosX(fx,px),Entity.dispPosY(fy,py));
+        g.setColor(new Color(240, 240,0, 197));
+        int dx = Entity.dispPosX(ix, px);
+        int dy = Entity.dispPosY(iy, py);
+        g.drawLine(dx,dy,(int)(dx+fx-ix),(int)(dy+fy-iy));
     }
 
     public void update() {
