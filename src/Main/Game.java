@@ -60,11 +60,18 @@ public class Game implements Runnable{
         gsm = new GameStateManager();
         run();
     }
-
+    public double startTime = 0;
+    public int frames = 0;
     public void run(){
         while(running){
             update();
             render();
+            frames++;
+            if (System.currentTimeMillis()-startTime>= 1000) {
+                startTime = System.currentTimeMillis();
+                System.out.println(frames);
+                frames = 0;
+            }
         }
     }
 

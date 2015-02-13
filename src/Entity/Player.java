@@ -41,7 +41,10 @@ public abstract class Player extends Entity {
 
 
     protected void updateLife() {
-        if (life < 0) life = 0;
+        if (life < 0) {
+            life = 0;
+            state = false;
+        }
     }
 
     public void update() {
@@ -68,8 +71,10 @@ public abstract class Player extends Entity {
         y = y/TileMap.tileSize;
         int tileType = 0;
         try{tileType= tileMap.tileArray[(int) x][(int) y];}
-        catch(Exception e){}
+        catch(Exception e){System.out.println("Out of Bounds Exception: Player");}
         if (tileType == TileMap.SOLID || tileType == TileMap.WINDOW ) return true;
         return false;
     }
+
+
 }

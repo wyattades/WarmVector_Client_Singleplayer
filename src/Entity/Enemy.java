@@ -13,10 +13,34 @@ import java.util.Random;
  */
 public class Enemy extends Player {
 
+    public boolean shooting;
+
     public Enemy(double x, double y, double w, double h, double orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
         super(x, y, w, h, orient, weapon, tileMap, tiles);
         hitColor = Color.red;
         sprite = FileManager.PLAYER1;
+        shooting = false;
+    }
+    
+    public void normalBehavior(double px, double py) {
+        stopMove();
+        shooting = false;
+        if (lineOfSight(px, py) && distBetween(px, py) < 400) {
+            if (distBetween(px, py) > 100) {
+                goTowards(px, py, (float) 1);
+            }
+            if (lookingAt(px, py, (float) 0.05)) {
+                shooting = true;
+            } else {
+                orientTo(px, py, (float) 0.1);
+            }
+        } else {
+            //patrol(1);
+            if (!lookingAt((float) (x + vx), (float) (y + vy), (float) 0.06)) {
+                orientTo((float) (x + vx), (float) (y + vy), (float) 0.12);
+            }
+        }
+
     }
 
     public void patrol(double speed) {
