@@ -20,20 +20,14 @@ public class Tile extends Entity {
         if (kind == TileMap.WINDOW) hitColor = Color.blue;
     }
 
-    @Override
     public void update() {}
 
-//    public void draw(Graphics2D g) {
-//        g.setColor(hitColor);
-//        g.fillRect((int) (dx - w / 2), (int) (dy - h / 2), (int) w, (int) h);
-//        g.setColor(new Color(200,200,200));
-//        g.drawRect((int)(dx-w/2),(int)(dy-h/2),(int)w,(int)h);
-//    }
-    @Override
     public void draw(Graphics2D g) {}
 
-    public void hit(int amount) {
-
-
+    public boolean hit(int amount) {
+        if (kind == TileMap.WINDOW) {
+            return true;
+        }
+        return false;
     }
 }

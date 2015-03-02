@@ -17,6 +17,7 @@ public class Game implements Runnable{
 
     public final static int WIDTH = 1200;
     public final static int HEIGHT = 600;
+    private static final long MS_PER_FRAME = 16;
 
     boolean running = true;
 
@@ -62,12 +63,28 @@ public class Game implements Runnable{
     }
     public double startTime = 0;
     public int frames = 0;
+
     public void run(){
+
         while(running){
+            long start = System.currentTimeMillis();
+
+            //ALL DA CODE HERE
             update();
             render();
+
+            //sets fps to 30
+            long sleepTime = (start + MS_PER_FRAME) - System.currentTimeMillis();
+            if (sleepTime > 0) {
+                try {
+                    Thread.sleep(sleepTime);
+                } catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
             frames++;
-            if (System.currentTimeMillis()-startTime>= 1000) {
+            if (System.currentTimeMillis()-startTime >= 1000) {
                 startTime = System.currentTimeMillis();
                 System.out.println(frames);
                 frames = 0;

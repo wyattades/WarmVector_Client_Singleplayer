@@ -31,9 +31,9 @@ public abstract class Weapon extends Entity{
         }
     }
 
-    public void hit(int amount) {
+    public boolean hit(int amount) {
 
-
+        return false;
     }
 
 }

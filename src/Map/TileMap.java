@@ -77,7 +77,7 @@ public class TileMap {
         values.put("enemy",new ArrayList<Entity>());
         values.put("tile", new ArrayList<Entity>());
         values.put("bullet", new ArrayList<Entity>());
-        values.get("thisPlayer").add(new ThisPlayer(400,400,4*tileSize,4*tileSize,0,new Remington(Remington.maxAmmo),this,values.get("tile")));
+        values.get("thisPlayer").add(new ThisPlayer(400,400,4*tileSize,4*tileSize,0,new M4rifle(M4rifle.maxAmmo),this,values.get("tile")));
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 int t = tileArray[i][j];

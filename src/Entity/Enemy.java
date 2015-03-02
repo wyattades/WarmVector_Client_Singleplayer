@@ -59,9 +59,9 @@ public class Enemy extends Player {
 
     public void orientTo(double ix, double iy, double rate) {
         if (angle_Between(ix,iy) < 0) {
-            orient += rate;
-        } else {
             orient -= rate;
+        } else {
+            orient += rate;
         }
 
     }

@@ -43,10 +43,10 @@ public abstract class Entity {
     }
 
     protected void updateCollideBox() {
-        collideBox.setFrame(x, y, w, h);
+        collideBox.setFrame(x-w/2, y-h/2, w, h);
     }
 
-    public abstract void hit(int damage);
+    public abstract boolean hit(int damage);
 
     public void update() {
         updateCollideBox();

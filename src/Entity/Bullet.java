@@ -1,6 +1,7 @@
 package Entity;
 
 import Main.WarmVector_Client_Singleplayer;
+import Manager.FileManager;
 import Map.TileMap;
 
 import java.awt.*;
@@ -13,15 +14,20 @@ import java.util.HashMap;
 public class Bullet {
 
     private double ix,iy,fx,fy;
+    public double orient;
     private long displayTime;
-    private Entity hitObject;
+    public Entity hitObject;
     public boolean state;
-    private double gunLength = 20;
+    private double gunLength = 18;
+    private ArrayList<Animation> animations;
+    public ArrayList<Point> collidePoints;
 
     public Bullet(double x, double y, double orient, double spread, int damage, HashMap<String,ArrayList<Entity>> allEnts, Player shooter) {
         state = true;
+        collidePoints = new ArrayList<Point>();
         displayTime = System.currentTimeMillis();
         orient += random(-spread, spread);
+        this.orient = orient;
         double checkLine = 10000; //just a big number
         fx = x + checkLine*Math.cos(orient);
         fy = y + checkLine*Math.sin(orient);
@@ -30,19 +36,24 @@ public class Bullet {
         double length = checkLine;
         for(HashMap.Entry<String,ArrayList<Entity>> entry : allEnts.entrySet()) {
             for(Entity e : entry.getValue()) {
-                if (e.collideBox.intersectsLine(ix, iy, fx, fy) && !e.equals(shooter)) {
-                    double dist = Math.sqrt((ix - e.x)*(ix - e.x) + (iy - e.y)*(iy - e.y));
+                if (e.collideBox.intersectsLine(ix, iy, fx, fy) && !e.equals(shooter) ) {
+                    double dist = Math.sqrt((ix - e.x) * (ix - e.x) + (iy - e.y) * (iy - e.y));
                     if (dist < length) {
-                        length = dist;
                         hitObject = e;
+                        if (!e.hit(damage)) {
+                            length = dist;
+                        } else {
+                            collidePoints.add(new Point((int)(x + (length+hitObject.w/2+8)*Math.cos(orient)), (int)(y + (length+hitObject.h/2+8)*Math.sin(orient))));
+                        }
                     }
                 }
             }
         }
-        fx = x + (length+hitObject.w/2)*Math.cos(orient);
-        fy = y + (length+hitObject.h/2)*Math.sin(orient);
+        fx = x + (length+hitObject.w/2+8)*Math.cos(orient);
+        fy = y + (length+hitObject.h/2+8)*Math.sin(orient);
 
         hitObject.hit(damage);
+        collidePoints.add(new Point((int)(x + (length+hitObject.w/2+8)*Math.cos(orient)), (int)(y + (length+hitObject.h/2+8)*Math.sin(orient))));
     }
 
     public void draw(Graphics2D g, double px, double py) {

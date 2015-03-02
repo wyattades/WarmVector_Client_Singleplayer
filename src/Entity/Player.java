@@ -12,7 +12,7 @@ public abstract class Player extends Entity {
 
     public Weapon weapon;
     public double vx,vy,life;
-    public static final int topSpeed = 1;
+    public static final int topSpeed = 4;
     public int shootTime;
     ArrayList<Entity> tiles;
     TileMap tileMap;
@@ -35,8 +35,9 @@ public abstract class Player extends Entity {
         y += vy;
     }
 
-    public void hit(int amount) {
+    public boolean hit(int amount) {
         life -= amount;
+        return false;
     }
 
 
@@ -69,9 +70,7 @@ public abstract class Player extends Entity {
     protected boolean inTile(double x, double y) {
         x = x/TileMap.tileSize;
         y = y/TileMap.tileSize;
-        int tileType = 0;
-        try{tileType= tileMap.tileArray[(int) x][(int) y];}
-        catch(Exception e){System.out.println("Out of Bounds Exception: Player");}
+        int tileType= tileMap.tileArray[(int) x][(int) y];
         if (tileType == TileMap.SOLID || tileType == TileMap.WINDOW ) return true;
         return false;
     }

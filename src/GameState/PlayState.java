@@ -1,8 +1,6 @@
 package GameState;
 
 import Entity.*;
-import Entity.Weapon.M4rifle;
-import Entity.Weapon.Remington;
 import Manager.FileManager;
 import Manager.GameStateManager;
 import Manager.InputManager;
@@ -12,16 +10,18 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Created by Wyatt on 1/25/2015.
  */
 public class PlayState extends GameState {
 
+
+    double px,py;
     public HashMap<String,ArrayList<Entity>> entityList;
     TileMap tileMap;
     ArrayList<Bullet> bullets;
+    ArrayList<Animation> animations;
     int level;
 
     public PlayState(GameStateManager gsm) {
@@ -30,60 +30,82 @@ public class PlayState extends GameState {
 
     public void init() {
         bullets = new ArrayList<Bullet>();
+        animations = new ArrayList<Animation>();
         tileMap = new TileMap(level,FileManager.TILESET1,FileManager.BACKGROUND1);
         entityList = tileMap.setEntities();
     }
 
     public void draw(Graphics2D g) {
-        double px = entityList.get("thisPlayer").get(0).x;
-        double py = entityList.get("thisPlayer").get(0).y;
-
-        tileMap.updateDispPos(px,py);
-        tileMap.draw(g);
         for(Bullet b : bullets) {
             b.draw(g,px,py);
         }
-
-        for(HashMap.Entry<String,ArrayList<Entity>> entry : entityList.entrySet()) {
-            for(Entity e : entry.getValue()) {
-                if (!entry.getKey().equals("thisPlayer")) e.updateDispPos(px,py);
-                e.draw(g);
-            }
+        tileMap.updateDispPos(px, py);
+        tileMap.draw(g);
+        entityList.get("thisPlayer").get(0).draw(g);
+        for(Entity entity : entityList.get("enemy")) {
+            Enemy e = (Enemy)entity;
+            e.updateDispPos(px,py);
+            e.draw(g);
+        }
+        for (Animation a : animations) {
+            a.updateDispPos(px,py);
+            a.draw(g);
         }
     }
 
     public void update() {
-        for(int i = bullets.size()-1; i >= 0; i--) {
-            Bullet b = bullets.get(i);
-            if (!b.state) bullets.remove(b); // <-- remove "object" or "index location"???
-        }
-        Iterator<HashMap.Entry<String, ArrayList<Entity>>> iterator = entityList.entrySet().iterator();
-        while(iterator.hasNext()){
-            HashMap.Entry<String,ArrayList<Entity>> entry = iterator.next();
-            for (Entity e : entry.getValue()) {
-                if (!e.state) iterator.remove();
-            }
-        }
-        try {
-            entityList.get("thisPlayer").get(0).update();
+        try { entityList.get("thisPlayer").get(0).update();
         }catch(Exception e) {
-            //gsm.setState(SWAG);
+            gsm.setState(GameStateManager.PLAY);
             return;
         }
+        px = entityList.get("thisPlayer").get(0).x;
+        py = entityList.get("thisPlayer").get(0).y;
         for(Bullet b : bullets) {
             b.update();
         }
         for(Entity entity : entityList.get("enemy")) {
             Enemy e = (Enemy)entity;
-            e.normalBehavior(entityList.get("thisPlayer").get(0).x,entityList.get("thisPlayer").get(0).y);
+            e.normalBehavior(px,py);
+            e.update();
             if (e.shooting) addBullets(e);
+        }
+        for (Animation a : animations) {
+            a.update();
+        }
+
+        for(int i = bullets.size()-1; i >= 0; i--) {
+            Bullet b = bullets.get(i);
+            if (!b.state) bullets.remove(b); // <-- remove "object" or "index location"???
+        }
+
+        //Entity removing outcomes
+        Iterator<HashMap.Entry<String,ArrayList<Entity>>> it = entityList.entrySet().iterator();
+        while(it.hasNext()) {
+            HashMap.Entry<String,ArrayList<Entity>> entry = it.next();
+            for (int i = entry.getValue().size()-1; i >= 0; i--) {
+                if (!entry.getValue().get(i).state) {
+                    if (!entry.getKey().equals("thisPlayer")) {
+                        entry.getValue().remove(i);
+                    } else {
+                        //restartGame
+                    }
+                }
+            }
+        }
+        for (int i = animations.size()-1; i >= 0; i--) {
+            if (!animations.get(i).state) animations.remove(i);
         }
     }
 
     private void addBullets(Player p) {
-        if ((int)System.currentTimeMillis()-p.shootTime > p.weapon.rate && p.weapon.ammo > 0) {
+        if (System.currentTimeMillis()-p.shootTime > p.weapon.rate && p.weapon.ammo > 0) {
             for (int i = 0; i < p.weapon.amount; i++){
-                bullets.add(new Bullet(p.x, p.y, p.orient, p.weapon.spread, p.weapon.damage, entityList,p));
+                Bullet b = new Bullet(p.x, p.y, p.orient, p.weapon.spread, p.weapon.damage, entityList,p);
+                for (Point point : b.collidePoints) {
+                    animations.add(new Animation(point.x,point.y, b.orient, 2, b.hitObject.hitColor, FileManager.HIT));
+                }
+                bullets.add(b);
             }
             p.shootTime = (int) System.currentTimeMillis();
         }

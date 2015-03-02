@@ -19,9 +19,11 @@ public class ThisPlayer extends Player {
         sprite = FileManager.PLAYER0;
         dx = Game.WIDTH/2;
         dy = Game.HEIGHT/2;
+        state = true;
     }
 
     public void updateAngle(double cursorx, double cursory) {
         orient = Math.atan2(cursory-dy, cursorx-dx);
     }
+
 }
