@@ -10,15 +10,15 @@ import java.util.HashMap;
 /**
  * Created by Wyatt on 3/8/2015.
  */
-public class Shadow {
+class Shadow {
 
-    private HashMap<String,ArrayList<Entity>> allEnts;
-    private double x,y;
+    private HashMap<String, ArrayList<Entity>> allEnts;
+    private double x, y;
     private ArrayList<Line2D> lines;
     private Color fill;
     private Polygon shape;
 
-    public Shadow(double x, double y, HashMap<String,ArrayList<Entity>> allEnts) {
+    public Shadow(double x, double y, HashMap<String, ArrayList<Entity>> allEnts) {
         this.allEnts = allEnts;
         this.x = x;
         this.y = y;

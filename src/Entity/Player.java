@@ -14,27 +14,26 @@ import java.util.ArrayList;
 public abstract class Player extends Entity {
 
     public Weapon weapon;
-    public double vx,vy,life;
+    public double vx, vy, life;
     public static final int topSpeed = 6;
     public int shootTime;
     ArrayList<Entity> tiles;
-    TileMap tileMap;
+    private TileMap tileMap;
 
-    public Player(double x, double y, double w, double h, double orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
-        super(x,y,w,h,orient);
+    Player(double x, double y, double w, double h, double orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
+        super(x, y, w, h, orient);
         this.weapon = weapon;
         this.tiles = tiles;
         this.tileMap = tileMap;
         hitColor = Color.red;
         vx = vy = 0;
         sprite = FileManager.PLAYER1G;
-        this.w = sprite.getWidth()* Game.SCALEFACTOR;
+        this.w = sprite.getWidth() * Game.SCALEFACTOR;
         this.h = sprite.getHeight() * Game.SCALEFACTOR;
         life = 200.0;
     }
+
     public void updateWeapon() {
-        weapon.x = x;
-        weapon.y = y;
         weapon.dx = dx;
         weapon.dy = dy;
         weapon.orient = orient;
@@ -44,7 +43,7 @@ public abstract class Player extends Entity {
         vx = vy = 0;
     }
 
-    protected void updatePosition() {
+    void updatePosition() {
         x += vx;
         y += vy;
     }
@@ -55,7 +54,7 @@ public abstract class Player extends Entity {
     }
 
 
-    protected void updateLife() {
+    void updateLife() {
         if (life < 0) {
             life = 0;
             state = false;
@@ -76,28 +75,29 @@ public abstract class Player extends Entity {
         Weapon w = weapon;
         w.x = x;
         w.y = y;
+        orient = Game.random(0, 6.283);
         return w;
     }
 
     public void updateVelX(double velX) {
-        if ((velX > 0 && !collideTile(w/2, 0, 0, h*0.3)) || (velX < 0  && !collideTile(-w/2, 0, 0,h*0.3))) vx = velX;
+        if ((velX > 0 && !collideTile(w / 2, 0, 0, h * 0.3)) || (velX < 0 && !collideTile(-w / 2, 0, 0, h * 0.3)))
+            vx = velX;
     }
 
     public void updateVelY(double velY) {
-        if ((velY > 0 && !collideTile(0, h/2,w*0.3, 0)) || (velY < 0  && !collideTile(0, -h/2,w*0.3, 0))) vy = velY;
+        if ((velY > 0 && !collideTile(0, h / 2, w * 0.3, 0)) || (velY < 0 && !collideTile(0, -h / 2, w * 0.3, 0)))
+            vy = velY;
     }
 
-    protected boolean collideTile(double ax, double ay, double dx, double dy) {
-        if (inTile(x+ax, y+ay) || inTile(x+ax+dx, y+ay+dy) || inTile(x+ax-dx, y+ay-dy)) return true;
-        return false;
+    boolean collideTile(double ax, double ay, double dx, double dy) {
+        return inTile(x + ax, y + ay) || inTile(x + ax + dx, y + ay + dy) || inTile(x + ax - dx, y + ay - dy);
     }
 
-    protected boolean inTile(double x, double y) {
-        x = x/TileMap.tileSize;
-        y = y/TileMap.tileSize;
-        int tileType= tileMap.tileArray[(int) x][(int) y];
-        if (tileType == TileMap.SOLID || tileType == TileMap.WINDOW ) return true;
-        return false;
+    boolean inTile(double x, double y) {
+        x = x / TileMap.tileSize;
+        y = y / TileMap.tileSize;
+        int tileType = tileMap.tileArray[(int) x][(int) y];
+        return tileType == TileMap.SOLID || tileType == TileMap.WINDOW;
     }
 
 

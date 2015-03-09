@@ -21,16 +21,16 @@ public class Game implements Runnable {
     public final static double SCALEFACTOR = 1.333;
     private static final long MS_PER_FRAME = 16;
 
-    public boolean running = true;
+    private boolean running = true;
 
-    public JFrame frame;
-    public Canvas canvas;
-    public BufferStrategy bufferStrategy;
-    public InputManager inputManager;
-    public GameStateManager gsm;
-    public Robot robot;
+    private JFrame frame;
+    private Canvas canvas;
+    private BufferStrategy bufferStrategy;
+    private InputManager inputManager;
+    private GameStateManager gsm;
+    private Robot robot;
 
-    public Game(){
+    public Game() {
         frame = new JFrame("WarmVector Singleplayer V2");
 
         JPanel panel = (JPanel) frame.getContentPane();
@@ -43,7 +43,7 @@ public class Game implements Runnable {
 
         panel.add(canvas);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setUndecorated(true);
         frame.add(new JLabel("WarmVector V2", SwingConstants.CENTER), BorderLayout.CENTER);
@@ -78,22 +78,25 @@ public class Game implements Runnable {
 
         run();
     }
-    public double startTime = 0;
-    public int frames = 0;
 
-    public static int currentTimeMillis()
-    {
+    private double startTime = 0;
+    private int frames = 0;
+
+    public static int currentTimeMillis() {
         long millisLong = System.currentTimeMillis();
-        while ( millisLong > Integer.MAX_VALUE )
-        {
+        while (millisLong > Integer.MAX_VALUE) {
             millisLong -= Integer.MAX_VALUE;
         }
-        return (int)millisLong;
+        return (int) millisLong;
     }
 
-    public void run(){
+    public static double random(double min, double max) {
+        return Math.random() * (max - min) + min;
+    }
 
-        while(running){
+    public void run() {
+
+        while (running) {
             long start = System.currentTimeMillis();
 
             //ALL DA CODE HERE
@@ -105,13 +108,13 @@ public class Game implements Runnable {
             if (sleepTime > 0) {
                 try {
                     Thread.sleep(sleepTime);
-                } catch(InterruptedException e) {
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
 
             frames++;
-            if (System.currentTimeMillis()-startTime >= 1000) {
+            if (System.currentTimeMillis() - startTime >= 1000) {
                 startTime = System.currentTimeMillis();
                 System.out.println(frames);
                 frames = 0;
@@ -134,15 +137,15 @@ public class Game implements Runnable {
         g.setRenderingHint(RenderingHints.KEY_DITHERING,
                 RenderingHints.VALUE_DITHER_DISABLE);
 
-        g.setColor(new Color(120,120,120));
+        g.setColor(new Color(120, 120, 120));
         g.fillRect(0, 0, WIDTH, HEIGHT); //background
         gsm.draw(g); //here is where the game is actually drawn
         g.dispose();
         bufferStrategy.show();
     }
 
-    protected void update() {
-        robot.mouseMove(Game.WIDTH/2,Game.HEIGHT/2);
+    void update() {
+        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
         gsm.update();
     }
 

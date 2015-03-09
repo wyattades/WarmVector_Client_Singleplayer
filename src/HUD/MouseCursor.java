@@ -10,19 +10,24 @@ import java.awt.image.BufferedImage;
  */
 public class MouseCursor {
 
-    public int x,y,px,py,w,h;
-    public BufferedImage sprite;
+    public int x;
+    public int y;
+    private int px;
+    private int py;
+    private int w;
+    private int h;
+    private BufferedImage sprite;
 
     public MouseCursor(BufferedImage sprite) {
         this.sprite = sprite;
-        x = px = Game.WIDTH/2+70;
-        y = py = Game.HEIGHT/2;
+        x = px = Game.WIDTH / 2 + 70;
+        y = py = Game.HEIGHT / 2;
         w = 32;
         h = 32;
     }
 
     public void draw(Graphics2D g) {
-        g.drawImage(sprite,x-(w/2),y-(h/2),w,h,null);
+        g.drawImage(sprite, x - (w / 2), y - (h / 2), w, h, null);
     }
 
     //theres got to be a simpler way to do this \/

@@ -7,7 +7,7 @@ import java.awt.*;
 /**
  * Created by Wyatt on 1/25/2015.
  */
-public class IntroState extends GameState{
+public class IntroState extends GameState {
     public IntroState(GameStateManager gsm) {
         super(gsm);
     }

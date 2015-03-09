@@ -14,13 +14,12 @@ public class GameStateManager {
 
     private GameState[] gameStates;
     private int currentState;
-    private int previousState;
 
-    public static final int NUM_STATES = 4;
-    public static final int INTRO = 0;
-    public static final int MENU = 1;
+    private static final int NUM_STATES = 4;
+    private static final int INTRO = 0;
+    private static final int MENU = 1;
     public static final int PLAY = 2;
-    public static final int GAMEOVER = 3;
+    private static final int GAMEOVER = 3;
 
     public GameStateManager() {
         paused = false;
@@ -31,27 +30,27 @@ public class GameStateManager {
     }
 
     public void setState(int i) {
-        previousState = currentState;
+        int previousState = currentState;
         unloadState(previousState);
         currentState = i;
-        switch (i){
-            case(INTRO):
+        switch (i) {
+            case (INTRO):
                 gameStates[i] = new IntroState(this);
                 break;
-            case(MENU):
+            case (MENU):
                 gameStates[i] = new MenuState(this);
                 break;
-            case(PLAY):
+            case (PLAY):
                 gameStates[i] = new PlayState(this);
                 break;
-            case(GAMEOVER):
+            case (GAMEOVER):
                 gameStates[i] = new GameOverState(this);
                 break;
         }
         gameStates[i].init();
     }
 
-    public void unloadState(int i) {
+    void unloadState(int i) {
         gameStates[i] = null;
     }
 
@@ -63,8 +62,7 @@ public class GameStateManager {
         if (gameStates[currentState] != null) gameStates[currentState].inputHandle();
         if (paused) {
             pauseState.update();
-        }
-        else if (gameStates[currentState] != null) {
+        } else if (gameStates[currentState] != null) {
             gameStates[currentState].update();
         }
     }
@@ -72,8 +70,7 @@ public class GameStateManager {
     public void draw(Graphics2D g) {
         if (paused) {
             pauseState.draw(g);
-        }
-        else if (gameStates[currentState] != null) {
+        } else if (gameStates[currentState] != null) {
             gameStates[currentState].draw(g);
         }
     }

@@ -17,7 +17,7 @@ public class Enemy extends Player {
         super(x, y, w, h, orient, weapon, tileMap, tiles);
         shooting = false;
     }
-    
+
     public void normalBehavior(double px, double py) {
         stopMove();
         shooting = false;
@@ -42,19 +42,19 @@ public class Enemy extends Player {
     public void patrol(double speed) {
         if (vx == 0 && vy == 0) {
             double r = new Random().nextDouble();
-            updateVelX(speed*Math.cos(r));
-            updateVelY(speed*Math.sin(r));
+            updateVelX(speed * Math.cos(r));
+            updateVelY(speed * Math.sin(r));
         }
     }
 
-    public void goTowards(double ix, double iy, double speed) {
-        double a = angle_Between(ix,iy);
-        updateVelX(speed*Math.cos(a));
-        updateVelY(speed*Math.sin(a));
+    void goTowards(double ix, double iy, double speed) {
+        double a = angle_Between(ix, iy);
+        updateVelX(speed * Math.cos(a));
+        updateVelY(speed * Math.sin(a));
     }
 
-    public void orientTo(double ix, double iy, double rate) {
-        if (angle_Between(ix,iy) < 0) {
+    void orientTo(double ix, double iy, double rate) {
+        if (angle_Between(ix, iy) < 0) {
             orient += rate;
         } else {
             orient -= rate;
@@ -62,19 +62,19 @@ public class Enemy extends Player {
 
     }
 
-    public double angle_Between(double ix, double iy) {
-        return orient-Math.atan2(ix-x,iy-y)+Math.PI/2;
+    double angle_Between(double ix, double iy) {
+        return orient - Math.atan2(ix - x, iy - y) + Math.PI / 2;
     }
 
-    public double distBetween(double ix, double iy) {
+    double distBetween(double ix, double iy) {
         ix -= x;
         iy -= y;
-        return Math.sqrt(Math.pow(ix,2)+Math.pow(iy,2));
+        return Math.sqrt(Math.pow(ix, 2) + Math.pow(iy, 2));
     }
 
-    public boolean lineOfSight(double ix, double iy) {
+    boolean lineOfSight(double ix, double iy) {
         for (Entity entity : tiles) {
-            Tile t = (Tile)entity;
+            Tile t = (Tile) entity;
             if (t.collideBox.intersectsLine(x, y, ix, iy) && t.kind == TileMap.SOLID) {
                 return false;
             }
@@ -82,11 +82,8 @@ public class Enemy extends Player {
         return true;
     }
 
-    public boolean lookingAt(double ix, double iy, double tolerance) {
-        if (Math.abs(angle_Between(ix, iy)) < tolerance) {
-            return true;
-        }
-        return false;
+    boolean lookingAt(double ix, double iy, double tolerance) {
+        return Math.abs(angle_Between(ix, iy)) < tolerance;
     }
 
 }

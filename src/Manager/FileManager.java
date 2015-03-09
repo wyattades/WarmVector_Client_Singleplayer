@@ -7,7 +7,6 @@ import java.io.IOException;
 /**
  * Created by Wyatt on 1/24/2015.
  */
-
 public class FileManager {
 
     public static BufferedImage TILESET1 = load("/Tilesets/leveltiles_01");
@@ -18,11 +17,11 @@ public class FileManager {
     public static BufferedImage PLAYER1 = load("/Sprites/player_1_0");
     public static BufferedImage M4 = load("/Sprites/gun_0");
     public static BufferedImage CURSOR = load("/Sprites/cursor");
-    public static BufferedImage[] HIT = loadAnimation("/Sprites/hit_",4);
+    public static BufferedImage[] HIT = loadAnimation("/Sprites/hit_", 4);
 
     private static BufferedImage load(String s) {
         try {
-            return ImageIO.read(FileManager.class.getResourceAsStream(s+".png"));
+            return ImageIO.read(FileManager.class.getResourceAsStream(s + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error loading graphics");
@@ -35,7 +34,7 @@ public class FileManager {
         BufferedImage[] bs = new BufferedImage[amount];
         for (int i = 0; i < amount; i++) {
             try {
-                bs[i] = ImageIO.read(FileManager.class.getResourceAsStream(s+i+".png"));
+                bs[i] = ImageIO.read(FileManager.class.getResourceAsStream(s + i + ".png"));
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error loading graphics");

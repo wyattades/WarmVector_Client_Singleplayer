@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="WarmVector_Client_Singleplayer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/WarmVector_Client_Singleplayer_jar</output-path>
+    <root id="archive" name="WarmVector_Client_Singleplayer.jar">
+      <element id="module-output" name="WarmVector_Client_Singleplayer" />
+    </root>
+  </artifact>
+</component>

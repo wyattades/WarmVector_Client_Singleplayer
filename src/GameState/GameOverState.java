@@ -7,7 +7,7 @@ import java.awt.*;
 /**
  * Created by Wyatt on 1/25/2015.
  */
-public class GameOverState extends GameState{
+public class GameOverState extends GameState {
     public GameOverState(GameStateManager gsm) {
         super(gsm);
     }

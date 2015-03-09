@@ -1,6 +1,7 @@
 package Visual;
 
 import Entity.Entity;
+import Main.Game;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,14 +14,14 @@ import java.util.HashMap;
  */
 public class Bullet {
 
-    private double ix,iy,fx,fy;
+    private double ix, iy, fx, fy;
     public double orient;
     private long displayTime;
     public boolean state;
-    private double gunLength = 52;
+    private static final double gunLength = 52;
     private Color fill;
     public ArrayList<CollidePoint> collidePoints;
-    public ArrayList<TestPoint> testPoints;
+    private ArrayList<TestPoint> testPoints;
 
     public class TestPoint {
 
@@ -32,10 +33,11 @@ public class Bullet {
             this.e = e;
         }
     }
+
     public class CollidePoint {
 
         public Color hitColor;
-        public int x,y;
+        public int x, y;
 
         public CollidePoint(int x, int y, Color c) {
             this.x = x;
@@ -44,21 +46,21 @@ public class Bullet {
         }
     }
 
-    public Bullet(double x, double y, double orient, double spread, int damage, HashMap<String,ArrayList<Entity>> allEnts) {
+    public Bullet(double x, double y, double orient, double spread, int damage, HashMap<String, ArrayList<Entity>> allEnts) {
         state = true;
-        fill = new Color(255,255,(int)random(50,220),200);
+        fill = new Color(255, 255, (int) Game.random(50, 220), 200);
         collidePoints = new ArrayList<CollidePoint>();
         testPoints = new ArrayList<TestPoint>();
         displayTime = System.currentTimeMillis();
-        orient += random(-spread, spread);
+        orient += Game.random(-spread, spread);
         this.orient = orient;
         double checkLine = 10000; //just a big number
-        fx = x + checkLine*Math.cos(orient);
-        fy = y + checkLine*Math.sin(orient);
-        ix = x + gunLength*Math.cos(orient);
-        iy = y + gunLength*Math.sin(orient);
+        fx = x + checkLine * Math.cos(orient);
+        fy = y + checkLine * Math.sin(orient);
+        ix = x + gunLength * Math.cos(orient);
+        iy = y + gunLength * Math.sin(orient);
 
-        for(HashMap.Entry<String,ArrayList<Entity>> entry : allEnts.entrySet()) {
+        for (HashMap.Entry<String, ArrayList<Entity>> entry : allEnts.entrySet()) {
             for (Entity e : entry.getValue()) {
                 if (e.collideBox.intersectsLine(ix, iy, fx, fy)) {
                     double dist = Math.sqrt((ix - e.x) * (ix - e.x) + (iy - e.y) * (iy - e.y)) - 20;
@@ -75,10 +77,10 @@ public class Bullet {
         });
 
         for (TestPoint p : testPoints) {
-            collidePoints.add(new CollidePoint((int)(ix + (p.dist)*Math.cos(orient)),(int)(iy + (p.dist)*Math.sin(orient)),p.e.hitColor));
+            collidePoints.add(new CollidePoint((int) (ix + (p.dist) * Math.cos(orient)), (int) (iy + (p.dist) * Math.sin(orient)), p.e.hitColor));
             if (!p.e.hit(damage)) {
-                fx = ix + (p.dist)*Math.cos(orient);
-                fy = iy + (p.dist)*Math.sin(orient);
+                fx = ix + (p.dist) * Math.cos(orient);
+                fy = iy + (p.dist) * Math.sin(orient);
                 break;
             }
         }
@@ -88,22 +90,17 @@ public class Bullet {
         int dx = Entity.dispPosX(ix, px);
         int dy = Entity.dispPosY(iy, py);
         g.setColor(fill);
-        g.drawLine(dx,dy,(int)(dx+fx-ix),(int)(dy+fy-iy));
+        g.drawLine(dx, dy, (int) (dx + fx - ix), (int) (dy + fy - iy));
     }
 
     public void update() {
         updateDisplay();
     }
 
-    public void updateDisplay() {
+    void updateDisplay() {
         if (System.currentTimeMillis() - displayTime > 32) {
             state = false;
         }
     }
-
-    public static double random(double min, double max) {
-        return Math.random() * (max - min) + min;
-    }
-
 
 }

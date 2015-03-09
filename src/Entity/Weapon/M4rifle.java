@@ -22,8 +22,4 @@ public class M4rifle extends Weapon {
         rate = 60;
     }
 
-    public void update() {
-
-    }
-
 }

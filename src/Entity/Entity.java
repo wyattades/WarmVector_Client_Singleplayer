@@ -12,13 +12,19 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Entity {
 
-    public double x,y,dx,dy,w,h,orient;
+    public double x;
+    public double y;
+    public double dx;
+    public double dy;
+    protected double w;
+    protected double h;
+    public double orient;
     public Color hitColor;
     public BufferedImage sprite;
     public Rectangle2D collideBox;
     public boolean state;
 
-    public Entity(double x, double y, double w, double h, double orient) {
+    protected Entity(double x, double y, double w, double h, double orient) {
         collideBox = new Rectangle2D.Double(x, y, w, h);
         this.x = x;
         this.y = y;
@@ -28,33 +34,29 @@ public abstract class Entity {
         state = true;
     }
 
-    public void draw(Graphics2D g){
+    public void draw(Graphics2D g) {
         AffineTransform oldTForm = g.getTransform();
         if (orient != 0) g.rotate(orient, dx, dy);
-        g.drawImage(sprite, (int)(dx-w/2),(int)(dy-h/2),(int)w,(int)h,null);
+        g.drawImage(sprite, (int) (dx - w / 2), (int) (dy - h / 2), (int) w, (int) h, null);
         g.setTransform(oldTForm);
     }
 
     public void updateDispPos(double px, double py) {
-        dx = dispPosX(x,px);
-        dy = dispPosY(y,py);
+        dx = dispPosX(x, px);
+        dy = dispPosY(y, py);
     }
 
     public void updateCollideBox() {
-        collideBox.setFrame(x-w/2, y-h/2, w, h);
+        collideBox.setFrame(x - w / 2, y - h / 2, w, h);
     }
 
     public abstract boolean hit(int damage);
 
-    public void update() {
-
-    }
-
     public static int dispPosX(double ix, double px) {
-        return (int)(ix - px + Game.WIDTH/2);
+        return (int) (ix - px + Game.WIDTH / 2);
     }
 
     public static int dispPosY(double iy, double py) {
-        return (int)(iy - py + Game.HEIGHT/2);
+        return (int) (iy - py + Game.HEIGHT / 2);
     }
 }

@@ -11,8 +11,8 @@ public class Tile extends Entity {
 
     public int kind;
 
-    public Tile(double x, double y, double w, double h, double orient, int kind) {
-        super(x,y,w,h,orient);
+    public Tile(double x, double y, int kind) {
+        super(x, y, (double) TileMap.tileSize, (double) TileMap.tileSize, (double) 0);
         this.x = x;
         this.y = y;
         this.kind = kind;
@@ -20,14 +20,10 @@ public class Tile extends Entity {
         if (kind == TileMap.WINDOW) hitColor = Color.blue;
     }
 
-    public void update() {}
-
-    public void draw(Graphics2D g) {}
+    public void draw(Graphics2D g) {
+    }
 
     public boolean hit(int amount) {
-        if (kind == TileMap.WINDOW) {
-            return true;
-        }
-        return false;
+        return kind == TileMap.WINDOW;
     }
 }
