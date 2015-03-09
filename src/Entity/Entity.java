@@ -14,7 +14,7 @@ public abstract class Entity {
 
     public double x,y,dx,dy,w,h,orient;
     public Color hitColor;
-    protected BufferedImage sprite;
+    public BufferedImage sprite;
     public Rectangle2D collideBox;
     public boolean state;
 
@@ -28,8 +28,6 @@ public abstract class Entity {
         state = true;
     }
 
-    public Entity() {}
-
     public void draw(Graphics2D g){
         AffineTransform oldTForm = g.getTransform();
         if (orient != 0) g.rotate(orient, dx, dy);
@@ -42,14 +40,14 @@ public abstract class Entity {
         dy = dispPosY(y,py);
     }
 
-    protected void updateCollideBox() {
+    public void updateCollideBox() {
         collideBox.setFrame(x-w/2, y-h/2, w, h);
     }
 
     public abstract boolean hit(int damage);
 
     public void update() {
-        updateCollideBox();
+
     }
 
     public static int dispPosX(double ix, double px) {

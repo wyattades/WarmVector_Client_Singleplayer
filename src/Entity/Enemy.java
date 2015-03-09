@@ -1,10 +1,8 @@
 package Entity;
 
 import Entity.Weapon.Weapon;
-import Manager.FileManager;
 import Map.TileMap;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,8 +15,6 @@ public class Enemy extends Player {
 
     public Enemy(double x, double y, double w, double h, double orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
         super(x, y, w, h, orient, weapon, tileMap, tiles);
-        hitColor = Color.red;
-        sprite = FileManager.PLAYER1;
         shooting = false;
     }
     
@@ -59,9 +55,9 @@ public class Enemy extends Player {
 
     public void orientTo(double ix, double iy, double rate) {
         if (angle_Between(ix,iy) < 0) {
-            orient -= rate;
-        } else {
             orient += rate;
+        } else {
+            orient -= rate;
         }
 
     }

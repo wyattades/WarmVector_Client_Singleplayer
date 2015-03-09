@@ -11,10 +11,6 @@ public class M4rifle extends Weapon {
         super(x, y, w, h, orient, ammo);
         setConstants();
     }
-    public M4rifle(int ammo){
-        super(ammo);
-        setConstants();
-    }
 
     protected void setConstants() {
         name = "M4Rifle";

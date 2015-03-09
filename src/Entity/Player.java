@@ -1,8 +1,11 @@
 package Entity;
 
 import Entity.Weapon.Weapon;
+import Main.Game;
+import Manager.FileManager;
 import Map.TileMap;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -12,7 +15,7 @@ public abstract class Player extends Entity {
 
     public Weapon weapon;
     public double vx,vy,life;
-    public static final int topSpeed = 4;
+    public static final int topSpeed = 6;
     public int shootTime;
     ArrayList<Entity> tiles;
     TileMap tileMap;
@@ -22,8 +25,19 @@ public abstract class Player extends Entity {
         this.weapon = weapon;
         this.tiles = tiles;
         this.tileMap = tileMap;
+        hitColor = Color.red;
         vx = vy = 0;
-        life = 100.0;
+        sprite = FileManager.PLAYER1G;
+        this.w = sprite.getWidth()* Game.SCALEFACTOR;
+        this.h = sprite.getHeight() * Game.SCALEFACTOR;
+        life = 200.0;
+    }
+    public void updateWeapon() {
+        weapon.x = x;
+        weapon.y = y;
+        weapon.dx = dx;
+        weapon.dy = dy;
+        weapon.orient = orient;
     }
 
     public void stopMove() {
@@ -49,9 +63,20 @@ public abstract class Player extends Entity {
     }
 
     public void update() {
+        if (Math.abs(vx) > 0 && Math.abs(vy) > 0) {
+            vx /= Math.sqrt(2);
+            vy /= Math.sqrt(2);
+        }
         updatePosition();
         updateLife();
         updateCollideBox();
+    }
+
+    public Weapon getWeapon() {
+        Weapon w = weapon;
+        w.x = x;
+        w.y = y;
+        return w;
     }
 
     public void updateVelX(double velX) {

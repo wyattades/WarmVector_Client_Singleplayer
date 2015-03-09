@@ -1,13 +1,8 @@
 package Manager;
 
-import com.sun.imageio.plugins.gif.GIFImageReader;
-import com.sun.imageio.plugins.gif.GIFImageReaderSpi;
-
 import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by Wyatt on 1/24/2015.
@@ -22,6 +17,7 @@ public class FileManager {
     public static BufferedImage PLAYER1G = load("/Sprites/player_1_1");
     public static BufferedImage PLAYER1 = load("/Sprites/player_1_0");
     public static BufferedImage M4 = load("/Sprites/gun_0");
+    public static BufferedImage CURSOR = load("/Sprites/cursor");
     public static BufferedImage[] HIT = loadAnimation("/Sprites/hit_",4);
 
     private static BufferedImage load(String s) {

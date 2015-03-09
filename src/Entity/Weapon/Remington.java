@@ -1,5 +1,7 @@
 package Entity.Weapon;
 
+import Main.Game;
+
 /**
  * Created by Wyatt on 1/25/2015.
  */
@@ -10,10 +12,8 @@ public class Remington extends Weapon {
     public Remington(double x, double y, double w, double h, double orient, int ammo) {
         super(x, y, w, h, orient, ammo);
         setConstants();
-    }
-    public Remington(int ammo){
-        super(ammo);
-        setConstants();
+        w = sprite.getWidth()* Game.SCALEFACTOR;
+        h = sprite.getHeight() * Game.SCALEFACTOR;
     }
 
     protected void setConstants() {

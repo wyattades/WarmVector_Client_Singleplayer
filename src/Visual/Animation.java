@@ -1,4 +1,6 @@
-package Entity;
+package Visual;
+
+import Entity.Entity;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -13,19 +15,22 @@ public class Animation {
     private int frame,length,step,currentStep,frameRate;
     private BufferedImage[] sprites;
     public boolean state;
+    private Color hitColor;
 
-    public Animation(double x, double y, double orient, int frameRate, Color hitColor, BufferedImage[] sprites) {
+    public Animation(double x, double y, double orient, int frameRate, Color hitColor, BufferedImage[] _sprites) {
         this.x = x;
         this.y = y;
         frame = 0;
-        this.orient = orient;
-        length = sprites.length;
-        w = sprites[0].getWidth();
-        h = sprites[0].getHeight();
-        this.sprites = new BufferedImage[length];
+        this.hitColor = hitColor;
+        this.orient = orient+Math.PI;
+        length = _sprites.length;
+        w = _sprites[0].getWidth();
+        h = _sprites[0].getHeight();
+        sprites = new BufferedImage[length];
         for (int i = 0; i < length; i++) {
-            this.sprites[i] = colorImage(sprites[i],hitColor);
+            sprites[i] = tintImage(_sprites[i],hitColor);
         }
+        //sprites = _sprites;
         this.frameRate = frameRate;
         state = true;
     }
@@ -37,6 +42,26 @@ public class Animation {
         g.drawImage(loadImg, null, 0, 0);
         g.dispose();
         return img;
+    }
+
+    public static BufferedImage tintImage(Image original, Color c){
+        int width = original.getWidth(null);
+        int height = original.getHeight(null);
+        BufferedImage tinted = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
+        Graphics2D graphics = (Graphics2D) tinted.getGraphics();
+        graphics.drawImage(original, 0, 0, width, height, null);
+        Color n = new Color(0,0,0,0);
+        BufferedImage tint = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
+        for(int i = 0 ; i < width ; i++){
+            for(int j = 0 ; j < height ; j++){
+                if(tinted.getRGB(i, j) != n.getRGB()){
+                    tint.setRGB(i, j, c.getRGB());
+                }
+            }
+        }
+        graphics.drawImage(tint, 0, 0, null);
+        graphics.dispose();
+        return tinted;
     }
 
     public void draw(Graphics2D g) {
@@ -58,7 +83,7 @@ public class Animation {
     }
 
     public void updateDispPos(double px, double py) {
-        dx = Entity.dispPosX(x,px);
+        dx = Entity.dispPosX(x, px);
         dy = Entity.dispPosY(y,py);
     }
 }
