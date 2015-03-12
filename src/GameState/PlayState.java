@@ -5,6 +5,7 @@ import Entity.Entity;
 import Entity.Player;
 import Entity.ThisPlayer;
 import Entity.Weapon.Weapon;
+import Entity.Tile;
 import HUD.GUI;
 import HUD.MouseCursor;
 import Main.Game;
@@ -14,6 +15,7 @@ import Manager.InputManager;
 import Map.TileMap;
 import Visual.Animation;
 import Visual.Bullet;
+import Visual.Shadow2D;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class PlayState extends GameState {
     private GUI gui;
     private ArrayList<Bullet> bullets;
     private ArrayList<Animation> animations;
+    private Shadow2D shadow;
     private int level;
     private MouseCursor cursor;
 
@@ -52,6 +55,8 @@ public class PlayState extends GameState {
         gui = new GUI((ThisPlayer) entityList.get("thisPlayer").get(0));
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
         cursor = new MouseCursor(FileManager.CURSOR);
+        //shadow = new Shadow(thisPlayer.x,thisPlayer.y,entityList);
+        shadow = new Shadow2D((int)thisPlayer.x,(int)thisPlayer.y,thisPlayer.orient,entityList);
     }
 
     public void draw(Graphics2D g) {
@@ -81,11 +86,19 @@ public class PlayState extends GameState {
                 e.weapon.draw(g);
             }
         }
+        for (Entity entity : entityList.get("tile")) {
+            Tile e = (Tile) entity;
+            e.updateDispPos(px-dx,py-dy);
+        }
         for (Animation a : animations) {
             a.updateDispPos(px - dx, py - dy);
             a.draw(g);
         }
+
+        shadow.update((int)(thisPlayer.dx-dx),(int)(thisPlayer.dy-dy),thisPlayer.orient,entityList);
+        shadow.draw(g);
         cursor.draw(g);
+
     }
 
     public void update() {
@@ -169,7 +182,7 @@ public class PlayState extends GameState {
             addBullets(thisPlayer);
         }
 
-        if (InputManager.isMousePressed("RIGHTMOUSE") && Game.currentTimeMillis() - InputManager.getMouseTime("RIGHTMOUSE") > 500) {
+        if (InputManager.isMouseClicked("RIGHTMOUSE") && Game.currentTimeMillis() - InputManager.getMouseTime("RIGHTMOUSE") > 500) {
             InputManager.setMouseTime("RIGHTMOUSE", Game.currentTimeMillis());
             if (thisPlayer.weapon != null) {
                 entityList.get("weapon").add(thisPlayer.getWeapon());

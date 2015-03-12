@@ -16,8 +16,8 @@ public abstract class Entity {
     public double y;
     public double dx;
     public double dy;
-    protected double w;
-    protected double h;
+    public double w;
+    public double h;
     public double orient;
     public Color hitColor;
     public BufferedImage sprite;

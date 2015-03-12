@@ -13,11 +13,11 @@ public class GUI {
     private double maxVel;
     public double screenPosX, screenPosY;
     private ThisPlayer player;
-    private static final double posAccel = 1.5, negAccel = 1;
+    private static final double posAccel = 1, negAccel = 1;
 
     public GUI(ThisPlayer player) {
         screenVelX = screenVelY = screenPosY = screenVelY = 0;
-        maxVel = 40;
+        maxVel = 24;
         this.player = player;
     }
 

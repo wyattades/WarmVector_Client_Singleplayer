@@ -30,7 +30,7 @@ public abstract class Player extends Entity {
         sprite = FileManager.PLAYER1G;
         this.w = sprite.getWidth() * Game.SCALEFACTOR;
         this.h = sprite.getHeight() * Game.SCALEFACTOR;
-        life = 200.0;
+        life = 100.0;
     }
 
     public void updateWeapon() {
@@ -75,7 +75,7 @@ public abstract class Player extends Entity {
         Weapon w = weapon;
         w.x = x;
         w.y = y;
-        orient = Game.random(0, 6.283);
+        w.orient += Game.random(-0.5, 0.5);
         return w;
     }
 

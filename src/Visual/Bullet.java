@@ -1,6 +1,7 @@
 package Visual;
 
 import Entity.Entity;
+import Entity.Player;
 import Main.Game;
 
 import java.awt.*;
@@ -18,7 +19,7 @@ public class Bullet {
     public double orient;
     private long displayTime;
     public boolean state;
-    private static final double gunLength = 52;
+    private static final double gunLength = 50;
     private Color fill;
     public ArrayList<CollidePoint> collidePoints;
     private ArrayList<TestPoint> testPoints;

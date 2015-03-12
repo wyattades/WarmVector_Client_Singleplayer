@@ -34,10 +34,10 @@ public class MouseCursor {
     public void updatePosition(int deltaX, int deltaY, int dx, int dy) {
         px += deltaX;
         py += deltaY;
-        if (dx > Game.WIDTH) dx = Game.WIDTH;
-        else if (dx < 0) dx = 0;
-        if (dy > Game.HEIGHT) dy = Game.HEIGHT;
-        else if (dy < 0) dy = 0;
+//        if (dx > Game.WIDTH) dx = Game.WIDTH;
+//        else if (dx < 0) dx = 0;
+//        if (dy > Game.HEIGHT) dy = Game.HEIGHT;
+//        else if (dy < 0) dy = 0;
         x = px + dx;
         y = py + dy;
         if (x > Game.WIDTH) x = Game.WIDTH;
