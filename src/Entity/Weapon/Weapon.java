@@ -30,6 +30,7 @@ public abstract class Weapon extends Entity {
         this.w = sprite.getWidth() * Game.SCALEFACTOR;
         this.h = sprite.getHeight() * Game.SCALEFACTOR;
         hitColor = Color.DARK_GRAY;
+        transparent = true;
     }
 
     public void draw(Graphics2D g) {

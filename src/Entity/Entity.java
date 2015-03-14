@@ -22,7 +22,7 @@ public abstract class Entity {
     public Color hitColor;
     public BufferedImage sprite;
     public Rectangle2D collideBox;
-    public boolean state;
+    public boolean state,transparent;
 
     protected Entity(double x, double y, double w, double h, double orient) {
         collideBox = new Rectangle2D.Double(x, y, w, h);
@@ -32,6 +32,7 @@ public abstract class Entity {
         this.h = h;
         this.orient = orient;
         state = true;
+        transparent = false;
     }
 
     public void draw(Graphics2D g) {

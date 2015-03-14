@@ -16,8 +16,8 @@ import java.awt.image.MemoryImageSource;
 
 public class Game implements Runnable {
 
-    public final static int WIDTH = 1366;
-    public final static int HEIGHT = 768;
+    public final static int WIDTH = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+    public final static int HEIGHT = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
     public final static double SCALEFACTOR = 1.333;
     private static final long MS_PER_FRAME = 16;
 

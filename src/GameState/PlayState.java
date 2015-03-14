@@ -56,7 +56,7 @@ public class PlayState extends GameState {
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
         cursor = new MouseCursor(FileManager.CURSOR);
         //shadow = new Shadow(thisPlayer.x,thisPlayer.y,entityList);
-        shadow = new Shadow2D((int)thisPlayer.x,(int)thisPlayer.y,thisPlayer.orient,entityList);
+        //shadow = new Shadow2D((int)thisPlayer.x,(int)thisPlayer.y,thisPlayer.orient,entityList);
     }
 
     public void draw(Graphics2D g) {
@@ -67,36 +67,26 @@ public class PlayState extends GameState {
         tileMap.draw(g);
         for (Entity entity : entityList.get("weapon")) {
             Weapon w = (Weapon) entity;
-            w.updateCollideBox();
-            w.updateDispPos(px - dx, py - dy);
             w.draw(g);
         }
-        thisPlayer.updateDispPos(Game.WIDTH / 2 + dx, Game.HEIGHT / 2 + dy);
         thisPlayer.draw(g);
+        //shadow.update((int)(thisPlayer.dx-dx),(int)(thisPlayer.dy-dy),thisPlayer.orient,entityList);
+        //shadow.draw(g);
         if (thisPlayer.weapon != null) {
             thisPlayer.updateWeapon();
             thisPlayer.weapon.draw(g);
         }
         for (Entity entity : entityList.get("enemy")) {
             Enemy e = (Enemy) entity;
-            e.updateDispPos(px - dx, py - dy);
             e.draw(g);
             if (e.weapon != null) {
                 e.updateWeapon();
                 e.weapon.draw(g);
             }
         }
-        for (Entity entity : entityList.get("tile")) {
-            Tile e = (Tile) entity;
-            e.updateDispPos(px-dx,py-dy);
-        }
         for (Animation a : animations) {
-            a.updateDispPos(px - dx, py - dy);
             a.draw(g);
         }
-
-        shadow.update((int)(thisPlayer.dx-dx),(int)(thisPlayer.dy-dy),thisPlayer.orient,entityList);
-        shadow.draw(g);
         cursor.draw(g);
 
     }
@@ -105,6 +95,7 @@ public class PlayState extends GameState {
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
         thisPlayer.update();
         thisPlayer.updateAngle(cursor.x, cursor.y);
+        thisPlayer.updateDispPos(Game.WIDTH/2+dx,Game.HEIGHT/2+dy);
         px = thisPlayer.x;
         py = thisPlayer.y;
         gui.updatePosition();
@@ -116,15 +107,22 @@ public class PlayState extends GameState {
         for (Bullet b : bullets) {
             b.update();
         }
+        for (Entity entity : entityList.get("weapon")) {
+            Weapon w = (Weapon)entity;
+            w.updateCollideBox();
+            w.updateDispPos(px - dx, py - dy);
+        }
         for (Entity entity : entityList.get("enemy")) {
             Enemy e = (Enemy) entity;
             e.normalBehavior(px, py);
             e.update();
+            e.updateDispPos(px - dx, py - dy);
             if (e.shooting) addBullets(e);
             if (e.life < 0) entityList.get("weapon").add(e.weapon);
         }
         for (Animation a : animations) {
             a.update();
+            a.updateDispPos(px - dx, py - dy);
         }
 
         for (int i = bullets.size() - 1; i >= 0; i--) {
@@ -132,6 +130,10 @@ public class PlayState extends GameState {
         }
         for (int i = animations.size() - 1; i >= 0; i--) {
             if (!animations.get(i).state) animations.remove(i);
+        }
+        for (Entity entity : entityList.get("tile")) {
+            Tile e = (Tile) entity;
+            e.updateDispPos(px-dx,py-dy);
         }
 
         //Entity removing outcomes:

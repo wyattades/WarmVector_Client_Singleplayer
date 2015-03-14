@@ -66,7 +66,7 @@ public class TileMap {
                 } else {
                     tArray[i][j] = EMPTY;
                 }
-                if (i == 0 || i == width - 1 || j == 0 || j == height - 1) tArray[i][j] = SOLID;
+                if (i == 0 || i == width - 1 || j == 0 || j == height - 1) tArray[i][j] = WINDOW;
             }
         }
         return tArray;
