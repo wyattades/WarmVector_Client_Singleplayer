@@ -18,8 +18,8 @@ public class Game implements Runnable {
 
     public final static int WIDTH = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static int HEIGHT = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-    public final static double SCALEFACTOR = 1.333;
-    private static final long MS_PER_FRAME = 16;
+    public final static float SCALEFACTOR = 1.333f;
+    private static final int MS_PER_FRAME = 16;
 
     private boolean running = true;
 
@@ -90,8 +90,8 @@ public class Game implements Runnable {
         return (int) millisLong;
     }
 
-    public static double random(double min, double max) {
-        return Math.random() * (max - min) + min;
+    public static float random(float min, float max) {
+        return (float)(Math.random() * (max - min) + min);
     }
 
     public void run() {
@@ -99,11 +99,10 @@ public class Game implements Runnable {
         while (running) {
             long start = System.currentTimeMillis();
 
-            //ALL DA CODE HERE
             update();
             render();
 
-            //sets fps to 30
+            //sets fps to 60
             long sleepTime = (start + MS_PER_FRAME) - System.currentTimeMillis();
             if (sleepTime > 0) {
                 try {

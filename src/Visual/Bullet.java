@@ -15,11 +15,11 @@ import java.util.HashMap;
  */
 public class Bullet {
 
-    private double ix, iy, fx, fy;
-    public double orient;
+    private int ix, iy, fx, fy;
+    public float orient;
     private long displayTime;
     public boolean state;
-    private static final double gunLength = 50;
+    private static final int gunLength = 50;
     private Color fill;
     public ArrayList<CollidePoint> collidePoints;
     private ArrayList<TestPoint> testPoints;
@@ -47,7 +47,7 @@ public class Bullet {
         }
     }
 
-    public Bullet(double x, double y, double orient, double spread, int damage, HashMap<String, ArrayList<Entity>> allEnts) {
+    public Bullet(int x, int y, float orient, float spread, int damage, HashMap<String, ArrayList<Entity>> allEnts) {
         state = true;
         fill = new Color(255, 255, (int) Game.random(50, 220), 200);
         collidePoints = new ArrayList<CollidePoint>();
@@ -56,10 +56,10 @@ public class Bullet {
         orient += Game.random(-spread, spread);
         this.orient = orient;
         double checkLine = 10000; //just a big number
-        fx = x + checkLine * Math.cos(orient);
-        fy = y + checkLine * Math.sin(orient);
-        ix = x + gunLength * Math.cos(orient);
-        iy = y + gunLength * Math.sin(orient);
+        fx = (int) (x + checkLine * Math.cos(orient));
+        fy = (int) (y + checkLine * Math.sin(orient));
+        ix = (int) (x + gunLength * Math.cos(orient));
+        iy = (int) (y + gunLength * Math.sin(orient));
 
         for (HashMap.Entry<String, ArrayList<Entity>> entry : allEnts.entrySet()) {
             for (Entity e : entry.getValue()) {
@@ -80,25 +80,19 @@ public class Bullet {
         for (TestPoint p : testPoints) {
             collidePoints.add(new CollidePoint((int) (ix + (p.dist) * Math.cos(orient)), (int) (iy + (p.dist) * Math.sin(orient)), p.e.hitColor));
             if (!p.e.hit(damage)) {
-                fx = ix + (p.dist) * Math.cos(orient);
-                fy = iy + (p.dist) * Math.sin(orient);
+                fx = (int) (ix + (p.dist) * Math.cos(orient));
+                fy = (int) (iy + (p.dist) * Math.sin(orient));
                 break;
             }
         }
     }
 
-    public void draw(Graphics2D g, double px, double py) {
-        int dx = Entity.dispPosX(ix, px);
-        int dy = Entity.dispPosY(iy, py);
+    public void draw(Graphics2D g) {
         g.setColor(fill);
-        g.drawLine(dx, dy, (int) (dx + fx - ix), (int) (dy + fy - iy));
+        g.drawLine(ix, iy, fx, fy);
     }
 
     public void update() {
-        updateDisplay();
-    }
-
-    void updateDisplay() {
         if (System.currentTimeMillis() - displayTime > 32) {
             state = false;
         }

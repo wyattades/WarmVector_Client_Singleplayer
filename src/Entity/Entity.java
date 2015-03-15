@@ -12,19 +12,14 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Entity {
 
-    public double x;
-    public double y;
-    public double dx;
-    public double dy;
-    public double w;
-    public double h;
-    public double orient;
+    public int x,y,w,h;
+    public float orient;
     public Color hitColor;
     public BufferedImage sprite;
     public Rectangle2D collideBox;
     public boolean state,transparent;
 
-    protected Entity(double x, double y, double w, double h, double orient) {
+    protected Entity(int x, int y, int w, int h, float orient) {
         collideBox = new Rectangle2D.Double(x, y, w, h);
         this.x = x;
         this.y = y;
@@ -37,14 +32,9 @@ public abstract class Entity {
 
     public void draw(Graphics2D g) {
         AffineTransform oldTForm = g.getTransform();
-        if (orient != 0) g.rotate(orient, dx, dy);
-        g.drawImage(sprite, (int) (dx - w / 2), (int) (dy - h / 2), (int) w, (int) h, null);
+        if (orient != 0) g.rotate(orient, x, y);
+        g.drawImage(sprite, x - w / 2, y - h / 2, null);
         g.setTransform(oldTForm);
-    }
-
-    public void updateDispPos(double px, double py) {
-        dx = dispPosX(x, px);
-        dy = dispPosY(y, py);
     }
 
     public void updateCollideBox() {
@@ -52,12 +42,12 @@ public abstract class Entity {
     }
 
     public abstract boolean hit(int damage);
-
-    public static int dispPosX(double ix, double px) {
-        return (int) (ix - px + Game.WIDTH / 2);
-    }
-
-    public static int dispPosY(double iy, double py) {
-        return (int) (iy - py + Game.HEIGHT / 2);
-    }
+//
+//    public static int dispPosX(double ix, double px) {
+//        return (int) (ix - px + Game.WIDTH / 2);
+//    }
+//
+//    public static int dispPosY(double iy, double py) {
+//        return (int) (iy - py + Game.HEIGHT / 2);
+//    }
 }

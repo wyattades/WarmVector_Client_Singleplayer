@@ -18,6 +18,7 @@ import Visual.Bullet;
 import Visual.Shadow2D;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,10 +29,7 @@ import java.util.Iterator;
 public class PlayState extends GameState {
 
 
-    private double px;
-    private double py;
-    private double dx;
-    private double dy;
+    private int px,py,dx,dy;
     private HashMap<String, ArrayList<Entity>> entityList;
     private TileMap tileMap;
     private GUI gui;
@@ -50,7 +48,7 @@ public class PlayState extends GameState {
     public void init() {
         bullets = new ArrayList<Bullet>();
         animations = new ArrayList<Animation>();
-        tileMap = new TileMap(level, FileManager.TILESET1, FileManager.BACKGROUND1);
+        tileMap = new TileMap(FileManager.TILESET1, FileManager.BACKGROUND1);
         entityList = tileMap.setEntities();
         gui = new GUI((ThisPlayer) entityList.get("thisPlayer").get(0));
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
@@ -60,17 +58,23 @@ public class PlayState extends GameState {
     }
 
     public void draw(Graphics2D g) {
+
+
+        AffineTransform oldT = g.getTransform();
+        g.scale(Game.SCALEFACTOR, Game.SCALEFACTOR);
+        g.translate(Game.WIDTH/2-px,Game.HEIGHT/2-py);
+
+
         for (Bullet b : bullets) {
-            b.draw(g, px - dx, py - dy);
+            b.draw(g);
         }
-        tileMap.updateDispPos(px - dx, py - dy);
         tileMap.draw(g);
         for (Entity entity : entityList.get("weapon")) {
             Weapon w = (Weapon) entity;
             w.draw(g);
         }
         thisPlayer.draw(g);
-        //shadow.update((int)(thisPlayer.dx-dx),(int)(thisPlayer.dy-dy),thisPlayer.orient,entityList);
+        //shadow.update((thisPlayer.x),(thisPlayer.y),thisPlayer.orient,entityList);
         //shadow.draw(g);
         if (thisPlayer.weapon != null) {
             thisPlayer.updateWeapon();
@@ -87,6 +91,8 @@ public class PlayState extends GameState {
         for (Animation a : animations) {
             a.draw(g);
         }
+        g.setTransform(oldT);
+
         cursor.draw(g);
 
     }
@@ -95,7 +101,7 @@ public class PlayState extends GameState {
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
         thisPlayer.update();
         thisPlayer.updateAngle(cursor.x, cursor.y);
-        thisPlayer.updateDispPos(Game.WIDTH/2+dx,Game.HEIGHT/2+dy);
+        //thisPlayer.updateDispPos(Game.WIDTH/2+dx,Game.HEIGHT/2+dy);
         px = thisPlayer.x;
         py = thisPlayer.y;
         gui.updatePosition();
@@ -103,26 +109,22 @@ public class PlayState extends GameState {
         gui.updateRotation(cursor.x, cursor.y);
         dx = gui.screenPosX;
         dy = gui.screenPosY;
-        cursor.updatePosition(InputManager.mouse.x, InputManager.mouse.y, (int) gui.screenVelX, (int) gui.screenVelY);
         for (Bullet b : bullets) {
             b.update();
         }
         for (Entity entity : entityList.get("weapon")) {
             Weapon w = (Weapon)entity;
             w.updateCollideBox();
-            w.updateDispPos(px - dx, py - dy);
         }
         for (Entity entity : entityList.get("enemy")) {
             Enemy e = (Enemy) entity;
             e.normalBehavior(px, py);
             e.update();
-            e.updateDispPos(px - dx, py - dy);
             if (e.shooting) addBullets(e);
             if (e.life < 0) entityList.get("weapon").add(e.weapon);
         }
         for (Animation a : animations) {
             a.update();
-            a.updateDispPos(px - dx, py - dy);
         }
 
         for (int i = bullets.size() - 1; i >= 0; i--) {
@@ -130,10 +132,6 @@ public class PlayState extends GameState {
         }
         for (int i = animations.size() - 1; i >= 0; i--) {
             if (!animations.get(i).state) animations.remove(i);
-        }
-        for (Entity entity : entityList.get("tile")) {
-            Tile e = (Tile) entity;
-            e.updateDispPos(px-dx,py-dy);
         }
 
         //Entity removing outcomes:
@@ -170,6 +168,7 @@ public class PlayState extends GameState {
     }
 
     public void inputHandle() {
+        cursor.updatePosition(InputManager.mouse.x, InputManager.mouse.y);
         if (InputManager.isKeyPressed("ESCAPE")) System.exit(0);
         if (InputManager.isKeyPressed("LEFT") && !InputManager.isKeyPressed("RIGHT"))
             thisPlayer.updateVelX(-ThisPlayer.topSpeed);

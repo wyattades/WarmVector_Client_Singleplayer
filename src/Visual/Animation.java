@@ -11,22 +11,17 @@ import java.awt.image.BufferedImage;
  */
 public class Animation {
 
-    private double x;
-    private double y;
-    private double dx;
-    private double dy;
-    private double w;
-    private double h;
-    private double orient;
+    private int x,y,w,h;
+    private float orient;
     private int frame, length, step, currentStep, frameRate;
     private BufferedImage[] sprites;
     public boolean state;
 
-    public Animation(double x, double y, double orient, int frameRate, Color hitColor, BufferedImage[] _sprites) {
+    public Animation(int x, int y, float orient, int frameRate, Color hitColor, BufferedImage[] _sprites) {
         this.x = x;
         this.y = y;
         frame = 0;
-        this.orient = orient + Math.PI;
+        this.orient = orient + (float)Math.PI;
         length = _sprites.length;
         w = _sprites[0].getWidth();
         h = _sprites[0].getHeight();
@@ -60,8 +55,8 @@ public class Animation {
 
     public void draw(Graphics2D g) {
         AffineTransform oldTForm = g.getTransform();
-        g.rotate(orient, dx, dy);
-        g.drawImage(sprites[frame], (int) (dx - w / 2), (int) (dy - h / 2), null);
+        g.rotate(orient, x, y);
+        g.drawImage(sprites[frame], x - w / 2, y - h / 2, null);
         g.setTransform(oldTForm);
     }
 
@@ -74,10 +69,5 @@ public class Animation {
                 state = false;
             }
         }
-    }
-
-    public void updateDispPos(double px, double py) {
-        dx = Entity.dispPosX(x, px);
-        dy = Entity.dispPosY(y, py);
     }
 }

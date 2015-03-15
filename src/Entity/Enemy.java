@@ -13,47 +13,47 @@ public class Enemy extends Player {
 
     public boolean shooting;
 
-    public Enemy(double x, double y, double w, double h, double orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
+    public Enemy(int x, int y, int w, int h, float orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
         super(x, y, w, h, orient, weapon, tileMap, tiles);
         shooting = false;
     }
 
-    public void normalBehavior(double px, double py) {
+    public void normalBehavior(float px, float py) {
         stopMove();
         shooting = false;
         if (lineOfSight(px, py) && distBetween(px, py) < 400) {
             if (distBetween(px, py) > 100) {
                 goTowards(px, py, (float) 1);
             }
-            if (lookingAt(px, py, (float) 0.05)) {
+            if (lookingAt(px, py, 0.05f)) {
                 shooting = true;
             } else {
-                orientTo(px, py, (float) 0.1);
+                orientTo(px, py, 0.1f);
             }
         } else {
             //patrol(1);
-            if (!lookingAt((float) (x + vx), (float) (y + vy), (float) 0.06)) {
-                orientTo((float) (x + vx), (float) (y + vy), (float) 0.12);
+            if (!lookingAt(x + vx, y + vy,  0.06f)) {
+                orientTo(x + vx, y + vy,  0.12f);
             }
         }
 
     }
 
-    public void patrol(double speed) {
+    public void patrol(float speed) {
         if (vx == 0 && vy == 0) {
             double r = new Random().nextDouble();
-            updateVelX(speed * Math.cos(r));
-            updateVelY(speed * Math.sin(r));
+            updateVelX(speed * (float)Math.cos(r));
+            updateVelY(speed * (float)Math.sin(r));
         }
     }
 
-    void goTowards(double ix, double iy, double speed) {
+    void goTowards(float ix, float iy, float speed) {
         double a = angle_Between(ix, iy);
-        updateVelX(speed * Math.cos(a));
-        updateVelY(speed * Math.sin(a));
+        updateVelX(speed * (float)Math.cos(a));
+        updateVelY(speed * (float)Math.sin(a));
     }
 
-    void orientTo(double ix, double iy, double rate) {
+    void orientTo(float ix, float iy, float rate) {
         if (angle_Between(ix, iy) < 0) {
             orient += rate;
         } else {
@@ -62,17 +62,17 @@ public class Enemy extends Player {
 
     }
 
-    double angle_Between(double ix, double iy) {
-        return orient - Math.atan2(ix - x, iy - y) + Math.PI / 2;
+    float angle_Between(float ix, float iy) {
+        return orient - (float)Math.atan2(ix - x, iy - y) + (float)Math.PI / 2;
     }
 
-    double distBetween(double ix, double iy) {
+    float distBetween(float ix, float iy) {
         ix -= x;
         iy -= y;
-        return Math.sqrt(Math.pow(ix, 2) + Math.pow(iy, 2));
+        return (float)Math.sqrt(Math.pow(ix, 2) + (float)Math.pow(iy, 2));
     }
 
-    boolean lineOfSight(double ix, double iy) {
+    boolean lineOfSight(float ix, float iy) {
         for (Entity entity : tiles) {
             Tile t = (Tile) entity;
             if (t.collideBox.intersectsLine(x, y, ix, iy) && t.kind == TileMap.SOLID) {
@@ -82,7 +82,7 @@ public class Enemy extends Player {
         return true;
     }
 
-    boolean lookingAt(double ix, double iy, double tolerance) {
+    boolean lookingAt(float ix, float iy, float tolerance) {
         return Math.abs(angle_Between(ix, iy)) < tolerance;
     }
 

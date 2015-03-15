@@ -12,31 +12,27 @@ import java.awt.geom.AffineTransform;
  */
 public abstract class Weapon extends Entity {
 
-    public int ammo;
-    int type;
-    public int amount;
-    public int damage;
-    public int rate;
-    String name;
-    private boolean isHeld;
-    double bVel;
-    public double spread;
+    public int ammo,type,amount,damage,rate;
+    public String name;
+    public boolean isHeld;
+    public float bVel,spread;
 
-    Weapon(double x, double y, double w, double h, double orient, int ammo) {
+    Weapon(int x, int y, int w, int h, float orient, int ammo) {
         super(x, y, w, h, orient);
+        sprite = FileManager.M4;
         isHeld = false;
         this.ammo = ammo;
-        sprite = FileManager.M4;
-        this.w = sprite.getWidth() * Game.SCALEFACTOR;
-        this.h = sprite.getHeight() * Game.SCALEFACTOR;
+
+        this.w = sprite.getWidth();
+        this.h = sprite.getHeight();
         hitColor = Color.DARK_GRAY;
         transparent = true;
     }
 
     public void draw(Graphics2D g) {
         AffineTransform oldTForm = g.getTransform();
-        if (orient != 0) g.rotate(orient, dx, dy);
-        g.drawImage(sprite, (int) (dx - w / 2) + 34, (int) (dy - h / 2) + 2, (int) w, (int) h, null);
+        if (orient != 0) g.rotate(orient, x, y);
+        g.drawImage(sprite, x - w / 2 + 34, y - h / 2 + 2, null);
         g.setTransform(oldTForm);
     }
 

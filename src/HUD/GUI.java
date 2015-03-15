@@ -8,23 +8,23 @@ import Main.Game;
  */
 public class GUI {
 
-    public double screenVelX;
-    public double screenVelY;
-    private double maxVel;
-    public double screenPosX, screenPosY;
+    public float screenVelX,screenVelY;
+    private float maxVel;
+    public int screenPosX, screenPosY;
     private ThisPlayer player;
-    private static final double posAccel = 1, negAccel = 1;
+    private static final float posAccel = 1.0f, negAccel = 1.0f;
 
     public GUI(ThisPlayer player) {
-        screenVelX = screenVelY = screenPosY = screenVelY = 0;
+        screenVelX = screenVelY = 0;
+        screenPosX = screenPosY = 0;
         maxVel = 24;
         this.player = player;
     }
 
     public void updatePosition() {
         updateVelocity();
-        screenPosX = screenVelX;
-        screenPosY = screenVelY;
+        screenPosX = (int)screenVelX;
+        screenPosY = (int)screenVelY;
     }
 
     private void updateVelocity() {
@@ -45,7 +45,8 @@ public class GUI {
     }
 
     public void updateRotation(double mouseX, double mouseY) {
-        double rotateRadius = -70 * Math.sqrt((mouseX - player.dx) * (mouseX - player.dx) + (mouseY - player.dy) * (mouseY - player.dy)) / (Game.WIDTH / 2);
+        //double rotateRadius = -70 * Math.sqrt((mouseX - player.dx) * (mouseX - player.dx) + (mouseY - player.dy) * (mouseY - player.dy)) / (Game.WIDTH / 2);
+        int rotateRadius = -70;
         screenPosX += rotateRadius * Math.cos(player.orient);
         screenPosY += rotateRadius * Math.sin(player.orient);
     }

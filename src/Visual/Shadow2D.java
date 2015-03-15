@@ -49,7 +49,7 @@ public class Shadow2D {
             if (!entry.getKey().equals("thisPlayer")) {
                 for (Entity entity : entry.getValue()) {
                     if (entity.transparent == false) {
-                        Rectangle2D.Float bounds = new Rectangle2D.Float((int) (entity.dx - entity.h / 2), (int) (entity.dy - entity.h / 2), (int) entity.w + 2, (int) entity.h + 2);
+                        Rectangle2D.Float bounds = new Rectangle2D.Float(entity.x - entity.h / 2, entity.y - entity.h / 2, entity.w + 2, entity.h + 2);
 
                         //radius of Entity's bounding circle
                         float r = (float) bounds.getWidth() / 2;

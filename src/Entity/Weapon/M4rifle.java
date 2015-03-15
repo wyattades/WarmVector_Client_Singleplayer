@@ -7,7 +7,7 @@ public class M4rifle extends Weapon {
 
     public static int maxAmmo = 40;
 
-    public M4rifle(double x, double y, double w, double h, double orient, int ammo) {
+    public M4rifle(int x, int y, int w, int h, float orient, int ammo) {
         super(x, y, w, h, orient, ammo);
         setConstants();
     }
@@ -17,7 +17,7 @@ public class M4rifle extends Weapon {
         type = 1;
         bVel = 8;
         amount = 1;
-        spread = 0.05;
+        spread = 0.05f;
         damage = 15;
         rate = 60;
     }

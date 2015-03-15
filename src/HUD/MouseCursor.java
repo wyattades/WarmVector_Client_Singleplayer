@@ -12,16 +12,14 @@ public class MouseCursor {
 
     public int x;
     public int y;
-    private int px;
-    private int py;
     private int w;
     private int h;
     private BufferedImage sprite;
 
     public MouseCursor(BufferedImage sprite) {
         this.sprite = sprite;
-        x = px = Game.WIDTH / 2 + 70;
-        y = py = Game.HEIGHT / 2;
+        x = Game.WIDTH / 2 + 70;
+        y = Game.HEIGHT / 2;
         w = 32;
         h = 32;
     }
@@ -31,15 +29,9 @@ public class MouseCursor {
     }
 
     //theres got to be a simpler way to do this \/
-    public void updatePosition(int deltaX, int deltaY, int dx, int dy) {
-        px += deltaX;
-        py += deltaY;
-//        if (dx > Game.WIDTH) dx = Game.WIDTH;
-//        else if (dx < 0) dx = 0;
-//        if (dy > Game.HEIGHT) dy = Game.HEIGHT;
-//        else if (dy < 0) dy = 0;
-        x = px + dx;
-        y = py + dy;
+    public void updatePosition(int deltaX, int deltaY) {
+        x += deltaX;
+        y += deltaY;
         if (x > Game.WIDTH) x = Game.WIDTH;
         else if (x < 0) x = 0;
         if (y > Game.HEIGHT) y = Game.HEIGHT;

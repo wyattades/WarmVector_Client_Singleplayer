@@ -17,19 +17,16 @@ import java.util.HashMap;
 public class TileMap {
     private BufferedImage background;
     public int[][] tileArray;
-    private int width;
-    private int height;
-    private int dx;
-    private int dy;
+    private int width,height;
     private static final int EMPTY = 0;
     public static final int SOLID = 1;
     public static final int WINDOW = 2;
     private static final int SPAWN = 3;
     private static final int ENEMY = 4;
 
-    public static final int tileSize = 16;
+    public static final int tileSize = 10;
 
-    public TileMap(int level, BufferedImage mapImage, BufferedImage background) {
+    public TileMap(BufferedImage mapImage, BufferedImage background) {
         this.background = background;
         width = mapImage.getWidth();
         height = mapImage.getHeight();
@@ -37,12 +34,7 @@ public class TileMap {
     }
 
     public void draw(Graphics2D g) {
-        g.drawImage(background, dx, dy, null);
-    }
-
-    public void updateDispPos(double px, double py) {
-        dx = Entity.dispPosX(0, px);
-        dy = Entity.dispPosY(0, py);
+        g.drawImage(background, 0, 0, null);
     }
 
     int[][] setTileArray(BufferedImage image) {
@@ -84,9 +76,9 @@ public class TileMap {
             for (int j = 0; j < height; j++) {
                 int t = tileArray[i][j];
                 if (t == TileMap.SOLID) {
-                    values.get("tile").add(new Tile((i + 0.5) * tileSize, (j + 0.5) * tileSize, TileMap.SOLID));
+                    values.get("tile").add(new Tile((int)((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), TileMap.SOLID));
                 } else if (t == TileMap.WINDOW) {
-                    values.get("tile").add(new Tile((i + 0.5) * tileSize, (j + 0.5) * tileSize, TileMap.WINDOW));
+                    values.get("tile").add(new Tile((int)((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), TileMap.WINDOW));
                 } else if (t == TileMap.SPAWN) {
                     values.get("thisPlayer").get(0).x = i * tileSize;
                     values.get("thisPlayer").get(0).y = j * tileSize;
