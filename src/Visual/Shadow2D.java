@@ -21,26 +21,26 @@ public class Shadow2D {
     private final static Polygon POLYGON = new Polygon();
 
     private int x, y;
-    private double orient;
+    private float orient;
     private HashMap<String,ArrayList<Entity>> allEnts;
+    Entity origin;
 
-    public Shadow2D(int x, int y, double orient, HashMap<String,ArrayList<Entity>> allEnts) {
-        this.x = x;
-        this.y = y;
-        this.orient = orient;
+    public Shadow2D(HashMap<String,ArrayList<Entity>> allEnts) {
+        x = y = 0;
+        orient = 0;
         this.allEnts = allEnts;
+        origin = allEnts.get("thisPlayer").get(0);
     }
 
-    public void update(int x, int y, double orient, HashMap<String, ArrayList<Entity>> allEnts) {
-        this.x = x;
-        this.y = y;
-        this.orient = orient;
-        this.allEnts = allEnts;
+    public void update() {
+        x = origin.x;
+        y = origin.y;
+        orient = origin.orient;
+
     }
 
     public void draw(Graphics2D g) {
         g.setColor(Color.white);
-        Paint oldPaint = g.getPaint();
         float minDistSq = GRADIENT_SIZE * GRADIENT_SIZE;
         final float SHADOW_EXTRUDE = GRADIENT_SIZE * GRADIENT_SIZE;
         final Point2D.Float center = new Point2D.Float(x, y);
@@ -94,14 +94,13 @@ public class Shadow2D {
                         POLYGON.addPoint((int) C.x, (int) C.y);
 
                         //fill the polygon with the gradient paint
-                        g.setPaint(GRADIENT_COLOR);
+                        g.setColor(GRADIENT_COLOR);
                         g.fill(POLYGON);
                     }
                 }
             }
         }
         //reset to old Paint object
-        g.setPaint(oldPaint);
     }
 
     /** Projects a point from end along the vector (end - start) by the given scalar amount. */

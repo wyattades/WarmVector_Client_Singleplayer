@@ -1,6 +1,4 @@
-package Manager;
-
-import GameState.*;
+package GameState;
 
 import java.awt.*;
 

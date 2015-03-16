@@ -9,7 +9,6 @@ import HUD.GUI;
 import HUD.MouseCursor;
 import Main.Game;
 import Manager.FileManager;
-import Manager.GameStateManager;
 import Manager.InputManager;
 import Map.TileMap;
 import Visual.Animation;
@@ -29,16 +28,16 @@ public class PlayState extends GameState {
 
 
     private int px,py;
-    private HashMap<String, ArrayList<Entity>> entityList;
+    private HashMap<String,ArrayList<Entity>> entityList;
     private TileMap tileMap;
     private GUI gui;
     private ArrayList<Bullet> bullets;
     private ArrayList<Animation> animations;
-    //private Shadow2D shadow;
     private int level;
     private MouseCursor cursor;
     private Robot robot;
     private ThisPlayer thisPlayer;
+    Shadow2D shadow;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -57,8 +56,7 @@ public class PlayState extends GameState {
         gui = new GUI((ThisPlayer) entityList.get("thisPlayer").get(0));
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
         cursor = new MouseCursor(FileManager.CURSOR);
-        //shadow = new Shadow(thisPlayer.x,thisPlayer.y,entityList);
-        //shadow = new Shadow2D((int)thisPlayer.x,(int)thisPlayer.y,thisPlayer.orient,entityList);
+        shadow = new Shadow2D(entityList);
     }
 
     public void draw(Graphics2D g) {
@@ -76,8 +74,7 @@ public class PlayState extends GameState {
             Weapon w = (Weapon) entity;
             w.draw(g);
         }
-        //shadow.update((thisPlayer.x),(thisPlayer.y),thisPlayer.orient,entityList);
-        //shadow.draw(g);
+
         if (thisPlayer.weapon != null) {
             thisPlayer.updateWeapon();
             thisPlayer.weapon.draw(g);
@@ -94,6 +91,7 @@ public class PlayState extends GameState {
         for (Animation a : animations) {
             a.draw(g);
         }
+        shadow.draw(g);
         g.setTransform(oldT);
         cursor.draw(g);
     }
@@ -107,6 +105,7 @@ public class PlayState extends GameState {
         gui.updatePosition();
         thisPlayer.stopMove();
         gui.updateRotation(cursor.x, cursor.y);
+        shadow.update();
         for (Bullet b : bullets) {
             b.update();
         }

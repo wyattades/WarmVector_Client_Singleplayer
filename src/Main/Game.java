@@ -4,7 +4,7 @@ package Main;
  * Created by Wyatt on 12/29/2014.
  */
 
-import Manager.GameStateManager;
+import GameState.GameStateManager;
 import Manager.InputManager;
 
 import javax.swing.*;

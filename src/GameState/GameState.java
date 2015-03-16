@@ -1,7 +1,5 @@
 package GameState;
 
-import Manager.GameStateManager;
-
 import java.awt.*;
 
 /**

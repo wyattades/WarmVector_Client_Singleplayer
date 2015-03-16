@@ -72,20 +72,22 @@ public class TileMap {
         values.put("enemy", new ArrayList<Entity>());
         values.put("weapon", new ArrayList<Entity>());
         values.put("tile", new ArrayList<Entity>());
-        values.put("bullet", new ArrayList<Entity>());
-        values.get("thisPlayer").add(new ThisPlayer(400, 400, 4 * tileSize, 4 * tileSize, 0, new M4rifle(0, 0, 0, 0, 0, M4rifle.maxAmmo), this, values.get("tile")));
+        values.get("thisPlayer").add(new ThisPlayer(0, 0, 0, 0, 0, new M4rifle(0, 0, 0, 0, 0, M4rifle.maxAmmo), this, values.get("tile")));
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 int t = tileArray[i][j];
-                if (t == TileMap.SOLID) {
-                    values.get("tile").add(new Tile((int)((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), TileMap.SOLID));
-                } else if (t == TileMap.WINDOW) {
-                    values.get("tile").add(new Tile((int)((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), TileMap.WINDOW));
-                } else if (t == TileMap.SPAWN) {
+                if (t == SOLID) {
+                    values.get("tile").add(new Tile((int)((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), SOLID));
+                } else if (t == WINDOW) {
+                    values.get("tile").add(new Tile((int)((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), WINDOW));
+                } else if (t == SPAWN) {
                     values.get("thisPlayer").get(0).x = i * tileSize;
                     values.get("thisPlayer").get(0).y = j * tileSize;
-                } else if (t == TileMap.ENEMY) {
+                    tileArray[i][j] = EMPTY;
+                } else if (t == ENEMY) {
                     values.get("enemy").add(new Enemy(i * tileSize, j * tileSize, 4 * tileSize, 4 * tileSize, 0, new M4rifle(0, 0, 64, 32, 0, M4rifle.maxAmmo), this, values.get("tile")));
+                    tileArray[i][j] = EMPTY;
+
                 }
             }
         }
