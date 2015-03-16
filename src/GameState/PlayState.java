@@ -5,7 +5,6 @@ import Entity.Entity;
 import Entity.Player;
 import Entity.ThisPlayer;
 import Entity.Weapon.Weapon;
-import Entity.Tile;
 import HUD.GUI;
 import HUD.MouseCursor;
 import Main.Game;
@@ -29,16 +28,16 @@ import java.util.Iterator;
 public class PlayState extends GameState {
 
 
-    private int px,py,dx,dy;
+    private int px,py;
     private HashMap<String, ArrayList<Entity>> entityList;
     private TileMap tileMap;
     private GUI gui;
     private ArrayList<Bullet> bullets;
     private ArrayList<Animation> animations;
-    private Shadow2D shadow;
+    //private Shadow2D shadow;
     private int level;
     private MouseCursor cursor;
-
+    private Robot robot;
     private ThisPlayer thisPlayer;
 
     public PlayState(GameStateManager gsm) {
@@ -46,6 +45,11 @@ public class PlayState extends GameState {
     }
 
     public void init() {
+        try {
+            robot = new Robot();
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
         bullets = new ArrayList<Bullet>();
         animations = new ArrayList<Animation>();
         tileMap = new TileMap(FileManager.TILESET1, FileManager.BACKGROUND1);
@@ -58,12 +62,11 @@ public class PlayState extends GameState {
     }
 
     public void draw(Graphics2D g) {
-
-
+        g.setColor(tileMap.backgroundColor);
+        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT); //background
         AffineTransform oldT = g.getTransform();
         g.scale(Game.SCALEFACTOR, Game.SCALEFACTOR);
-        g.translate(Game.WIDTH/2-px,Game.HEIGHT/2-py);
-
+        g.translate(gui.screenPosX+(-px + Game.WIDTH / 2 /Game.SCALEFACTOR),gui.screenPosY+(-py + Game.HEIGHT / 2 /Game.SCALEFACTOR));
 
         for (Bullet b : bullets) {
             b.draw(g);
@@ -73,7 +76,6 @@ public class PlayState extends GameState {
             Weapon w = (Weapon) entity;
             w.draw(g);
         }
-        thisPlayer.draw(g);
         //shadow.update((thisPlayer.x),(thisPlayer.y),thisPlayer.orient,entityList);
         //shadow.draw(g);
         if (thisPlayer.weapon != null) {
@@ -88,27 +90,23 @@ public class PlayState extends GameState {
                 e.weapon.draw(g);
             }
         }
+        thisPlayer.draw(g);
         for (Animation a : animations) {
             a.draw(g);
         }
         g.setTransform(oldT);
-
         cursor.draw(g);
-
     }
 
     public void update() {
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
         thisPlayer.update();
         thisPlayer.updateAngle(cursor.x, cursor.y);
-        //thisPlayer.updateDispPos(Game.WIDTH/2+dx,Game.HEIGHT/2+dy);
         px = thisPlayer.x;
         py = thisPlayer.y;
         gui.updatePosition();
         thisPlayer.stopMove();
         gui.updateRotation(cursor.x, cursor.y);
-        dx = gui.screenPosX;
-        dy = gui.screenPosY;
         for (Bullet b : bullets) {
             b.update();
         }
@@ -157,9 +155,9 @@ public class PlayState extends GameState {
     private void addBullets(Player p) {
         if (p.weapon != null && Game.currentTimeMillis() - p.shootTime > p.weapon.rate && p.weapon.ammo > 0) {
             for (int i = 0; i < p.weapon.amount; i++) {
-                Bullet b = new Bullet(p.x, p.y, p.orient, p.weapon.spread, p.weapon.damage, entityList);
+                Bullet b = new Bullet(p.x, p.y, p.orient, p.weapon.spread, p.weapon.damage, entityList,p);
                 for (Bullet.CollidePoint point : b.collidePoints) {
-                    animations.add(new Animation(point.x, point.y, b.orient, 3, point.hitColor, FileManager.HIT));
+                    animations.add(new Animation(point.x, point.y, b.orient, 2, point.hitColor, FileManager.HIT));
                 }
                 bullets.add(b);
             }
@@ -168,7 +166,9 @@ public class PlayState extends GameState {
     }
 
     public void inputHandle() {
-        cursor.updatePosition(InputManager.mouse.x, InputManager.mouse.y);
+        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
+        cursor.updatePosition(InputManager.mouse.x-Game.WIDTH/2, InputManager.mouse.y-Game.HEIGHT/2);
+
         if (InputManager.isKeyPressed("ESCAPE")) System.exit(0);
         if (InputManager.isKeyPressed("LEFT") && !InputManager.isKeyPressed("RIGHT"))
             thisPlayer.updateVelX(-ThisPlayer.topSpeed);
@@ -210,6 +210,8 @@ public class PlayState extends GameState {
                 }
             }
         }
+        if (InputManager.isKeyPressed("ALT")) gsm.setPaused(true);
+
     }
 
 }

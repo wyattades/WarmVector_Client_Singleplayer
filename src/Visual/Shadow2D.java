@@ -1,13 +1,13 @@
 package Visual;
 
+import Entity.Entity;
+import Main.Game;
+
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import Entity.Entity;
-import Main.Game;
 
 /**
  * Created by Wyatt on 3/12/2015.

@@ -1,7 +1,6 @@
 package Entity.Weapon;
 
 import Entity.Entity;
-import Main.Game;
 import Manager.FileManager;
 
 import java.awt.*;
@@ -32,7 +31,7 @@ public abstract class Weapon extends Entity {
     public void draw(Graphics2D g) {
         AffineTransform oldTForm = g.getTransform();
         if (orient != 0) g.rotate(orient, x, y);
-        g.drawImage(sprite, x - w / 2 + 34, y - h / 2 + 2, null);
+        g.drawImage(sprite, x - w / 2 + 24, y - h / 2 + 2, null);
         g.setTransform(oldTForm);
     }
 

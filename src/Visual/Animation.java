@@ -1,7 +1,5 @@
 package Visual;
 
-import Entity.Entity;
-
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;

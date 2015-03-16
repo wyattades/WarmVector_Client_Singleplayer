@@ -1,6 +1,7 @@
 package GameState;
 
 import Manager.GameStateManager;
+import Manager.InputManager;
 
 import java.awt.*;
 
@@ -25,6 +26,6 @@ public class PauseState extends GameState {
     }
 
     public void inputHandle() {
-
+        if (InputManager.isKeyPressed("ALT")) gsm.setPaused(false);
     }
 }

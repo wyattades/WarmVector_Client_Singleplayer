@@ -45,8 +45,8 @@ public class GUI {
     }
 
     public void updateRotation(double mouseX, double mouseY) {
-        //double rotateRadius = -70 * Math.sqrt((mouseX - player.dx) * (mouseX - player.dx) + (mouseY - player.dy) * (mouseY - player.dy)) / (Game.WIDTH / 2);
-        int rotateRadius = -70;
+        float rotateRadius = (float) (-70 * Math.sqrt((mouseX - Game.WIDTH/2) * (mouseX - Game.WIDTH/2) + (mouseY - Game.HEIGHT/2) * (mouseY - Game.HEIGHT/2)) / (Game.WIDTH / 2));
+        //int rotateRadius = -70;
         screenPosX += rotateRadius * Math.cos(player.orient);
         screenPosY += rotateRadius * Math.sin(player.orient);
     }

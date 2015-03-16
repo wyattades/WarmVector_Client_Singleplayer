@@ -20,12 +20,12 @@ public class MouseCursor {
         this.sprite = sprite;
         x = Game.WIDTH / 2 + 70;
         y = Game.HEIGHT / 2;
-        w = 32;
-        h = 32;
+        w = sprite.getWidth();
+        h = sprite.getHeight();
     }
 
     public void draw(Graphics2D g) {
-        g.drawImage(sprite, x - (w / 2), y - (h / 2), w, h, null);
+        g.drawImage(sprite, x - (w / 2), y - (h / 2), null);
     }
 
     //theres got to be a simpler way to do this \/

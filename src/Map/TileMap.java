@@ -23,6 +23,7 @@ public class TileMap {
     public static final int WINDOW = 2;
     private static final int SPAWN = 3;
     private static final int ENEMY = 4;
+    public Color backgroundColor;
 
     public static final int tileSize = 10;
 
@@ -31,6 +32,7 @@ public class TileMap {
         width = mapImage.getWidth();
         height = mapImage.getHeight();
         tileArray = setTileArray(mapImage);
+        backgroundColor = new Color(120,120,120);
     }
 
     public void draw(Graphics2D g) {

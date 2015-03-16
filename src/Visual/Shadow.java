@@ -77,10 +77,10 @@ public class Shadow {
             Point2D vertex = hitPoints.get(0);
             shape.addPoint((int)vertex.getX(),(int)vertex.getY());
         }
-        shape.addPoint((int)x,(int)y);//idk if this is necessary
+       // shape.addPoint((int)x,(int)y);//idk if this is necessary
     }
 
-    public ArrayList<Point2D> getIntersectionPoint(Line2D line, Rectangle2D rectangle) {
+    public static ArrayList<Point2D> getIntersectionPoint(Line2D line, Rectangle2D rectangle) {
 
         ArrayList<Point2D> p = new ArrayList<Point2D>();
 
@@ -98,7 +98,7 @@ public class Shadow {
                         rectangle.getY() + rectangle.getHeight()/2,
                         rectangle.getX() + rectangle.getWidth()/2,
                         rectangle.getY() - rectangle.getHeight()/2)));
-        // Left side...
+        // Left side
         p.add(getIntersectionPoint(line,
                 new Line2D.Double(
                         rectangle.getX() + rectangle.getWidth()/2,
@@ -117,7 +117,7 @@ public class Shadow {
 
     }
 
-    public Point2D getIntersectionPoint(Line2D lineA, Line2D lineB) {
+    public static Point2D getIntersectionPoint(Line2D lineA, Line2D lineB) {
 
         double x1 = lineA.getX1();
         double y1 = lineA.getY1();

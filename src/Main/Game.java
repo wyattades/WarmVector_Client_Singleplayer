@@ -18,19 +18,19 @@ public class Game implements Runnable {
 
     public final static int WIDTH = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static int HEIGHT = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-    public final static float SCALEFACTOR = 1.333f;
+    public final static float SCALEFACTOR = 2;
     private static final int MS_PER_FRAME = 16;
 
-    private boolean running = true;
+    private boolean running;
 
     private JFrame frame;
     private Canvas canvas;
     private BufferStrategy bufferStrategy;
     private InputManager inputManager;
     private GameStateManager gsm;
-    private Robot robot;
 
     public Game() {
+        running = true;
         frame = new JFrame("WarmVector Singleplayer V2");
 
         JPanel panel = (JPanel) frame.getContentPane();
@@ -61,16 +61,13 @@ public class Game implements Runnable {
         panel.setCursor(transparentCursor);
 
         inputManager = new InputManager(canvas);
-        try {
-            robot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
-        }
+
         inputManager.addKeyMapping("UP", KeyEvent.VK_W);
         inputManager.addKeyMapping("DOWN", KeyEvent.VK_S);
         inputManager.addKeyMapping("LEFT", KeyEvent.VK_A);
         inputManager.addKeyMapping("RIGHT", KeyEvent.VK_D);
         inputManager.addKeyMapping("ESCAPE", KeyEvent.VK_ESCAPE);
+        inputManager.addKeyMapping("ALT", KeyEvent.VK_ALT);
         inputManager.addMouseMapping("LEFTMOUSE", MouseEvent.BUTTON1);
         inputManager.addMouseMapping("RIGHTMOUSE", MouseEvent.BUTTON3);
 
@@ -97,13 +94,13 @@ public class Game implements Runnable {
     public void run() {
 
         while (running) {
-            long start = System.currentTimeMillis();
+            int start = currentTimeMillis();
 
             update();
             render();
 
             //sets fps to 60
-            long sleepTime = (start + MS_PER_FRAME) - System.currentTimeMillis();
+            int sleepTime = (start + MS_PER_FRAME) - currentTimeMillis();
             if (sleepTime > 0) {
                 try {
                     Thread.sleep(sleepTime);
@@ -113,8 +110,8 @@ public class Game implements Runnable {
             }
 
             frames++;
-            if (System.currentTimeMillis() - startTime >= 1000) {
-                startTime = System.currentTimeMillis();
+            if (currentTimeMillis() - startTime >= 1000) {
+                startTime = currentTimeMillis();
                 System.out.println(frames);
                 frames = 0;
             }
@@ -123,28 +120,24 @@ public class Game implements Runnable {
 
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-        g.setRenderingHint(RenderingHints.KEY_RENDERING,
-                RenderingHints.VALUE_RENDER_QUALITY);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
-        g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-                RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
-        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
-                RenderingHints.VALUE_COLOR_RENDER_SPEED);
-        g.setRenderingHint(RenderingHints.KEY_DITHERING,
-                RenderingHints.VALUE_DITHER_DISABLE);
-
-        g.setColor(new Color(120, 120, 120));
-        g.fillRect(0, 0, WIDTH, HEIGHT); //background
+//        g.setRenderingHint(RenderingHints.KEY_RENDERING,
+//                RenderingHints.VALUE_RENDER_QUALITY);
+//        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+//                RenderingHints.VALUE_ANTIALIAS_OFF);
+//        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+//                RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+//        g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+//                RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+//        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
+//                RenderingHints.VALUE_COLOR_RENDER_SPEED);
+//        g.setRenderingHint(RenderingHints.KEY_DITHERING,
+//                RenderingHints.VALUE_DITHER_DISABLE);
         gsm.draw(g); //here is where the game is actually drawn
         g.dispose();
         bufferStrategy.show();
     }
 
     void update() {
-        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
         gsm.update();
     }
 

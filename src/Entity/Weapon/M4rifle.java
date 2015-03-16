@@ -19,7 +19,7 @@ public class M4rifle extends Weapon {
         amount = 1;
         spread = 0.05f;
         damage = 15;
-        rate = 60;
+        rate = 100;
     }
 
 }

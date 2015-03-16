@@ -1,7 +1,5 @@
 package Entity;
 
-import Main.Game;
-
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;

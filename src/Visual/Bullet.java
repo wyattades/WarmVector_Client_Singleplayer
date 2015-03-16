@@ -19,17 +19,17 @@ public class Bullet {
     public float orient;
     private long displayTime;
     public boolean state;
-    private static final int gunLength = 50;
+    private static final int gunLength = 44;
     private Color fill;
     public ArrayList<CollidePoint> collidePoints;
     private ArrayList<TestPoint> testPoints;
 
     public class TestPoint {
 
-        public double dist;
+        public float dist;
         public Entity e;
 
-        public TestPoint(double dist, Entity e) {
+        public TestPoint(float dist, Entity e) {
             this.dist = dist;
             this.e = e;
         }
@@ -47,7 +47,7 @@ public class Bullet {
         }
     }
 
-    public Bullet(int x, int y, float orient, float spread, int damage, HashMap<String, ArrayList<Entity>> allEnts) {
+    public Bullet(int x, int y, float orient, float spread, int damage, HashMap<String, ArrayList<Entity>> allEnts, Player shooter) {
         state = true;
         fill = new Color(255, 255, (int) Game.random(50, 220), 200);
         collidePoints = new ArrayList<CollidePoint>();
@@ -55,17 +55,19 @@ public class Bullet {
         displayTime = System.currentTimeMillis();
         orient += Game.random(-spread, spread);
         this.orient = orient;
-        double checkLine = 10000; //just a big number
+        int checkLine = 10000; //just a big number
         fx = (int) (x + checkLine * Math.cos(orient));
         fy = (int) (y + checkLine * Math.sin(orient));
-        ix = (int) (x + gunLength * Math.cos(orient));
-        iy = (int) (y + gunLength * Math.sin(orient));
+        ix = x;
+        iy = y;
 
         for (HashMap.Entry<String, ArrayList<Entity>> entry : allEnts.entrySet()) {
             for (Entity e : entry.getValue()) {
-                if (e.collideBox.intersectsLine(ix, iy, fx, fy)) {
-                    double dist = Math.sqrt((ix - e.x) * (ix - e.x) + (iy - e.y) * (iy - e.y)) - 20;
-                    testPoints.add(new TestPoint(dist, e));
+                if (!e.equals(shooter)) {
+                    if (e.collideBox.intersectsLine(ix, iy, fx, fy)) {
+                        float dist = (float) (Math.sqrt((ix - e.x) * (ix - e.x) + (iy - e.y) * (iy - e.y)) - 20);
+                        testPoints.add(new TestPoint(dist, e));
+                    }
                 }
             }
         }
@@ -73,7 +75,7 @@ public class Bullet {
         Collections.sort(testPoints, new Comparator<TestPoint>() {
             @Override
             public int compare(TestPoint p1, TestPoint p2) {
-                return Double.compare(p1.dist, p2.dist);
+                return Float.compare(p1.dist, p2.dist);
             }
         });
 
@@ -85,6 +87,8 @@ public class Bullet {
                 break;
             }
         }
+        ix =  ix + gunLength * (int)Math.cos(orient);
+        iy =  iy + gunLength *(int) Math.sin(orient);
     }
 
     public void draw(Graphics2D g) {

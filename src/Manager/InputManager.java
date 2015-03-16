@@ -1,7 +1,5 @@
 package Manager;
 
-import Main.Game;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -223,8 +221,8 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
     @Override
     public void mouseDragged(MouseEvent e) {
         mouse.dragged = true;
-        mouse.x = e.getX() - Game.WIDTH / 2;
-        mouse.y = e.getY() - Game.HEIGHT / 2;
+        mouse.x = e.getX();
+        mouse.y = e.getY();
 
 
     }
@@ -232,7 +230,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
     @Override
     public void mouseMoved(MouseEvent e) {
         mouse.dragged = false;
-        mouse.x = e.getX() - Game.WIDTH / 2;
-        mouse.y = e.getY() - Game.HEIGHT / 2;
+        mouse.x = e.getX();
+        mouse.y = e.getY();
     }
 }

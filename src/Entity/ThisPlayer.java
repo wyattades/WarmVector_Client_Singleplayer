@@ -19,8 +19,7 @@ public class ThisPlayer extends Player {
     }
 
     public void updateAngle(float cursorx, float cursory) {
-        //orient = Math.atan2(cursory - dy, cursorx - dx);
+        orient = (float)Math.atan2(cursory - Game.HEIGHT/2, cursorx - Game.WIDTH/2);
     }
-
 
 }

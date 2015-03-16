@@ -9,11 +9,11 @@ import java.awt.*;
  */
 public class GameStateManager {
 
-    private boolean paused;
+    public boolean paused;
     private PauseState pauseState;
 
     private GameState[] gameStates;
-    private int currentState;
+    public int currentState;
 
     private static final int NUM_STATES = 4;
     private static final int INTRO = 0;
@@ -59,10 +59,12 @@ public class GameStateManager {
     }
 
     public void update() {
-        if (gameStates[currentState] != null) gameStates[currentState].inputHandle();
+        //if (gameStates[currentState] != null) gameStates[currentState].inputHandle();
         if (paused) {
+            pauseState.inputHandle();
             pauseState.update();
         } else if (gameStates[currentState] != null) {
+            gameStates[currentState].inputHandle();
             gameStates[currentState].update();
         }
     }
