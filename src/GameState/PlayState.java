@@ -56,7 +56,7 @@ public class PlayState extends GameState {
         gui = new GUI((ThisPlayer) entityList.get("thisPlayer").get(0));
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
         cursor = new MouseCursor(FileManager.CURSOR);
-        shadow = new Shadow2D(entityList);
+        shadow = new Shadow2D(tileMap.tileArray,thisPlayer);
     }
 
     public void draw(Graphics2D g) {

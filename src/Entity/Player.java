@@ -31,13 +31,14 @@ public abstract class Player extends Entity {
         this.w = sprite.getWidth();
         this.h = sprite.getHeight();
         life = 50.0f;
+        transparent = true;
     }
 
     public void updateWeapon() {
-        weapon.x = x;
-        weapon.y = y;
+        int length = 24;
+        weapon.x = (int)(x+length*Math.cos(orient));
+        weapon.y = (int)(y+length*Math.sin(orient));
         weapon.orient = orient;
-        //dont need this right?
     }
 
     public void stopMove() {
