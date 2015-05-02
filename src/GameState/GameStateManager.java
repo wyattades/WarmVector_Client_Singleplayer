@@ -13,11 +13,11 @@ public class GameStateManager {
     private GameState[] gameStates;
     public int currentState;
 
-    private static final int NUM_STATES = 4;
-    private static final int INTRO = 0;
-    private static final int MENU = 1;
+    public static final int NUM_STATES = 4;
+    public static final int INTRO = 0;
+    public static final int MENU = 1;
     public static final int PLAY = 2;
-    private static final int GAMEOVER = 3;
+    public static final int GAMEOVER = 3;
 
     public GameStateManager() {
         paused = false;
@@ -57,7 +57,6 @@ public class GameStateManager {
     }
 
     public void update() {
-        //if (gameStates[currentState] != null) gameStates[currentState].inputHandle();
         if (paused) {
             pauseState.inputHandle();
             pauseState.update();
@@ -68,10 +67,11 @@ public class GameStateManager {
     }
 
     public void draw(Graphics2D g) {
+        if (gameStates[currentState] != null) {
+            gameStates[currentState].draw(g);
+        }
         if (paused) {
             pauseState.draw(g);
-        } else if (gameStates[currentState] != null) {
-            gameStates[currentState].draw(g);
         }
     }
 }

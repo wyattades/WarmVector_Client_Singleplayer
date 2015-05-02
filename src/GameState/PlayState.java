@@ -34,8 +34,8 @@ public class PlayState extends GameState {
     private ArrayList<Bullet> bullets;
     private ArrayList<Animation> animations;
     private int level;
-    private MouseCursor cursor;
     private Robot robot;
+    private MouseCursor cursor;
     private ThisPlayer thisPlayer;
     Shadow2D shadow;
 
@@ -48,6 +48,7 @@ public class PlayState extends GameState {
             robot = new Robot();
         } catch (AWTException e) {
             e.printStackTrace();
+            System.exit(0);
         }
         bullets = new ArrayList<Bullet>();
         animations = new ArrayList<Animation>();
@@ -60,12 +61,16 @@ public class PlayState extends GameState {
     }
 
     public void draw(Graphics2D g) {
+        //background
         g.setColor(tileMap.backgroundColor);
-        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT); //background
+        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+
+        //translate screen to follow player
         AffineTransform oldT = g.getTransform();
         g.scale(Game.SCALEFACTOR, Game.SCALEFACTOR);
         g.translate(gui.screenPosX+(-px + Game.WIDTH / 2 /Game.SCALEFACTOR),gui.screenPosY+(-py + Game.HEIGHT / 2 /Game.SCALEFACTOR));
 
+        //draw objects
         for (Bullet b : bullets) {
             b.draw(g);
         }
@@ -92,12 +97,22 @@ public class PlayState extends GameState {
             a.draw(g);
         }
         shadow.draw(g);
+
+        //reset transformation
         g.setTransform(oldT);
+
+        //draw cursor
         cursor.draw(g);
     }
 
     public void update() {
+        //move mouse cursor to center of the display
+        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
+
+        //create a copy of thisPlayer for convenience
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
+
+        //update objects
         thisPlayer.update();
         thisPlayer.updateAngle(cursor.x, cursor.y);
         px = thisPlayer.x;
@@ -125,20 +140,20 @@ public class PlayState extends GameState {
         }
 
         for (int i = bullets.size() - 1; i >= 0; i--) {
-            if (!bullets.get(i).state) bullets.remove(i); // <-- remove "object" or "index location"???
+            if (!bullets.get(i).state) bullets.remove(i); // <-- should I remove "object" or "index location"???
         }
         for (int i = animations.size() - 1; i >= 0; i--) {
             if (!animations.get(i).state) animations.remove(i);
         }
 
-        //Entity removing outcomes:
+        //Entity removing outcomes
         Iterator<HashMap.Entry<String, ArrayList<Entity>>> it = entityList.entrySet().iterator();
         while (it.hasNext()) {
             HashMap.Entry<String, ArrayList<Entity>> entry = it.next();
             for (int i = entry.getValue().size() - 1; i >= 0; i--) {
                 if (!entry.getValue().get(i).state) {
                     if (!entry.getKey().equals("thisPlayer")) {
-                        if (entry.getKey().equals("enemy")) {
+                        if (entry.getKey().equals("enemy")) { //enemy dies
                             Enemy e = (Enemy) entry.getValue().get(i);
                             entityList.get("weapon").add(e.getWeapon());
                         }
@@ -165,7 +180,6 @@ public class PlayState extends GameState {
     }
 
     public void inputHandle() {
-        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
         cursor.updatePosition(InputManager.mouse.x-Game.WIDTH/2, InputManager.mouse.y-Game.HEIGHT/2);
 
         if (InputManager.isKeyPressed("ESCAPE")) System.exit(0);
@@ -209,6 +223,10 @@ public class PlayState extends GameState {
                 }
             }
         }
+//        if (InputManager.isKeyPressed("ALT") && InputManager.getKeyTime("ALT") - Game.currentTimeMillis() > 100) {
+//            InputManager.setKeyTime("ALT",Game.currentTimeMillis());
+//            gsm.setPaused(true);
+//        }
         if (InputManager.isKeyPressed("ALT")) gsm.setPaused(true);
 
     }

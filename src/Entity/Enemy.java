@@ -73,13 +73,14 @@ public class Enemy extends Player {
     }
 
     boolean lineOfSight(float ix, float iy) {
-        for (Entity entity : tiles) {
-            Tile t = (Tile) entity;
-            if (t.collideBox.intersectsLine(x, y, ix, iy) && t.kind == TileMap.SOLID) {
-                return false;
-            }
-        }
-        return true;
+//        for (Entity entity : tiles) {
+//            Tile t = (Tile) entity;
+//            if (t.collideBox.intersectsLine(x, y, ix, iy) && t.kind == TileMap.SOLID) {
+//                return false;
+//            }
+//        }
+//        return true;
+        return false;
     }
 
     boolean lookingAt(float ix, float iy, float tolerance) {
