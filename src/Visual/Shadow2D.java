@@ -123,6 +123,7 @@ public class Shadow2D {
             dx /= len;
             dy /= len;
         }
+
         //multiply by scalar amount
         dx *= scalar;
         dy *= scalar;
