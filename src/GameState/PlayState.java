@@ -1,6 +1,7 @@
 package GameState;
 
 import Entity.Enemy;
+import Visual.Occlussion.EndPoint;
 import Entity.Entity;
 import Entity.Player;
 import Entity.ThisPlayer;
@@ -13,7 +14,8 @@ import Manager.InputManager;
 import Map.TileMap;
 import Visual.Animation;
 import Visual.Bullet;
-import Visual.Shadow2D;
+import Visual.Occlussion.Segment;
+import Visual.Occlussion.Visibility;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -37,7 +39,8 @@ public class PlayState extends GameState {
     private Robot robot;
     private MouseCursor cursor;
     private ThisPlayer thisPlayer;
-    Shadow2D shadow;
+    //Shadow2D shadow;
+    Visibility shadow;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -57,7 +60,22 @@ public class PlayState extends GameState {
         gui = new GUI((ThisPlayer) entityList.get("thisPlayer").get(0));
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
         cursor = new MouseCursor(FileManager.CURSOR);
-        shadow = new Shadow2D(tileMap.tileArray,thisPlayer);
+        //shadow = new Shadow2D(tileMap.tileArray,thisPlayer);
+        shadow = new Visibility();
+        ArrayList<Segment> segments = new ArrayList<Segment>();
+        for (Entity e : entityList.get("tile")) {
+            EndPoint p1,p2,p3,p4;
+            p1 = new EndPoint(e.x-e.w/2,e.y+e.h/2);
+            p2 = new EndPoint(e.x+e.w/2,e.y+e.h/2);
+            p3 = new EndPoint(e.x+e.w/2,e.y-e.h/2);
+            p4 = new EndPoint(e.x-e.w/2,e.y-e.h/2);
+            segments.add(new Segment(p1,p2));
+            segments.add(new Segment(p2,p3));
+            segments.add(new Segment(p3,p4));
+            segments.add(new Segment(p4,p1));
+        }
+        shadow.loadMap(segments);
+
     }
 
     public void draw(Graphics2D g) {
@@ -120,7 +138,10 @@ public class PlayState extends GameState {
         gui.updatePosition();
         thisPlayer.stopMove();
         gui.updateRotation(cursor.x, cursor.y);
-        shadow.update();
+
+        shadow.setLightLocation(thisPlayer.x,thisPlayer.y);
+        shadow.sweep(999);
+
         for (Bullet b : bullets) {
             b.update();
         }
