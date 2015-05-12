@@ -1,13 +1,15 @@
-package Visual.Occlussion;
+package Visual.Occlusion;
 
-import Entity.Entity;
+import Map.TileMap;
 
 import java.awt.*;
+import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 5/7/2015.
  */
 public class Visibility {
@@ -26,30 +28,46 @@ public class Visibility {
     // Note: DLL is a doubly linked list but an array would be ok too
 
     // These represent the map and the light location:
-    public ArrayList<Segment> segments;
-    public ArrayList<EndPoint> endpoints;
-    public Point center;
+    private ArrayList<Segment> segments;
+    private ArrayList<EndPoint> endpoints;
+    private Point center;
 
     // These are currently 'open' line segments, sorted so that the nearest
     // segment is first. It's used only during the sweep algorithm, and exposed
     // as a public field here so that the demo can display it.
-    public ArrayList<Segment> open;
+    private ArrayList<Segment> open;
 
     // The output is a series of points that forms a visible area polygon
     public ArrayList<Point> output;
 
     // For the demo, keep track of wall intersections
-    public ArrayList<ArrayList<Point>> demo_intersectionsDetected;
+    private ArrayList<ArrayList<Point>> demo_intersectionsDetected;
 
+    private TileMap tileMap;
 
     // Construct an empty visibility set
-    public Visibility() {
+    public Visibility(TileMap tileMap) {
+        this.tileMap = tileMap;
         segments = new ArrayList<Segment>();
         endpoints = new ArrayList<EndPoint>();
         open = new ArrayList<Segment>();
         center = new Point(0, 0);
         output = new ArrayList<Point>();
         demo_intersectionsDetected = new ArrayList<ArrayList<Point>>();
+        for (int i = 0; i < tileMap.width; i++) {
+            for (int j = 0; j < tileMap.height; j++) {
+                if (tileMap.tileArray[i][j] == TileMap.SOLID || (i == 0 || i == tileMap.width - 1 || j == 0 || j == tileMap.height - 1) ) {
+                    addSegment( (i+.5f)* TileMap.tileSize - TileMap.tileSize/2, (j+.5f)*TileMap.tileSize + TileMap.tileSize/2,
+                                (i+.5f)* TileMap.tileSize + TileMap.tileSize/2, (j+.5f)*TileMap.tileSize + TileMap.tileSize/2);
+                    addSegment( (i+.5f)* TileMap.tileSize + TileMap.tileSize/2, (j+.5f)*TileMap.tileSize + TileMap.tileSize/2,
+                                (i+.5f)* TileMap.tileSize + TileMap.tileSize/2, (j+.5f)*TileMap.tileSize - TileMap.tileSize/2);
+                    addSegment( (i+.5f)* TileMap.tileSize + TileMap.tileSize/2, (j+.5f)*TileMap.tileSize - TileMap.tileSize/2,
+                                (i+.5f)* TileMap.tileSize - TileMap.tileSize/2, (j+.5f)*TileMap.tileSize - TileMap.tileSize/2);
+                    addSegment( (i+.5f)* TileMap.tileSize - TileMap.tileSize/2, (j+.5f)*TileMap.tileSize - TileMap.tileSize/2,
+                                (i+.5f)* TileMap.tileSize - TileMap.tileSize/2, (j+.5f)*TileMap.tileSize + TileMap.tileSize/2);
+                }
+            }
+        }
     }
 
 
@@ -65,12 +83,21 @@ public class Visibility {
     }
 
     public void draw(Graphics2D g) {
-        Polygon SHADOW = new Polygon();
+        Polygon EMPTY = new Polygon();
         for (Point s : output) {
-            SHADOW.addPoint((int)s.x,(int)s.y);
+            EMPTY.addPoint((int)s.x,(int)s.y);
         }
-        g.setColor(new Color(0,0,0,100));
-        g.draw(SHADOW);
+        Polygon BORDER = new Polygon();
+        BORDER.addPoint(-tileMap.width* TileMap.tileSize,-tileMap.height* TileMap.tileSize);
+        BORDER.addPoint(2*tileMap.width * TileMap.tileSize, -tileMap.height* TileMap.tileSize);
+        BORDER.addPoint(2*tileMap.width * TileMap.tileSize,2*tileMap.height* TileMap.tileSize);
+        BORDER.addPoint(-tileMap.width * TileMap.tileSize, 2*tileMap.height* TileMap.tileSize);
+        GeneralPath SHADOW = new GeneralPath(BORDER);
+        SHADOW.append(EMPTY,true);
+        g.setColor(new Color(0,0,0,255));
+        g.fill(SHADOW);
+
+
     }
 
     // Load a set of square blocks, plus any other line segments
@@ -101,7 +128,7 @@ public class Visibility {
         Segment segment = null;
         EndPoint p1  = new EndPoint(x1, y1);
         EndPoint p2 = new EndPoint(x2, y2);
-        p1.segment = p2.segment = segment;
+        p1.segment = p2.segment = null;
         p1.visualize = true;
         p2.visualize = false;
         segment = new Segment();
@@ -264,7 +291,7 @@ public class Visibility {
                     // Insert into the right place in the list
                     Segment node = open.isEmpty()? null : open.get(0);
                     while (node != null && _segment_in_front_of(p.segment, node, center)) {
-                        node = open.get(open.lastIndexOf(node));
+                        node = open.size()==open.indexOf(node)+1? null:open.get((open.indexOf(node) + 1));
                     }
                     if (node == null) {
                         open.add(p.segment);

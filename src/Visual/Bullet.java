@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/28/2015.
  */
 public class Bullet {
@@ -22,7 +23,6 @@ public class Bullet {
     private static final int gunLength = 44;
     private Color fill;
     public ArrayList<CollidePoint> collidePoints;
-    private ArrayList<TestPoint> testPoints;
 
     public class TestPoint {
 
@@ -51,8 +51,8 @@ public class Bullet {
         state = true;
         fill = new Color(255, 255, (int) Game.random(50, 220), 200);
         collidePoints = new ArrayList<CollidePoint>();
-        testPoints = new ArrayList<TestPoint>();
-        displayTime = System.currentTimeMillis();
+        ArrayList<TestPoint> testPoints = new ArrayList<TestPoint>();
+        displayTime = Game.currentTimeMillis();
         orient += Game.random(-spread, spread);
         this.orient = orient;
         int checkLine = 10000; //just a big number
@@ -81,7 +81,7 @@ public class Bullet {
 
         for (TestPoint p : testPoints) {
             collidePoints.add(new CollidePoint((int) (ix + (p.dist) * Math.cos(orient)), (int) (iy + (p.dist) * Math.sin(orient)), p.e.hitColor));
-            if (!p.e.hit(damage)) {
+            if (!p.e.hit(damage,orient)) {
                 fx = (int) (ix + (p.dist) * Math.cos(orient));
                 fy = (int) (iy + (p.dist) * Math.sin(orient));
                 break;
@@ -97,7 +97,7 @@ public class Bullet {
     }
 
     public void update() {
-        if (System.currentTimeMillis() - displayTime > 32) {
+        if (Game.currentTimeMillis() - displayTime > 16) {
             state = false;
         }
     }

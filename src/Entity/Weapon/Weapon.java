@@ -4,13 +4,14 @@ import Entity.Entity;
 import Manager.FileManager;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/22/2015.
  */
 public abstract class Weapon extends Entity {
 
+    public float vx, vy;
     public int ammo,type,amount,damage,rate;
     public String name;
     public boolean isHeld;
@@ -18,6 +19,7 @@ public abstract class Weapon extends Entity {
 
     Weapon(int x, int y, int w, int h, float orient, int ammo) {
         super(x, y, w, h, orient);
+        vx = vy = 0;
         sprite = FileManager.M4;
         isHeld = false;
         this.ammo = ammo;
@@ -25,15 +27,8 @@ public abstract class Weapon extends Entity {
         this.w = sprite.getWidth();
         this.h = sprite.getHeight();
         hitColor = Color.DARK_GRAY;
-        transparent = true;
+        setConstants();
     }
-
-//    public void draw(Graphics2D g) {
-//        AffineTransform oldTForm = g.getTransform();
-//        if (orient != 0) g.rotate(orient, x, y);
-//        g.drawImage(sprite, x - w / 2 + 24, y - h / 2 + 2, null);
-//        g.setTransform(oldTForm);
-//    }
 
     protected abstract void setConstants();
 
@@ -43,7 +38,9 @@ public abstract class Weapon extends Entity {
         }
     }
 
-    public boolean hit(int amount) {
+    public boolean hit(int amount, float angle) {
+        vx += Math.cos(angle);
+        vy += Math.sin(angle);
         return false;
     }
 

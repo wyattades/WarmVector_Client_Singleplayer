@@ -1,7 +1,6 @@
 package GameState;
 
 import Entity.Enemy;
-import Visual.Occlussion.EndPoint;
 import Entity.Entity;
 import Entity.Player;
 import Entity.ThisPlayer;
@@ -14,8 +13,7 @@ import Manager.InputManager;
 import Map.TileMap;
 import Visual.Animation;
 import Visual.Bullet;
-import Visual.Occlussion.Segment;
-import Visual.Occlussion.Visibility;
+import Visual.Occlusion.Visibility;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -24,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/25/2015.
  */
 public class PlayState extends GameState {
@@ -39,7 +38,6 @@ public class PlayState extends GameState {
     private Robot robot;
     private MouseCursor cursor;
     private ThisPlayer thisPlayer;
-    //Shadow2D shadow;
     Visibility shadow;
 
     public PlayState(GameStateManager gsm) {
@@ -59,26 +57,12 @@ public class PlayState extends GameState {
         entityList = tileMap.setEntities();
         gui = new GUI((ThisPlayer) entityList.get("thisPlayer").get(0));
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
-        cursor = new MouseCursor(FileManager.CURSOR);
-        //shadow = new Shadow2D(tileMap.tileArray,thisPlayer);
-        shadow = new Visibility();
-        ArrayList<Segment> segments = new ArrayList<Segment>();
-        for (Entity e : entityList.get("tile")) {
-            EndPoint p1,p2,p3,p4;
-            p1 = new EndPoint(e.x-e.w/2,e.y+e.h/2);
-            p2 = new EndPoint(e.x+e.w/2,e.y+e.h/2);
-            p3 = new EndPoint(e.x+e.w/2,e.y-e.h/2);
-            p4 = new EndPoint(e.x-e.w/2,e.y-e.h/2);
-            segments.add(new Segment(p1,p2));
-            segments.add(new Segment(p2,p3));
-            segments.add(new Segment(p3,p4));
-            segments.add(new Segment(p4,p1));
-        }
-        shadow.loadMap(segments);
-
+        cursor = new MouseCursor(FileManager.CURSOR, FileManager.CROSSHAIR);
+        shadow = new Visibility(tileMap);
     }
 
     public void draw(Graphics2D g) {
+
         //background
         g.setColor(tileMap.backgroundColor);
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
@@ -87,6 +71,15 @@ public class PlayState extends GameState {
         AffineTransform oldT = g.getTransform();
         g.scale(Game.SCALEFACTOR, Game.SCALEFACTOR);
         g.translate(gui.screenPosX+(-px + Game.WIDTH / 2 /Game.SCALEFACTOR),gui.screenPosY+(-py + Game.HEIGHT / 2 /Game.SCALEFACTOR));
+
+//        Path2D path = new Path2D.Float();
+//        path.moveTo(shadow.output.get(0).x, shadow.output.get(0).y);
+//        for (int i = 0; i < shadow.output.size(); i++) {
+//            Visual.Occlusion.Point e = shadow.output.get(i);
+//            path.lineTo(e.x,e.y);
+//        }
+//        path.closePath();
+//        g.setClip(path);
 
         //draw objects
         for (Bullet b : bullets) {
@@ -139,8 +132,8 @@ public class PlayState extends GameState {
         thisPlayer.stopMove();
         gui.updateRotation(cursor.x, cursor.y);
 
-        shadow.setLightLocation(thisPlayer.x,thisPlayer.y);
-        shadow.sweep(999);
+        shadow.setLightLocation(px, py);
+        shadow.sweep(999); //idk what this number does
 
         for (Bullet b : bullets) {
             b.update();

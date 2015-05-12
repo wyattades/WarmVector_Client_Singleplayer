@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 3/7/2015.
  */
 public class MouseCursor {
@@ -14,12 +15,19 @@ public class MouseCursor {
     public int y;
     private int w;
     private int h;
-    private BufferedImage sprite;
+    private BufferedImage sprite, cursor, crosshair;
 
-    public MouseCursor(BufferedImage sprite) {
-        this.sprite = sprite;
+    public MouseCursor(BufferedImage cursor, BufferedImage crosshair) {
         x = Game.WIDTH / 2 + 70;
         y = Game.HEIGHT / 2;
+        this.cursor = cursor;
+        this.crosshair = crosshair;
+        setSpriteCursor(true);
+    }
+
+    public void setSpriteCursor(boolean bool) {
+        if (bool) sprite = cursor;
+        else sprite = crosshair;
         w = sprite.getWidth();
         h = sprite.getHeight();
     }
@@ -28,13 +36,16 @@ public class MouseCursor {
         g.drawImage(sprite, x - (w / 2), y - (h / 2), null);
     }
 
-    //theres got to be a simpler way to do this \/
+
     public void updatePosition(int deltaX, int deltaY) {
-        x += deltaX;
-        y += deltaY;
-        if (x > Game.WIDTH) x = Game.WIDTH;
-        else if (x < 0) x = 0;
-        if (y > Game.HEIGHT) y = Game.HEIGHT;
-        else if (y < 0) y = 0;
+        x = constrain(x+deltaX,0,Game.WIDTH);
+        y = constrain(y+deltaY,0,Game.HEIGHT);
     }
+
+    public void setPosition(int newx, int newy) {
+        x = constrain(newx,0,Game.WIDTH);
+        y = constrain(newy,0,Game.HEIGHT);
+    }
+
+    private int constrain(int value, int min, int max) { return Math.min(Math.max(value, min), max); }
 }

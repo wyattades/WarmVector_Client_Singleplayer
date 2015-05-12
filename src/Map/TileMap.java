@@ -12,12 +12,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/26/2015.
  */
 public class TileMap {
     private BufferedImage background;
     public int[][] tileArray;
-    private int width,height;
+    public int width;
+    public int height;
     private static final int EMPTY = 0;
     public static final int SOLID = 1;
     public static final int WINDOW = 2;

@@ -3,6 +3,7 @@ package GameState;
 import java.awt.*;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/25/2015.
  */
 public class GameOverState extends GameState {

@@ -1,6 +1,7 @@
 package Entity.Weapon;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/25/2015.
  */
 public class M4rifle extends Weapon {
@@ -9,7 +10,6 @@ public class M4rifle extends Weapon {
 
     public M4rifle(int x, int y, int w, int h, float orient, int ammo) {
         super(x, y, w, h, orient, ammo);
-        setConstants();
     }
 
     protected void setConstants() {

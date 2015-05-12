@@ -1,8 +1,12 @@
 package GameState;
 
+import HUD.MouseCursor;
+import Manager.FileManager;
+
 import java.awt.*;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/25/2015.
  */
 public class GameStateManager {
@@ -18,6 +22,7 @@ public class GameStateManager {
     public static final int MENU = 1;
     public static final int PLAY = 2;
     public static final int GAMEOVER = 3;
+    public MouseCursor cursor;
 
     public GameStateManager() {
         paused = false;
@@ -25,6 +30,8 @@ public class GameStateManager {
 
         gameStates = new GameState[NUM_STATES];
         setState(PLAY);
+        cursor = new MouseCursor(FileManager.CURSOR,FileManager.CROSSHAIR);
+
     }
 
     public void setState(int i) {
@@ -53,6 +60,7 @@ public class GameStateManager {
     }
 
     public void setPaused(boolean b) {
+        cursor.setSpriteCursor(b);
         paused = b;
     }
 
@@ -73,5 +81,6 @@ public class GameStateManager {
         if (paused) {
             pauseState.draw(g);
         }
+        cursor.draw(g);
     }
 }

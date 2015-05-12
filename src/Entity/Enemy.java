@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/24/2015.
  */
 public class Enemy extends Player {

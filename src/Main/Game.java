@@ -1,6 +1,7 @@
 package Main;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 12/29/2014.
  */
 
@@ -23,21 +24,18 @@ public class Game implements Runnable {
 
     private boolean running;
 
-    private JFrame frame;
-    private Canvas canvas;
     private BufferStrategy bufferStrategy;
-    private InputManager inputManager;
     private GameStateManager gsm;
 
     public Game() {
         running = true;
-        frame = new JFrame("WarmVector Singleplayer V2");
+        JFrame frame = new JFrame("WarmVector Singleplayer V2");
 
         JPanel panel = (JPanel) frame.getContentPane();
         panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         panel.setLayout(null);
 
-        canvas = new Canvas();
+        Canvas canvas = new Canvas();
         canvas.setBounds(0, 0, WIDTH, HEIGHT);
         canvas.setIgnoreRepaint(true);
 
@@ -60,7 +58,7 @@ public class Game implements Runnable {
                         new MemoryImageSource(16, 16, new int[16 * 16], 0, 16)), new Point(0, 0), "invisibleCursor");
         panel.setCursor(transparentCursor);
 
-        inputManager = new InputManager(canvas);
+        InputManager inputManager = new InputManager(canvas);
 
         inputManager.addKeyMapping("UP", KeyEvent.VK_W);
         inputManager.addKeyMapping("DOWN", KeyEvent.VK_S);

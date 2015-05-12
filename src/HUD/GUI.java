@@ -4,6 +4,7 @@ import Entity.ThisPlayer;
 import Main.Game;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/24/2015.
  */
 public class GUI {

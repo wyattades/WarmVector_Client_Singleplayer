@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 12/29/2014.
  */
 public class InputManager implements MouseListener, KeyListener, MouseMotionListener {
@@ -94,6 +95,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         clicks.add(new Click(s, mouseCode));
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
         for (Click click : clicks) {
             if (e.getButton() == click.mouseCode) {
@@ -102,6 +104,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         }
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         for (Click click : clicks) {
             if (e.getButton() == click.mouseCode) {

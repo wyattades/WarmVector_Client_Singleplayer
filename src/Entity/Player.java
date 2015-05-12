@@ -6,9 +6,11 @@ import Manager.FileManager;
 import Map.TileMap;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/22/2015.
  */
 public abstract class Player extends Entity {
@@ -19,6 +21,7 @@ public abstract class Player extends Entity {
     public int shootTime;
     ArrayList<Entity> tiles;
     private TileMap tileMap;
+    protected BufferedImage shootSprite,defaultSprite;
 
     Player(int x, int y, int w, int h, float orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
         super(x, y, w, h, orient);
@@ -31,7 +34,11 @@ public abstract class Player extends Entity {
         this.w = sprite.getWidth();
         this.h = sprite.getHeight();
         life = 50.0f;
-        transparent = true;
+    }
+
+    public void setSpriteToDefault(boolean bool) {
+        if (bool) sprite = defaultSprite;
+        else sprite = shootSprite;
     }
 
     public void updateWeapon() {
@@ -50,7 +57,7 @@ public abstract class Player extends Entity {
         y += vy;
     }
 
-    public boolean hit(int amount) {
+    public boolean hit(int amount, float angle) {
         life -= amount;
         return false;
     }

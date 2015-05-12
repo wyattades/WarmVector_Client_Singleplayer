@@ -5,11 +5,12 @@ import Manager.InputManager;
 import java.awt.*;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 3/7/2015.
  */
 public class ButtonC {
 
-    private int x, y, w, h, mx, my;
+    private int x, y, w, h;
     private Color c1, c2;
     public String text;
     public boolean pressed;
@@ -31,11 +32,7 @@ public class ButtonC {
             //g.setStroke(c2);
         } else {
             g.setColor(c2);
-            if (InputManager.isMousePressed("LEFTMOUSE")) {
-                pressed = true;
-            } else {
-                pressed = false;
-            }
+            pressed = InputManager.isMousePressed("LEFTMOUSE");
             //g.setStroke(c1);
         }
         g.fillRect(x - (w / 2), y - (h / 2), w, h);
@@ -46,7 +43,7 @@ public class ButtonC {
 
     private boolean overBox(int mx, int my) {
         return mx > x - w / 2 && mx < x + w / 2 &&
-                my > y - w / 2 && my < y + w / 2;
+                my > y - h / 2 && my < y + h / 2;
     }
 
 }

@@ -9,6 +9,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 3/12/2015.
  */
 public class Shadow2D {
@@ -42,7 +43,7 @@ public class Shadow2D {
     public void draw(Graphics2D g) {
         final Point2D.Float center = new Point2D.Float(x, y);
 
-        for (int i = 0; i < tileArray[0].length; i++){
+        for (int i = 0; i < tileArray.length; i++){
             for (int j = 0; j < tileArray[1].length; j++) {
                 if (tileArray[i][j] == TileMap.SOLID) {
                     Rectangle2D.Float bounds = new Rectangle2D.Float(i*tileSize,j*tileSize, tileSize+2, tileSize+2);

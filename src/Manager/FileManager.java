@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/24/2015.
  */
 public class FileManager {
@@ -15,6 +16,7 @@ public class FileManager {
     public static BufferedImage PLAYER0 = load("/Sprites/player_0_0");
     public static BufferedImage PLAYER1G = load("/Sprites/player_1_1");
     public static BufferedImage PLAYER1 = load("/Sprites/player_1_0");
+    public static BufferedImage CROSSHAIR = load("/Sprites/crosshair");
     public static BufferedImage M4 = load("/Sprites/gun_0");
     public static BufferedImage CURSOR = load("/Sprites/cursor");
     public static BufferedImage[] HIT = loadAnimation("/Sprites/hit_", 4);

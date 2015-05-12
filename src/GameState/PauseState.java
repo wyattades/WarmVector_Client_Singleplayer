@@ -1,12 +1,14 @@
 package GameState;
 
+import HUD.ButtonC;
 import Main.Game;
 import Manager.InputManager;
-import HUD.ButtonC;
+
 import java.awt.*;
 import java.util.ArrayList;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/25/2015.
  */
 public class PauseState extends GameState {
@@ -39,7 +41,7 @@ public class PauseState extends GameState {
                     gsm.setPaused(false);
                 } else if (b.text.equals("Restart")) {
                     gsm.unloadState(gsm.currentState);
-                    gsm.setState(gsm.PLAY);
+                    gsm.setState(GameStateManager.PLAY);
                     gsm.setPaused(false);
                 } else if (b.text.equals("Help")) {
 
@@ -51,15 +53,14 @@ public class PauseState extends GameState {
     }
 
     public void update() {
-
+        gsm.cursor.setPosition(InputManager.mouse.x, InputManager.mouse.y);
     }
 
     public void inputHandle() {
-        if (InputManager.isKeyPressed("ALT") && InputManager.getKeyTime("ALT")-Game.currentTimeMillis() > 100) {
-            InputManager.setKeyTime("ALT", Game.currentTimeMillis());
+        if (Game.currentTimeMillis() - InputManager.getKeyTime("ESCAPE") > 300 && InputManager.isKeyPressed("ESCAPE")) {
+            InputManager.setKeyTime("ESCAPE",Game.currentTimeMillis());
             gsm.setPaused(false);
         }
-//        if (InputManager.isKeyPressed("ALT") || InputManager.isKeyPressed("ESC")) gsm.setPaused(false);
     }
 
 }

@@ -1,6 +1,7 @@
 package Entity.Weapon;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/25/2015.
  */
 public class Remington extends Weapon {
@@ -9,7 +10,6 @@ public class Remington extends Weapon {
 
     public Remington(int x, int y, int w, int h, float orient, int ammo) {
         super(x, y, w, h, orient, ammo);
-        setConstants();
     }
 
     protected void setConstants() {
