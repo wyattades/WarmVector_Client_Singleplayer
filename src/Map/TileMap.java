@@ -16,7 +16,7 @@ import java.util.HashMap;
  * Created by Wyatt on 1/26/2015.
  */
 public class TileMap {
-    private BufferedImage background;
+    private BufferedImage background,foreground;
     public int[][] tileArray;
     public int width;
     public int height;
@@ -29,17 +29,23 @@ public class TileMap {
 
     public static final int tileSize = 10;
 
-    public TileMap(BufferedImage mapImage, BufferedImage background) {
+    public TileMap(BufferedImage mapImage, BufferedImage background, BufferedImage foreground) {
         this.background = background;
+        this.foreground = foreground;
         width = mapImage.getWidth();
         height = mapImage.getHeight();
         tileArray = setTileArray(mapImage);
         backgroundColor = new Color(120,120,120);
     }
 
-    public void draw(Graphics2D g) {
+    public void drawBack(Graphics2D g) {
         g.drawImage(background, 0, 0, null);
     }
+
+    public void drawFore(Graphics2D g) {
+        g.drawImage(foreground, 0, 0, null);
+    }
+
 
     int[][] setTileArray(BufferedImage image) {
         int[][] tArray = new int[width][height];

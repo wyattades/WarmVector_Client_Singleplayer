@@ -5,8 +5,8 @@ import Entity.Entity;
 import Entity.Player;
 import Entity.ThisPlayer;
 import Entity.Weapon.Weapon;
-import HUD.GUI;
-import HUD.MouseCursor;
+import Visual.GUI;
+import Visual.MouseCursor;
 import Main.Game;
 import Manager.FileManager;
 import Manager.InputManager;
@@ -35,42 +35,31 @@ public class PlayState extends GameState {
     private ArrayList<Bullet> bullets;
     private ArrayList<Animation> animations;
     private int level;
-    private Robot robot;
-    private MouseCursor cursor;
     private ThisPlayer thisPlayer;
-    Visibility shadow;
+    private Visibility shadow;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
     }
 
     public void init() {
-        try {
-            robot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
+
         bullets = new ArrayList<Bullet>();
         animations = new ArrayList<Animation>();
-        tileMap = new TileMap(FileManager.TILESET1, FileManager.BACKGROUND1);
+        tileMap = new TileMap(FileManager.TILESET1, FileManager.BACKGROUND1, FileManager.FOREGROUND1);
         entityList = tileMap.setEntities();
         gui = new GUI((ThisPlayer) entityList.get("thisPlayer").get(0));
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
-        cursor = new MouseCursor(FileManager.CURSOR, FileManager.CROSSHAIR);
         shadow = new Visibility(tileMap);
     }
 
     public void draw(Graphics2D g) {
-
-        //background
-        g.setColor(tileMap.backgroundColor);
-        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
-
         //translate screen to follow player
         AffineTransform oldT = g.getTransform();
         g.scale(Game.SCALEFACTOR, Game.SCALEFACTOR);
         g.translate(gui.screenPosX+(-px + Game.WIDTH / 2 /Game.SCALEFACTOR),gui.screenPosY+(-py + Game.HEIGHT / 2 /Game.SCALEFACTOR));
+        //background image
+        tileMap.drawBack(g);
 
 //        Path2D path = new Path2D.Float();
 //        path.moveTo(shadow.output.get(0).x, shadow.output.get(0).y);
@@ -85,7 +74,7 @@ public class PlayState extends GameState {
         for (Bullet b : bullets) {
             b.draw(g);
         }
-        tileMap.draw(g);
+
         for (Entity entity : entityList.get("weapon")) {
             Weapon w = (Weapon) entity;
             w.draw(g);
@@ -108,32 +97,28 @@ public class PlayState extends GameState {
             a.draw(g);
         }
         shadow.draw(g);
-
+        tileMap.drawFore(g);
         //reset transformation
         g.setTransform(oldT);
-
-        //draw cursor
-        cursor.draw(g);
     }
 
     public void update() {
-        //move mouse cursor to center of the display
-        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
+
 
         //create a copy of thisPlayer for convenience
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
 
         //update objects
         thisPlayer.update();
-        thisPlayer.updateAngle(cursor.x, cursor.y);
+        thisPlayer.updateAngle(gsm.cursor.x, gsm.cursor.y);
         px = thisPlayer.x;
         py = thisPlayer.y;
         gui.updatePosition();
         thisPlayer.stopMove();
-        gui.updateRotation(cursor.x, cursor.y);
+        gui.updateRotation(gsm.cursor.x, gsm.cursor.y);
 
         shadow.setLightLocation(px, py);
-        shadow.sweep(999); //idk what this number does
+        shadow.sweep(999);
 
         for (Bullet b : bullets) {
             b.update();
@@ -194,7 +179,7 @@ public class PlayState extends GameState {
     }
 
     public void inputHandle() {
-        cursor.updatePosition(InputManager.mouse.x-Game.WIDTH/2, InputManager.mouse.y-Game.HEIGHT/2);
+        gsm.cursor.updatePosition(InputManager.mouse.x-Game.WIDTH/2, InputManager.mouse.y-Game.HEIGHT/2);
 
         if (InputManager.isKeyPressed("ESCAPE")) System.exit(0);
         if (InputManager.isKeyPressed("LEFT") && !InputManager.isKeyPressed("RIGHT"))

@@ -131,7 +131,7 @@ public class Game implements Runnable {
 //        g.setRenderingHint(RenderingHints.KEY_DITHERING,
 //                RenderingHints.VALUE_DITHER_DISABLE);
         gsm.draw(g); //here is where the game is actually drawn
-        g.dispose();
+        //g.dispose();
         bufferStrategy.show();
     }
 

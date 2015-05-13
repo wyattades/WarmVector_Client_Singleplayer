@@ -1,4 +1,4 @@
-package HUD;
+package Visual;
 
 import Manager.InputManager;
 

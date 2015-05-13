@@ -1,4 +1,4 @@
-package HUD;
+package Visual;
 
 import Main.Game;
 
@@ -11,10 +11,8 @@ import java.awt.image.BufferedImage;
  */
 public class MouseCursor {
 
-    public int x;
-    public int y;
-    private int w;
-    private int h;
+    public int x,y;
+    private int w,h;
     private BufferedImage sprite, cursor, crosshair;
 
     public MouseCursor(BufferedImage cursor, BufferedImage crosshair) {
@@ -22,7 +20,7 @@ public class MouseCursor {
         y = Game.HEIGHT / 2;
         this.cursor = cursor;
         this.crosshair = crosshair;
-        setSpriteCursor(true);
+        setSpriteCursor(false);
     }
 
     public void setSpriteCursor(boolean bool) {
@@ -36,15 +34,14 @@ public class MouseCursor {
         g.drawImage(sprite, x - (w / 2), y - (h / 2), null);
     }
 
-
     public void updatePosition(int deltaX, int deltaY) {
         x = constrain(x+deltaX,0,Game.WIDTH);
         y = constrain(y+deltaY,0,Game.HEIGHT);
     }
 
-    public void setPosition(int newx, int newy) {
-        x = constrain(newx,0,Game.WIDTH);
-        y = constrain(newy,0,Game.HEIGHT);
+    public void setPosition(int new_x, int new_y) {
+        x = constrain(new_x,0,Game.WIDTH);
+        y = constrain(new_y,0,Game.HEIGHT);
     }
 
     private int constrain(int value, int min, int max) { return Math.min(Math.max(value, min), max); }

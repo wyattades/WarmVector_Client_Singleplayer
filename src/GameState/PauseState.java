@@ -1,6 +1,6 @@
 package GameState;
 
-import HUD.ButtonC;
+import Visual.ButtonC;
 import Main.Game;
 import Manager.InputManager;
 
@@ -44,7 +44,7 @@ public class PauseState extends GameState {
                     gsm.setState(GameStateManager.PLAY);
                     gsm.setPaused(false);
                 } else if (b.text.equals("Help")) {
-
+                    //open help menu
                 } else if (b.text.equals("Quit")) {
                     System.exit(0);
                 }
@@ -53,10 +53,11 @@ public class PauseState extends GameState {
     }
 
     public void update() {
-        gsm.cursor.setPosition(InputManager.mouse.x, InputManager.mouse.y);
     }
 
     public void inputHandle() {
+        gsm.cursor.updatePosition(InputManager.mouse.x, InputManager.mouse.y);
+
         if (Game.currentTimeMillis() - InputManager.getKeyTime("ESCAPE") > 300 && InputManager.isKeyPressed("ESCAPE")) {
             InputManager.setKeyTime("ESCAPE",Game.currentTimeMillis());
             gsm.setPaused(false);

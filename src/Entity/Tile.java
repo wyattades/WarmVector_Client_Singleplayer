@@ -18,7 +18,7 @@ public class Tile extends Entity {
         this.y = y;
         this.kind = kind;
         if (kind == TileMap.SOLID) hitColor = Color.black;
-        if (kind == TileMap.WINDOW) hitColor = Color.blue;
+        if (kind == TileMap.WINDOW) hitColor = new Color(90, 148,255);
     }
 
     public void draw(Graphics2D g) {}

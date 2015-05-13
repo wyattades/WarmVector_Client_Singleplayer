@@ -11,7 +11,8 @@ import java.io.IOException;
 public class FileManager {
 
     public static BufferedImage TILESET1 = load("/Tilesets/leveltiles_01");
-    public static BufferedImage BACKGROUND1 = load("/Maps/levelmap_01");
+    public static BufferedImage FOREGROUND1 = load("/Maps/levelmap_01");
+    public static BufferedImage BACKGROUND1 = load("/Background/background_01");
     public static BufferedImage PLAYER0G = load("/Sprites/player_0_1");
     public static BufferedImage PLAYER0 = load("/Sprites/player_0_0");
     public static BufferedImage PLAYER1G = load("/Sprites/player_1_1");

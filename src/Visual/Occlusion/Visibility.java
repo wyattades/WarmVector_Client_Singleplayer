@@ -54,38 +54,39 @@ public class Visibility {
         center = new Point(0, 0);
         output = new ArrayList<Point>();
         demo_intersectionsDetected = new ArrayList<ArrayList<Point>>();
-        for (int i = 0; i < tileMap.width; i++) {
-            for (int j = 0; j < tileMap.height; j++) {
-                if (tileMap.tileArray[i][j] == TileMap.SOLID || (i == 0 || i == tileMap.width - 1 || j == 0 || j == tileMap.height - 1) ) {
-                    addSegment( (i+.5f)* TileMap.tileSize - TileMap.tileSize/2, (j+.5f)*TileMap.tileSize + TileMap.tileSize/2,
-                                (i+.5f)* TileMap.tileSize + TileMap.tileSize/2, (j+.5f)*TileMap.tileSize + TileMap.tileSize/2);
-                    addSegment( (i+.5f)* TileMap.tileSize + TileMap.tileSize/2, (j+.5f)*TileMap.tileSize + TileMap.tileSize/2,
-                                (i+.5f)* TileMap.tileSize + TileMap.tileSize/2, (j+.5f)*TileMap.tileSize - TileMap.tileSize/2);
-                    addSegment( (i+.5f)* TileMap.tileSize + TileMap.tileSize/2, (j+.5f)*TileMap.tileSize - TileMap.tileSize/2,
-                                (i+.5f)* TileMap.tileSize - TileMap.tileSize/2, (j+.5f)*TileMap.tileSize - TileMap.tileSize/2);
-                    addSegment( (i+.5f)* TileMap.tileSize - TileMap.tileSize/2, (j+.5f)*TileMap.tileSize - TileMap.tileSize/2,
-                                (i+.5f)* TileMap.tileSize - TileMap.tileSize/2, (j+.5f)*TileMap.tileSize + TileMap.tileSize/2);
+        loadTileMap(tileMap);
+    }
+
+    private void loadTileMap(TileMap map) {
+        segments.clear();
+        endpoints.clear();
+        int[][] array = map.tileArray;
+        int w = map.width;
+        int h = map.height;
+        int size = TileMap.tileSize;
+
+        for (int i = 0; i < map.width; i++) {
+            for (int j = 0; j < map.height; j++) {
+                //if a tile is solid or in the border of the map, add segments for each side of the tile
+                if (array[i][j] == TileMap.SOLID || (i == 0 || i == w - 1 || j == 0 || j == h - 1) ) {
+                    //add a segment if there is not an existing segment in that spac
+                    addSegment( (i+.5f)* size - size/2, (j+.5f)*size + size/2,
+                            (i+.5f)* size + size/2, (j+.5f)*size + size/2);
+                    addSegment( (i+.5f)* size + size/2, (j+.5f)*size + size/2,
+                            (i+.5f)* size + size/2, (j+.5f)*size - size/2);
+                    addSegment( (i+.5f)* size + size/2, (j+.5f)*size - size/2,
+                            (i+.5f)* size - size/2, (j+.5f)*size - size/2);
+                    addSegment( (i+.5f)* size - size/2, (j+.5f)*size - size/2,
+                            (i+.5f)* size - size/2, (j+.5f)*size + size/2);
                 }
             }
         }
     }
 
-
-    // Helper function to construct segments along the outside perimeter
-    private void loadEdgeOfMap(int size,int margin) {
-        addSegment(margin, margin, margin, size - margin);
-        addSegment(margin, size - margin, size - margin, size - margin);
-        addSegment(size - margin, size - margin, size - margin, margin);
-        addSegment(size-margin, margin, margin, margin);
-        // NOTE: if using the simpler distance function (a.d < b.d)
-        // then we need segments to be similarly sized, so the edge of
-        // the map needs to be broken up into smaller segments.
-    }
-
     public void draw(Graphics2D g) {
-        Polygon EMPTY = new Polygon();
+        Polygon CUTOUT = new Polygon();
         for (Point s : output) {
-            EMPTY.addPoint((int)s.x,(int)s.y);
+            CUTOUT.addPoint((int)s.x,(int)s.y);
         }
         Polygon BORDER = new Polygon();
         BORDER.addPoint(-tileMap.width* TileMap.tileSize,-tileMap.height* TileMap.tileSize);
@@ -93,42 +94,19 @@ public class Visibility {
         BORDER.addPoint(2*tileMap.width * TileMap.tileSize,2*tileMap.height* TileMap.tileSize);
         BORDER.addPoint(-tileMap.width * TileMap.tileSize, 2*tileMap.height* TileMap.tileSize);
         GeneralPath SHADOW = new GeneralPath(BORDER);
-        SHADOW.append(EMPTY,true);
-        g.setColor(new Color(0,0,0,255));
+        SHADOW.append(CUTOUT,true);
+        g.setColor(new Color(20,20,20,255));
         g.fill(SHADOW);
-
-
     }
-
-    // Load a set of square blocks, plus any other line segments
-    public void loadMap(ArrayList<Segment> walls) {
-        segments.clear();
-        endpoints.clear();
-        //loadEdgeOfMap(size, margin);
-
-//            for (Block block : blocks) {
-//                float x = block.x;
-//                float y = block.y;
-//                float r = block.r;
-//                addSegment(x-r, y-r, x-r, y+r);
-//                addSegment(x-r, y+r, x+r, y+r);
-//                addSegment(x+r, y+r, x+r, y-r);
-//                addSegment(x+r, y-r, x-r, y-r);
-//            }
-        for (Segment wall : walls) {
-            addSegment(wall.p1.x, wall.p1.y, wall.p2.x, wall.p2.y);
-        }
-    }
-
 
     // Add a segment, where the first point shows up in the
     // visualization but the second one does not. (Every endpoint is
     // part of two segments, but we want to only show them once.)
     private void addSegment(float x1, float y1, float x2, float y2) {
-        Segment segment = null;
-        EndPoint p1  = new EndPoint(x1, y1);
+        EndPoint p1 = new EndPoint(x1, y1);
         EndPoint p2 = new EndPoint(x2, y2);
-        p1.segment = p2.segment = null;
+        Segment segment = null;
+        p1.segment = p2.segment = segment;
         p1.visualize = true;
         p2.visualize = false;
         segment = new Segment();
@@ -136,10 +114,10 @@ public class Visibility {
         segment.p1 = p1;
         segment.p2 = p2;
         segment.d = 0;
-
         segments.add(segment);
         endpoints.add(p1);
         endpoints.add(p2);
+
     }
 
 

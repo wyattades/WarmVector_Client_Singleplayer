@@ -1,6 +1,7 @@
 package GameState;
 
-import HUD.MouseCursor;
+import Main.Game;
+import Visual.MouseCursor;
 import Manager.FileManager;
 
 import java.awt.*;
@@ -23,6 +24,7 @@ public class GameStateManager {
     public static final int PLAY = 2;
     public static final int GAMEOVER = 3;
     public MouseCursor cursor;
+    private Robot robot;
 
     public GameStateManager() {
         paused = false;
@@ -31,7 +33,12 @@ public class GameStateManager {
         gameStates = new GameState[NUM_STATES];
         setState(PLAY);
         cursor = new MouseCursor(FileManager.CURSOR,FileManager.CROSSHAIR);
-
+        try {
+            robot = new Robot();
+        } catch (AWTException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
     }
 
     public void setState(int i) {
@@ -65,6 +72,8 @@ public class GameStateManager {
     }
 
     public void update() {
+        //move mouse cursor to center of the display
+        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
         if (paused) {
             pauseState.inputHandle();
             pauseState.update();

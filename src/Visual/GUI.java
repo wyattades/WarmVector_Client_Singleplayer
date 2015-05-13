@@ -1,4 +1,4 @@
-package HUD;
+package Visual;
 
 import Entity.ThisPlayer;
 import Main.Game;
