@@ -17,6 +17,15 @@ public class PauseState extends GameState {
 
     public PauseState(GameStateManager gsm) {
         super(gsm);
+
+    }
+
+    private void addButton(String name, int x, int y) {
+        buttons.add(new ButtonC(name, x, y, 300, 80, Color.red, Color.blue));
+
+    }
+
+    public void init() {
         buttons = new ArrayList<ButtonC>();
         addButton("Resume",Game.WIDTH/2,Game.HEIGHT/2-200);
         addButton("Restart",Game.WIDTH/2,Game.HEIGHT/2);
@@ -24,31 +33,24 @@ public class PauseState extends GameState {
         addButton("Quit",Game.WIDTH/2,Game.HEIGHT/2+400);
     }
 
-    private void addButton(String name, int x, int y) {
-        buttons.add(new ButtonC(name,x,y,300,80,Color.red,Color.blue));
-
-    }
-
-    public void init() {
-
-    }
-
     public void draw(Graphics2D g) {
         for (ButtonC b : buttons) {
-            b.draw(g);
             if (b.pressed) {
                 if (b.text.equals("Resume")) {
-                    gsm.setPaused(false);
+                    gsm.paused = false;
                 } else if (b.text.equals("Restart")) {
-                    gsm.unloadState(gsm.currentState);
                     gsm.setState(GameStateManager.PLAY);
-                    gsm.setPaused(false);
                 } else if (b.text.equals("Help")) {
                     //open help menu
                 } else if (b.text.equals("Quit")) {
+                    System.out.println("Quiting");
                     System.exit(0);
+
                 }
             }
+        }
+        for (ButtonC b : buttons) {
+            b.draw(g);
         }
     }
 
@@ -56,12 +58,11 @@ public class PauseState extends GameState {
     }
 
     public void inputHandle() {
-        gsm.cursor.updatePosition(InputManager.mouse.x, InputManager.mouse.y);
-
-        if (Game.currentTimeMillis() - InputManager.getKeyTime("ESCAPE") > 300 && InputManager.isKeyPressed("ESCAPE")) {
-            InputManager.setKeyTime("ESCAPE",Game.currentTimeMillis());
+        if (InputManager.isKeyPressed("ALT") && Game.currentTimeMillis()-InputManager.getKeyTime("ALT") > 400) {
+            InputManager.setKeyTime("ALT",Game.currentTimeMillis());
             gsm.setPaused(false);
         }
+        gsm.cursor.setPosition(InputManager.mouse.x, InputManager.mouse.y);
     }
 
 }

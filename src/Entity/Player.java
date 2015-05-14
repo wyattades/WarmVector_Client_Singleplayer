@@ -33,7 +33,7 @@ public abstract class Player extends Entity {
         sprite = FileManager.PLAYER1G;
         this.w = sprite.getWidth();
         this.h = sprite.getHeight();
-        life = 50.0f;
+        life = 25.0f;
     }
 
     public void setSpriteToDefault(boolean bool) {

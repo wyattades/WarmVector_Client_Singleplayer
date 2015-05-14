@@ -12,10 +12,7 @@ import java.awt.*;
  */
 public class GameStateManager {
 
-    public boolean paused;
-    private PauseState pauseState;
-
-    private GameState[] gameStates;
+    public GameState[] gameStates;
     public int currentState;
 
     public static final int NUM_STATES = 4;
@@ -23,28 +20,21 @@ public class GameStateManager {
     public static final int MENU = 1;
     public static final int PLAY = 2;
     public static final int GAMEOVER = 3;
+
+    public boolean paused;
+
     public MouseCursor cursor;
-    private Robot robot;
 
     public GameStateManager() {
-        paused = false;
-        pauseState = new PauseState(this);
-
         gameStates = new GameState[NUM_STATES];
         setState(PLAY);
         cursor = new MouseCursor(FileManager.CURSOR,FileManager.CROSSHAIR);
-        try {
-            robot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
     }
 
     public void setState(int i) {
         int previousState = currentState;
-        unloadState(previousState);
         currentState = i;
+        unloadState(previousState);
         switch (i) {
             case (INTRO):
                 gameStates[i] = new IntroState(this);
@@ -66,29 +56,27 @@ public class GameStateManager {
         gameStates[i] = null;
     }
 
-    public void setPaused(boolean b) {
-        cursor.setSpriteCursor(b);
-        paused = b;
+    public void setPaused(boolean p) {
+        paused = p;
+        cursor.setSpriteCursor(p);
     }
 
     public void update() {
-        //move mouse cursor to center of the display
-        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
-        if (paused) {
-            pauseState.inputHandle();
-            pauseState.update();
-        } else if (gameStates[currentState] != null) {
+        if (gameStates[currentState] != null) {
             gameStates[currentState].inputHandle();
             gameStates[currentState].update();
+        } else {
+            System.out.println("gameState = null (during update)");
+            System.exit(0);
         }
     }
 
     public void draw(Graphics2D g) {
         if (gameStates[currentState] != null) {
             gameStates[currentState].draw(g);
-        }
-        if (paused) {
-            pauseState.draw(g);
+        } else {
+            System.out.println("gameState = null (during draw)");
+            System.exit(0);
         }
         cursor.draw(g);
     }
