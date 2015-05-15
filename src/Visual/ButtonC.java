@@ -31,7 +31,7 @@ public class ButtonC {
             g.setColor(c1);
             //g.setStroke(c2);
         } else {
-            if (InputManager.isMousePressed("LEFT")) pressed = true;
+            if (InputManager.isMousePressed("LEFTMOUSE")) pressed = true;
             g.setColor(c2);
             //g.setStroke(c1);
         }

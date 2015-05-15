@@ -28,7 +28,7 @@ public class GameStateManager {
     public GameStateManager() {
         gameStates = new GameState[NUM_STATES];
         setState(PLAY);
-        cursor = new MouseCursor(FileManager.CURSOR,FileManager.CROSSHAIR);
+        cursor = new MouseCursor(FileManager.images.get("cursor.png"),FileManager.images.get("crosshair.png"));
     }
 
     public void setState(int i) {

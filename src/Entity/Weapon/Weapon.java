@@ -1,9 +1,11 @@
 package Entity.Weapon;
 
 import Entity.Entity;
+import Entity.Player;
 import Manager.FileManager;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -12,22 +14,41 @@ import java.awt.*;
 public abstract class Weapon extends Entity {
 
     public float vx, vy;
-    public int ammo,type,amount,damage,rate;
+    public int ammo,type,amount,damage,rate,maxAmmo;
     public String name;
     public boolean isHeld;
     public float bVel,spread;
+    public Player user;
 
-    Weapon(int x, int y, int w, int h, float orient, int ammo) {
+    Weapon(int x, int y, int w, int h, float orient, Player i_user) {
         super(x, y, w, h, orient);
         vx = vy = 0;
-        sprite = FileManager.M4;
+        sprite = FileManager.images.get("m4.png");
         isHeld = false;
-        this.ammo = ammo;
-
+        user = i_user;
         this.w = sprite.getWidth();
         this.h = sprite.getHeight();
         hitColor = Color.DARK_GRAY;
         setConstants();
+        ammo = maxAmmo;
+    }
+
+    public void unloadUser() {
+        user = null;
+    }
+
+    public void draw(Graphics2D g) {
+        if (user != null) {
+            AffineTransform oldTForm = g.getTransform();
+            g.rotate(orient, x, y);
+            g.drawImage(sprite, x - w / 2 + 24, y - h / 2 + 2, null);
+            g.setTransform(oldTForm);
+        } else {
+            AffineTransform oldTForm = g.getTransform();
+            g.rotate(orient, x, y);
+            g.drawImage(sprite, x - w / 2, y - h / 2, null);
+            g.setTransform(oldTForm);
+        }
     }
 
     protected abstract void setConstants();
@@ -41,7 +62,16 @@ public abstract class Weapon extends Entity {
     public boolean hit(int amount, float angle) {
         vx += Math.cos(angle);
         vy += Math.sin(angle);
-        return false;
+        return true;
     }
 
+    public void updatePos() {
+        if (user != null) {
+            orient = user.orient;
+            x = user.x;
+            y = user.y;
+        } else {
+            System.out.println("Unauthorized update of position");
+        }
+    }
 }

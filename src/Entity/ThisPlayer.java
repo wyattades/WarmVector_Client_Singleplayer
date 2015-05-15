@@ -15,9 +15,10 @@ public class ThisPlayer extends Player {
 
     public ThisPlayer(int x, int y, int w, int h, float orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
         super(x, y, w, h, orient, weapon, tileMap, tiles);
-        sprite = shootSprite = FileManager.PLAYER0G;
-        defaultSprite = FileManager.PLAYER0;
-        state = true;
+        sprite = shootSprite = FileManager.images.get("player0g.png");
+        defaultSprite = FileManager.images.get("player0.png");
+        this.w = sprite.getWidth();
+        this.h = sprite.getHeight();
     }
 
     public void updateAngle(float cursorx, float cursory) {

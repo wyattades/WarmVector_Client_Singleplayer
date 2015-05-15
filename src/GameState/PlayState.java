@@ -5,8 +5,8 @@ import Entity.Entity;
 import Entity.Player;
 import Entity.ThisPlayer;
 import Entity.Weapon.Weapon;
-import Visual.GUI;
-import Visual.MouseCursor;
+import Visual.ScreenMover;
+import Visual.HUD;
 import Main.Game;
 import Manager.FileManager;
 import Manager.InputManager;
@@ -28,45 +28,55 @@ import java.util.Iterator;
 public class PlayState extends GameState {
 
     private PauseState pauseState;
-    private int px,py;
+    private int px, py, level;
     private HashMap<String,ArrayList<Entity>> entityList;
     private TileMap tileMap;
-    private GUI gui;
+    private ScreenMover screenMover;
+    private HUD hud;
     private ArrayList<Bullet> bullets;
     private ArrayList<Animation> animations;
-    private int level;
     private ThisPlayer thisPlayer;
     private Visibility shadow;
     private Robot robot;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
+        level = 1;
         pauseState = new PauseState(gsm);
-    }
-
-    public void init() {
-        pauseState.init();
-        gsm.paused = false;
         try {
             robot = new Robot();
         } catch (AWTException e) {
             e.printStackTrace();
             System.exit(0);
         }
+    }
+
+    public void init() {
+        if (level > 2) {
+            System.out.println("YOU WIN!!!!\nThis game is still in development,\nmore content coming soon!");
+            System.exit(0);
+        } else {
+            System.out.println("Level = " + level);
+
+        }
+        pauseState.init();
+        gsm.paused = false;
         bullets = new ArrayList<Bullet>();
         animations = new ArrayList<Animation>();
-        tileMap = new TileMap(FileManager.TILESET1, FileManager.BACKGROUND1, FileManager.FOREGROUND1);
+        tileMap = new TileMap(FileManager.images.get("leveltiles_0"+level+".png"), FileManager.images.get("background_0"+level+".png"), FileManager.images.get("foreground_0"+level+".png"));
         entityList = tileMap.setEntities();
-        gui = new GUI((ThisPlayer) entityList.get("thisPlayer").get(0));
+        screenMover = new ScreenMover((ThisPlayer) entityList.get("thisPlayer").get(0));
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
+        hud = new HUD(thisPlayer);
         shadow = new Visibility(tileMap);
+        robot.mouseMove(Game.WIDTH/2,Game.HEIGHT/2);
     }
 
     public void draw(Graphics2D g) {
         //translate screen to follow player
         AffineTransform oldT = g.getTransform();
         g.scale(Game.SCALEFACTOR, Game.SCALEFACTOR);
-        g.translate(gui.screenPosX+(-px + Game.WIDTH / 2 /Game.SCALEFACTOR),gui.screenPosY+(-py + Game.HEIGHT / 2 /Game.SCALEFACTOR));
+        g.translate(screenMover.screenPosX+(-px + Game.WIDTH / 2 /Game.SCALEFACTOR), screenMover.screenPosY+(-py + Game.HEIGHT / 2 /Game.SCALEFACTOR));
         //background image
         tileMap.drawBack(g);
 
@@ -90,14 +100,14 @@ public class PlayState extends GameState {
         }
 
         if (thisPlayer.weapon != null) {
-            thisPlayer.updateWeapon();
+            thisPlayer.weapon.updatePos();
             thisPlayer.weapon.draw(g);
         }
         for (Entity entity : entityList.get("enemy")) {
             Enemy e = (Enemy) entity;
             e.draw(g);
             if (e.weapon != null) {
-                e.updateWeapon();
+                e.weapon.updatePos();
                 e.weapon.draw(g);
             }
         }
@@ -109,12 +119,14 @@ public class PlayState extends GameState {
         tileMap.drawFore(g);
         //reset transformation
         g.setTransform(oldT);
+        hud.draw(g);
         if (gsm.paused) pauseState.draw(g);
 
     }
 
     public void update() {
         if (!gsm.paused) {
+
             //create a copy of thisPlayer for convenience
             thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
 
@@ -123,9 +135,9 @@ public class PlayState extends GameState {
             thisPlayer.updateAngle(gsm.cursor.x, gsm.cursor.y);
             px = thisPlayer.x;
             py = thisPlayer.y;
-            gui.updatePosition();
+            screenMover.updatePosition();
             thisPlayer.stopMove();
-            gui.updateRotation(gsm.cursor.x, gsm.cursor.y);
+            screenMover.updateRotation(gsm.cursor.x, gsm.cursor.y);
 
             shadow.setLightLocation(px, py);
             shadow.sweep(999);
@@ -169,12 +181,20 @@ public class PlayState extends GameState {
                             }
                             entry.getValue().remove(i);
                         } else { //player dies
-                            gsm.setState(GameStateManager.PLAY);
+                            init();
                         }
                     }
                 }
             }
-            robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
+            int enemies = entityList.get("enemy").size();
+            hud.updateEnemyAmount(enemies);
+
+            //if there are no enemies left...
+            if (enemies <= 0) {
+                //move on to next level
+                level++;
+                init();
+            }
         } else {
             pauseState.update();
         }
@@ -185,8 +205,9 @@ public class PlayState extends GameState {
             for (int i = 0; i < p.weapon.amount; i++) {
                 Bullet b = new Bullet(p.x, p.y, p.orient, p.weapon.spread, p.weapon.damage, entityList,p);
                 for (Bullet.CollidePoint point : b.collidePoints) {
-                    animations.add(new Animation(point.x, point.y, b.orient, 2, point.hitColor, FileManager.HIT));
+                    animations.add(new Animation(point.x, point.y, b.orient, 2, point.hitColor, FileManager.animations.get("hit_")));
                 }
+                p.weapon.changeAmmo(-1);
                 bullets.add(b);
             }
             p.shootTime = Game.currentTimeMillis();
@@ -212,14 +233,16 @@ public class PlayState extends GameState {
             if (InputManager.isMouseClicked("RIGHTMOUSE") && Game.currentTimeMillis() - InputManager.getMouseTime("RIGHTMOUSE") > 500) {
                 InputManager.setMouseTime("RIGHTMOUSE", Game.currentTimeMillis());
                 if (thisPlayer.weapon != null) {
+                    thisPlayer.weapon.unloadUser();
                     entityList.get("weapon").add(thisPlayer.getWeapon());
                     thisPlayer.weapon = null;
-                    thisPlayer.sprite = FileManager.PLAYER0;
+                    thisPlayer.setSpriteToDefault(true);
                     for (int i = 0; i < entityList.get("weapon").size() - 1; i++) {
                         Weapon w = (Weapon) entityList.get("weapon").get(i);
                         if (thisPlayer.collideBox.intersects(w.collideBox)) {
                             thisPlayer.weapon = w;
-                            thisPlayer.sprite = FileManager.PLAYER0G;
+                            w.user = thisPlayer;
+                            thisPlayer.setSpriteToDefault(false);
                             entityList.get("weapon").remove(w);
                             break;
                         }
@@ -229,7 +252,8 @@ public class PlayState extends GameState {
                         Weapon w = (Weapon) entityList.get("weapon").get(i);
                         if (thisPlayer.collideBox.intersects(w.collideBox)) {
                             thisPlayer.weapon = w;
-                            thisPlayer.sprite = FileManager.PLAYER0G;
+                            w.user = thisPlayer;
+                            thisPlayer.setSpriteToDefault(false);
                             entityList.get("weapon").remove(w);
                             break;
                         }
@@ -240,8 +264,9 @@ public class PlayState extends GameState {
                 InputManager.setKeyTime("ALT",Game.currentTimeMillis());
                 gsm.setPaused(true);
             }
-            gsm.cursor.updatePosition(InputManager.mouse.x - Game.WIDTH / 2, InputManager.mouse.y - Game.HEIGHT / 2);
-
+            //gsm.cursor.setPosition(InputManager.mouse.x - Game.WIDTH / 2, InputManager.mouse.y - Game.HEIGHT / 2);
+            gsm.cursor.setPosition(InputManager.mouse.x + 2* screenMover.screenPosX, InputManager.mouse.y + 2* screenMover.screenPosY);
+            //robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
         } else {
             pauseState.inputHandle();
         }

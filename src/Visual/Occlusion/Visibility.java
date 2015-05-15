@@ -15,18 +15,6 @@ import java.util.Comparator;
  */
 public class Visibility {
 
-/* 2d visibility algorithm, for demo
-   Usage:
-      new Visibility()
-   Whenever map data changes:
-      loadMap
-   Whenever light source changes:
-      setLightLocation
-   To calculate the area:
-      sweep
-*/
-
-    // Note: DLL is a doubly linked list but an array would be ok too
 
     // These represent the map and the light location:
     private ArrayList<Segment> segments;
@@ -41,11 +29,7 @@ public class Visibility {
     // The output is a series of points that forms a visible area polygon
     public ArrayList<Point> output;
 
-    // For the demo, keep track of wall intersections
-    private ArrayList<ArrayList<Point>> demo_intersectionsDetected;
-
     private TileMap tileMap;
-
     private Rectangle2D.Float BORDER;
 
     // Construct an empty visibility set
@@ -58,11 +42,12 @@ public class Visibility {
         open = new ArrayList<Segment>();
         center = new Point(0, 0);
         output = new ArrayList<Point>();
-        demo_intersectionsDetected = new ArrayList<ArrayList<Point>>();
         loadTileMap(tileMap);
     }
 
+    // Set the endpoints and segments corresponding to the tiles on the map
     private void loadTileMap(TileMap map) {
+        // Reset endpoints and segments
         segments.clear();
         endpoints.clear();
         int[][] array = map.tileArray;
@@ -72,9 +57,8 @@ public class Visibility {
 
         for (int i = 0; i < map.width; i++) {
             for (int j = 0; j < map.height; j++) {
-                //if a tile is solid or in the border of the map, add segments for each side of the tile
+                // If a tile is solid or in the border of the map, add segments for each side of the tile
                 if (array[i][j] == TileMap.SOLID || (i == 0 || i == w - 1 || j == 0 || j == h - 1) ) {
-                    //add a segment if there is not an existing segment in that spac
                     addSegment( (i+.5f)* size - size/2, (j+.5f)*size + size/2,
                             (i+.5f)* size + size/2, (j+.5f)*size + size/2);
                     addSegment( (i+.5f)* size + size/2, (j+.5f)*size + size/2,
@@ -99,11 +83,9 @@ public class Visibility {
         g.fill(SHADOW);
     }
 
-    // Add a segment, where the first point shows up in the
-    // visualization but the second one does not. (Every endpoint is
-    // part of two segments, but we want to only show them once.)
+
     private void addSegment(float x1, float y1, float x2, float y2) {
-        //do not add a segment if one exists in that location
+        // Add a segment only if there is not an existing segment in that space
         boolean alreadyExists = false;
         for (Segment s : segments) {
             if (((int)x1 == (int)s.p1.x && (int)y1 == (int)s.p1.y && (int)x2 == (int)s.p2.x && (int)y2 == (int)s.p2.y)||
@@ -112,6 +94,9 @@ public class Visibility {
             }
         }
         if (!alreadyExists) {
+            // Add a segment, where the first point shows up in the
+            // visualization but the second one does not. (Every endpoint is
+            // part of two segments, but we want to only show them once.)
             EndPoint p1 = new EndPoint(x1, y1);
             p1.visualize = true;
             EndPoint p2 = new EndPoint(x2, y2);
@@ -126,8 +111,7 @@ public class Visibility {
     }
 
 
-    // Set the light location. Segment and EndPoint data can't be
-    // processed until the light location is known.
+    // Set the light location
     public void setLightLocation(float x, float y) {
         center.x = x;
         center.y = y;
@@ -135,18 +119,8 @@ public class Visibility {
         for (Segment segment : segments) {
             float dx = 0.5f * (segment.p1.x + segment.p2.x) - x;
             float dy = 0.5f * (segment.p1.y + segment.p2.y) - y;
-            // NOTE: we only use this for comparison so we can use
-            // distance squared instead of distance. However in
-            // practice the sqrt is plenty fast and this doesn't
-            // really help in this situation.
             segment.d = dx*dx + dy*dy;
 
-            // NOTE: future optimization: we could record the quadrant
-            // and the y/x or x/y ratio, and sort by (quadrant,
-            // ratio), instead of calling atan2. See
-            // <https://github.com/mikolalysenko/compare-slope> for a
-            // library that does this. Alternatively, calculate the
-            // angles and use bucket sort to get an O(N) sort.
             segment.p1.angle = (float) Math.atan2(segment.p1.y - y, segment.p1.x - x);
             segment.p2.angle = (float) Math.atan2(segment.p2.y - y, segment.p2.x - x);
 
@@ -158,26 +132,17 @@ public class Visibility {
         }
     }
 
-    // Helper: leftOf(segment, point) returns true if point is "left"
+    // According to an outside source: leftOf(segment, point) returns true if point is "left"
     // of segment treated as a vector. Note that this assumes a 2D
     // coordinate system in which the Y axis grows downwards, which
     // matches common 2D graphics libraries, but is the opposite of
     // the usual convention from mathematics and in 3D graphics
     // libraries.
     private boolean leftOf(Segment s, Point p) {
-        // This is based on a 3d cross product, but we don't need to
-        // use z coordinate inputs (they're 0), and we only need the
-        // sign. If you're annoyed that cross product is only defined
-        // in 3d, see "outer product" in Geometric Algebra.
         // <http://en.wikipedia.org/wiki/Geometric_algebra>
         float cross = (s.p2.x - s.p1.x) * (p.y - s.p1.y)
                 - (s.p2.y - s.p1.y) * (p.x - s.p1.x);
         return cross < 0;
-        // Also note that this is the naive version of the test and
-        // isn't numerically robust. See
-        // <https://github.com/mikolalysenko/robust-arithmetic> for a
-        // demo of how this fails when a point is very close to the
-        // line.
     }
 
     // Return p*(1-f) + q*f
@@ -185,67 +150,40 @@ public class Visibility {
         return new Point(p.x*(1-f) + q.x*f, p.y*(1-f) + q.y*f);
     }
 
-    // Helper: do we know that segment a is in front of b?
-    // Implementation not anti-symmetric (that is to say,
-    // _segment_in_front_of(a, b) != (!_segment_in_front_of(b, a)).
-    // Also note that it only has to work in a restricted set of cases
-    // in the visibility algorithm; I don't think it handles all
-    // cases. See http://www.redblobgames.com/articles/visibility/segment-sorting.html
+
     private boolean _segment_in_front_of(Segment a, Segment b, Point relativeTo) {
-        // NOTE: we slightly shorten the segments so that
-        // intersections of the endpoints (common) don't count as
-        // intersections in this algorithm
+        // A neat algorithm that works for reasons outside of my knowledge
         boolean A1 = leftOf(a, interpolate(b.p1, b.p2, 0.01f));
         boolean A2 = leftOf(a, interpolate(b.p2, b.p1, 0.01f));
         boolean A3 = leftOf(a, relativeTo);
         boolean B1 = leftOf(b, interpolate(a.p1, a.p2, 0.01f));
         boolean B2 = leftOf(b, interpolate(a.p2, a.p1, 0.01f));
         boolean B3 = leftOf(b, relativeTo);
-
-        // NOTE: this algorithm is probably worthy of a short article
-        // but for now, draw it on paper to see how it works. Consider
-        // the line A1-A2. If both B1 and B2 are on one side and
-        // relativeTo is on the other side, then A is in between the
-        // viewer and B. We can do the same with B1-B2: if A1 and A2
-        // are on one side, and relativeTo is on the other side, then
-        // B is in between the viewer and A.
         if (B1 == B2 && B2 != B3) return true;
         if (A1 == A2 && A2 == A3) return true;
         if (A1 == A2 && A2 != A3) return false;
         if (B1 == B2 && B2 == B3) return false;
 
-        // If A1 != A2 and B1 != B2 then we have an intersection.
-        // Expose it for the GUI to show a message. A more robust
-        // implementation would split segments at intersections so
-        // that part of the segment is in front and part is behind.
         ArrayList<Point> points = new ArrayList<Point>();
         points.add(a.p1);
         points.add(a.p2);
         points.add(b.p1);
         points.add(b.p2);
-        demo_intersectionsDetected.add(points);
         return false;
-
-        // NOTE: previous implementation was a.d < b.d. That's simpler
-        // but trouble when the segments are of dissimilar sizes. If
-        // you're on a grid and the segments are similarly sized, then
-        // using distance will be a simpler and faster implementation.
     }
 
 
     // Run the algorithm, sweeping over all or part of the circle to find
     // the visible area, represented as a set of triangles
-    public void sweep(float maxAngle) { //maxAngle:Float=999.0
+    public void sweep(float maxAngle) {
         output = new ArrayList<Point>();  // output set of triangles
-        demo_intersectionsDetected = new ArrayList<ArrayList<Point>>();
         Collections.sort(endpoints, new Comparator<EndPoint>() {
-            // Helper: comparison function for sorting points by angle
+            // comparison function for sorting points by angle
             @Override
             public int compare(EndPoint a, EndPoint b) {
                 // Traverse in angle order
                 if (a.angle > b.angle) return 1;
                 if (a.angle < b.angle) return -1;
-                // But for ties (common), we want Begin nodes before End nodes
                 if (!a.begin && b.begin) return 1;
                 if (a.begin && !b.begin) return -1;
                 return 0;
@@ -261,7 +199,7 @@ public class Visibility {
         // both collect and process them. However it would be more
         // efficient to go through all the segments, figure out which
         // ones intersect the initial sweep line, and then sort them.
-        for (int i = 0; i < 2; i++) { //0-3 or 0-2????
+        for (int i = 0; i < 2; i++) {
             for (EndPoint p : endpoints) {
                 if (i == 1 && p.angle > maxAngle) {
                     // Early exit for the visualization to show the sweep process
@@ -299,7 +237,6 @@ public class Visibility {
 
 
     private Point lineIntersection(Point p1, Point p2, Point p3, Point p4) {
-        // From http://paulbourke.net/geometry/lineline2d/
         float s = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x))
                 / ((p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y));
         return new Point(p1.x + s * (p2.x - p1.x), p1.y + s * (p2.y - p1.y));

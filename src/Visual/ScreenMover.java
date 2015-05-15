@@ -7,15 +7,16 @@ import Main.Game;
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/24/2015.
  */
-public class GUI {
+public class ScreenMover {
 
     public float screenVelX,screenVelY;
     private float maxVel;
     public int screenPosX, screenPosY;
     private ThisPlayer player;
     private static final float posAccel = 1.0f, negAccel = 1.0f;
+    private static final int MaxRadius = 70;
 
-    public GUI(ThisPlayer player) {
+    public ScreenMover(ThisPlayer player) {
         screenVelX = screenVelY = 0;
         screenPosX = screenPosY = 0;
         maxVel = 24;
@@ -46,7 +47,7 @@ public class GUI {
     }
 
     public void updateRotation(double mouseX, double mouseY) {
-        float rotateRadius = (float) (-70 * Math.sqrt((mouseX - Game.WIDTH/2) * (mouseX - Game.WIDTH/2) + (mouseY - Game.HEIGHT/2) * (mouseY - Game.HEIGHT/2)) / (Game.WIDTH / 2));
+        float rotateRadius = (float) (-MaxRadius * Math.sqrt((mouseX - Game.WIDTH/2) * (mouseX - Game.WIDTH/2) + (mouseY - Game.HEIGHT/2) * (mouseY - Game.HEIGHT/2)) / (Game.WIDTH / 2));
         //int rotateRadius = -70;
         screenPosX += rotateRadius * Math.cos(player.orient);
         screenPosY += rotateRadius * Math.sin(player.orient);

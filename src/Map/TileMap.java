@@ -20,12 +20,12 @@ public class TileMap {
     public int[][] tileArray;
     public int width;
     public int height;
-    private static final int EMPTY = 0;
-    public static final int SOLID = 1;
+    public static final int EMPTY = 0;
+    public static final int SOLID  = 1;
     public static final int WINDOW = 2;
-    private static final int SPAWN = 3;
-    private static final int ENEMY = 4;
-    public Color backgroundColor;
+    public static final int SPAWN = 3;
+    public static final int ENEMY = 4;
+    //public Color backgroundColor;
 
     public static final int tileSize = 10;
 
@@ -35,7 +35,7 @@ public class TileMap {
         width = mapImage.getWidth();
         height = mapImage.getHeight();
         tileArray = setTileArray(mapImage);
-        backgroundColor = new Color(120,120,120);
+        //backgroundColor = new Color(120,120,120);
     }
 
     public void drawBack(Graphics2D g) {
@@ -80,7 +80,9 @@ public class TileMap {
         values.put("enemy", new ArrayList<Entity>());
         values.put("weapon", new ArrayList<Entity>());
         values.put("tile", new ArrayList<Entity>());
-        values.get("thisPlayer").add(new ThisPlayer(0, 0, 0, 0, 0, new M4rifle(0, 0, 0, 0, 0, M4rifle.maxAmmo), this, values.get("tile")));
+        ThisPlayer tp = new ThisPlayer(0, 0, 0 ,0 , 0, new M4rifle(0, 0, 0, 0, 0,null), this, values.get("tile"));
+        tp.weapon.user = tp;
+        values.get("thisPlayer").add(tp);
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 int t = tileArray[i][j];
@@ -93,7 +95,9 @@ public class TileMap {
                     values.get("thisPlayer").get(0).y = j * tileSize;
                     tileArray[i][j] = EMPTY;
                 } else if (t == ENEMY) {
-                    values.get("enemy").add(new Enemy(i * tileSize, j * tileSize, 4 * tileSize, 4 * tileSize, 0, new M4rifle(0, 0, 64, 32, 0, M4rifle.maxAmmo), this, values.get("tile")));
+                    Enemy e = new Enemy(i * tileSize, j * tileSize, 0, 0, 0, new M4rifle(0, 0, 64, 32, 0,null), this, values.get("tile"));
+                    e.weapon.user = e;
+                    values.get("enemy").add(e);
                     tileArray[i][j] = EMPTY;
 
                 }
@@ -101,5 +105,6 @@ public class TileMap {
         }
         return values;
     }
+
 
 }

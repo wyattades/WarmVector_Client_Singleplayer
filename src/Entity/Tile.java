@@ -21,8 +21,6 @@ public class Tile extends Entity {
         if (kind == TileMap.WINDOW) hitColor = new Color(90, 148,255);
     }
 
-    public void draw(Graphics2D g) {}
-
     public boolean hit(int amount, float angle) {
         return kind == TileMap.WINDOW;
     }

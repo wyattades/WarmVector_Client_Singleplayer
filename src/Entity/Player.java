@@ -16,8 +16,8 @@ import java.util.ArrayList;
 public abstract class Player extends Entity {
 
     public Weapon weapon;
-    public float vx, vy, life;
-    public static final int topSpeed = 6;
+    public float vx, vy, life, maxLife;
+    public static final int topSpeed = 5;
     public int shootTime;
     ArrayList<Entity> tiles;
     private TileMap tileMap;
@@ -30,10 +30,7 @@ public abstract class Player extends Entity {
         this.tileMap = tileMap;
         hitColor = Color.red;
         vx = vy = 0;
-        sprite = FileManager.PLAYER1G;
-        this.w = sprite.getWidth();
-        this.h = sprite.getHeight();
-        life = 25.0f;
+        life = maxLife = 100.0f;
     }
 
     public void setSpriteToDefault(boolean bool) {
@@ -41,12 +38,12 @@ public abstract class Player extends Entity {
         else sprite = shootSprite;
     }
 
-    public void updateWeapon() {
-        int length = 24;
-        weapon.x = (int)(x+length*Math.cos(orient));
-        weapon.y = (int)(y+length*Math.sin(orient));
-        weapon.orient = orient;
-    }
+//    public void updateWeapon() {
+//        int length = 24;
+//        weapon.x = (int)(x+length*Math.cos(orient));
+//        weapon.y = (int)(y+length*Math.sin(orient));
+//        weapon.orient = orient;
+//    }
 
     public void stopMove() {
         vx = vy = 0;
