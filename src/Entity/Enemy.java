@@ -45,9 +45,6 @@ public class Enemy extends Player {
 //                orientTo(x + 3*vx, y + 3*vy,  0.06f);
 //            }
         }
-        System.out.println(vx+" , "+vy);
-
-
     }
 
     public void patrol(float speed) {

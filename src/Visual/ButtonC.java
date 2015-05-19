@@ -37,7 +37,7 @@ public class ButtonC {
         }
         g.fillRect(x - (w / 2), y - (h / 2), w, h);
         g.setColor(Color.black);
-        g.drawString(text,x,y);
+        g.drawString(text,x - (int)g.getFontMetrics().getStringBounds(text, g).getWidth()/2,y);
 
     }
 

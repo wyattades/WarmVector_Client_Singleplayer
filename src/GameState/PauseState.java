@@ -27,10 +27,10 @@ public class PauseState extends GameState {
 
     public void init() {
         buttons = new ArrayList<ButtonC>();
-        addButton("Resume",Game.WIDTH/2,Game.HEIGHT/2-200);
-        addButton("Restart",Game.WIDTH/2,Game.HEIGHT/2);
-        addButton("Help",Game.WIDTH/2,Game.HEIGHT/2+200);
-        addButton("Quit",Game.WIDTH/2,Game.HEIGHT/2+400);
+        addButton("Resume",Game.WIDTH/2,Game.HEIGHT/2-150);
+        addButton("Restart",Game.WIDTH/2,Game.HEIGHT/2-50);
+        addButton("Help",Game.WIDTH/2,Game.HEIGHT/2+50);
+        addButton("Quit",Game.WIDTH/2,Game.HEIGHT/2+150);
     }
 
     public void draw(Graphics2D g) {
