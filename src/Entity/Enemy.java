@@ -15,6 +15,7 @@ import java.util.Random;
 public class Enemy extends Player {
 
     public boolean shooting;
+    private int shootTime;
 
     public Enemy(int x, int y, int w, int h, float orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
         super(x, y, w, h, orient, weapon, tileMap, tiles);
@@ -24,21 +25,28 @@ public class Enemy extends Player {
         this.w = sprite.getWidth();
         this.h = sprite.getHeight();
         life = maxLife = 25.0f;
+        shootTime = Game.currentTimeMillis();
     }
 
     public void normalBehavior(float px, float py) {
         //stopMove();
         shooting = false;
         if (lineOfSight(px, py) && distBetween(px, py) < 400) {
-            stopMove();
-            if (distBetween(px, py) > 100) {
-                goTowards(px, py, (float) 1);
-            }
-            if (lookingAt(px, py, 0.05f)) {
-                shooting = true;
-            } else {
-                orientTo(px, py, 0.1f);
-            }
+                stopMove();
+                if (distBetween(px, py) > 100) {
+                    goTowards(px, py, (float) 1);
+                }
+                if (lookingAt(px, py, 0.05f)) {
+                    if (Game.currentTimeMillis() - shootTime > 400) {
+                        shootTime = Game.currentTimeMillis();
+                        shooting = true;
+                    } else {
+                        shooting = false;
+
+                    }
+                } else {
+                    orientTo(px, py, 0.1f);
+                }
         } else {
 //            patrol(2);
 //            if (!lookingAt(x + 3*vx, y + 3*vy,  0.12f)) {

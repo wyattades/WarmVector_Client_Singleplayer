@@ -16,7 +16,10 @@ import java.util.ArrayList;
 public abstract class Player extends Entity {
 
     public Weapon weapon;
-    public float vx, vy, life, maxLife;
+    public float vx;
+    public float vy;
+    public float life;
+    public float maxLife;
     public static final int topSpeed = 5;
     public int shootTime;
     ArrayList<Entity> tiles;

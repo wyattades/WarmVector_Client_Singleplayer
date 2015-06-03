@@ -13,6 +13,8 @@ import java.util.ArrayList;
  */
 public class ThisPlayer extends Player {
 
+    public int hitTime;
+
     public ThisPlayer(int x, int y, int w, int h, float orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
         super(x, y, w, h, orient, weapon, tileMap, tiles);
         sprite = shootSprite = FileManager.images.get("player0g.png");
@@ -23,6 +25,18 @@ public class ThisPlayer extends Player {
 
     public void updateAngle(float cursorx, float cursory) {
         orient = (float)Math.atan2(cursory - Game.HEIGHT/2, cursorx - Game.WIDTH/2);
+    }
+
+    public boolean hit(int amount, float angle) {
+        life -= amount;
+        hitTime = Game.currentTimeMillis();
+        return false;
+    }
+
+    public void regenHealth() {
+        if (Game.currentTimeMillis()-hitTime>2000) {
+            life = (float)Math.min(maxLife,life+0.04);
+        }
     }
 
 }

@@ -67,7 +67,7 @@ public class PlayState extends GameState {
         entityList = tileMap.setEntities();
         screenMover = new ScreenMover((ThisPlayer) entityList.get("thisPlayer").get(0));
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
-        hud = new HUD(thisPlayer);
+        hud = new HUD(thisPlayer,entityList.get("enemy").size());
         shadow = new Visibility(tileMap);
         robot.mouseMove(Game.WIDTH/2,Game.HEIGHT/2);
     }
@@ -132,6 +132,7 @@ public class PlayState extends GameState {
 
             //update objects
             thisPlayer.update();
+            thisPlayer.regenHealth();
             thisPlayer.updateAngle(gsm.cursor.x, gsm.cursor.y);
             px = thisPlayer.x;
             py = thisPlayer.y;

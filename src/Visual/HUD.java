@@ -5,6 +5,7 @@ import Main.Game;
 import com.sun.prism.*;
 
 import java.awt.*;
+import java.awt.BasicStroke;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/Visual/
@@ -13,33 +14,70 @@ import java.awt.*;
 public class HUD {
 
     private Player user;
-    private final static int HUDx = (int) (Game.WIDTH-20);
-    private final static int HUDy = (int) (Game.HEIGHT*.9);
+    private final static int HUDx = (int) (Game.WIDTH-20),HUDy = (int) (Game.HEIGHT-40),lifeBar_w = 150,
+            lifeBar_h = 12, lifeBar_x = 110, lifeBar_y = HUDy+lifeBar_h/2,  lifeBar_offset = 3;
     public int enemies;
+    public int startEnemies;
 
-    public HUD(Player user) {
+    public HUD(Player user, int i_enemies) {
         this.user = user;
+        startEnemies = i_enemies;
     }
 
     public void updateEnemyAmount(int amount) {
         enemies = Math.max(0,amount);
     }
 
+    private static Polygon cross = new Polygon();
+    static {
+        int w = 10;
+        cross.addPoint(-w,w/2);
+        cross.addPoint(-w,-w/2);
+        cross.addPoint(-w/2,-w/2);
+        cross.addPoint(-w/2,-w);
+        cross.addPoint(w/2,-w);
+        cross.addPoint(w/2,-w/2);
+        cross.addPoint(w,-w/2);
+        cross.addPoint(w,w/2);
+        cross.addPoint(w/2,w/2);
+        cross.addPoint(w/2,w);
+        cross.addPoint(-w/2,w);
+        cross.addPoint(-w/2,w/2);
+        cross.translate(16,HUDy+w+2);
+    }
+
+
     public void draw(Graphics2D g) {
-        String  lifeS = "Health: " + (int)user.life + " / " + (int)user.maxLife,
-                ammoS = user.weapon==null?"":"Ammo: " + user.weapon.ammo + " / " + user.weapon.maxAmmo,
-                enemiesS = "Enemies: " + enemies;
-        g.setColor(Color.white);
-        g.setFont(new Font("Dotum Bold", Font.PLAIN, 45));
-        g.drawString(enemiesS,HUDx  - textWidth(enemiesS, g),(int)(Game.HEIGHT*.1));
-        g.drawString(lifeS, HUDx - textWidth(lifeS, g), HUDy);
-        if (user.weapon != null) {
-            g.drawString(ammoS, HUDx  - textWidth(ammoS, g), HUDy + 50);
+        String  lifeS = String.valueOf((int)user.life),
+                ammoS = user.weapon == null ? "" : "Ammo: " + user.weapon.ammo + " / " + user.weapon.maxAmmo;
+        g.setFont(new Font("Dotum Bold", Font.BOLD, 45));
+        g.setColor(new Color(100, 100, 100, 200));
+
+//        g.drawString(enemiesS, Game.WIDTH/2 - textWidth(enemiesS, g)/2, HUDy + textHeight(enemiesS,g)/2);
+
+        g.drawString(ammoS, HUDx  - textWidth(ammoS, g), HUDy + textHeight(ammoS,g)/2);
+        g.drawString(lifeS, 26, HUDy + textHeight(lifeS, g) / 2);
+        g.setStroke(new BasicStroke(2));
+        g.drawRect(lifeBar_x - lifeBar_offset, lifeBar_y - lifeBar_offset, lifeBar_w + 2 * lifeBar_offset, lifeBar_h + 2 * lifeBar_offset);
+        g.setStroke(new BasicStroke(1));
+        g.fillRect(lifeBar_x, lifeBar_y, (int) (user.life * lifeBar_w / user.maxLife), lifeBar_h);
+        g.fill(cross);
+        for (int i = -startEnemies/2; i < startEnemies/2; i++) {
+            g.fillRect(Game.WIDTH/2+i*70, Game.HEIGHT-50, 50, 50);
+        }
+        for (int i = -startEnemies/2; i < enemies-startEnemies/2; i++) {
+            g.setColor(new Color(255,0,0,180));
+            g.fillRect(Game.WIDTH/2+i*70, Game.HEIGHT-50, 50, 50);
         }
     }
 
     private int textWidth(String t, Graphics2D g) {
         return (int)g.getFontMetrics().getStringBounds(t, g).getWidth();
     }
+
+    private int textHeight(String t, Graphics2D g) {
+        return (int)g.getFontMetrics().getStringBounds(t, g).getHeight();
+    }
+
 
 }
