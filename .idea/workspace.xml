@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="79328cf6-c427-44a6-a23b-90c221e9f3ec" name="Default" comment="troubleshooting git">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Images/hit_3.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/Animation.java" afterPath="$PROJECT_DIR$/src/Visual/Animation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entity/Enemy.java" afterPath="$PROJECT_DIR$/src/Entity/Enemy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Manager/FileManager.java" afterPath="$PROJECT_DIR$/src/Manager/FileManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Main/Game.java" afterPath="$PROJECT_DIR$/src/Main/Game.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/GameStateManager.java" afterPath="$PROJECT_DIR$/src/GameState/GameStateManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/HUD.java" afterPath="$PROJECT_DIR$/src/Visual/HUD.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entity/Weapon/M4rifle.java" afterPath="$PROJECT_DIR$/src/Entity/Weapon/M4rifle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/MouseCursor.java" afterPath="$PROJECT_DIR$/src/Visual/MouseCursor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/PauseState.java" afterPath="$PROJECT_DIR$/src/GameState/PauseState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/PlayState.java" afterPath="$PROJECT_DIR$/src/GameState/PlayState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entity/Player.java" afterPath="$PROJECT_DIR$/src/Entity/Player.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entity/Weapon/Remington.java" afterPath="$PROJECT_DIR$/src/Entity/Weapon/Remington.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/ScreenMover.java" afterPath="$PROJECT_DIR$/src/Visual/ScreenMover.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Map/TileMap.java" afterPath="$PROJECT_DIR$/src/Map/TileMap.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entity/Weapon/Weapon.java" afterPath="$PROJECT_DIR$/src/Entity/Weapon/Weapon.java" />
+    <list default="true" id="79328cf6-c427-44a6-a23b-90c221e9f3ec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="WarmVector_Client_Singleplayer.iws" />
@@ -125,7 +109,7 @@
       <file leaf-file-name="HUD.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Visual/HUD.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4473684">
+            <state vertical-scroll-proportion="0.5173913">
               <caret line="31" column="33" selection-start-line="31" selection-start-column="33" selection-end-line="31" selection-end-column="33" />
               <folding>
                 <element signature="e#343#344#0" expanded="true" />
@@ -585,7 +569,13 @@
       <option name="project" value="LOCAL" />
       <updated>1430542913892</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="audio is almost implemented&#10;no bug fixes really">
+      <created>1433650423300</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1433650423300</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -600,7 +590,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32911393" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.0" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23177083" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -632,7 +622,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="...idkdkidk" />
     <MESSAGE value="troubleshooting git" />
-    <option name="LAST_COMMIT_MESSAGE" value="troubleshooting git" />
+    <MESSAGE value="audio is almost implemented&#10;no bug fixes really" />
+    <option name="LAST_COMMIT_MESSAGE" value="audio is almost implemented&#10;no bug fixes really" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1039,7 +1030,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Visual/HUD.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4473684">
+        <state vertical-scroll-proportion="0.5173913">
           <caret line="31" column="33" selection-start-line="31" selection-start-column="33" selection-end-line="31" selection-end-column="33" />
           <folding>
             <element signature="e#343#344#0" expanded="true" />
