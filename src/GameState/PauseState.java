@@ -1,8 +1,8 @@
 package GameState;
 
-import Visual.ButtonC;
 import Main.Game;
 import Manager.InputManager;
+import Visual.ButtonC;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class PauseState extends GameState {
         for (ButtonC b : buttons) {
             if (b.pressed) {
                 if (b.text.equals("Resume")) {
-                    gsm.paused = false;
+                    gsm.setPaused(false);
                 } else if (b.text.equals("Restart")) {
                     gsm.setState(GameStateManager.PLAY);
                 } else if (b.text.equals("Help")) {

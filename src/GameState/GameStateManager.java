@@ -1,8 +1,7 @@
 package GameState;
 
-import Main.Game;
-import Visual.MouseCursor;
 import Manager.FileManager;
+import Visual.MouseCursor;
 
 import java.awt.*;
 
@@ -26,9 +25,9 @@ public class GameStateManager {
     public MouseCursor cursor;
 
     public GameStateManager() {
+        cursor = new MouseCursor();
         gameStates = new GameState[NUM_STATES];
         setState(PLAY);
-        cursor = new MouseCursor(FileManager.images.get("cursor.png"),FileManager.images.get("crosshair.png"));
     }
 
     public void setState(int i) {

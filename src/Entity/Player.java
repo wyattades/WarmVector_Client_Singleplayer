@@ -2,7 +2,6 @@ package Entity;
 
 import Entity.Weapon.Weapon;
 import Main.Game;
-import Manager.FileManager;
 import Map.TileMap;
 
 import java.awt.*;
@@ -41,18 +40,11 @@ public abstract class Player extends Entity {
         else sprite = shootSprite;
     }
 
-//    public void updateWeapon() {
-//        int length = 24;
-//        weapon.x = (int)(x+length*Math.cos(orient));
-//        weapon.y = (int)(y+length*Math.sin(orient));
-//        weapon.orient = orient;
-//    }
-
     public void stopMove() {
         vx = vy = 0;
     }
 
-    void updatePosition() {
+    public void updatePosition() {
         x += vx;
         y += vy;
     }
@@ -63,7 +55,7 @@ public abstract class Player extends Entity {
     }
 
 
-    void updateLife() {
+    public void updateLife() {
         if (life < 0) {
             life = 0;
             state = false;
@@ -98,11 +90,11 @@ public abstract class Player extends Entity {
             vy = velY;
     }
 
-    boolean collideTile(float ax, float ay, float dx, float dy) {
+    protected boolean collideTile(float ax, float ay, float dx, float dy) {
         return inTile(x + ax, y + ay) || inTile(x + ax + dx, y + ay + dy) || inTile(x + ax - dx, y + ay - dy);
     }
 
-    boolean inTile(float x, float y) {
+    private boolean inTile(float x, float y) {
         x = x / TileMap.tileSize;
         y = y / TileMap.tileSize;
         int tileType = tileMap.tileArray[(int) x][(int) y];

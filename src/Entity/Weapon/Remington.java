@@ -1,6 +1,7 @@
 package Entity.Weapon;
 
 import Entity.Player;
+import Manager.FileManager;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -21,6 +22,8 @@ public class Remington extends Weapon {
         spread = 0.3f;
         damage = 15;
         rate = 400;
+        shootSound = FileManager.sounds.get("m4_shoot.wav");
+
     }
 
 }

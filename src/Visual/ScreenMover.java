@@ -9,9 +9,8 @@ import Main.Game;
  */
 public class ScreenMover {
 
-    public float screenVelX,screenVelY;
+    public int screenVelX,screenVelY,screenPosX,screenPosY;
     private float maxVel;
-    public int screenPosX, screenPosY;
     private ThisPlayer player;
     private static final float posAccel = 1.0f, negAccel = 1.0f;
     private static final int MaxRadius = 70;
@@ -25,24 +24,24 @@ public class ScreenMover {
 
     public void updatePosition() {
         updateVelocity();
-        screenPosX = (int)screenVelX;
-        screenPosY = (int)screenVelY;
+        screenPosX = screenVelX;
+        screenPosY = screenVelY;
     }
 
     private void updateVelocity() {
 
-        if (player.vx > 0) screenVelX = Math.min(screenVelX + posAccel, maxVel);
-        else if (player.vx < 0) screenVelX = Math.max(screenVelX - posAccel, -maxVel);
+        if (player.vx > 0) screenVelX = (int)Math.min(screenVelX + posAccel, maxVel);
+        else if (player.vx < 0) screenVelX = (int)Math.max(screenVelX - posAccel, -maxVel);
         else {
-            if (screenVelX > 0) screenVelX = Math.max(screenVelX - negAccel, 0);
-            else if (screenVelX < 0) screenVelX = Math.min(screenVelX + negAccel, 0);
+            if (screenVelX > 0) screenVelX = (int)Math.max(screenVelX - negAccel, 0);
+            else if (screenVelX < 0) screenVelX = (int)Math.min(screenVelX + negAccel, 0);
         }
 
-        if (player.vy > 0) screenVelY = Math.min(screenVelY + posAccel, maxVel);
-        else if (player.vy < 0) screenVelY = Math.max(screenVelY - posAccel, -maxVel);
+        if (player.vy > 0) screenVelY = (int)Math.min(screenVelY + posAccel, maxVel);
+        else if (player.vy < 0) screenVelY = (int)Math.max(screenVelY - posAccel, -maxVel);
         else {
-            if (screenVelY > 0) screenVelY = Math.max(screenVelY - negAccel, 0);
-            else if (screenVelY < 0) screenVelY = Math.min(screenVelY + negAccel, 0);
+            if (screenVelY > 0) screenVelY = (int)Math.max(screenVelY - negAccel, 0);
+            else if (screenVelY < 0) screenVelY = (int)Math.min(screenVelY + negAccel, 0);
         }
     }
 

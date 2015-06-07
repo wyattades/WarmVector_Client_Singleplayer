@@ -1,6 +1,7 @@
 package Entity.Weapon;
 
 import Entity.Player;
+import Manager.FileManager;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -21,6 +22,7 @@ public class M4rifle extends Weapon {
         spread = 0.05f;
         damage = 15;
         rate = 100;
+        shootSound = FileManager.sounds.get("m4_shoot.wav");
     }
 
 }

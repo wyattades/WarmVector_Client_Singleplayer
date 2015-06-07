@@ -6,7 +6,6 @@ import Manager.FileManager;
 import Map.TileMap;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/

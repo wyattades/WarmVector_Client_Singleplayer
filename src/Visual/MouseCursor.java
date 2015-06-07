@@ -1,6 +1,7 @@
 package Visual;
 
 import Main.Game;
+import Manager.FileManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -16,11 +17,11 @@ public class MouseCursor {
     private int w,h;
     private BufferedImage sprite, cursor, crosshair;
 
-    public MouseCursor(BufferedImage cursor, BufferedImage crosshair) {
+    public MouseCursor() {
         x = Game.WIDTH / 2 + 70;
         y = Game.HEIGHT / 2;
-        this.cursor = cursor;
-        this.crosshair = crosshair;
+        cursor = FileManager.images.get("cursor.png");
+        crosshair = FileManager.images.get("crosshair.png");
         setSpriteCursor(false);
     }
 

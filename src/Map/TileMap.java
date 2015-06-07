@@ -5,6 +5,7 @@ import Entity.Entity;
 import Entity.ThisPlayer;
 import Entity.Tile;
 import Entity.Weapon.M4rifle;
+import Manager.FileManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -29,14 +30,15 @@ public class TileMap {
 
     public static final int tileSize = 10;
 
-    public TileMap(BufferedImage mapImage, BufferedImage background, BufferedImage foreground) {
-        this.background = background;
-        this.foreground = foreground;
+    public TileMap(int level) {
+        background = FileManager.images.get("background_0"+level+".png");
+        foreground =  FileManager.images.get("foreground_0" + level + ".png");
+        BufferedImage mapImage = FileManager.images.get("leveltiles_0"+level+".png");
         width = mapImage.getWidth();
         height = mapImage.getHeight();
         tileArray = setTileArray(mapImage);
-        //backgroundColor = new Color(120,120,120);
     }
+
 
     public void drawBack(Graphics2D g) {
         g.drawImage(background, 0, 0, null);

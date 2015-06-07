@@ -1,5 +1,7 @@
 package Visual;
 
+import Manager.FileManager;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -16,25 +18,25 @@ public class Animation {
     private BufferedImage[] sprites;
     public boolean state;
 
-    public Animation(int x, int y, float orient, int frameRate, Color hitColor, BufferedImage[] _sprites) {
+    public Animation(int x, int y, float orient, int frameRate, Color hitColor, String fileName) {
         this.x = x;
         this.y = y;
-        frame = 0;
-        this.orient = orient + (float)Math.PI;
-        length = _sprites.length;
-        w = _sprites[0].getWidth();
-        h = _sprites[0].getHeight();
-        sprites = new BufferedImage[length];
-        for (int i = 0; i < length; i++) {
-            sprites[i] = tintImage(_sprites[i], hitColor);
-        }
         this.frameRate = frameRate;
+        this.orient = orient;
+        sprites = FileManager.animations.get(fileName);
+        length = sprites.length;
+        w = sprites[0].getWidth();
+        h = sprites[0].getHeight();
+        for (int i = 0; i < length; i++) {
+            sprites[i] = tintImage(sprites[i], hitColor);
+        }
+        frame = 0;
         state = true;
     }
 
-    private static BufferedImage tintImage(Image original, Color c) {
-        int width = original.getWidth(null);
-        int height = original.getHeight(null);
+    private static BufferedImage tintImage(BufferedImage original, Color c) {
+        int width = original.getWidth();
+        int height = original.getHeight();
         BufferedImage tinted = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
         Graphics2D graphics = (Graphics2D) tinted.getGraphics();
         graphics.drawImage(original, 0, 0, width, height, null);

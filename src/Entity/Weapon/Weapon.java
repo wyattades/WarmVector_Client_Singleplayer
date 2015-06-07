@@ -4,6 +4,7 @@ import Entity.Entity;
 import Entity.Player;
 import Manager.FileManager;
 
+import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
@@ -19,11 +20,13 @@ public abstract class Weapon extends Entity {
     public boolean isHeld;
     public float bVel,spread;
     public Player user;
+    public Clip hitSound,shootSound;
 
     Weapon(int x, int y, int w, int h, float orient, Player i_user) {
         super(x, y, w, h, orient);
         vx = vy = 0;
         sprite = FileManager.images.get("m4.png");
+        hitSound = FileManager.sounds.get("bulletHit.wav");
         isHeld = false;
         user = i_user;
         this.w = sprite.getWidth();
@@ -71,7 +74,8 @@ public abstract class Weapon extends Entity {
             x = user.x;
             y = user.y;
         } else {
-            System.out.println("Unauthorized update of position");
+            System.out.println("Unauthorized update of weapon position");
+            System.exit(0);
         }
     }
 }
