@@ -120,16 +120,16 @@ public class Game implements Runnable {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
 //        g.setRenderingHint(RenderingHints.KEY_RENDERING,
 //                RenderingHints.VALUE_RENDER_QUALITY);
-//        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-//                RenderingHints.VALUE_ANTIALIAS_OFF);
-//        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-//                RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 //        g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-//                RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+//                RenderingHints.VALUE_FRACTIONALMETRICS_ON);
 //        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
 //                RenderingHints.VALUE_COLOR_RENDER_SPEED);
 //        g.setRenderingHint(RenderingHints.KEY_DITHERING,
-//                RenderingHints.VALUE_DITHER_DISABLE);
+//                RenderingHints.VALUE_DITHER_ENABLE);
         gsm.draw(g); //here is where the game is actually drawn
         //g.dispose();
         bufferStrategy.show();
