@@ -15,9 +15,9 @@ import java.awt.geom.Rectangle2D;
 public class Shadow2D {
 
 
-    final float SHADOW_EXTRUDE = 2*Game.WIDTH;
+    final float SHADOW_EXTRUDE = 2 * Game.WIDTH;
 
-    private final static Color COLOR = new Color(0,0,0);
+    private final static Color COLOR = new Color(0, 0, 0);
 
     private final static Polygon POLYGON = new Polygon();
 
@@ -43,10 +43,10 @@ public class Shadow2D {
     public void draw(Graphics2D g) {
         final Point2D.Float center = new Point2D.Float(x, y);
 
-        for (int i = 0; i < tileArray.length; i++){
+        for (int i = 0; i < tileArray.length; i++) {
             for (int j = 0; j < tileArray[1].length; j++) {
                 if (tileArray[i][j] == TileMap.SOLID) {
-                    Rectangle2D.Float bounds = new Rectangle2D.Float(i*tileSize,j*tileSize, tileSize+2, tileSize+2);
+                    Rectangle2D.Float bounds = new Rectangle2D.Float(i * tileSize, j * tileSize, tileSize + 2, tileSize + 2);
 
                     //radius of Entity's bounding circle
                     float r = (float) bounds.getWidth() / 2;
@@ -98,12 +98,14 @@ public class Shadow2D {
         }
     }
 
-    /** Projects a point from end along the vector (end - start) by the given scalar amount. */
+    /**
+     * Projects a point from end along the vector (end - start) by the given scalar amount.
+     */
     private Point2D.Float project(Point2D.Float start, Point2D.Float end, float scalar) {
         float dx = end.x - start.x;
         float dy = end.y - start.y;
         //euclidean length
-        float len = (float)Math.sqrt(dx * dx + dy * dy);
+        float len = (float) Math.sqrt(dx * dx + dy * dy);
         //normalize to unit vector
         if (len != 0) {
             dx /= len;

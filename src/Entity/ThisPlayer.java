@@ -24,7 +24,7 @@ public class ThisPlayer extends Player {
     }
 
     public void updateAngle(float cursorx, float cursory) {
-        orient = (float)Math.atan2(cursory - Game.HEIGHT/2, cursorx - Game.WIDTH/2);
+        orient = (float) Math.atan2(cursory - Game.HEIGHT / 2, cursorx - Game.WIDTH / 2);
     }
 
     public boolean hit(int amount, float angle) {
@@ -34,8 +34,8 @@ public class ThisPlayer extends Player {
     }
 
     public void regenHealth() {
-        if (Game.currentTimeMillis()-hitTime>2000) {
-            life = (float)Math.min(maxLife,life+0.04);
+        if (Game.currentTimeMillis() - hitTime > 2000) {
+            life = (float) Math.min(maxLife, life + 0.04);
         }
     }
 

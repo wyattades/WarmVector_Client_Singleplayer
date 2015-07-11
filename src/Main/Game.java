@@ -17,8 +17,8 @@ import java.awt.image.MemoryImageSource;
 
 public class Game implements Runnable {
 
-    public final static int WIDTH = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-    public final static int HEIGHT = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+    public final static int WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+    public final static int HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
     public final static float SCALEFACTOR = 2;
     private static final int MS_PER_FRAME = 16;
 
@@ -86,7 +86,7 @@ public class Game implements Runnable {
     }
 
     public static float random(float min, float max) {
-        return (float)(Math.random() * (max - min) + min);
+        return (float) (Math.random() * (max - min) + min);
     }
 
     public void run() {
@@ -130,6 +130,7 @@ public class Game implements Runnable {
 //                RenderingHints.VALUE_COLOR_RENDER_SPEED);
 //        g.setRenderingHint(RenderingHints.KEY_DITHERING,
 //                RenderingHints.VALUE_DITHER_ENABLE);
+        g.setFont(new Font("Dotum Bold", Font.BOLD, 45));
         gsm.draw(g); //here is where the game is actually drawn
         //g.dispose();
         bufferStrategy.show();

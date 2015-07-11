@@ -5,7 +5,7 @@ package Visual.Occlusion;
  * Created by Wyatt on 5/11/2015.
  */
 public class Segment {
-    public EndPoint p1,p2;
+    public EndPoint p1, p2;
     public float d;
 
     public Segment() {

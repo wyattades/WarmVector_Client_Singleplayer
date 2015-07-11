@@ -5,7 +5,7 @@ package Visual.Occlusion;
  * Created by Wyatt on 5/11/2015.
  */
 public class Point {
-    public float x,y;
+    public float x, y;
 
     public Point(float x, float y) {
         this.x = x;

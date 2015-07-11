@@ -9,7 +9,8 @@ public class EndPoint extends Point {
     public Segment segment = null;
     public float angle = 0;
     public boolean visualize = false;
+
     public EndPoint(float x, float y) {
-        super(x,y);
+        super(x, y);
     }
 }

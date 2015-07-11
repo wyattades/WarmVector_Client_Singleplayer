@@ -6,7 +6,6 @@ import Entity.Player;
 import Entity.ThisPlayer;
 import Entity.Weapon.Weapon;
 import Main.Game;
-import Manager.FileManager;
 import Manager.InputManager;
 import Map.TileMap;
 import Visual.Animation;
@@ -18,13 +17,13 @@ import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Scanner;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -33,8 +32,8 @@ import java.util.Iterator;
 public class PlayState extends GameState {
 
     private PauseState pauseState;
-    private int px, py, level;
-    private HashMap<String,ArrayList<Entity>> entityList;
+    private int px, py;
+    private HashMap<String, ArrayList<Entity>> entityList;
     private TileMap tileMap;
     private ScreenMover screenMover;
     private HUD hud;
@@ -47,7 +46,6 @@ public class PlayState extends GameState {
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-        level = 1;
         pauseState = new PauseState(gsm);
         try {
             robot = new Robot();
@@ -58,31 +56,27 @@ public class PlayState extends GameState {
     }
 
     public void init() {
-        if (level > 2) {
-            System.out.println("YOU WIN!!!!\nThis game is still in development,\nmore content coming soon!");
-            System.exit(0);
-        } else {
-            System.out.println("Level = " + level);
 
-        }
+        System.out.println("Level = " + gsm.level);
+
         pauseState.init();
         gsm.setPaused(false);
         bullets = new ArrayList<Bullet>();
         animations = new ArrayList<Animation>();
-        tileMap = new TileMap(level);
+        tileMap = new TileMap(gsm.level);
         entityList = tileMap.setEntities();
         screenMover = new ScreenMover((ThisPlayer) entityList.get("thisPlayer").get(0));
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
-        hud = new HUD(thisPlayer,entityList.get("enemy").size());
+        hud = new HUD(thisPlayer, entityList.get("enemy").size());
         shadow = new Visibility(tileMap);
-        robot.mouseMove(Game.WIDTH/2,Game.HEIGHT/2);
+        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
     }
 
     public void draw(Graphics2D g) {
         //translate screen to follow player
         AffineTransform oldT = g.getTransform();
         g.scale(Game.SCALEFACTOR, Game.SCALEFACTOR);
-        g.translate(screenMover.screenPosX+(-px + Game.WIDTH / 2 /Game.SCALEFACTOR), screenMover.screenPosY+(-py + Game.HEIGHT / 2 /Game.SCALEFACTOR));
+        g.translate(screenMover.screenPosX + (-px + Game.WIDTH / 2 / Game.SCALEFACTOR), screenMover.screenPosY + (-py + Game.HEIGHT / 2 / Game.SCALEFACTOR));
         //background image
         tileMap.drawBack(g);
 
@@ -178,7 +172,7 @@ public class PlayState extends GameState {
                 if (!animations.get(i).state) animations.remove(i);
             }
 
-            //Entity removing outcomes
+            //Entity removal outcomes
             Iterator<HashMap.Entry<String, ArrayList<Entity>>> it = entityList.entrySet().iterator();
             while (it.hasNext()) {
                 HashMap.Entry<String, ArrayList<Entity>> entry = it.next();
@@ -196,14 +190,13 @@ public class PlayState extends GameState {
                     }
                 }
             }
-            int enemies = entityList.get("enemy").size();
-            hud.updateEnemyAmount(enemies);
+            int enemyCount = entityList.get("enemy").size();
+            hud.updateEnemyAmount(enemyCount);
 
             //if there are no enemies left...
-            if (enemies <= 0) {
+            if (enemyCount <= 0) {
                 //move on to next level
-                level++;
-                init();
+                gsm.setState(GameStateManager.NEXTLEVEL);
             }
         } else {
             pauseState.update();
@@ -213,9 +206,9 @@ public class PlayState extends GameState {
     private void addBullets(Player p) {
         if (p.weapon != null && Game.currentTimeMillis() - p.shootTime > p.weapon.rate && p.weapon.ammo > 0) {
             for (int i = 0; i < p.weapon.amount; i++) {
-                Bullet b = new Bullet(p.x, p.y, p.orient, p.weapon.spread, p.weapon.damage, entityList,p);
+                Bullet b = new Bullet(p.x, p.y, p.orient, p.weapon.spread, p.weapon.damage, entityList, p);
                 for (Bullet.CollidePoint point : b.collidePoints) {
-                    animations.add(new Animation(point.x, point.y, b.orient + (float)Math.PI, 2, point.hitColor, "hit_"));
+                    animations.add(new Animation(point.x, point.y, b.orient + (float) Math.PI, 2, point.hitColor, "hit_"));
                     p.weapon.hitSound.stop();
                     Clip copy = p.weapon.hitSound;
                     copy.setFramePosition(0);
@@ -249,9 +242,19 @@ public class PlayState extends GameState {
     }
 
     public void inputHandle() {
+//        Scanner scanner = new Scanner(System.in);
+//        String name = null;
+//        try {
+//            name = scanner.nextLine();
+//        } catch(Exception e) {}
+//        if (name != null) {
+//            if (name.equals("nextlevel")) gsm.setState(GameStateManager.NEXTLEVEL);
+//        }
+
+
         if (!gsm.paused) {
-            if (InputManager.isKeyPressed("ALT") && Game.currentTimeMillis()-InputManager.getKeyTime("ALT") > 400) {
-                InputManager.setKeyTime("ALT",Game.currentTimeMillis());
+            if (InputManager.isKeyPressed("ALT") && Game.currentTimeMillis() - InputManager.getKeyTime("ALT") > 400) {
+                InputManager.setKeyTime("ALT", Game.currentTimeMillis());
                 gsm.setPaused(true);
             }
             if (InputManager.isKeyPressed("ESCAPE")) System.exit(0);

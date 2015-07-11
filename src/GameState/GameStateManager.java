@@ -1,6 +1,5 @@
 package GameState;
 
-import Manager.FileManager;
 import Visual.MouseCursor;
 
 import java.awt.*;
@@ -13,24 +12,30 @@ public class GameStateManager {
 
     public GameState[] gameStates;
     public int currentState;
+    public int level;
+    public static int MAXLEVEL = 2;
 
-    public static final int NUM_STATES = 4;
-    public static final int INTRO = 0;
-    public static final int MENU = 1;
-    public static final int PLAY = 2;
-    public static final int GAMEOVER = 3;
+    public static final int
+            NUM_STATES = 5,
+            INTRO = 0,
+            MENU = 1,
+            PLAY = 2,
+            GAMEOVER = 3,
+            NEXTLEVEL = 4;
 
     public boolean paused;
 
     public MouseCursor cursor;
 
     public GameStateManager() {
+        level = 1;
         cursor = new MouseCursor();
         gameStates = new GameState[NUM_STATES];
         setState(PLAY);
     }
 
     public void setState(int i) {
+        cursor.setSpriteCursor(true);
         int previousState = currentState;
         currentState = i;
         unloadState(previousState);
@@ -46,6 +51,9 @@ public class GameStateManager {
                 break;
             case (GAMEOVER):
                 gameStates[i] = new GameOverState(this);
+                break;
+            case (NEXTLEVEL):
+                gameStates[i] = new NextLevelState(this);
                 break;
         }
         gameStates[i].init();
@@ -65,7 +73,7 @@ public class GameStateManager {
             gameStates[currentState].inputHandle();
             gameStates[currentState].update();
         } else {
-            System.out.println("gameState = null (during update)");
+            System.out.println("gameState is null during update()");
             System.exit(0);
         }
     }
@@ -74,7 +82,7 @@ public class GameStateManager {
         if (gameStates[currentState] != null) {
             gameStates[currentState].draw(g);
         } else {
-            System.out.println("gameState = null (during draw)");
+            System.out.println("gameState is null during draw()");
             System.exit(0);
         }
         cursor.draw(g);

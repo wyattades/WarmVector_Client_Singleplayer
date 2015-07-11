@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Entity {
 
-    public int x,y,w,h;
+    public int x, y, w, h;
     public float orient;
     public Color hitColor;
     public BufferedImage sprite;

@@ -81,14 +81,14 @@ public class Bullet {
 
         for (TestPoint p : testPoints) {
             collidePoints.add(new CollidePoint((int) (ix + (p.dist) * Math.cos(orient)), (int) (iy + (p.dist) * Math.sin(orient)), p.e.hitColor));
-            if (!p.e.hit(damage,orient)) {
+            if (!p.e.hit(damage, orient)) {
                 fx = (int) (ix + (p.dist) * Math.cos(orient));
                 fy = (int) (iy + (p.dist) * Math.sin(orient));
                 break;
             }
         }
-        ix =  ix + gunLength * (int)Math.cos(orient);
-        iy =  iy + gunLength *(int) Math.sin(orient);
+        ix = ix + gunLength * (int) Math.cos(orient);
+        iy = iy + gunLength * (int) Math.sin(orient);
     }
 
     public void draw(Graphics2D g) {

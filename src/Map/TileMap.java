@@ -17,12 +17,12 @@ import java.util.HashMap;
  * Created by Wyatt on 1/26/2015.
  */
 public class TileMap {
-    private BufferedImage background,foreground;
+    private BufferedImage background, foreground;
     public int[][] tileArray;
     public int width;
     public int height;
     public static final int EMPTY = 0;
-    public static final int SOLID  = 1;
+    public static final int SOLID = 1;
     public static final int WINDOW = 2;
     public static final int SPAWN = 3;
     public static final int ENEMY = 4;
@@ -31,9 +31,9 @@ public class TileMap {
     public static final int tileSize = 10;
 
     public TileMap(int level) {
-        background = FileManager.images.get("background_0"+level+".png");
-        foreground =  FileManager.images.get("foreground_0" + level + ".png");
-        BufferedImage mapImage = FileManager.images.get("leveltiles_0"+level+".png");
+        background = FileManager.images.get("background_0" + level + ".png");
+        foreground = FileManager.images.get("foreground_0" + level + ".png");
+        BufferedImage mapImage = FileManager.images.get("leveltiles_0" + level + ".png");
         width = mapImage.getWidth();
         height = mapImage.getHeight();
         tileArray = setTileArray(mapImage);
@@ -82,22 +82,22 @@ public class TileMap {
         values.put("enemy", new ArrayList<Entity>());
         values.put("weapon", new ArrayList<Entity>());
         values.put("tile", new ArrayList<Entity>());
-        ThisPlayer tp = new ThisPlayer(0, 0, 0 ,0 , 0, new M4rifle(0, 0, 0, 0, 0,null), this, values.get("tile"));
+        ThisPlayer tp = new ThisPlayer(0, 0, 0, 0, 0, new M4rifle(0, 0, 0, 0, 0, null), this, values.get("tile"));
         tp.weapon.user = tp;
         values.get("thisPlayer").add(tp);
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 int t = tileArray[i][j];
                 if (t == SOLID) {
-                    values.get("tile").add(new Tile((int)((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), SOLID));
+                    values.get("tile").add(new Tile((int) ((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), SOLID));
                 } else if (t == WINDOW) {
-                    values.get("tile").add(new Tile((int)((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), WINDOW));
+                    values.get("tile").add(new Tile((int) ((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), WINDOW));
                 } else if (t == SPAWN) {
                     values.get("thisPlayer").get(0).x = i * tileSize;
                     values.get("thisPlayer").get(0).y = j * tileSize;
                     tileArray[i][j] = EMPTY;
                 } else if (t == ENEMY) {
-                    Enemy e = new Enemy(i * tileSize, j * tileSize, 0, 0, 0, new M4rifle(0, 0, 64, 32, 0,null), this, values.get("tile"));
+                    Enemy e = new Enemy(i * tileSize, j * tileSize, 0, 0, 0, new M4rifle(0, 0, 64, 32, 0, null), this, values.get("tile"));
                     e.weapon.user = e;
                     values.get("enemy").add(e);
                     tileArray[i][j] = EMPTY;

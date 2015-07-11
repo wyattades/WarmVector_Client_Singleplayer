@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
  */
 public class Animation {
 
-    private int x,y,w,h;
+    private int x, y, w, h;
     private float orient;
     private int frame, length, step, currentStep, frameRate;
     private BufferedImage[] sprites;

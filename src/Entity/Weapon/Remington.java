@@ -10,7 +10,7 @@ import Manager.FileManager;
 public class Remington extends Weapon {
 
     public Remington(int x, int y, int w, int h, float orient, Player i_user) {
-        super(x, y, w, h, orient,i_user);
+        super(x, y, w, h, orient, i_user);
     }
 
     protected void setConstants() {

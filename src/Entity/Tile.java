@@ -18,7 +18,7 @@ public class Tile extends Entity {
         this.y = y;
         this.kind = kind;
         if (kind == TileMap.SOLID) hitColor = Color.black;
-        if (kind == TileMap.WINDOW) hitColor = new Color(90, 148,255);
+        if (kind == TileMap.WINDOW) hitColor = new Color(90, 148, 255);
     }
 
     public boolean hit(int amount, float angle) {

@@ -9,7 +9,7 @@ import Manager.FileManager;
  */
 public class M4rifle extends Weapon {
 
-    public M4rifle(int x, int y, int w, int h, float orient,Player i_user) {
+    public M4rifle(int x, int y, int w, int h, float orient, Player i_user) {
         super(x, y, w, h, orient, i_user);
     }
 

@@ -23,7 +23,7 @@ public abstract class Player extends Entity {
     public int shootTime;
     ArrayList<Entity> tiles;
     private TileMap tileMap;
-    protected BufferedImage shootSprite,defaultSprite;
+    protected BufferedImage shootSprite, defaultSprite;
 
     Player(int x, int y, int w, int h, float orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
         super(x, y, w, h, orient);
@@ -76,7 +76,7 @@ public abstract class Player extends Entity {
         Weapon w = weapon;
         w.x = x;
         w.y = y;
-        w.orient = Game.random(0,6.28f);
+        w.orient = Game.random(0, 6.28f);
         return w;
     }
 

@@ -35,7 +35,7 @@ public class Visibility {
     // Construct an empty visibility set
     public Visibility(TileMap tileMap) {
         BORDER = new Rectangle2D.Float();
-        BORDER.setRect(-tileMap.width* TileMap.tileSize,-tileMap.height* TileMap.tileSize,3*tileMap.width * TileMap.tileSize, 3*tileMap.height* TileMap.tileSize);
+        BORDER.setRect(-tileMap.width * TileMap.tileSize, -tileMap.height * TileMap.tileSize, 3 * tileMap.width * TileMap.tileSize, 3 * tileMap.height * TileMap.tileSize);
         this.tileMap = tileMap;
         segments = new ArrayList<Segment>();
         endpoints = new ArrayList<EndPoint>();
@@ -58,15 +58,15 @@ public class Visibility {
         for (int i = 0; i < map.width; i++) {
             for (int j = 0; j < map.height; j++) {
                 // If a tile is solid or in the border of the map, add segments for each side of the tile
-                if (array[i][j] == TileMap.SOLID || (i == 0 || i == w - 1 || j == 0 || j == h - 1) ) {
-                    addSegment( (i+.5f)* size - size/2, (j+.5f)*size + size/2,
-                            (i+.5f)* size + size/2, (j+.5f)*size + size/2);
-                    addSegment( (i+.5f)* size + size/2, (j+.5f)*size + size/2,
-                            (i+.5f)* size + size/2, (j+.5f)*size - size/2);
-                    addSegment( (i+.5f)* size + size/2, (j+.5f)*size - size/2,
-                            (i+.5f)* size - size/2, (j+.5f)*size - size/2);
-                    addSegment( (i+.5f)* size - size/2, (j+.5f)*size - size/2,
-                            (i+.5f)* size - size/2, (j+.5f)*size + size/2);
+                if (array[i][j] == TileMap.SOLID || (i == 0 || i == w - 1 || j == 0 || j == h - 1)) {
+                    addSegment((i + .5f) * size - size / 2, (j + .5f) * size + size / 2,
+                            (i + .5f) * size + size / 2, (j + .5f) * size + size / 2);
+                    addSegment((i + .5f) * size + size / 2, (j + .5f) * size + size / 2,
+                            (i + .5f) * size + size / 2, (j + .5f) * size - size / 2);
+                    addSegment((i + .5f) * size + size / 2, (j + .5f) * size - size / 2,
+                            (i + .5f) * size - size / 2, (j + .5f) * size - size / 2);
+                    addSegment((i + .5f) * size - size / 2, (j + .5f) * size - size / 2,
+                            (i + .5f) * size - size / 2, (j + .5f) * size + size / 2);
                 }
             }
         }
@@ -75,11 +75,11 @@ public class Visibility {
     public void draw(Graphics2D g) {
         Polygon CUTOUT = new Polygon();
         for (Point s : output) {
-            CUTOUT.addPoint((int)s.x,(int)s.y);
+            CUTOUT.addPoint((int) s.x, (int) s.y);
         }
         GeneralPath SHADOW = new GeneralPath(CUTOUT);
-        SHADOW.append(BORDER,false);
-        g.setColor(new Color(20,20,20,255));
+        SHADOW.append(BORDER, false);
+        g.setColor(new Color(20, 20, 20, 255));
         g.fill(SHADOW);
     }
 
@@ -88,8 +88,8 @@ public class Visibility {
         // Add a segment only if there is not an existing segment in that space
         boolean alreadyExists = false;
         for (Segment s : segments) {
-            if (((int)x1 == (int)s.p1.x && (int)y1 == (int)s.p1.y && (int)x2 == (int)s.p2.x && (int)y2 == (int)s.p2.y)||
-                    ((int)x1 == (int)s.p2.x && (int)y1 == (int)s.p2.y && (int)x2 == (int)s.p1.x && (int)y2 == (int)s.p1.y)) {
+            if (((int) x1 == (int) s.p1.x && (int) y1 == (int) s.p1.y && (int) x2 == (int) s.p2.x && (int) y2 == (int) s.p2.y) ||
+                    ((int) x1 == (int) s.p2.x && (int) y1 == (int) s.p2.y && (int) x2 == (int) s.p1.x && (int) y2 == (int) s.p1.y)) {
                 alreadyExists = true;
             }
         }
@@ -101,7 +101,7 @@ public class Visibility {
             p1.visualize = true;
             EndPoint p2 = new EndPoint(x2, y2);
             p2.visualize = false;
-            Segment segment = new Segment(p1,p2);
+            Segment segment = new Segment(p1, p2);
             p1.segment = p2.segment = segment;
             segments.add(segment);
             endpoints.add(p1);
@@ -119,14 +119,18 @@ public class Visibility {
         for (Segment segment : segments) {
             float dx = 0.5f * (segment.p1.x + segment.p2.x) - x;
             float dy = 0.5f * (segment.p1.y + segment.p2.y) - y;
-            segment.d = dx*dx + dy*dy;
+            segment.d = dx * dx + dy * dy;
 
             segment.p1.angle = (float) Math.atan2(segment.p1.y - y, segment.p1.x - x);
             segment.p2.angle = (float) Math.atan2(segment.p2.y - y, segment.p2.x - x);
 
             float dAngle = segment.p2.angle - segment.p1.angle;
-            if (dAngle <= -Math.PI) { dAngle += 2*Math.PI; }
-            if (dAngle > Math.PI) { dAngle -= 2*Math.PI; }
+            if (dAngle <= -Math.PI) {
+                dAngle += 2 * Math.PI;
+            }
+            if (dAngle > Math.PI) {
+                dAngle -= 2 * Math.PI;
+            }
             segment.p1.begin = (dAngle > 0.0);
             segment.p2.begin = !segment.p1.begin;
         }
@@ -147,7 +151,7 @@ public class Visibility {
 
     // Return p*(1-f) + q*f
     private Point interpolate(Point p, Point q, float f) {
-        return new Point(p.x*(1-f) + q.x*f, p.y*(1-f) + q.y*f);
+        return new Point(p.x * (1 - f) + q.x * f, p.y * (1 - f) + q.y * f);
     }
 
 
@@ -206,25 +210,24 @@ public class Visibility {
                     break;
                 }
 
-                Segment current_old = open.isEmpty()? null : open.get(0);
+                Segment current_old = open.isEmpty() ? null : open.get(0);
 
                 if (p.begin) {
                     // Insert into the right place in the list
-                    Segment node = open.isEmpty()? null : open.get(0);
+                    Segment node = open.isEmpty() ? null : open.get(0);
                     while (node != null && _segment_in_front_of(p.segment, node, center)) {
-                        node = open.size()==open.indexOf(node)+1? null:open.get((open.indexOf(node) + 1));
+                        node = open.size() == open.indexOf(node) + 1 ? null : open.get((open.indexOf(node) + 1));
                     }
                     if (node == null) {
                         open.add(p.segment);
                     } else {
                         open.add(open.indexOf(node), p.segment); // (index-1) or just (index)???
                     }
-                }
-                else {
+                } else {
                     open.remove(p.segment);
                 }
 
-                Segment current_new = open.isEmpty()? null : open.get(0);
+                Segment current_new = open.isEmpty() ? null : open.get(0);
                 if (current_old != current_new) {
                     if (i == 1) {
                         addTriangle(beginAngle, p.angle, current_old);
@@ -245,7 +248,7 @@ public class Visibility {
 
     private void addTriangle(float angle1, float angle2, Segment segment) {
         Point p1 = center;
-        Point p2 = new Point(center.x + (float)Math.cos(angle1), center.y + (float)Math.sin(angle1));
+        Point p2 = new Point(center.x + (float) Math.cos(angle1), center.y + (float) Math.sin(angle1));
         Point p3 = new Point(0, 0);
         Point p4 = new Point(0, 0);
 
@@ -258,16 +261,16 @@ public class Visibility {
         } else {
             // Stop the triangle at a fixed distance; this probably is
             // not what we want, but it never gets used in the demo
-            p3.x = center.x + (float)Math.cos(angle1) * 500;
-            p3.y = center.y + (float)Math.sin(angle1) * 500;
-            p4.x = center.x + (float)Math.cos(angle2) * 500;
-            p4.y = center.y + (float)Math.sin(angle2) * 500;
+            p3.x = center.x + (float) Math.cos(angle1) * 500;
+            p3.y = center.y + (float) Math.sin(angle1) * 500;
+            p4.x = center.x + (float) Math.cos(angle2) * 500;
+            p4.y = center.y + (float) Math.sin(angle2) * 500;
         }
 
         Point pBegin = lineIntersection(p3, p4, p1, p2);
 
-        p2.x = center.x + (float)Math.cos(angle2);
-        p2.y = center.y + (float)Math.sin(angle2);
+        p2.x = center.x + (float) Math.cos(angle2);
+        p2.y = center.y + (float) Math.sin(angle2);
         Point pEnd = lineIntersection(p3, p4, p1, p2);
 
         output.add(pBegin);
