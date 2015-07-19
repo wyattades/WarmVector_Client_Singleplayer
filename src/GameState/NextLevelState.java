@@ -36,9 +36,10 @@ public class NextLevelState extends GameState {
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
         g.setColor(Color.black);
         if (gsm.level >= GameStateManager.MAXLEVEL) {
+            String text = "YOU WIN!";
             g.drawString(
-                    "YOU WIN!",
-                    Game.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds("YOU WIN!", g).getWidth() / 2,
+                    text,
+                    Game.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(text, g).getWidth() / 2,
                     Game.HEIGHT / 2 - 150
             );
         }
