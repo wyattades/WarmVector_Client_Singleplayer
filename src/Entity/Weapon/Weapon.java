@@ -75,7 +75,7 @@ public abstract class Weapon extends Entity {
             y = user.y;
         } else {
             System.out.println("Unauthorized update of weapon position");
-            System.exit(0);
+            System.exit(1);
         }
     }
 }

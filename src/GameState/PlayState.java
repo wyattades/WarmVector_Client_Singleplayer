@@ -50,7 +50,7 @@ public class PlayState extends GameState {
             robot = new Robot();
         } catch (AWTException e) {
             e.printStackTrace();
-            System.exit(0);
+            System.exit(1);
         }
     }
 

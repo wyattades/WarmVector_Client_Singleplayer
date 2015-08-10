@@ -31,7 +31,7 @@ public class GameStateManager {
         level = 1;
         cursor = new MouseCursor();
         gameStates = new GameState[NUM_STATES];
-        setState(PLAY);
+        setState(INTRO);
     }
 
     public void setState(int i) {
@@ -74,7 +74,7 @@ public class GameStateManager {
             gameStates[currentState].update();
         } else {
             System.out.println("gameState is null during update()");
-            System.exit(0);
+            System.exit(1);
         }
     }
 
@@ -83,7 +83,7 @@ public class GameStateManager {
             gameStates[currentState].draw(g);
         } else {
             System.out.println("gameState is null during draw()");
-            System.exit(0);
+            System.exit(1);
         }
         cursor.draw(g);
     }

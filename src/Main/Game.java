@@ -130,10 +130,15 @@ public class Game implements Runnable {
 //                RenderingHints.VALUE_COLOR_RENDER_SPEED);
 //        g.setRenderingHint(RenderingHints.KEY_DITHERING,
 //                RenderingHints.VALUE_DITHER_ENABLE);
+
         g.setFont(new Font("Dotum Bold", Font.BOLD, 45));
+
         gsm.draw(g); //here is where the game is actually drawn
+
         //g.dispose();
+
         bufferStrategy.show();
+
     }
 
     void update() {

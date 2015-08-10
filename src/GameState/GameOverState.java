@@ -54,7 +54,7 @@ public class GameOverState extends GameState {
                     //open help menu
                 } else if (b.text.equals("Quit")) {
                     System.out.println("Quiting");
-                    System.exit(1);
+                    System.exit(0);
 
                 }
             }

@@ -40,7 +40,7 @@ public class FileManager {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error loading sounds");
-            System.exit(0);
+            System.exit(1);
         }
         return null;
     }
@@ -85,7 +85,7 @@ public class FileManager {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error loading graphics");
-            System.exit(0);
+            System.exit(1);
         }
         return null;
     }
@@ -98,7 +98,7 @@ public class FileManager {
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("Error loading graphics");
-                System.exit(0);
+                System.exit(1);
             }
 
         }
