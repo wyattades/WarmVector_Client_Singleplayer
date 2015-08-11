@@ -35,6 +35,12 @@ public class PauseState extends GameState {
 
     public void draw(Graphics2D g) {
         for (ButtonC b : buttons) {
+            b.draw(g);
+        }
+    }
+
+    public void update() {
+        for (ButtonC b : buttons) {
             if (b.pressed) {
                 if (b.text.equals("Resume")) {
                     gsm.setPaused(false);
@@ -49,12 +55,6 @@ public class PauseState extends GameState {
                 }
             }
         }
-        for (ButtonC b : buttons) {
-            b.draw(g);
-        }
-    }
-
-    public void update() {
     }
 
     public void inputHandle() {

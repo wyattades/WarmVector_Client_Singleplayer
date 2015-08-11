@@ -53,13 +53,16 @@ public class Game implements Runnable {
 
         canvas.requestFocus();
 
+        //Set default mouse cursor to transparent
         Cursor transparentCursor = Toolkit.getDefaultToolkit().createCustomCursor(
                 Toolkit.getDefaultToolkit().createImage(
                         new MemoryImageSource(16, 16, new int[16 * 16], 0, 16)), new Point(0, 0), "invisibleCursor");
         panel.setCursor(transparentCursor);
 
+        //Create a manager for handling key and mouse inputs
         InputManager inputManager = new InputManager(canvas);
 
+        //Add key and mouse mappings to inputManager
         inputManager.addKeyMapping("UP", KeyEvent.VK_W);
         inputManager.addKeyMapping("DOWN", KeyEvent.VK_S);
         inputManager.addKeyMapping("LEFT", KeyEvent.VK_A);
@@ -69,8 +72,10 @@ public class Game implements Runnable {
         inputManager.addMouseMapping("LEFTMOUSE", MouseEvent.BUTTON1);
         inputManager.addMouseMapping("RIGHTMOUSE", MouseEvent.BUTTON3);
 
+        //Create a manager for handling the different game states e.g. intro, play, gameOver
         gsm = new GameStateManager();
 
+        //Run the game thread
         run();
     }
 
@@ -135,7 +140,7 @@ public class Game implements Runnable {
 
         gsm.draw(g); //here is where the game is actually drawn
 
-        //g.dispose();
+        g.dispose();
 
         bufferStrategy.show();
 

@@ -81,10 +81,10 @@ public class GameStateManager {
     public void draw(Graphics2D g) {
         if (gameStates[currentState] != null) {
             gameStates[currentState].draw(g);
+            cursor.draw(g);
         } else {
             System.out.println("gameState is null during draw()");
             System.exit(1);
         }
-        cursor.draw(g);
     }
 }

@@ -26,6 +26,8 @@ public abstract class Entity {
         this.h = h;
         this.orient = orient;
         state = true;
+        //Set color as pink for easy debugging (entity's hitColor should never be pink)
+        hitColor = new Color(255,0, 169);
     }
 
     public void draw(Graphics2D g) {

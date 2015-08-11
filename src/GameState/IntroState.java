@@ -2,6 +2,7 @@ package GameState;
 
 
 import Main.Game;
+import Manager.InputManager;
 import Visual.Animation;
 import java.awt.*;
 
@@ -28,10 +29,13 @@ public class IntroState extends GameState {
 
     public void update() {
         intro.update();
-        if (!intro.state) gsm.setState(GameStateManager.PLAY);
+        if (!intro.state) gsm.setState(GameStateManager.MENU);
     }
 
     public void inputHandle() {
-
+        if (InputManager.isMousePressed("LEFTMOUSE")) {
+            gsm.setState(GameStateManager.MENU);
+        }
     }
+
 }
