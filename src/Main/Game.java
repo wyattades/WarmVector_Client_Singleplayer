@@ -67,8 +67,9 @@ public class Game implements Runnable {
         inputManager.addKeyMapping("DOWN", KeyEvent.VK_S);
         inputManager.addKeyMapping("LEFT", KeyEvent.VK_A);
         inputManager.addKeyMapping("RIGHT", KeyEvent.VK_D);
-        inputManager.addKeyMapping("ESCAPE", KeyEvent.VK_ESCAPE);
+        inputManager.addKeyMapping("ESC", KeyEvent.VK_ESCAPE);
         inputManager.addKeyMapping("ALT", KeyEvent.VK_ALT);
+        inputManager.addKeyMapping("SPACE",KeyEvent.VK_SPACE);
         inputManager.addMouseMapping("LEFTMOUSE", MouseEvent.BUTTON1);
         inputManager.addMouseMapping("RIGHTMOUSE", MouseEvent.BUTTON3);
 

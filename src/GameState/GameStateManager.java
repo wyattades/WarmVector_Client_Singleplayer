@@ -1,5 +1,6 @@
 package GameState;
 
+import Manager.InputManager;
 import Visual.MouseCursor;
 
 import java.awt.*;
@@ -35,7 +36,6 @@ public class GameStateManager {
     }
 
     public void setState(int i) {
-        cursor.setSpriteCursor(true);
         int previousState = currentState;
         currentState = i;
         unloadState(previousState);
@@ -65,7 +65,8 @@ public class GameStateManager {
 
     public void setPaused(boolean p) {
         paused = p;
-        cursor.setSpriteCursor(p);
+        if (p) cursor.setSprite(MouseCursor.CURSOR);
+        else cursor.setSprite(MouseCursor.CROSSHAIR);
     }
 
     public void update() {

@@ -8,11 +8,8 @@ import Entity.Weapon.Weapon;
 import Main.Game;
 import Manager.InputManager;
 import Map.TileMap;
-import Visual.Animation;
-import Visual.Bullet;
-import Visual.HUD;
+import Visual.*;
 import Visual.Occlusion.Visibility;
-import Visual.ScreenMover;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
@@ -41,6 +38,7 @@ public class PlayState extends GameState {
     private ThisPlayer thisPlayer;
     private Visibility shadow;
     private Robot robot;
+    private boolean dead;
     //private Clip hitSound;
 
     public PlayState(GameStateManager gsm) {
@@ -58,6 +56,7 @@ public class PlayState extends GameState {
 
         System.out.println("Level = " + gsm.level);
 
+        dead = false;
         pauseState.init();
         gsm.setPaused(false);
         bullets = new ArrayList<Bullet>();
@@ -69,6 +68,10 @@ public class PlayState extends GameState {
         hud = new HUD(thisPlayer, entityList.get("enemy").size());
         shadow = new Visibility(tileMap);
         robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
+    }
+
+    public void setCursor() {
+        gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
     }
 
     public void draw(Graphics2D g) {
@@ -118,7 +121,16 @@ public class PlayState extends GameState {
         tileMap.drawFore(g);
         //reset transformation
         g.setTransform(oldT);
-        hud.draw(g);
+
+        if (!dead) hud.draw(g);
+        else {
+            g.setColor(ThemeColors.textOver);
+            Font oldFont = g.getFont();
+            g.setFont(new Font("Ariel",Font.BOLD,60));
+            g.drawString("RESTART?",Game.WIDTH - 350, Game.HEIGHT - 60);
+            g.setFont(oldFont);
+        }
+
         if (gsm.paused) pauseState.draw(g);
 
     }
@@ -132,15 +144,18 @@ public class PlayState extends GameState {
             //create a copy of thisPlayer for convenience
             thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
 
-            //update objects
-            thisPlayer.update();
-            thisPlayer.regenHealth();
-            thisPlayer.updateAngle(gsm.cursor.x, gsm.cursor.y);
-            px = thisPlayer.x;
-            py = thisPlayer.y;
-            screenMover.updatePosition();
-            thisPlayer.stopMove();
-            screenMover.updateRotation(gsm.cursor.x, gsm.cursor.y);
+            if (!dead) {
+                //update objects
+                thisPlayer.update();
+                thisPlayer.regenHealth();
+                thisPlayer.updateAngle(gsm.cursor.x, gsm.cursor.y);
+
+                px = thisPlayer.x;
+                py = thisPlayer.y;
+                screenMover.updatePosition();
+                screenMover.updateRotation(gsm.cursor.x, gsm.cursor.y, thisPlayer.orient);
+                thisPlayer.stopMove();
+            }
 
             shadow.setLightLocation(px, py);
             shadow.sweep(999);
@@ -154,7 +169,7 @@ public class PlayState extends GameState {
             }
             for (Entity entity : entityList.get("enemy")) {
                 Enemy e = (Enemy) entity;
-                e.normalBehavior(px, py);
+                e.normalBehavior(px, py, dead);
                 e.update();
                 if (e.shooting) addBullets(e);
                 if (e.life < 0) entityList.get("weapon").add(e.weapon);
@@ -184,7 +199,7 @@ public class PlayState extends GameState {
                             }
                             entry.getValue().remove(i);
                         } else { //player dies
-                            init();
+                            dead = true;
                         }
                     }
                 }
@@ -197,6 +212,7 @@ public class PlayState extends GameState {
                 //move on to next level
                 gsm.setState(GameStateManager.NEXTLEVEL);
             }
+
         } else {
             pauseState.update();
         }
@@ -227,18 +243,18 @@ public class PlayState extends GameState {
         }
     }
 
-    private void playSound(String fileName) {
-        try {
-            // get the sound file as a resource out of my jar file;
-            // the sound file must be in the same directory as this class file.
-            // the input stream portion of this recipe comes from a javaworld.com article.
-            InputStream inputStream = getClass().getResourceAsStream(fileName);
-            AudioStream audioStream = new AudioStream(inputStream);
-            AudioPlayer.player.start(audioStream);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
+//    private void playSound(String fileName) {
+//        try {
+//            // get the sound file as a resource out of my jar file;
+//            // the sound file must be in the same directory as this class file.
+//            // the input stream portion of this recipe comes from a javaworld.com article.
+//            InputStream inputStream = getClass().getResourceAsStream(fileName);
+//            AudioStream audioStream = new AudioStream(inputStream);
+//            AudioPlayer.player.start(audioStream);
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//    }
 
     public void inputHandle() {
 //        Scanner scanner = new Scanner(System.in);
@@ -252,11 +268,6 @@ public class PlayState extends GameState {
 
 
         if (!gsm.paused) {
-            if (InputManager.isKeyPressed("ALT") && Game.currentTimeMillis() - InputManager.getKeyTime("ALT") > 400) {
-                InputManager.setKeyTime("ALT", Game.currentTimeMillis());
-                gsm.setPaused(true);
-            }
-            if (InputManager.isKeyPressed("ESCAPE")) System.exit(0);
             if (InputManager.isKeyPressed("LEFT") && !InputManager.isKeyPressed("RIGHT"))
                 thisPlayer.updateVelX(-ThisPlayer.topSpeed);
             else if (InputManager.isKeyPressed("RIGHT") && !InputManager.isKeyPressed("LEFT"))
@@ -299,6 +310,13 @@ public class PlayState extends GameState {
                         }
                     }
                 }
+            }
+            if (InputManager.isKeyPressed("ESC") && Game.currentTimeMillis() - InputManager.getKeyTime("ESC") > 400) {
+                InputManager.setKeyTime("ESC", Game.currentTimeMillis());
+                gsm.setPaused(true);
+            }
+            if (dead && (InputManager.isMousePressed("LEFTMOUSE") || InputManager.isKeyPressed("SPACE"))) {
+                init();
             }
         } else {
             pauseState.inputHandle();

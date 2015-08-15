@@ -27,10 +27,10 @@ public class Enemy extends Player {
         shootTime = Game.currentTimeMillis();
     }
 
-    public void normalBehavior(float px, float py) {
+    public void normalBehavior(float px, float py, boolean playerDead) {
         //stopMove();
         shooting = false;
-        if (lineOfSight(px, py) && distBetween(px, py) < 400) {
+        if (!playerDead && lineOfSight(px, py) && distBetween(px, py) < 400) {
             stopMove();
             if (distBetween(px, py) > 100) {
                 goTowards(px, py, (float) 1);

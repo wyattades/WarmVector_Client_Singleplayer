@@ -3,6 +3,7 @@ package GameState;
 import Main.Game;
 import Manager.InputManager;
 import Visual.ButtonC;
+import Visual.MouseCursor;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class PauseState extends GameState {
     }
 
     private void addButton(String name, int x, int y) {
-        buttons.add(new ButtonC(name, x, y, 300, 80, Color.red, Color.blue));
+        buttons.add(new ButtonC(name, x, y, 300, 80));
 
     }
 
@@ -57,9 +58,11 @@ public class PauseState extends GameState {
         }
     }
 
+    public void setCursor() {}
+
     public void inputHandle() {
-        if (InputManager.isKeyPressed("ALT") && Game.currentTimeMillis() - InputManager.getKeyTime("ALT") > 400) {
-            InputManager.setKeyTime("ALT", Game.currentTimeMillis());
+        if (Game.currentTimeMillis() - InputManager.getKeyTime("ESC") > 400 && InputManager.isKeyPressed("ESC")) {
+            InputManager.setKeyTime("ESC", Game.currentTimeMillis());
             gsm.setPaused(false);
         }
         gsm.cursor.setPosition(InputManager.mouse.x, InputManager.mouse.y);

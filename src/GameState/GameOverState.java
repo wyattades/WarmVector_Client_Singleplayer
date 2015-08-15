@@ -3,6 +3,8 @@ package GameState;
 import Main.Game;
 import Manager.InputManager;
 import Visual.ButtonC;
+import Visual.MouseCursor;
+import Visual.ThemeColors;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class GameOverState extends GameState {
     }
 
     private void addButton(String name, int x, int y) {
-        buttons.add(new ButtonC(name, x, y, 300, 80, Color.red, Color.blue));
+        buttons.add(new ButtonC(name, x, y, 300, 80));
     }
 
     public void init() {
@@ -32,12 +34,13 @@ public class GameOverState extends GameState {
         addButton("Restart", Game.WIDTH / 2, Game.HEIGHT / 2 - 50);
         addButton("Help", Game.WIDTH / 2, Game.HEIGHT / 2 + 50);
         addButton("Quit", Game.WIDTH / 2, Game.HEIGHT / 2 + 150);
+
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(new Color(200,200,200));
+        g.setColor(ThemeColors.background);
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
-        g.setColor(Color.black);
+        g.setColor(ThemeColors.textTitle);
         if (gsm.level >= GameStateManager.MAXLEVEL) {
             String text = "YOU DIED";
             g.drawString(
@@ -47,8 +50,14 @@ public class GameOverState extends GameState {
             );
         }
         for (ButtonC b : buttons) {
+            b.draw(g);
+        }
+    }
+
+    public void update() {
+        for (ButtonC b : buttons) {
             if (b.pressed) {
-               if (b.text.equals("Restart")) {
+                if (b.text.equals("Restart")) {
                     gsm.setState(GameStateManager.PLAY);
                 } else if (b.text.equals("Help")) {
                     //open help menu
@@ -59,15 +68,13 @@ public class GameOverState extends GameState {
                 }
             }
         }
-        for (ButtonC b : buttons) {
-            b.draw(g);
-        }
-    }
-
-    public void update() {
     }
 
     public void inputHandle() {
         gsm.cursor.setPosition(InputManager.mouse.x, InputManager.mouse.y);
+    }
+
+    public void setCursor() {
+        gsm.cursor.setSprite(MouseCursor.CURSOR);
     }
 }

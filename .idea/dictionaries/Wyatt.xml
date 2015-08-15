@@ -1,18 +1,7 @@
 <component name="ProjectDictionaryState">
-  <dictionary name="Wyatt">
+  <dictionary name="wyatt">
     <words>
-      <w>accel</w>
-      <w>crosshair</w>
-      <w>disp</w>
-      <w>ents</w>
-      <w>gameover</w>
-      <w>leftmouse</w>
-      <w>leveltiles</w>
-      <w>maxlevel</w>
-      <w>nextlevel</w>
-      <w>rightmouse</w>
-      <w>scalefactor</w>
-      <w>singleplayer</w>
+      <w>warmvector</w>
     </words>
   </dictionary>
 </component>

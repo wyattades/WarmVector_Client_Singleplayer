@@ -3,8 +3,11 @@ package GameState;
 import Main.Game;
 import Manager.InputManager;
 import Visual.ButtonC;
+import Visual.MouseCursor;
+import Visual.ThemeColors;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 /**
@@ -13,36 +16,55 @@ import java.util.ArrayList;
  */
 public class MenuState extends GameState {
 
-    ArrayList<ButtonC> buttons;
+    private ArrayList<ButtonC> buttons;
+
+    private int titleTextScale;
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
+
     }
 
     private void addButton(String name, int x, int y) {
-        buttons.add(new ButtonC(name, x, y, 300, 80, Color.red, Color.blue));
-
+        buttons.add(new ButtonC(name, x, y, 300, 80));
     }
 
     public void init() {
+
         buttons = new ArrayList<ButtonC>();
-        addButton("Begin", Game.WIDTH / 2, Game.HEIGHT / 2 - 150);
+        addButton("Begin", Game.WIDTH / 2, Game.HEIGHT / 2 - 50);
         //addButton("Continue", Game.WIDTH / 2, Game.HEIGHT / 2 - 50);
         addButton("Help", Game.WIDTH / 2, Game.HEIGHT / 2 + 50);
         addButton("Quit", Game.WIDTH / 2, Game.HEIGHT / 2 + 150);
     }
 
-    Color background = new Color(100,100,100);
+    public void setCursor() {
+        gsm.cursor.setSprite(MouseCursor.CURSOR);
+    }
 
     public void draw(Graphics2D g) {
-        g.setColor(background);
-        g.fillRect(0,0,Game.WIDTH,Game.HEIGHT);
+        g.setColor(ThemeColors.background);
+        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
         for (ButtonC b : buttons) {
             b.draw(g);
         }
+        g.setColor(ThemeColors.textTitle);
+        g.setFont(new Font("Ariel", Font.BOLD, titleTextScale));
+        String text = "WARMVECTOR";
+        //int textWidth = ;
+        //System.out.println(textWidth);
+        //AffineTransform oldTransform = g.getTransform();
+        //g.translate(, );
+        //g.scale(titleTextScale, titleTextScale);
+        //g.translate(textWidth, 0);
+        g.drawString(text,Game.WIDTH / 2 -(int) g.getFontMetrics().getStringBounds(text, g).getWidth() / 2,Game.HEIGHT/2 - 140);
+        //g.setTransform(oldTransform);
     }
 
     public void update() {
+
+        titleTextScale = (int) (Math.sin(Game.currentTimeMillis() / 800f)*20f + 140f);
+        System.out.println(titleTextScale);
         for (ButtonC b : buttons) {
             if (b.pressed) {
                 if (b.text.equals("Begin")) {
@@ -56,6 +78,7 @@ public class MenuState extends GameState {
                     System.exit(0);
 
                 }
+
             }
         }
     }

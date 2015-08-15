@@ -12,6 +12,7 @@ public abstract class GameState {
 
     GameState(GameStateManager gsm) {
         this.gsm = gsm;
+        setCursor();
     }
 
     public abstract void init();
@@ -21,5 +22,7 @@ public abstract class GameState {
     public abstract void update();
 
     public abstract void inputHandle();
+
+    public abstract void setCursor();
 
 }

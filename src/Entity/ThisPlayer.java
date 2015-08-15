@@ -21,6 +21,7 @@ public class ThisPlayer extends Player {
         defaultSprite = FileManager.images.get("player0.png");
         this.w = sprite.getWidth();
         this.h = sprite.getHeight();
+        shootTime = Game.currentTimeMillis();
     }
 
     public void updateAngle(float cursorx, float cursory) {

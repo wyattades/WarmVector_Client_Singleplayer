@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
  */
 public class Animation {
 
-    private int x, y, w, h;
+    public int x, y, w, h;
     private float orient;
     private int frame, length, step, currentStep, frameRate;
     private BufferedImage[] sprites;
@@ -64,7 +64,7 @@ public class Animation {
     public void draw(Graphics2D g) {
         AffineTransform oldTForm = g.getTransform();
         g.rotate(orient, x, y);
-        g.drawImage(sprites[frame], x - w / 2, y - h / 2, null);
+        g.drawImage(sprites[frame], x - w / 2, y - h / 2, w, h, null);
         g.setTransform(oldTForm);
     }
 

@@ -15,6 +15,8 @@ import java.util.Comparator;
  */
 public class Visibility {
 
+    //Color of shadow
+    private static Color COLOR = new Color(20,20,20,255);
 
     // These represent the map and the light location:
     private ArrayList<Segment> segments;
@@ -79,7 +81,7 @@ public class Visibility {
         }
         GeneralPath SHADOW = new GeneralPath(CUTOUT);
         SHADOW.append(BORDER, false);
-        g.setColor(new Color(20, 20, 20, 255));
+        g.setColor(COLOR);
         g.fill(SHADOW);
     }
 

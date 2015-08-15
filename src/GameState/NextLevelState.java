@@ -3,6 +3,8 @@ package GameState;
 import Main.Game;
 import Manager.InputManager;
 import Visual.ButtonC;
+import Visual.MouseCursor;
+import Visual.ThemeColors;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class NextLevelState extends GameState {
     }
 
     private void addButton(String name, int x, int y) {
-        buttons.add(new ButtonC(name, x, y, 300, 80, Color.red, Color.blue));
+        buttons.add(new ButtonC(name, x, y, 300, 80));
     }
 
     public void init() {
@@ -31,10 +33,14 @@ public class NextLevelState extends GameState {
         addButton("Quit", Game.WIDTH / 2, Game.HEIGHT / 2 + 150);
     }
 
+    public void setCursor() {
+        gsm.cursor.setSprite(MouseCursor.CURSOR);
+    }
+
     public void draw(Graphics2D g) {
-        g.setColor(new Color(200,200,200));
+        g.setColor(ThemeColors.background);
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
-        g.setColor(Color.black);
+        g.setColor(ThemeColors.textTitle);
         if (gsm.level >= GameStateManager.MAXLEVEL) {
             String text = "YOU WIN!";
             g.drawString(

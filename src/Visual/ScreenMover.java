@@ -45,10 +45,10 @@ public class ScreenMover {
         }
     }
 
-    public void updateRotation(double mouseX, double mouseY) {
+    public void updateRotation(double mouseX, double mouseY, float orient) {
         float rotateRadius = (float) (-MaxRadius * Math.sqrt((mouseX - Game.WIDTH / 2) * (mouseX - Game.WIDTH / 2) + (mouseY - Game.HEIGHT / 2) * (mouseY - Game.HEIGHT / 2)) / (Game.WIDTH / 2));
         //int rotateRadius = -70;
-        screenPosX += rotateRadius * Math.cos(player.orient);
-        screenPosY += rotateRadius * Math.sin(player.orient);
+        screenPosX += rotateRadius * Math.cos(orient);
+        screenPosY += rotateRadius * Math.sin(orient);
     }
 }

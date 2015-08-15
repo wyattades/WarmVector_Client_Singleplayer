@@ -4,6 +4,8 @@ package GameState;
 import Main.Game;
 import Manager.InputManager;
 import Visual.Animation;
+import Visual.MouseCursor;
+
 import java.awt.*;
 
 
@@ -21,6 +23,8 @@ public class IntroState extends GameState {
 
     public void init() {
         intro = new Animation(Game.WIDTH/2, Game.HEIGHT/2, 0, 40, Color.white, "intro_");
+        intro.w = Game.WIDTH;
+        intro.h = Game.HEIGHT;
     }
 
     public void draw(Graphics2D g) {
@@ -32,8 +36,12 @@ public class IntroState extends GameState {
         if (!intro.state) gsm.setState(GameStateManager.MENU);
     }
 
+    public void setCursor() {
+        gsm.cursor.setSprite(MouseCursor.NONE);
+    }
+
     public void inputHandle() {
-        if (InputManager.isMousePressed("LEFTMOUSE")) {
+        if (InputManager.isMousePressed("LEFTMOUSE") || InputManager.isKeyPressed("SPACE")) {
             gsm.setState(GameStateManager.MENU);
         }
     }
