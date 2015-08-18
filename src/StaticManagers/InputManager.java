@@ -1,4 +1,4 @@
-package Manager;
+package StaticManagers;
 
 import java.awt.*;
 import java.awt.event.*;

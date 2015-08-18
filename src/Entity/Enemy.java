@@ -2,7 +2,7 @@ package Entity;
 
 import Entity.Weapon.Weapon;
 import Main.Game;
-import Manager.FileManager;
+import StaticManagers.FileManager;
 import Map.TileMap;
 
 import java.util.ArrayList;

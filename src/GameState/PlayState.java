@@ -6,17 +6,14 @@ import Entity.Player;
 import Entity.ThisPlayer;
 import Entity.Weapon.Weapon;
 import Main.Game;
-import Manager.InputManager;
+import StaticManagers.InputManager;
 import Map.TileMap;
 import Visual.*;
 import Visual.Occlusion.Visibility;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -229,9 +226,12 @@ public class PlayState extends GameState {
                     copy.setFramePosition(0);
                     copy.start();
                 }
+                //Subtract one ammo from player
                 p.weapon.changeAmmo(-1);
+                //Add bullet object to arrayList so it can be updated and displayed
                 bullets.add(b);
 
+                //Player bullet shoot sound for each bullet shot
                 p.weapon.shootSound.stop();
                 Clip copy = p.weapon.shootSound;
                 copy.setFramePosition(0);
@@ -276,9 +276,9 @@ public class PlayState extends GameState {
                 thisPlayer.updateVelY(-ThisPlayer.topSpeed);
             else if (InputManager.isKeyPressed("DOWN") && !InputManager.isKeyPressed("UP"))
                 thisPlayer.updateVelY(ThisPlayer.topSpeed);
-
             if (InputManager.isMousePressed("LEFTMOUSE")) {
                 addBullets(thisPlayer);
+
             }
 
             if (InputManager.isMouseClicked("RIGHTMOUSE") && Game.currentTimeMillis() - InputManager.getMouseTime("RIGHTMOUSE") > 500) {

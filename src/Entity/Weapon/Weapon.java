@@ -2,7 +2,7 @@ package Entity.Weapon;
 
 import Entity.Entity;
 import Entity.Player;
-import Manager.FileManager;
+import StaticManagers.FileManager;
 
 import javax.sound.sampled.Clip;
 import java.awt.*;

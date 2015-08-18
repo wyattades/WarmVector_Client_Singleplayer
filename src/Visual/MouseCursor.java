@@ -1,7 +1,7 @@
 package Visual;
 
 import Main.Game;
-import Manager.FileManager;
+import StaticManagers.FileManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

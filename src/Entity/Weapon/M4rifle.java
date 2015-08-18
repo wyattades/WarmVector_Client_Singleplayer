@@ -1,7 +1,7 @@
 package Entity.Weapon;
 
 import Entity.Player;
-import Manager.FileManager;
+import StaticManagers.FileManager;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/

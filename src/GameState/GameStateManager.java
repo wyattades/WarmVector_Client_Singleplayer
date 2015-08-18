@@ -13,7 +13,7 @@ public class GameStateManager {
     public GameState[] gameStates;
     public int currentState;
     public int level;
-    public static int MAXLEVEL = 2;
+    public static final int MAXLEVEL = 2;
 
     public static final int
             NUM_STATES = 5,

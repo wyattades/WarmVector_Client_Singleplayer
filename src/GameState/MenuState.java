@@ -1,10 +1,11 @@
 package GameState;
 
 import Main.Game;
-import Manager.InputManager;
+import StaticManagers.InputManager;
 import Visual.ButtonC;
+import Visual.MouseCursor;
+import Visual.Slider;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -13,72 +14,122 @@ import java.util.ArrayList;
 public abstract class MenuState extends GameState{
 
     protected ArrayList<ButtonC> buttons;
+    protected ArrayList<Slider> sliders;
 
-    private final int buttonDist = 90;
+    protected int startY;
 
-    protected int startY = Game.HEIGHT/2 - 250;
+    static final int buttonDist = 58;
 
     public MenuState(GameStateManager gsm) {super(gsm);}
 
-    protected void addButton(String name, boolean above) {
-        if (!above) {
-            int y = startY;
-            for (ButtonC b : buttons) {
-                if (y <= b.y) y = b.y + buttonDist;
-            }
-            buttons.add(new ButtonC(name, Game.WIDTH / 2, y, 300, 70));
-        } else {
-            for (ButtonC b : buttons) {
-               b.y += buttonDist;
-            }
-            buttons.add(new ButtonC(name, Game.WIDTH / 2, startY, 300, 70));
+    protected void addButton(String name) {
+        int y = startY;
+        for (ButtonC b : buttons) {
+            if (y <= b.y) y = b.y + buttonDist;
         }
+        for (Slider s : sliders) {
+            if (y <= s.y) y = s.y + buttonDist;
+        }
+        buttons.add(new ButtonC(name, Game.WIDTH - 50, y));
     }
 
+    protected void addSlider(String name, String[] options, int current_pos) {
+        int y = startY;
+        for (ButtonC b : buttons) {
+            if (y <= b.y) y = b.y + buttonDist;
+        }
+        for (Slider s : sliders) {
+            if (y <= s.y) y = s.y + buttonDist;
+        }
+        sliders.add(new Slider(Game.WIDTH - 50, y, name, options, current_pos));
+    }
+
+    protected abstract void initButtons();
+
     protected void initDefault() {
-        buttons = new ArrayList<ButtonC>();
-        addButton("Settings",false);
-        addButton("Help",false);
-        addButton("Quit",false);
+        addButton("OPTIONS");
+        addButton("HELP");
+        addButton("CREDITS");
+        addButton("QUIT");
     }
 
     private void initSettings() {
         buttons = new ArrayList<ButtonC>();
-        addButton("AA On",false);
-        addButton("Back",false);
+        sliders = new ArrayList<Slider>();
+        addSlider("Anti-Aliasing", new String[]{"On", "Off"}, 1);
+        addSlider("Quality", new String[]{"Good","Great"},0);
+        addSlider("Music Volume", new String[]{"0","25","50","75","100"},4);
+        addSlider("Game Volume", new String[]{"0","25","50","75","100"},4);
+        addButton("BACK");
     }
 
-    public void buttonOutcomes() {
-        for (ButtonC b : buttons) {
-            if (b.pressed) {
-                if (b.text.equals("Settings")) {
-                    initSettings();
-                } else if (b.text.equals("Help")) {
-                    //Open help menu
-                } else if (b.text.equals("Quit")) {
-                    System.exit(0);
-                } else if (b.text.equals("Resume")) {
-                    gsm.setPaused(false);
-                } else if (b.text.equals("Begin")) {
-                    gsm.setState(GameStateManager.PLAY);
-                } else if (b.text.equals("Restart")) {
-                    gsm.setState(GameStateManager.PLAY);
-                } else if (b.text.equals("Back")) {
-                    init();
-                } else if (b.text.equals("AA Off")) {
-                    b.text = "AA On";
-                    //set antialiasing to off
-                } else if (b.text.equals("AA On")) {
-                    b.text = "AA Off";
-                    //set antialiasing to on
-                }
-                b.pressed = false;
-            }
+    protected void buttonOutcome(ButtonC b) {
+        if (b.text.equals("OPTIONS")) {
+            initSettings();
+        } else if (b.text.equals("HELP")) {
+            //Open help menu
+        } else if (b.text.equals("CONTINUE")) {
+            gsm.level++;
+            gsm.setState(GameStateManager.PLAY);
+        } else if (b.text.equals("QUIT")) {
+            System.exit(0);
+        } else if (b.text.equals("RESUME")) {
+            gsm.setPaused(false);
+        } else if (b.text.equals("BEGIN")) {
+            gsm.setState(GameStateManager.PLAY);
+        } else if (b.text.equals("RESTART")) {
+            gsm.setState(GameStateManager.PLAY);
+        } else if (b.text.equals("BACK")) {
+            initButtons();
         }
     }
 
+    protected void sliderOutcome(Slider s) {
+
+    }
+
+    public void setCursor() {
+        gsm.cursor.setSprite(MouseCursor.CURSOR);
+    }
+
+    boolean snapSliders;
+
     public void inputHandle() {
         gsm.cursor.setPosition(InputManager.mouse.x, InputManager.mouse.y);
+
+        if (InputManager.isMousePressed("LEFTMOUSE")) {
+
+            snapSliders = false;
+
+            for (Slider s : sliders) {
+                s.pressed = false;
+                if (s.overBox(InputManager.mouse.x, InputManager.mouse.y)) {
+                    s.pressed = true;
+                    if (InputManager.mouse.dragged) {
+                        s.slide(InputManager.mouse.x - s.dragPos);
+                    } else {
+                        s.setDragPos(InputManager.mouse.x);
+                    }
+                }
+            }
+            for (ButtonC b : buttons) {
+                if (b.overBox(InputManager.mouse.x, InputManager.mouse.y) &&
+                        Game.currentTimeMillis() - InputManager.getMouseTime("LEFTMOUSE") > 400) {
+                    InputManager.setMouseTime("LEFTMOUSE", Game.currentTimeMillis());
+                    buttonOutcome(b);
+                    break;
+                }
+            }
+        } else {
+            if (!snapSliders) {
+                for (Slider s : sliders) {
+                    s.snapSlider();
+                    s.pressed = false;
+                }
+                snapSliders = true;
+            }
+        }
+
     }
 
 }

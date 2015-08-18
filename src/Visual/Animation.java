@@ -1,6 +1,6 @@
 package Visual;
 
-import Manager.FileManager;
+import StaticManagers.FileManager;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;

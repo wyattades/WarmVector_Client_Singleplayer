@@ -2,7 +2,7 @@ package GameState;
 
 
 import Main.Game;
-import Manager.InputManager;
+import StaticManagers.InputManager;
 import Visual.Animation;
 import Visual.MouseCursor;
 

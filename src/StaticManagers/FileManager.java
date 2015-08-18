@@ -1,4 +1,4 @@
-package Manager;
+package StaticManagers;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioSystem;

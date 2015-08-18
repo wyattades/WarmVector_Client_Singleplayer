@@ -6,7 +6,8 @@ package Main;
  */
 
 import GameState.GameStateManager;
-import Manager.InputManager;
+import StaticManagers.InputManager;
+import StaticManagers.OutputManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +29,9 @@ public class Game implements Runnable {
     private GameStateManager gsm;
 
     public Game() {
+
+        OutputManager.setSetting("key_anti_aliasing", 1);
+
         running = true;
         JFrame frame = new JFrame("WarmVector Singleplayer V2");
 
@@ -137,7 +141,7 @@ public class Game implements Runnable {
 //        g.setRenderingHint(RenderingHints.KEY_DITHERING,
 //                RenderingHints.VALUE_DITHER_ENABLE);
 
-        g.setFont(new Font("Dotum Bold", Font.BOLD, 45));
+        //g.setFont(new Font("Dotum Bold", Font.BOLD, 50));
 
         gsm.draw(g); //game is drawn
 

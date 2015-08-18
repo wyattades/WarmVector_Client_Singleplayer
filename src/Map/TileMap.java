@@ -5,7 +5,7 @@ import Entity.Entity;
 import Entity.ThisPlayer;
 import Entity.Tile;
 import Entity.Weapon.M4rifle;
-import Manager.FileManager;
+import StaticManagers.FileManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
