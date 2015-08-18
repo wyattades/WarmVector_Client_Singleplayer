@@ -1,5 +1,7 @@
 package GameState;
 
+import Main.Game;
+
 import java.awt.*;
 
 /**
@@ -8,14 +10,14 @@ import java.awt.*;
  */
 public abstract class GameState {
 
-    GameStateManager gsm;
+    protected GameStateManager gsm;
 
-    GameState(GameStateManager gsm) {
+    public GameState(GameStateManager gsm) {
         this.gsm = gsm;
         setCursor();
     }
 
-    public abstract void init();
+    protected abstract void init();
 
     public abstract void draw(Graphics2D g);
 
@@ -23,6 +25,11 @@ public abstract class GameState {
 
     public abstract void inputHandle();
 
-    public abstract void setCursor();
+    protected abstract void setCursor();
+
+    protected void drawBackground(Graphics2D g, Color color) {
+        g.setColor(color);
+        g.fillRect(0,0, Game.WIDTH,Game.HEIGHT);
+    }
 
 }

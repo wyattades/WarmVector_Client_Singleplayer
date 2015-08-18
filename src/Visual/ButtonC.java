@@ -1,5 +1,6 @@
 package Visual;
 
+import Main.Game;
 import Manager.InputManager;
 
 import java.awt.*;
@@ -10,7 +11,10 @@ import java.awt.*;
  */
 public class ButtonC {
 
-    private int x, y, w, h;
+    private int x;
+    public int y;
+    private int w;
+    private int h;
     public String text;
     public boolean pressed;
 
@@ -31,7 +35,8 @@ public class ButtonC {
             g.drawString(text, x - (int) g.getFontMetrics().getStringBounds(text, g).getWidth() / 2, y+10);
         } else {
             g.setColor(ThemeColors.buttonOver);
-            if (InputManager.isMousePressed("LEFTMOUSE")) {
+            if (InputManager.isMousePressed("LEFTMOUSE") && Game.currentTimeMillis() - InputManager.getMouseTime("LEFTMOUSE") > 400) {
+                InputManager.setMouseTime("LEFTMOUSE",Game.currentTimeMillis());
                 pressed = true;
                 g.setColor(ThemeColors.buttonSelected);
             }

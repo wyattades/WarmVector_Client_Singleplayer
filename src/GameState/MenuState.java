@@ -3,82 +3,76 @@ package GameState;
 import Main.Game;
 import Manager.InputManager;
 import Visual.ButtonC;
-import Visual.MouseCursor;
-import Visual.ThemeColors;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
 /**
- * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
- * Created by Wyatt on 1/25/2015.
+ * Created by wyatt on 8/17/2015.
  */
-public class MenuState extends GameState {
+public abstract class MenuState extends GameState{
 
-    private ArrayList<ButtonC> buttons;
+    protected ArrayList<ButtonC> buttons;
 
-    private int titleTextScale;
+    private final int buttonDist = 90;
 
-    public MenuState(GameStateManager gsm) {
-        super(gsm);
+    protected int startY = Game.HEIGHT/2 - 250;
 
-    }
+    public MenuState(GameStateManager gsm) {super(gsm);}
 
-    private void addButton(String name, int x, int y) {
-        buttons.add(new ButtonC(name, x, y, 300, 80));
-    }
-
-    public void init() {
-
-        buttons = new ArrayList<ButtonC>();
-        addButton("Begin", Game.WIDTH / 2, Game.HEIGHT / 2 - 50);
-        //addButton("Continue", Game.WIDTH / 2, Game.HEIGHT / 2 - 50);
-        addButton("Help", Game.WIDTH / 2, Game.HEIGHT / 2 + 50);
-        addButton("Quit", Game.WIDTH / 2, Game.HEIGHT / 2 + 150);
-    }
-
-    public void setCursor() {
-        gsm.cursor.setSprite(MouseCursor.CURSOR);
-    }
-
-    public void draw(Graphics2D g) {
-        g.setColor(ThemeColors.background);
-        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
-        for (ButtonC b : buttons) {
-            b.draw(g);
+    protected void addButton(String name, boolean above) {
+        if (!above) {
+            int y = startY;
+            for (ButtonC b : buttons) {
+                if (y <= b.y) y = b.y + buttonDist;
+            }
+            buttons.add(new ButtonC(name, Game.WIDTH / 2, y, 300, 70));
+        } else {
+            for (ButtonC b : buttons) {
+               b.y += buttonDist;
+            }
+            buttons.add(new ButtonC(name, Game.WIDTH / 2, startY, 300, 70));
         }
-        g.setColor(ThemeColors.textTitle);
-        g.setFont(new Font("Ariel", Font.BOLD, titleTextScale));
-        String text = "WARMVECTOR";
-        //int textWidth = ;
-        //System.out.println(textWidth);
-        //AffineTransform oldTransform = g.getTransform();
-        //g.translate(, );
-        //g.scale(titleTextScale, titleTextScale);
-        //g.translate(textWidth, 0);
-        g.drawString(text,Game.WIDTH / 2 -(int) g.getFontMetrics().getStringBounds(text, g).getWidth() / 2,Game.HEIGHT/2 - 140);
-        //g.setTransform(oldTransform);
     }
 
-    public void update() {
+    protected void initDefault() {
+        buttons = new ArrayList<ButtonC>();
+        addButton("Settings",false);
+        addButton("Help",false);
+        addButton("Quit",false);
+    }
 
-        titleTextScale = (int) (Math.sin(Game.currentTimeMillis() / 800f)*20f + 140f);
-        System.out.println(titleTextScale);
+    private void initSettings() {
+        buttons = new ArrayList<ButtonC>();
+        addButton("AA On",false);
+        addButton("Back",false);
+    }
+
+    public void buttonOutcomes() {
         for (ButtonC b : buttons) {
             if (b.pressed) {
-                if (b.text.equals("Begin")) {
-                    gsm.setState(GameStateManager.PLAY);
-//                } else if (b.text.equals("Continue")) {
-//                    gsm.setState(GameStateManager.PLAY);
+                if (b.text.equals("Settings")) {
+                    initSettings();
                 } else if (b.text.equals("Help")) {
-                    //open help menu
+                    //Open help menu
                 } else if (b.text.equals("Quit")) {
-                    System.out.println("Quiting");
                     System.exit(0);
-
+                } else if (b.text.equals("Resume")) {
+                    gsm.setPaused(false);
+                } else if (b.text.equals("Begin")) {
+                    gsm.setState(GameStateManager.PLAY);
+                } else if (b.text.equals("Restart")) {
+                    gsm.setState(GameStateManager.PLAY);
+                } else if (b.text.equals("Back")) {
+                    init();
+                } else if (b.text.equals("AA Off")) {
+                    b.text = "AA On";
+                    //set antialiasing to off
+                } else if (b.text.equals("AA On")) {
+                    b.text = "AA Off";
+                    //set antialiasing to on
                 }
-
+                b.pressed = false;
             }
         }
     }
@@ -86,7 +80,5 @@ public class MenuState extends GameState {
     public void inputHandle() {
         gsm.cursor.setPosition(InputManager.mouse.x, InputManager.mouse.y);
     }
-
-
 
 }

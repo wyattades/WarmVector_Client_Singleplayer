@@ -139,7 +139,7 @@ public class Game implements Runnable {
 
         g.setFont(new Font("Dotum Bold", Font.BOLD, 45));
 
-        gsm.draw(g); //here is where the game is actually drawn
+        gsm.draw(g); //game is drawn
 
         g.dispose();
 

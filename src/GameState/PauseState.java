@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class PauseState extends GameState {
 
-    ArrayList<ButtonC> buttons;
+    private ArrayList<ButtonC> buttons;
 
     public PauseState(GameStateManager gsm) {
         super(gsm);

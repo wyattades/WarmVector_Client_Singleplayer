@@ -15,7 +15,7 @@ import java.awt.*;
  */
 public class IntroState extends GameState {
 
-    Animation intro;
+    private Animation intro;
 
     public IntroState(GameStateManager gsm) {
         super(gsm);

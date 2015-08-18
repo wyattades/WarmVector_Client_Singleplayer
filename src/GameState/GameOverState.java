@@ -38,8 +38,7 @@ public class GameOverState extends GameState {
     }
 
     public void draw(Graphics2D g) {
-        g.setColor(ThemeColors.background);
-        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+        drawBackground(g,ThemeColors.background);
         g.setColor(ThemeColors.textTitle);
         if (gsm.level >= GameStateManager.MAXLEVEL) {
             String text = "YOU DIED";

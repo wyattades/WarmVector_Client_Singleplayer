@@ -1,6 +1,5 @@
 package GameState;
 
-import Manager.InputManager;
 import Visual.MouseCursor;
 
 import java.awt.*;
@@ -44,7 +43,7 @@ public class GameStateManager {
                 gameStates[i] = new IntroState(this);
                 break;
             case (MENU):
-                gameStates[i] = new MenuState(this);
+                gameStates[i] = new StartMenuState(this);
                 break;
             case (PLAY):
                 gameStates[i] = new PlayState(this);
