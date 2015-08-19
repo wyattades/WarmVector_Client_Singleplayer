@@ -1,7 +1,8 @@
 package GameState;
 
 import Main.Game;
-import Visual.ButtonC;
+import StaticManagers.InputManager;
+import Visual.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,14 +13,18 @@ import java.util.ArrayList;
  */
 public class NextLevelState extends MenuState {
 
+//    private NextLevelTransition nextLevelTransition;
+
     public NextLevelState(GameStateManager gsm) {
         super(gsm);
     }
 
     protected void initButtons() {
         buttons = new ArrayList<ButtonC>();
+        sliders = new ArrayList<Slider>();
         if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE");
         initDefault();
+//        nextLevelTransition = new NextLevelTransition(ThemeColors.menuBackground);
     }
 
     public void init() {
@@ -29,14 +34,15 @@ public class NextLevelState extends MenuState {
 
     public void draw(Graphics2D g) {
 
-        //drawBackground(g,ThemeColors.background);
+        drawBackground(g,ThemeColors.menuBackground);
+//        nextLevelTransition.draw(g);
 
         for (ButtonC b : buttons) {
             b.draw(g);
         }
 
         if (gsm.level >= GameStateManager.MAXLEVEL) {
-            String text = "YOU WIN!";
+            String text = "YOU WIN! (work in progress btdubs)";
             g.drawString(
                     text,
                     Game.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(text, g).getWidth() / 2,
@@ -46,6 +52,8 @@ public class NextLevelState extends MenuState {
 
     }
 
-    public void update() {}
+    public void update() {
+//        nextLevelTransition.transition();
+    }
 
 }

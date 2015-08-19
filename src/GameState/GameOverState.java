@@ -2,6 +2,7 @@ package GameState;
 
 import Main.Game;
 import Visual.ButtonC;
+import Visual.Slider;
 import Visual.ThemeColors;
 
 import java.awt.*;
@@ -23,6 +24,7 @@ public class GameOverState extends MenuState {
 
     protected void initButtons() {
         buttons = new ArrayList<ButtonC>();
+        sliders = new ArrayList<Slider>();
         if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE");
         initDefault();
     }
@@ -31,13 +33,17 @@ public class GameOverState extends MenuState {
 
         drawBackground(g,ThemeColors.background);
 
+        for (Slider s : sliders) {
+            s.draw(g);
+        }
+
         for (ButtonC b : buttons) {
             b.draw(g);
         }
 
-        g.setColor(ThemeColors.textTitle);
         if (gsm.level >= GameStateManager.MAXLEVEL) {
             String text = "YOU DIED";
+            g.setColor(ThemeColors.textTitle);
             g.drawString(
                     text,
                     Game.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(text, g).getWidth() / 2,

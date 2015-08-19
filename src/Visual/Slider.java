@@ -43,7 +43,7 @@ public class Slider {
 
         //Text
         g.setFont(new Font("Dotum Bold", Font.BOLD, 20));
-        g.setColor(ThemeColors.textTitle);
+        g.setColor(ThemeColors.textOver);
         g.drawString(text, (int) (x - w - size - g.getFontMetrics().getStringBounds(text, g).getWidth()), y+6);
 
         //Options

@@ -2,6 +2,7 @@ package GameState;
 
 import Main.Game;
 import Visual.ButtonC;
+import Visual.Slider;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class PauseState extends MenuState {
 
     protected void initButtons() {
         buttons = new ArrayList<ButtonC>();
+        sliders = new ArrayList<Slider>();
         addButton("RESUME");
         initDefault();
     }
@@ -28,6 +30,10 @@ public class PauseState extends MenuState {
     }
 
     public void draw(Graphics2D g) {
+
+        for (Slider s : sliders) {
+            s.draw(g);
+        }
 
         for (ButtonC b : buttons) {
             b.draw(g);

@@ -13,7 +13,7 @@ public class ButtonC {
     private int x;
     public int y;
     private int w;
-    private int h;
+    private final int h = 43;
     public String text;
 
     public boolean setWidth;
@@ -22,12 +22,11 @@ public class ButtonC {
         this.text = text;
         this.x = x;
         this.y = y;
-        h = 38;
         setWidth = false;
     }
 
     public void draw(Graphics2D g) {
-        g.setFont(new Font("Dotum Bold", Font.BOLD, 50));
+        g.setFont(new Font("Dotum Bold", Font.BOLD, 60));
 
         if (!setWidth) {
             w = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
@@ -36,9 +35,9 @@ public class ButtonC {
         }
 
         if (!overBox(InputManager.mouse.x,InputManager.mouse.y)) {
-            g.setColor(ThemeColors.textDefault);
+            g.setColor(ThemeColors.buttonDefault);
         } else {
-            g.setColor(ThemeColors.textOver);
+            g.setColor(ThemeColors.buttonOver);
         }
         g.drawString(text, x - w, y + h);
     }

@@ -212,6 +212,7 @@ public class PlayState extends GameState {
 
         } else {
             pauseState.update();
+            thisPlayer.shootTime = Game.currentTimeMillis();
         }
     }
 

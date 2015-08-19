@@ -61,6 +61,8 @@ public class HUD {
 
 
     public void draw(Graphics2D g) {
+        g.setFont(new Font("Dotum Bold",Font.BOLD,40));
+
         String lifeS = String.valueOf((int) user.life),
                 ammoS = user.weapon == null ? "" : "Ammo: " + user.weapon.ammo + " / " + user.weapon.maxAmmo;
         g.setColor(defaultHudColor);
