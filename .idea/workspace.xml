@@ -6,32 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="79328cf6-c427-44a6-a23b-90c221e9f3ec" name="Default" comment="current">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Visual/BarVisualizer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Visual/NextLevelTransition.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/ButtonC.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/ButtonC.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/GameOverState.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/GameOverState.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/HUD.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/HUD.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/MenuState.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/MenuState.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PauseState.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PauseState.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Images/cursor.png" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Images/cursor.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Images/cursor.png" afterPath="$PROJECT_DIR$/src/Images/cursor.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Animations/intro_/intro_1.png" afterPath="$PROJECT_DIR$/src/Animations/intro_/intro_1.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Animations/intro_/intro_2.png" afterPath="$PROJECT_DIR$/src/Animations/intro_/intro_2.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Animations/intro_/intro_3.png" afterPath="$PROJECT_DIR$/src/Animations/intro_/intro_3.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Animations/intro_/intro_4.png" afterPath="$PROJECT_DIR$/src/Animations/intro_/intro_4.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Animations/intro_/intro_5.png" afterPath="$PROJECT_DIR$/src/Animations/intro_/intro_5.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Animations/intro_/intro_6.png" afterPath="$PROJECT_DIR$/src/Animations/intro_/intro_6.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/ButtonC.java" afterPath="$PROJECT_DIR$/src/Visual/ButtonC.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/GameOverState.java" afterPath="$PROJECT_DIR$/src/GameState/GameOverState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/HUD.java" afterPath="$PROJECT_DIR$/src/Visual/HUD.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/MenuState.java" afterPath="$PROJECT_DIR$/src/GameState/MenuState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/NextLevelState.java" afterPath="$PROJECT_DIR$/src/GameState/NextLevelState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/PauseState.java" afterPath="$PROJECT_DIR$/src/GameState/PauseState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/PlayState.java" afterPath="$PROJECT_DIR$/src/GameState/PlayState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/Slider.java" afterPath="$PROJECT_DIR$/src/Visual/Slider.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/StartMenuState.java" afterPath="$PROJECT_DIR$/src/GameState/StartMenuState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/ThemeColors.java" afterPath="$PROJECT_DIR$/src/Visual/ThemeColors.java" />
+    <list default="true" id="79328cf6-c427-44a6-a23b-90c221e9f3ec" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PlayState.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PlayState.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="WarmVector_Client_Singleplayer.iws" />
@@ -111,8 +87,8 @@
       <file leaf-file-name="PlayState.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/GameState/PlayState.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="3.5719845">
-              <caret line="214" column="60" selection-start-line="214" selection-start-column="60" selection-end-line="214" selection-end-column="60" />
+            <state vertical-scroll-proportion="0.5953307">
+              <caret line="79" column="28" selection-start-line="79" selection-start-column="28" selection-end-line="79" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -640,7 +616,13 @@
       <option name="project" value="LOCAL" />
       <updated>1439271398214</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="menu gui changes ( very pretty now)">
+      <created>1439958764525</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1439958764525</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -693,7 +675,8 @@
     <MESSAGE value="bug fixes?" />
     <MESSAGE value="intro gif" />
     <MESSAGE value="current" />
-    <option name="LAST_COMMIT_MESSAGE" value="current" />
+    <MESSAGE value="menu gui changes ( very pretty now)" />
+    <option name="LAST_COMMIT_MESSAGE" value="menu gui changes ( very pretty now)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1090,8 +1073,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/GameState/PlayState.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.5719845">
-          <caret line="214" column="60" selection-start-line="214" selection-start-column="60" selection-end-line="214" selection-end-column="60" />
+        <state vertical-scroll-proportion="0.5953307">
+          <caret line="79" column="28" selection-start-line="79" selection-start-column="28" selection-end-line="79" selection-end-column="28" />
           <folding />
         </state>
       </provider>
