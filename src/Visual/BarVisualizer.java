@@ -32,18 +32,16 @@ public class BarVisualizer {
         }
     }
 
+//    public void newSpike(int posY) {
+//        for (int i = 0; i < bars.length; i++) {
+//            bars[i] +=
+//        }
+//    }
+
     public void react(int mouseY) {
         int deltaY = Math.abs(mouseY - lastMousePos);
         for (int i = 0; i < bars.length; i++) {
-//            float multiplier = -0.1f * bars[i];
-//            if (deltaY > 3) {
-//                multiplier += deltaY/4;
-                int diff = Math.abs(mouseY - i * barH);
-//                if (diff < 300) multiplier += 100/diff/deltaY;
-//            }
-//            bars[i] += multiplier;
-//            if (diff > 300) diff = 0;
-//            if (deltaY < 3) deltaY = 0;
+            int diff = Math.abs(mouseY - i * barH);
             float addition = 3.0f * (float)deltaY - diff;
             if (addition < 0) addition = 0;
             bars[i] += (addition - (float)bars[i]/20.0f);
@@ -54,4 +52,12 @@ public class BarVisualizer {
     }
 
 
+    public void spike(int y) {
+        for (int i = 0; i < bars.length; i++) {
+            int diff = y - i * barH;
+            float addition = (float) (100 - Math.sin(diff/4)*80);
+            if (addition < 0) addition = 0;
+            bars[i] += addition;
+        }
+    }
 }

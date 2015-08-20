@@ -19,7 +19,7 @@ public class GameOverState extends MenuState {
     }
 
     public void init() {
-        startY = Game.HEIGHT/2 + 50;
+        startY = Game.HEIGHT - 100;
     }
 
     protected void initButtons() {

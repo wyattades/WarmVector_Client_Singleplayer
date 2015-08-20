@@ -28,7 +28,7 @@ public class NextLevelState extends MenuState {
     }
 
     public void init() {
-        startY = Game.HEIGHT/2 + 50;
+        startY = Game.HEIGHT - 100;
         initButtons();
     }
 

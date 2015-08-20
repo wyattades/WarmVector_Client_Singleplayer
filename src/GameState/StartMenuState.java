@@ -10,6 +10,7 @@ import Visual.ThemeColors;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.util.ArrayList;
 
 /**
@@ -23,12 +24,15 @@ public class StartMenuState extends MenuState {
 
     private BarVisualizer barVisualizer;
 
+    private Color backGround;
+
     public StartMenuState(GameStateManager gsm) {super(gsm);}
 
     public void init() {
-        startY = Game.HEIGHT/2 + 50;
+        startY = Game.HEIGHT - 100;
         initButtons();
         barVisualizer = new BarVisualizer(480, ThemeColors.menuBackground);
+        //backGround = Color.black;
 //        title = FileManager.images.get("title.png");
 //        title_w = title_i_w = title.getWidth()/2;
 //        title_h = title_i_h = title.getHeight()/2;
@@ -37,13 +41,13 @@ public class StartMenuState extends MenuState {
     protected void initButtons() {
         buttons = new ArrayList<ButtonC>();
         sliders = new ArrayList<Slider>();
-        addButton("BEGIN");
         initDefault();
+        addButton("BEGIN");
     }
 
     public void draw(Graphics2D g) {
 
-        drawBackground(g,ThemeColors.background);
+        drawBackground(g,backGround);
 
         barVisualizer.draw(g);
 
@@ -63,13 +67,21 @@ public class StartMenuState extends MenuState {
         //g.drawImage(title, Game.WIDTH/2 - title_w/2, Game.HEIGHT/2 - title_h/2 - 180, title_w, title_h, null);
     }
 
+    float value = 0.0f;
+
     public void update() {
+
+
+        backGround = Color.getHSBColor(value,1,1);
+        ThemeColors.buttonOver = backGround;
+        value+=0.001f;
+        if (value >= 1) value = 0;
+    }
+
+    public void inputHandle() {
+        defaultInputHandle();
         barVisualizer.react(InputManager.mouse.y);
-
-//        float titleTextScale = (float) (Math.sin(Game.currentTimeMillis() / 600f)*0.1f + 0.6f);
-//        title_w = (int) (title_i_w*titleTextScale);
-//        title_h = (int) (title_i_h*titleTextScale);
-
+        if (InputManager.isMousePressed("LEFTMOUSE")) barVisualizer.spike(InputManager.mouse.y);
     }
 
 }

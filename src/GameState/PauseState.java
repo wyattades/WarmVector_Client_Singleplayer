@@ -1,6 +1,7 @@
 package GameState;
 
 import Main.Game;
+import StaticManagers.InputManager;
 import Visual.ButtonC;
 import Visual.Slider;
 
@@ -20,12 +21,12 @@ public class PauseState extends MenuState {
     protected void initButtons() {
         buttons = new ArrayList<ButtonC>();
         sliders = new ArrayList<Slider>();
-        addButton("RESUME");
         initDefault();
+        addButton("RESUME");
     }
 
     public void init() {
-        startY = Game.HEIGHT/2 + 50;
+        startY = Game.HEIGHT - 200;
         initButtons();
     }
 
@@ -43,5 +44,13 @@ public class PauseState extends MenuState {
     public void update() {}
 
     public void setCursor() {}
+
+    public void inputHandle() {
+        defaultInputHandle();
+        if (InputManager.isKeyPressed("ESC") && Game.currentTimeMillis()-InputManager.getKeyTime("ESC") > 400) {
+            gsm.setPaused(false);
+            InputManager.setKeyTime("ESC",Game.currentTimeMillis());
+        }
+    }
 
 }

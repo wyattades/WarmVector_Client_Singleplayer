@@ -25,11 +25,11 @@ public abstract class MenuState extends GameState{
     protected void addButton(String name) {
         int y = startY;
         for (ButtonC b : buttons) {
-            if (y <= b.y) y = b.y + buttonDist;
+            if (y >= b.y) y = b.y - buttonDist;
         }
         if (sliders != null) {
             for (Slider s : sliders) {
-                if (y <= s.y) y = s.y + buttonDist;
+                if (y >= s.y) y = s.y - buttonDist;
             }
         }
         buttons.add(new ButtonC(name, Game.WIDTH - 50, y));
@@ -38,10 +38,10 @@ public abstract class MenuState extends GameState{
     protected void addSlider(String name, String[] options, int current_pos) {
         int y = startY;
         for (ButtonC b : buttons) {
-            if (y <= b.y) y = b.y + buttonDist;
+            if (y >= b.y) y = b.y - buttonDist;
         }
         for (Slider s : sliders) {
-            if (y <= s.y) y = s.y + buttonDist;
+            if (y >= s.y) y = s.y - buttonDist;
         }
         sliders.add(new Slider(Game.WIDTH - 50, y, name, options, current_pos));
     }
@@ -49,21 +49,22 @@ public abstract class MenuState extends GameState{
     protected abstract void initButtons();
 
     protected void initDefault() {
-        addButton("OPTIONS");
+        addButton("QUIT");
         addButton("HELP");
         addButton("CREDITS");
-        addButton("QUIT");
+        addButton("OPTIONS");
+
     }
 
     private void initSettings() {
         buttons = new ArrayList<ButtonC>();
         sliders = new ArrayList<Slider>();
+        addButton("BACK");
         addSlider("Fullscreen", new String[]{"On","Off"}, 0);
         addSlider("Anti-Aliasing", new String[]{"On", "Off"}, 1);
         addSlider("Quality", new String[]{"Good","Great"},0);
-        addSlider("Music Level", new String[]{"0","25","50","75","100"},4);
+        addSlider("Music Level", new String[]{"0","25","50","75","100"}, 4);
         addSlider("SFX Level", new String[]{"0","25","50","75","100"},4);
-        addButton("BACK");
     }
 
     protected void buttonOutcome(ButtonC b) {
@@ -97,7 +98,7 @@ public abstract class MenuState extends GameState{
 
     boolean snapSliders;
 
-    public void inputHandle() {
+    protected void defaultInputHandle() {
         gsm.cursor.setPosition(InputManager.mouse.x, InputManager.mouse.y);
 
 
@@ -133,7 +134,10 @@ public abstract class MenuState extends GameState{
                 snapSliders = true;
             }
         }
+    }
 
+    public void inputHandle() {
+        defaultInputHandle();
     }
 
 }
