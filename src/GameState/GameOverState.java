@@ -1,6 +1,7 @@
 package GameState;
 
 import Main.Game;
+import StaticManagers.InputManager;
 import Visual.ButtonC;
 import Visual.Slider;
 import Visual.ThemeColors;
@@ -22,22 +23,27 @@ public class GameOverState extends MenuState {
         startY = Game.HEIGHT - 100;
     }
 
+    public void unload() {
+
+    }
+
     protected void initButtons() {
         buttons = new ArrayList<ButtonC>();
         sliders = new ArrayList<Slider>();
-        if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE");
+        if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE", ButtonC.CONTINUE);
         initDefault();
     }
 
     public void draw(Graphics2D g) {
 
-        drawBackground(g,ThemeColors.background);
+        drawBackground(g,ThemeColors.menuBackground);
 
         for (Slider s : sliders) {
             s.draw(g);
         }
 
         for (ButtonC b : buttons) {
+            b.update(InputManager.mouse.x,InputManager.mouse.y);
             b.draw(g);
         }
 

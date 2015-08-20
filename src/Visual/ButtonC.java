@@ -17,16 +17,33 @@ public class ButtonC {
     public String text;
 
     public boolean setWidth;
+    public boolean overBox;
+    public int value;
 
-    public ButtonC(String text, int x, int y) {
+    public static final int
+            BEGIN = 0,
+            CONTINUE = 1,
+            OPTIONS = 2,
+            HELP = 3,
+            QUIT = 4,
+            RESTART = 5,
+            RESUME = 6,
+            BACK = 7,
+            CREDITS = 8,
+            RETURN = 9;
+
+
+    public ButtonC(String text, int value, int x, int y) {
         this.text = text;
+        this.value = value;
         this.x = x;
         this.y = y;
         setWidth = false;
+        overBox = false;
     }
 
     public void draw(Graphics2D g) {
-        g.setFont(new Font("Dotum Bold", Font.BOLD, 60));
+        g.setFont(ThemeColors.fontButton);
 
         if (!setWidth) {
             w = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
@@ -34,7 +51,7 @@ public class ButtonC {
             setWidth = true;
         }
 
-        if (!overBox(InputManager.mouse.x,InputManager.mouse.y)) {
+        if (!overBox) {
             g.setColor(ThemeColors.buttonDefault);
         } else {
             g.setColor(ThemeColors.buttonOver);
@@ -42,7 +59,11 @@ public class ButtonC {
         g.drawString(text, x - w, y + h);
     }
 
-    public boolean overBox(int mx, int my) {
+    public void update(int x, int y) {
+        overBox = overBox(x,y);
+    }
+
+    private boolean overBox(int mx, int my) {
 //        return mx > x - w / 2 && mx < x + w / 2 &&
 //                my > y - h / 2 && my < y + h / 2;
         return  mx > x - w && mx < x &&

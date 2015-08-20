@@ -24,6 +24,7 @@ import java.util.Iterator;
  */
 public class PlayState extends GameState {
 
+    private static final float SCALEFACTOR = 3;
     private PauseState pauseState;
     private int px, py;
     private HashMap<String, ArrayList<Entity>> entityList;
@@ -60,11 +61,15 @@ public class PlayState extends GameState {
         animations = new ArrayList<Animation>();
         tileMap = new TileMap(gsm.level);
         entityList = tileMap.setEntities();
-        screenMover = new ScreenMover((ThisPlayer) entityList.get("thisPlayer").get(0));
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
+        screenMover = new ScreenMover(thisPlayer);
         hud = new HUD(thisPlayer, entityList.get("enemy").size());
         shadow = new Visibility(tileMap);
         robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
+    }
+
+    public void unload() {
+
     }
 
     public void setCursor() {
@@ -72,10 +77,16 @@ public class PlayState extends GameState {
     }
 
     public void draw(Graphics2D g) {
-        //translate screen to follow player
+
+        //Create copy of transform for later
         AffineTransform oldT = g.getTransform();
-        g.scale(Game.SCALEFACTOR, Game.SCALEFACTOR);
-        g.translate(screenMover.screenPosX + (-px + Game.WIDTH / 2 / Game.SCALEFACTOR), screenMover.screenPosY + (-py + Game.HEIGHT / 2 / Game.SCALEFACTOR));
+
+        //Zoom in
+        g.scale(SCALEFACTOR, SCALEFACTOR);
+
+        //translate screen to follow player
+        g.translate(screenMover.screenPosX + (-px + Game.WIDTH / 2 / SCALEFACTOR), screenMover.screenPosY + (-py + Game.HEIGHT / 2 / SCALEFACTOR));
+
         //background image
         tileMap.drawBack(g);
 
@@ -88,7 +99,7 @@ public class PlayState extends GameState {
 //        path.closePath();
 //        g.setClip(path);
 
-        //draw objects
+        //draw objects \/
         for (Bullet b : bullets) {
             b.draw(g);
         }
@@ -116,16 +127,15 @@ public class PlayState extends GameState {
         }
         shadow.draw(g);
         tileMap.drawFore(g);
+
         //reset transformation
         g.setTransform(oldT);
 
         if (!dead) hud.draw(g);
         else {
             g.setColor(ThemeColors.textOver);
-            Font oldFont = g.getFont();
-            g.setFont(new Font("Ariel",Font.BOLD,60));
+            g.setFont(ThemeColors.fontButton);
             g.drawString("RESTART?",Game.WIDTH - 350, Game.HEIGHT - 60);
-            g.setFont(oldFont);
         }
 
         if (gsm.paused) pauseState.draw(g);

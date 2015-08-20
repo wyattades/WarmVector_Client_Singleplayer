@@ -17,7 +17,9 @@ public abstract class GameState {
         setCursor();
     }
 
-    protected abstract void init();
+    public abstract void init();
+
+    public abstract void unload();
 
     public abstract void draw(Graphics2D g);
 

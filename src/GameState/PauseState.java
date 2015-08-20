@@ -22,12 +22,17 @@ public class PauseState extends MenuState {
         buttons = new ArrayList<ButtonC>();
         sliders = new ArrayList<Slider>();
         initDefault();
-        addButton("RESUME");
+        addButton("MAIN MENU", ButtonC.RETURN);
+        addButton("RESUME", ButtonC.RESUME);
     }
 
     public void init() {
         startY = Game.HEIGHT - 200;
         initButtons();
+    }
+
+    public void unload() {
+
     }
 
     public void draw(Graphics2D g) {
@@ -37,6 +42,7 @@ public class PauseState extends MenuState {
         }
 
         for (ButtonC b : buttons) {
+            b.update(InputManager.mouse.x,InputManager.mouse.y);
             b.draw(g);
         }
     }

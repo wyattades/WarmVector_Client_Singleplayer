@@ -17,6 +17,35 @@ public class OutputManager {
 
     public static String[] settings;
     static {
+        settings = loadSettings();
+
+        //TEMP FOR DEBUGGING
+        for (int i = 0; i < settings.length; i++) {
+            System.out.println(settings[i]);
+        }
+    }
+
+    public static void setSetting(String name, int value) {
+        String newData = name + " " + value;
+        for (int i = 0; i < settings.length; i++) {
+            String s = settings[i];
+            if (s.contains(name)) {
+                File file = new File(filePath);
+                List<String> lines;
+                try {
+                    lines = Files.readAllLines(file.toPath());
+                    lines.set(i, newData);
+                    Files.write(file.toPath(), lines);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+
+    public static String[] loadSettings() {
+
         Scanner sc = null;
         try {
             sc = new Scanner(new File(filePath));
@@ -29,30 +58,8 @@ public class OutputManager {
             lines.add(sc.nextLine());
         }
 
-        settings = lines.toArray(new String[lines.size()]);
+        return lines.toArray(new String[lines.size()]);
 
-        for (int i = 0; i < settings.length; i++) {
-            System.out.println(settings[i]);
-        }
-    }
-
-    public static void setSetting(String name, int value) {
-        String newData = name + " " + value;
-        for (int i = 0; i < settings.length; i++) {
-            String s = settings[i];
-            if (s.contains(name)) {
-                File file = new File(filePath);
-                List<String> lines = null;
-                try {
-                    lines = Files.readAllLines(file.toPath());
-                    lines.set(i, newData);
-                    Files.write(file.toPath(), lines);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
     }
 
 }

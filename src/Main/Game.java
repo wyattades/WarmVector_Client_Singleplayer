@@ -20,8 +20,7 @@ public class Game implements Runnable {
 
     public final static int WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     public final static int HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-    public final static float SCALEFACTOR = 2;
-    private static final int MS_PER_FRAME = 16;
+    private static final int MS_PER_UPDATE = 16;
 
     private boolean running;
 
@@ -84,8 +83,7 @@ public class Game implements Runnable {
         run();
     }
 
-    private double startTime = 0;
-    private int frames = 0;
+
 
     public static int currentTimeMillis() {
         long millisLong = System.currentTimeMillis();
@@ -99,30 +97,51 @@ public class Game implements Runnable {
         return (float) (Math.random() * (max - min) + min);
     }
 
+//    private double startTime = 0;
+//    private int frames = 0;
+    double previous = currentTimeMillis();
+    double lag = 0.0;
+
     public void run() {
 
         while (running) {
-            int start = currentTimeMillis();
 
-            update();
+            double current = currentTimeMillis();
+            double elapsed = current - previous;
+            previous = current;
+            lag += elapsed;
+
+            inputHandle();
+
+            while (lag >= MS_PER_UPDATE)
+            {
+                update();
+                lag -= MS_PER_UPDATE;
+            }
+
             render();
 
-            //sets fps to 60
-            int sleepTime = (start + MS_PER_FRAME) - currentTimeMillis();
-            if (sleepTime > 0) {
-                try {
-                    Thread.sleep(sleepTime);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            frames++;
-            if (currentTimeMillis() - startTime >= 1000) {
-                startTime = currentTimeMillis();
-                System.out.println(frames);
-                frames = 0;
-            }
+//            int start = currentTimeMillis();
+//
+//            update();
+//            render();
+//
+//            //sets fps to 60
+//            int sleepTime = (start + MS_PER_UPDATE) - currentTimeMillis();
+//            if (sleepTime > 0) {
+//                try {
+//                    Thread.sleep(sleepTime);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            frames++;
+//            if (currentTimeMillis() - startTime >= 1000) {
+//                startTime = currentTimeMillis();
+//                System.out.println(frames);
+//                frames = 0;
+//            }
         }
     }
 
@@ -153,6 +172,10 @@ public class Game implements Runnable {
 
     void update() {
         gsm.update();
+    }
+
+    void inputHandle() {
+        gsm.inputHandle();
     }
 
 }

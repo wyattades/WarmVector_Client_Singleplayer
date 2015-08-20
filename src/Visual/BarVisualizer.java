@@ -3,6 +3,7 @@ package Visual;
 import Main.Game;
 
 import java.awt.*;
+import java.util.Arrays;
 
 import com.sun.media.sound.FFT;
 
@@ -20,6 +21,7 @@ public class BarVisualizer {
     public BarVisualizer(int x, Color color) {
         this.color = color;
         bars = new int[128];
+        Arrays.fill(bars, Game.WIDTH-startX);
         startX = x;
         barH = (int) Math.ceil((float)Game.HEIGHT/128f);
     }

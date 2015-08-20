@@ -17,11 +17,21 @@ public class Slider {
     private static final int sub_w = 60, size = 30;
     public boolean pressed;
     public int dragPos;
+    public int value;
 
-    public Slider(int x, int y, String text, String[] options, int current_option) {
+    public static final int
+            AA = 0,
+            QUALITY = 1,
+            SFX = 2,
+            MUSIC = 3,
+            FULLSCREEN = 4;
+
+
+    public Slider(int x, int y, String text, int value, String[] options, int current_option) {
         this.x = x;
         this.y = y;
         this.text = text;
+        this.value = value;
         w = sub_w * (options.length - 1);
         this.options = options;
         pressed = false;

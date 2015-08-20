@@ -22,7 +22,7 @@ public abstract class MenuState extends GameState{
 
     public MenuState(GameStateManager gsm) {super(gsm);}
 
-    protected void addButton(String name) {
+    protected void addButton(String name, int value) {
         int y = startY;
         for (ButtonC b : buttons) {
             if (y >= b.y) y = b.y - buttonDist;
@@ -32,10 +32,10 @@ public abstract class MenuState extends GameState{
                 if (y >= s.y) y = s.y - buttonDist;
             }
         }
-        buttons.add(new ButtonC(name, Game.WIDTH - 50, y));
+        buttons.add(new ButtonC(name, value, Game.WIDTH - 50, y));
     }
 
-    protected void addSlider(String name, String[] options, int current_pos) {
+    protected void addSlider(String name, int value, String[] options, int current_pos) {
         int y = startY;
         for (ButtonC b : buttons) {
             if (y >= b.y) y = b.y - buttonDist;
@@ -43,52 +43,70 @@ public abstract class MenuState extends GameState{
         for (Slider s : sliders) {
             if (y >= s.y) y = s.y - buttonDist;
         }
-        sliders.add(new Slider(Game.WIDTH - 50, y, name, options, current_pos));
+        sliders.add(new Slider(Game.WIDTH - 50, y, name, value, options, current_pos));
     }
 
     protected abstract void initButtons();
 
     protected void initDefault() {
-        addButton("QUIT");
-        addButton("HELP");
-        addButton("CREDITS");
-        addButton("OPTIONS");
+        addButton("QUIT", ButtonC.QUIT);
+        addButton("HELP", ButtonC.HELP);
+        addButton("CREDITS", ButtonC.CREDITS);
+        addButton("OPTIONS", ButtonC.OPTIONS);
 
     }
 
     private void initSettings() {
         buttons = new ArrayList<ButtonC>();
         sliders = new ArrayList<Slider>();
-        addButton("BACK");
-        addSlider("Fullscreen", new String[]{"On","Off"}, 0);
-        addSlider("Anti-Aliasing", new String[]{"On", "Off"}, 1);
-        addSlider("Quality", new String[]{"Good","Great"},0);
-        addSlider("Music Level", new String[]{"0","25","50","75","100"}, 4);
-        addSlider("SFX Level", new String[]{"0","25","50","75","100"},4);
+        addButton("BACK", ButtonC.BACK);
+        addSlider("Fullscreen", Slider.FULLSCREEN, new String[]{"On","Off"}, 0);
+        addSlider("Anti-Aliasing", Slider.AA, new String[]{"On", "Off"}, 1);
+        addSlider("Quality", Slider.QUALITY, new String[]{"Good","Great"},0);
+        addSlider("Music Level", Slider.MUSIC, new String[]{"0","25","50","75","100"}, 4);
+        addSlider("SFX Level", Slider.SFX, new String[]{"0","25","50","75","100"},4);
     }
 
-    protected void buttonOutcome(ButtonC b) {
-        if (b.text.equals("OPTIONS")) {
-            initSettings();
-        } else if (b.text.equals("HELP")) {
-            //Open help menu
-        } else if (b.text.equals("CONTINUE")) {
-            gsm.level++;
-            gsm.setState(GameStateManager.PLAY);
-        } else if (b.text.equals("QUIT")) {
-            System.exit(0);
-        } else if (b.text.equals("RESUME")) {
-            gsm.setPaused(false);
-        } else if (b.text.equals("BEGIN")) {
-            gsm.setState(GameStateManager.PLAY);
-        } else if (b.text.equals("RESTART")) {
-            gsm.setState(GameStateManager.PLAY);
-        } else if (b.text.equals("BACK")) {
-            initButtons();
+    protected void buttonOutcome(int value) {
+        switch(value) {
+            case ButtonC.OPTIONS:
+                initSettings();
+                break;
+            case ButtonC.HELP:
+                //Open help menu
+                break;
+            case ButtonC.CONTINUE:
+                gsm.level++;
+                gsm.setState(GameStateManager.PLAY);
+                break;
+            case ButtonC.QUIT:
+                System.exit(0);
+                break;
+            case ButtonC.RESUME:
+                gsm.setPaused(false);
+                break;
+            case ButtonC.BEGIN:
+                gsm.setState(GameStateManager.PLAY);
+                break;
+            case ButtonC.RESTART:
+                gsm.setState(GameStateManager.PLAY);
+                break;
+            case ButtonC.BACK:
+                initButtons();
+                break;
+            case ButtonC.CREDITS:
+                //Roll the credits!
+                break;
+            case ButtonC.RETURN:
+                gsm.setState(GameStateManager.MAINMENU);
+                break;
+            default:
+                System.out.println("Invalid button value: " + value);
+                break;
         }
     }
 
-    protected void sliderOutcome(Slider s) {
+    protected void sliderOutcome(int name, int newSetting) {
 
     }
 
@@ -118,10 +136,10 @@ public abstract class MenuState extends GameState{
                 }
             }
             for (ButtonC b : buttons) {
-                if (b.overBox(InputManager.mouse.x, InputManager.mouse.y) &&
+                if (b.overBox &&
                         Game.currentTimeMillis() - InputManager.getMouseTime("LEFTMOUSE") > 400) {
                     InputManager.setMouseTime("LEFTMOUSE", Game.currentTimeMillis());
-                    buttonOutcome(b);
+                    buttonOutcome(b.value);
                     break;
                 }
             }

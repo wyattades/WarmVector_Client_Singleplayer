@@ -27,13 +27,17 @@ public class IntroState extends GameState {
         intro.h = Game.HEIGHT;
     }
 
+    public void unload() {
+
+    }
+
     public void draw(Graphics2D g) {
         intro.draw(g);
     }
 
     public void update() {
         intro.update();
-        if (!intro.state) gsm.setState(GameStateManager.MENU);
+        if (!intro.state) gsm.setState(GameStateManager.MAINMENU);
     }
 
     public void setCursor() {
@@ -42,7 +46,7 @@ public class IntroState extends GameState {
 
     public void inputHandle() {
         if (InputManager.isMousePressed("LEFTMOUSE") || InputManager.isKeyPressed("SPACE")) {
-            gsm.setState(GameStateManager.MENU);
+            gsm.setState(GameStateManager.MAINMENU);
         }
     }
 

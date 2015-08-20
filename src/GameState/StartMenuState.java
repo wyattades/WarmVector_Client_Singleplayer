@@ -1,7 +1,6 @@
 package GameState;
 
 import Main.Game;
-import StaticManagers.FileManager;
 import StaticManagers.InputManager;
 import Visual.BarVisualizer;
 import Visual.ButtonC;
@@ -9,8 +8,6 @@ import Visual.Slider;
 import Visual.ThemeColors;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
 import java.util.ArrayList;
 
 /**
@@ -19,30 +16,37 @@ import java.util.ArrayList;
  */
 public class StartMenuState extends MenuState {
 
-//    private BufferedImage title;
-//    private int title_w, title_h, title_i_w, title_i_h;
-
     private BarVisualizer barVisualizer;
 
     private Color backGround;
 
-    public StartMenuState(GameStateManager gsm) {super(gsm);}
+    private float backgroundHue = 0.0f;
+
+    private final int menuWidth = 480;
+
+    public StartMenuState(GameStateManager gsm) {
+        super(gsm);
+    }
 
     public void init() {
+
         startY = Game.HEIGHT - 100;
         initButtons();
-        barVisualizer = new BarVisualizer(480, ThemeColors.menuBackground);
-        //backGround = Color.black;
-//        title = FileManager.images.get("title.png");
-//        title_w = title_i_w = title.getWidth()/2;
-//        title_h = title_i_h = title.getHeight()/2;
+        barVisualizer = new BarVisualizer(menuWidth, ThemeColors.menuBackground);
+
+    }
+
+    public void unload() {
+        ThemeColors.buttonOver = ThemeColors.buttonOverOld;
     }
 
     protected void initButtons() {
+
         buttons = new ArrayList<ButtonC>();
         sliders = new ArrayList<Slider>();
         initDefault();
-        addButton("BEGIN");
+        addButton("BEGIN", ButtonC.BEGIN);
+
     }
 
     public void draw(Graphics2D g) {
@@ -52,6 +56,7 @@ public class StartMenuState extends MenuState {
         barVisualizer.draw(g);
 
         for (ButtonC b : buttons) {
+            b.update(InputManager.mouse.x,InputManager.mouse.y);
             b.draw(g);
         }
 
@@ -59,23 +64,29 @@ public class StartMenuState extends MenuState {
             s.draw(g);
         }
 
-        g.setColor(ThemeColors.buttonDefault);
-        g.setFont(new Font("Dotum Bold",Font.BOLD,200));
-        g.drawString("W", Game.WIDTH - 300, Game.HEIGHT / 2 - 200);
-        g.drawString("V", Game.WIDTH - 273, Game.HEIGHT / 2 - 140);
+        //Draw the "W" & "V" title
+        for (ButtonC b : buttons) {
+            if (b.overBox && b.value == ButtonC.BEGIN) {
+                g.setColor(ThemeColors.buttonOver);
+                g.setFont(ThemeColors.fontHUD);
+                g.drawString("ARM", Game.WIDTH - menuWidth / 2 + 70, Game.HEIGHT / 2 - 200);
+                g.drawString("ECTOR", Game.WIDTH - menuWidth / 2 + 28, Game.HEIGHT / 2 - 40);
+            } else {
+                g.setColor(ThemeColors.buttonDefault);
+            }
+        }
+        g.setFont(ThemeColors.fontLogo);
+        g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 200);
+        g.drawString("V", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("V", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 40);
 
-        //g.drawImage(title, Game.WIDTH/2 - title_w/2, Game.HEIGHT/2 - title_h/2 - 180, title_w, title_h, null);
     }
-
-    float value = 0.0f;
 
     public void update() {
 
+        backGround = ThemeColors.buttonOver = Color.getHSBColor(backgroundHue, 1, 1);
+        backgroundHue += 0.001f;
+        if (backgroundHue >= 1) backgroundHue = 0;
 
-        backGround = Color.getHSBColor(value,1,1);
-        ThemeColors.buttonOver = backGround;
-        value+=0.001f;
-        if (value >= 1) value = 0;
     }
 
     public void inputHandle() {

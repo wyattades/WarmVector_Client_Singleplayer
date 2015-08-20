@@ -22,8 +22,9 @@ public class NextLevelState extends MenuState {
     protected void initButtons() {
         buttons = new ArrayList<ButtonC>();
         sliders = new ArrayList<Slider>();
-        if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE");
         initDefault();
+        if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE", ButtonC.CONTINUE);
+
 //        nextLevelTransition = new NextLevelTransition(ThemeColors.menuBackground);
     }
 
@@ -32,13 +33,22 @@ public class NextLevelState extends MenuState {
         initButtons();
     }
 
+    public void unload() {
+
+    }
+
     public void draw(Graphics2D g) {
 
         drawBackground(g,ThemeColors.menuBackground);
 //        nextLevelTransition.draw(g);
 
         for (ButtonC b : buttons) {
+            b.update(InputManager.mouse.x,InputManager.mouse.y);
             b.draw(g);
+        }
+
+        for (Slider s : sliders) {
+            s.draw(g);
         }
 
         if (gsm.level >= GameStateManager.MAXLEVEL) {
