@@ -12,9 +12,10 @@ import java.awt.image.BufferedImage;
  */
 public class MouseCursor {
 
-    private final static float x_sensitivity = 1.5f, y_sensitivity = 1.5f;
+    private final static float x_sensitivity = 1.0f, y_sensitivity = 1.0f;
     public static int NONE = 0, CURSOR = 1, CROSSHAIR = 2;
     public int x, y;
+    private int oldPosX, oldPosY;
     private int w, h;
     private BufferedImage sprite, cursor, crosshair, transparent;
 
@@ -51,5 +52,15 @@ public class MouseCursor {
 
     private int constrain(int value, int min, int max) {
         return Math.min(Math.max(value, min), max);
+    }
+
+    public void updateOldPos() {
+        oldPosX = x;
+        oldPosY = y;
+    }
+
+    public void setToOldPos() {
+        x = oldPosX;
+        y = oldPosY;
     }
 }

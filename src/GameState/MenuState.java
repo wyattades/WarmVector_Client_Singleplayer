@@ -83,10 +83,11 @@ public abstract class MenuState extends GameState{
                 System.exit(0);
                 break;
             case ButtonC.RESUME:
-                gsm.setPaused(false);
+                gsm.unloadState(GameStateManager.PAUSE);
+                gsm.cursor.setToOldPos();
                 break;
             case ButtonC.BEGIN:
-                gsm.setState(GameStateManager.PLAY);
+                gsm.setTopState(GameStateManager.FADEOUT);
                 break;
             case ButtonC.RESTART:
                 gsm.setState(GameStateManager.PLAY);
@@ -98,6 +99,7 @@ public abstract class MenuState extends GameState{
                 //Roll the credits!
                 break;
             case ButtonC.RETURN:
+                gsm.unloadState(GameStateManager.PAUSE);
                 gsm.setState(GameStateManager.MAINMENU);
                 break;
             default:
@@ -114,7 +116,7 @@ public abstract class MenuState extends GameState{
         gsm.cursor.setSprite(MouseCursor.CURSOR);
     }
 
-    boolean snapSliders;
+    private boolean snapSliders;
 
     protected void defaultInputHandle() {
         gsm.cursor.setPosition(InputManager.mouse.x, InputManager.mouse.y);
@@ -126,12 +128,12 @@ public abstract class MenuState extends GameState{
 
             for (Slider s : sliders) {
                 s.pressed = false;
-                if (s.overBox(InputManager.mouse.x, InputManager.mouse.y)) {
+                if (s.overBox(gsm.cursor.x, gsm.cursor.y)) {
                     s.pressed = true;
                     if (InputManager.mouse.dragged) {
-                        s.slide(InputManager.mouse.x - s.dragPos);
+                        s.slide(gsm.cursor.x - s.dragPos);
                     } else {
-                        s.setDragPos(InputManager.mouse.x);
+                        s.setDragPos(gsm.cursor.x);
                     }
                 }
             }

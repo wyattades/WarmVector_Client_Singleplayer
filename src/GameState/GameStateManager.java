@@ -13,9 +13,10 @@ import java.awt.*;
  */
 public class GameStateManager {
 
-    private GameState[] gameStates;
+    protected GameState[] gameStates;
 
-    private int currentState, topState;
+    protected int currentState;
+    private int topState;
 
     public int level;
 
@@ -26,13 +27,16 @@ public class GameStateManager {
     public static final int
             MAXLEVEL = 2,
 
-            NUM_STATES = 5,
+            NUM_STATES = 8,
 
             INTRO = 0,
             MAINMENU = 1,
             PLAY = 2,
             GAMEOVER = 3,
-            NEXTLEVEL = 4;
+            NEXTLEVEL = 4,
+            FADEIN = 5,
+            PAUSE = 6,
+            FADEOUT = 7;
 
     public GameStateManager() {
 
@@ -43,66 +47,68 @@ public class GameStateManager {
 
     }
 
+    private void initState(int i) {
+
+        switch (i) {
+            case INTRO:
+                gameStates[i] = new IntroState(this);
+                break;
+            case MAINMENU:
+                gameStates[i] = new StartMenuState(this);
+                break;
+            case FADEIN:
+                gameStates[i] = new FadeInState(this);
+                break;
+            case PLAY:
+                gameStates[i] = new PlayState(this);
+                break;
+            case GAMEOVER:
+                gameStates[i] = new GameOverState(this);
+                break;
+            case NEXTLEVEL:
+                gameStates[i] = new NextLevelState(this);
+                break;
+            case PAUSE:
+                gameStates[i] = new PauseState(this);
+                break;
+            case FADEOUT:
+                gameStates[i] = new FadeOutState(this);
+                break;
+        }
+        gameStates[i].init();
+
+    }
+
     public void setState(int i) {
 
         int previousState = currentState;
         currentState = i;
         if (gameStates[previousState] != null) unloadState(previousState);
-        switch (i) {
-            case (INTRO):
-                gameStates[i] = new IntroState(this);
-                break;
-            case (MAINMENU):
-                gameStates[i] = new StartMenuState(this);
-                break;
-            case (PLAY):
-                gameStates[i] = new PlayState(this);
-                break;
-            case (GAMEOVER):
-                gameStates[i] = new GameOverState(this);
-                break;
-            case (NEXTLEVEL):
-                gameStates[i] = new NextLevelState(this);
-                break;
-        }
-        gameStates[i].init();
+        initState(i);
 
     }
 
     public void setTopState(int i) {
+
         topState = i;
-        switch (i) {
-            case (INTRO):
-                gameStates[i] = new IntroState(this);
-                break;
-            case (MAINMENU):
-                gameStates[i] = new StartMenuState(this);
-                break;
-            case (PLAY):
-                gameStates[i] = new PlayState(this);
-                break;
-            case (GAMEOVER):
-                gameStates[i] = new GameOverState(this);
-                break;
-            case (NEXTLEVEL):
-                gameStates[i] = new NextLevelState(this);
-                break;
-        }
-        gameStates[i].init();
+        initState(i);
+
     }
 
-    private void unloadState(int i) {
+    public void unloadState(int i) {
+
         gameStates[i].unload();
         gameStates[i] = null;
-    }
-
-    public void setPaused(boolean p) {
-
-        paused = p;
-        if (p) cursor.setSprite(MouseCursor.CURSOR);
-        else cursor.setSprite(MouseCursor.CROSSHAIR);
 
     }
+
+//    public void setPaused(boolean p) {
+//
+//        paused = p;
+//        if (p) cursor.setSprite(MouseCursor.CURSOR);
+//        else cursor.setSprite(MouseCursor.CROSSHAIR);
+//
+//    }
 
     public void inputHandle() {
 

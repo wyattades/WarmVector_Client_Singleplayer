@@ -3,6 +3,7 @@ package GameState;
 import Main.Game;
 import StaticManagers.InputManager;
 import Visual.ButtonC;
+import Visual.MouseCursor;
 import Visual.Slider;
 
 import java.awt.*;
@@ -32,7 +33,8 @@ public class PauseState extends MenuState {
     }
 
     public void unload() {
-
+        gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
+        gsm.cursor.setToOldPos();
     }
 
     public void draw(Graphics2D g) {
@@ -49,12 +51,14 @@ public class PauseState extends MenuState {
 
     public void update() {}
 
-    public void setCursor() {}
+    public void setCursor() {
+        gsm.cursor.setSprite(MouseCursor.CURSOR);
+    }
 
     public void inputHandle() {
         defaultInputHandle();
         if (InputManager.isKeyPressed("ESC") && Game.currentTimeMillis()-InputManager.getKeyTime("ESC") > 400) {
-            gsm.setPaused(false);
+            gsm.unloadState(GameStateManager.PAUSE);
             InputManager.setKeyTime("ESC",Game.currentTimeMillis());
         }
     }

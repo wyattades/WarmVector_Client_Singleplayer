@@ -6,8 +6,8 @@ import Entity.Player;
 import Entity.ThisPlayer;
 import Entity.Weapon.Weapon;
 import Main.Game;
-import StaticManagers.InputManager;
 import Map.TileMap;
+import StaticManagers.InputManager;
 import Visual.*;
 import Visual.Occlusion.Visibility;
 
@@ -37,11 +37,9 @@ public class PlayState extends GameState {
     private Visibility shadow;
     private Robot robot;
     private boolean dead;
-    //private Clip hitSound;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-        pauseState = new PauseState(gsm);
         try {
             robot = new Robot();
         } catch (AWTException e) {
@@ -55,8 +53,6 @@ public class PlayState extends GameState {
         System.out.println("Level = " + gsm.level);
 
         dead = false;
-        pauseState.init();
-        gsm.setPaused(false);
         bullets = new ArrayList<Bullet>();
         animations = new ArrayList<Animation>();
         tileMap = new TileMap(gsm.level);
@@ -66,6 +62,7 @@ public class PlayState extends GameState {
         hud = new HUD(thisPlayer, entityList.get("enemy").size());
         shadow = new Visibility(tileMap);
         robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
+
     }
 
     public void unload() {
@@ -135,95 +132,92 @@ public class PlayState extends GameState {
         else {
             g.setColor(ThemeColors.textOver);
             g.setFont(ThemeColors.fontButton);
-            g.drawString("RESTART?",Game.WIDTH - 350, Game.HEIGHT - 60);
+            g.drawString("PRESS [SPACE] TO RESTART", Game.WIDTH / 2, Game.HEIGHT - 60);
         }
 
-        if (gsm.paused) pauseState.draw(g);
+//        if (gsm.paused) pauseState.draw(g);
 
     }
 
     public void update() {
-        if (!gsm.paused) {
 
-            //This is here, rather than in inputHandle(), because it needs to be run before thisPlayer is updated
-            gsm.cursor.setPosition(InputManager.mouse.x + 2 * screenMover.screenPosX, InputManager.mouse.y + 2 * screenMover.screenPosY);
+        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
 
-            //create a copy of thisPlayer for convenience
-            thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
+        //create a copy of thisPlayer for convenience
+        thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
 
-            if (!dead) {
-                //update objects
-                thisPlayer.update();
-                thisPlayer.regenHealth();
-                thisPlayer.updateAngle(gsm.cursor.x, gsm.cursor.y);
+        if (!dead) {
+            //update objects
+            thisPlayer.update();
+            thisPlayer.regenHealth();
+            thisPlayer.updateAngle(gsm.cursor.x - screenMover.screenPosX, gsm.cursor.y - screenMover.screenPosY);
 
-                px = thisPlayer.x;
-                py = thisPlayer.y;
-                screenMover.updatePosition();
-                screenMover.updateRotation(gsm.cursor.x, gsm.cursor.y, thisPlayer.orient);
-                thisPlayer.stopMove();
-            }
+            px = thisPlayer.x;
+            py = thisPlayer.y;
+            screenMover.updatePosition();
+            screenMover.updateRotation(gsm.cursor.x, gsm.cursor.y, thisPlayer.orient);
+            thisPlayer.stopMove();
+        }
 
-            shadow.setLightLocation(px, py);
-            shadow.sweep(999);
+        //This is here, rather than in inputHandle(), because it needs to be run before thisPlayer is updated
+        gsm.cursor.updatePosition(InputManager.mouse.x - Game.WIDTH / 2 + screenMover.screenVelX/4, InputManager.mouse.y - Game.HEIGHT / 2 + screenMover.screenVelY/4);
 
-            for (Bullet b : bullets) {
-                b.update();
-            }
-            for (Entity entity : entityList.get("weapon")) {
-                Weapon w = (Weapon) entity;
-                w.updateCollideBox();
-            }
-            for (Entity entity : entityList.get("enemy")) {
-                Enemy e = (Enemy) entity;
-                e.normalBehavior(px, py, dead);
-                e.update();
-                if (e.shooting) addBullets(e);
-                if (e.life < 0) entityList.get("weapon").add(e.weapon);
-            }
-            for (Animation a : animations) {
-                a.update();
-            }
+        shadow.setLightLocation(px, py);
+        shadow.sweep(999);
 
-            for (int i = bullets.size() - 1; i >= 0; i--) {
-                if (!bullets.get(i).state) bullets.remove(i); // <-- should I remove "object" or "index location"???
-            }
+        for (Bullet b : bullets) {
+            b.update();
+        }
+        for (Entity entity : entityList.get("weapon")) {
+            Weapon w = (Weapon) entity;
+            w.updateCollideBox();
+        }
+        for (Entity entity : entityList.get("enemy")) {
+            Enemy e = (Enemy) entity;
+            e.normalBehavior(px, py, dead);
+            e.update();
+            if (e.shooting) addBullets(e);
+            if (e.life < 0) entityList.get("weapon").add(e.weapon);
+        }
+        for (Animation a : animations) {
+            a.update();
+        }
 
-            for (int i = animations.size() - 1; i >= 0; i--) {
-                if (!animations.get(i).state) animations.remove(i);
-            }
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            if (!bullets.get(i).state) bullets.remove(i); // <-- should I remove "object" or "index location"???
+        }
 
-            //Entity removal outcomes
-            Iterator<HashMap.Entry<String, ArrayList<Entity>>> it = entityList.entrySet().iterator();
-            while (it.hasNext()) {
-                HashMap.Entry<String, ArrayList<Entity>> entry = it.next();
-                for (int i = entry.getValue().size() - 1; i >= 0; i--) {
-                    if (!entry.getValue().get(i).state) {
-                        if (!entry.getKey().equals("thisPlayer")) {
-                            if (entry.getKey().equals("enemy")) { //enemy dies
-                                Enemy e = (Enemy) entry.getValue().get(i);
-                                entityList.get("weapon").add(e.getWeapon());
-                            }
-                            entry.getValue().remove(i);
-                        } else { //player dies
-                            dead = true;
+        for (int i = animations.size() - 1; i >= 0; i--) {
+            if (!animations.get(i).state) animations.remove(i);
+        }
+
+        //Entity removal outcomes
+        Iterator<HashMap.Entry<String, ArrayList<Entity>>> it = entityList.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap.Entry<String, ArrayList<Entity>> entry = it.next();
+            for (int i = entry.getValue().size() - 1; i >= 0; i--) {
+                if (!entry.getValue().get(i).state) {
+                    if (!entry.getKey().equals("thisPlayer")) {
+                        if (entry.getKey().equals("enemy")) { //enemy dies
+                            Enemy e = (Enemy) entry.getValue().get(i);
+                            entityList.get("weapon").add(e.getWeapon());
                         }
+                        entry.getValue().remove(i);
+                    } else { //player dies
+                        dead = true;
                     }
                 }
             }
-            int enemyCount = entityList.get("enemy").size();
-            hud.updateEnemyAmount(enemyCount);
-
-            //if there are no enemies left...
-            if (enemyCount <= 0) {
-                //move on to next level
-                gsm.setState(GameStateManager.NEXTLEVEL);
-            }
-
-        } else {
-            pauseState.update();
-            thisPlayer.shootTime = Game.currentTimeMillis();
         }
+        int enemyCount = entityList.get("enemy").size();
+        hud.updateEnemyAmount(enemyCount);
+
+        //if there are no enemies left...
+        if (enemyCount <= 0) {
+            //move on to next level
+            gsm.setState(GameStateManager.NEXTLEVEL);
+        }
+
     }
 
     private void addBullets(Player p) {
@@ -254,19 +248,6 @@ public class PlayState extends GameState {
         }
     }
 
-//    private void playSound(String fileName) {
-//        try {
-//            // get the sound file as a resource out of my jar file;
-//            // the sound file must be in the same directory as this class file.
-//            // the input stream portion of this recipe comes from a javaworld.com article.
-//            InputStream inputStream = getClass().getResourceAsStream(fileName);
-//            AudioStream audioStream = new AudioStream(inputStream);
-//            AudioPlayer.player.start(audioStream);
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
-//    }
-
     public void inputHandle() {
 //        Scanner scanner = new Scanner(System.in);
 //        String name = null;
@@ -278,59 +259,59 @@ public class PlayState extends GameState {
 //        }
 
 
-        if (!gsm.paused) {
-            if (InputManager.isKeyPressed("LEFT") && !InputManager.isKeyPressed("RIGHT"))
-                thisPlayer.updateVelX(-ThisPlayer.topSpeed);
-            else if (InputManager.isKeyPressed("RIGHT") && !InputManager.isKeyPressed("LEFT"))
-                thisPlayer.updateVelX(ThisPlayer.topSpeed);
-            if (InputManager.isKeyPressed("UP") && !InputManager.isKeyPressed("DOWN"))
-                thisPlayer.updateVelY(-ThisPlayer.topSpeed);
-            else if (InputManager.isKeyPressed("DOWN") && !InputManager.isKeyPressed("UP"))
-                thisPlayer.updateVelY(ThisPlayer.topSpeed);
-            if (InputManager.isMousePressed("LEFTMOUSE")) {
-                addBullets(thisPlayer);
+//        if (!gsm.paused) {
+        if (InputManager.isKeyPressed("LEFT") && !InputManager.isKeyPressed("RIGHT"))
+            thisPlayer.updateVelX(-ThisPlayer.topSpeed);
+        else if (InputManager.isKeyPressed("RIGHT") && !InputManager.isKeyPressed("LEFT"))
+            thisPlayer.updateVelX(ThisPlayer.topSpeed);
+        if (InputManager.isKeyPressed("UP") && !InputManager.isKeyPressed("DOWN"))
+            thisPlayer.updateVelY(-ThisPlayer.topSpeed);
+        else if (InputManager.isKeyPressed("DOWN") && !InputManager.isKeyPressed("UP"))
+            thisPlayer.updateVelY(ThisPlayer.topSpeed);
+        if (InputManager.isMousePressed("LEFTMOUSE")) {
+            addBullets(thisPlayer);
 
-            }
+        }
 
-            if (InputManager.isMouseClicked("RIGHTMOUSE") && Game.currentTimeMillis() - InputManager.getMouseTime("RIGHTMOUSE") > 500) {
-                InputManager.setMouseTime("RIGHTMOUSE", Game.currentTimeMillis());
-                if (thisPlayer.weapon != null) {
-                    thisPlayer.weapon.unloadUser();
-                    entityList.get("weapon").add(thisPlayer.getWeapon());
-                    thisPlayer.weapon = null;
-                    thisPlayer.setSpriteToDefault(true);
-                    for (int i = 0; i < entityList.get("weapon").size() - 1; i++) {
-                        Weapon w = (Weapon) entityList.get("weapon").get(i);
-                        if (thisPlayer.collideBox.intersects(w.collideBox)) {
-                            thisPlayer.weapon = w;
-                            w.user = thisPlayer;
-                            thisPlayer.setSpriteToDefault(false);
-                            entityList.get("weapon").remove(w);
-                            break;
-                        }
+        if (InputManager.isMouseClicked("RIGHTMOUSE") && Game.currentTimeMillis() - InputManager.getMouseTime("RIGHTMOUSE") > 500) {
+            InputManager.setMouseTime("RIGHTMOUSE", Game.currentTimeMillis());
+            if (thisPlayer.weapon != null) {
+                thisPlayer.weapon.unloadUser();
+                entityList.get("weapon").add(thisPlayer.getWeapon());
+                thisPlayer.weapon = null;
+                thisPlayer.setSpriteToDefault(true);
+                for (int i = 0; i < entityList.get("weapon").size() - 1; i++) {
+                    Weapon w = (Weapon) entityList.get("weapon").get(i);
+                    if (thisPlayer.collideBox.intersects(w.collideBox)) {
+                        thisPlayer.weapon = w;
+                        w.user = thisPlayer;
+                        thisPlayer.setSpriteToDefault(false);
+                        entityList.get("weapon").remove(w);
+                        break;
                     }
-                } else {
-                    for (int i = 0; i < entityList.get("weapon").size(); i++) {
-                        Weapon w = (Weapon) entityList.get("weapon").get(i);
-                        if (thisPlayer.collideBox.intersects(w.collideBox)) {
-                            thisPlayer.weapon = w;
-                            w.user = thisPlayer;
-                            thisPlayer.setSpriteToDefault(false);
-                            entityList.get("weapon").remove(w);
-                            break;
-                        }
+                }
+            } else {
+                for (int i = 0; i < entityList.get("weapon").size(); i++) {
+                    Weapon w = (Weapon) entityList.get("weapon").get(i);
+                    if (thisPlayer.collideBox.intersects(w.collideBox)) {
+                        thisPlayer.weapon = w;
+                        w.user = thisPlayer;
+                        thisPlayer.setSpriteToDefault(false);
+                        entityList.get("weapon").remove(w);
+                        break;
                     }
                 }
             }
-            if (InputManager.isKeyPressed("ESC") && Game.currentTimeMillis() - InputManager.getKeyTime("ESC") > 400) {
-                InputManager.setKeyTime("ESC", Game.currentTimeMillis());
-                gsm.setPaused(true);
-            }
-            if (dead && (InputManager.isMousePressed("LEFTMOUSE") || InputManager.isKeyPressed("SPACE"))) {
-                init();
-            }
-        } else {
-            pauseState.inputHandle();
         }
+        if (InputManager.isKeyPressed("ESC") && Game.currentTimeMillis() - InputManager.getKeyTime("ESC") > 400) {
+            InputManager.setKeyTime("ESC", Game.currentTimeMillis());
+            gsm.cursor.updateOldPos();
+            //gsm.setPaused(true);
+            gsm.setTopState(GameStateManager.PAUSE);
+        }
+        if (dead && (InputManager.isMousePressed("LEFTMOUSE") || InputManager.isKeyPressed("SPACE"))) {
+            init();
+        }
+
     }
 }

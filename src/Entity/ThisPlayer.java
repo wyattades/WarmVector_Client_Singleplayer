@@ -24,8 +24,8 @@ public class ThisPlayer extends Player {
         shootTime = Game.currentTimeMillis();
     }
 
-    public void updateAngle(float cursorx, float cursory) {
-        orient = (float) Math.atan2(cursory - Game.HEIGHT / 2, cursorx - Game.WIDTH / 2);
+    public void updateAngle(float cursor_x, float cursor_y) {
+        orient = (float) Math.atan2(cursor_y - Game.HEIGHT / 2, cursor_x - Game.WIDTH / 2);
     }
 
     public boolean hit(int amount, float angle) {
