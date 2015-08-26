@@ -49,7 +49,7 @@ public class GameOverState extends MenuState {
 
         if (gsm.level >= GameStateManager.MAXLEVEL) {
             String text = "YOU DIED";
-            g.setColor(ThemeColors.textTitle);
+            g.setColor(ThemeColors.buttonDefault);
             g.drawString(
                     text,
                     Game.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(text, g).getWidth() / 2,

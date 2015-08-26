@@ -36,18 +36,27 @@ public class IntroState extends GameState {
     }
 
     public void update() {
+
         intro.update();
-        if (!intro.state) gsm.setState(GameStateManager.MAINMENU);
+
+        if (!intro.state) {
+            nextState();
+        }
+
     }
 
-    public void setCursor() {
-        gsm.cursor.setSprite(MouseCursor.NONE);
-    }
+//    public void setCursor() {
+//        gsm.cursor.setSprite(MouseCursor.NONE);
+//    }
 
     public void inputHandle() {
-        if (InputManager.isMousePressed("LEFTMOUSE") || InputManager.isKeyPressed("SPACE")) {
-            gsm.setState(GameStateManager.MAINMENU);
+        if (InputManager.isMousePressed("LEFTMOUSE") || InputManager.isMouseClicked("LEFTMOUSE") || InputManager.isKeyPressed("SPACE")) {
+            nextState();
         }
+    }
+
+    private void nextState() {
+        gsm.setState(GameStateManager.MAINMENU);
     }
 
 }

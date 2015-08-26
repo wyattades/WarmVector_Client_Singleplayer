@@ -24,9 +24,8 @@ import java.util.Iterator;
  */
 public class PlayState extends GameState {
 
-    private static final float SCALEFACTOR = 3;
-    private PauseState pauseState;
-    private int px, py;
+    private static float SCALEFACTOR = 3;
+
     private HashMap<String, ArrayList<Entity>> entityList;
     private TileMap tileMap;
     private ScreenMover screenMover;
@@ -35,17 +34,10 @@ public class PlayState extends GameState {
     private ArrayList<Animation> animations;
     private ThisPlayer thisPlayer;
     private Visibility shadow;
-    private Robot robot;
     private boolean dead;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-        try {
-            robot = new Robot();
-        } catch (AWTException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
     }
 
     public void init() {
@@ -61,16 +53,17 @@ public class PlayState extends GameState {
         screenMover = new ScreenMover(thisPlayer);
         hud = new HUD(thisPlayer, entityList.get("enemy").size());
         shadow = new Visibility(tileMap);
-        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
+        gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
+        gsm.cursor.setMouseToCenter();
+        gsm.cursor.x = Game.WIDTH/2 + 70;
+        gsm.cursor.y = Game.HEIGHT/2;
 
     }
 
     public void unload() {
+        gsm.cursor.setSprite(MouseCursor.CURSOR);
 
-    }
-
-    public void setCursor() {
-        gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
+        //save stuff (stats?)
     }
 
     public void draw(Graphics2D g) {
@@ -82,19 +75,10 @@ public class PlayState extends GameState {
         g.scale(SCALEFACTOR, SCALEFACTOR);
 
         //translate screen to follow player
-        g.translate(screenMover.screenPosX + (-px + Game.WIDTH / 2 / SCALEFACTOR), screenMover.screenPosY + (-py + Game.HEIGHT / 2 / SCALEFACTOR));
+        g.translate(screenMover.screenPosX - thisPlayer.x + Game.WIDTH / 2 / SCALEFACTOR, screenMover.screenPosY - thisPlayer.y + Game.HEIGHT / 2 / SCALEFACTOR);
 
         //background image
         tileMap.drawBack(g);
-
-//        Path2D path = new Path2D.Float();
-//        path.moveTo(shadow.output.get(0).x, shadow.output.get(0).y);
-//        for (int i = 0; i < shadow.output.size(); i++) {
-//            Visual.Occlusion.Point e = shadow.output.get(i);
-//            path.lineTo(e.x,e.y);
-//        }
-//        path.closePath();
-//        g.setClip(path);
 
         //draw objects \/
         for (Bullet b : bullets) {
@@ -118,30 +102,34 @@ public class PlayState extends GameState {
                 e.weapon.draw(g);
             }
         }
+
         thisPlayer.draw(g);
+
         for (Animation a : animations) {
             a.draw(g);
         }
+
         shadow.draw(g);
+
         tileMap.drawFore(g);
 
         //reset transformation
         g.setTransform(oldT);
 
-        if (!dead) hud.draw(g);
-        else {
+        if (!dead) {
+            hud.draw(g);
+            gsm.cursor.draw(g);
+        } else {
             g.setColor(ThemeColors.textOver);
             g.setFont(ThemeColors.fontButton);
             g.drawString("PRESS [SPACE] TO RESTART", Game.WIDTH / 2, Game.HEIGHT - 60);
         }
 
-//        if (gsm.paused) pauseState.draw(g);
-
     }
 
     public void update() {
 
-        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
+        gsm.cursor.setMouseToCenter();
 
         //create a copy of thisPlayer for convenience
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
@@ -150,10 +138,10 @@ public class PlayState extends GameState {
             //update objects
             thisPlayer.update();
             thisPlayer.regenHealth();
-            thisPlayer.updateAngle(gsm.cursor.x - screenMover.screenPosX, gsm.cursor.y - screenMover.screenPosY);
+            thisPlayer.updateAngle(gsm.cursor.x, gsm.cursor.y);
 
-            px = thisPlayer.x;
-            py = thisPlayer.y;
+//            px = thisPlayer.x;
+//            py = thisPlayer.y;
             screenMover.updatePosition();
             screenMover.updateRotation(gsm.cursor.x, gsm.cursor.y, thisPlayer.orient);
             thisPlayer.stopMove();
@@ -162,7 +150,7 @@ public class PlayState extends GameState {
         //This is here, rather than in inputHandle(), because it needs to be run before thisPlayer is updated
         gsm.cursor.updatePosition(InputManager.mouse.x - Game.WIDTH / 2 + screenMover.screenVelX/4, InputManager.mouse.y - Game.HEIGHT / 2 + screenMover.screenVelY/4);
 
-        shadow.setLightLocation(px, py);
+        shadow.setLightLocation(thisPlayer.x, thisPlayer.y);
         shadow.sweep(999);
 
         for (Bullet b : bullets) {
@@ -174,7 +162,7 @@ public class PlayState extends GameState {
         }
         for (Entity entity : entityList.get("enemy")) {
             Enemy e = (Enemy) entity;
-            e.normalBehavior(px, py, dead);
+            e.normalBehavior(thisPlayer.x, thisPlayer.y, dead);
             e.update();
             if (e.shooting) addBullets(e);
             if (e.life < 0) entityList.get("weapon").add(e.weapon);
@@ -249,31 +237,28 @@ public class PlayState extends GameState {
     }
 
     public void inputHandle() {
-//        Scanner scanner = new Scanner(System.in);
-//        String name = null;
-//        try {
-//            name = scanner.nextLine();
-//        } catch(Exception e) {}
-//        if (name != null) {
-//            if (name.equals("nextlevel")) gsm.setState(GameStateManager.NEXTLEVEL);
-//        }
 
-
-//        if (!gsm.paused) {
+        //If leftKey is pressed and right isn't, player goes left
         if (InputManager.isKeyPressed("LEFT") && !InputManager.isKeyPressed("RIGHT"))
             thisPlayer.updateVelX(-ThisPlayer.topSpeed);
+        //If rightKey is pressed and left isn't, player goes right
         else if (InputManager.isKeyPressed("RIGHT") && !InputManager.isKeyPressed("LEFT"))
             thisPlayer.updateVelX(ThisPlayer.topSpeed);
+
+        //If upKey is pressed and down isn't, player goes up
         if (InputManager.isKeyPressed("UP") && !InputManager.isKeyPressed("DOWN"))
             thisPlayer.updateVelY(-ThisPlayer.topSpeed);
+        //If downKey is pressed and up isn't, player goes down
         else if (InputManager.isKeyPressed("DOWN") && !InputManager.isKeyPressed("UP"))
             thisPlayer.updateVelY(ThisPlayer.topSpeed);
+
+        //If leftMouse is pressed, create bullets from player
         if (InputManager.isMousePressed("LEFTMOUSE")) {
             addBullets(thisPlayer);
-
         }
 
-        if (InputManager.isMouseClicked("RIGHTMOUSE") && Game.currentTimeMillis() - InputManager.getMouseTime("RIGHTMOUSE") > 500) {
+        //If rightMouse is clicked, check for pickup or drop a weapon
+        if ((InputManager.isMouseClicked("RIGHTMOUSE") || InputManager.isMousePressed("RIGHTMOUSE")) && Game.currentTimeMillis() - InputManager.getMouseTime("RIGHTMOUSE") > 300) {
             InputManager.setMouseTime("RIGHTMOUSE", Game.currentTimeMillis());
             if (thisPlayer.weapon != null) {
                 thisPlayer.weapon.unloadUser();

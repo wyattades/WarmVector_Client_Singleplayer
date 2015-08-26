@@ -9,6 +9,7 @@ import Visual.Slider;
 import java.util.ArrayList;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by wyatt on 8/17/2015.
  */
 public abstract class MenuState extends GameState{
@@ -20,7 +21,9 @@ public abstract class MenuState extends GameState{
 
     static final int buttonDist = 70;
 
-    public MenuState(GameStateManager gsm) {super(gsm);}
+    public MenuState(GameStateManager gsm) {
+        super(gsm);
+    }
 
     protected void addButton(String name, int value) {
         int y = startY;
@@ -62,9 +65,9 @@ public abstract class MenuState extends GameState{
         addButton("BACK", ButtonC.BACK);
         addSlider("Fullscreen", Slider.FULLSCREEN, new String[]{"On","Off"}, 0);
         addSlider("Anti-Aliasing", Slider.AA, new String[]{"On", "Off"}, 1);
-        addSlider("Quality", Slider.QUALITY, new String[]{"Good","Great"},0);
-        addSlider("Music Level", Slider.MUSIC, new String[]{"0","25","50","75","100"}, 4);
-        addSlider("SFX Level", Slider.SFX, new String[]{"0","25","50","75","100"},4);
+        addSlider("Quality", Slider.QUALITY, new String[]{"Good", "Great"}, 0);
+        addSlider("Music Level", Slider.MUSIC, new String[]{"0", "25", "50", "75", "100"}, 4);
+        addSlider("SFX Level", Slider.SFX, new String[]{"0", "25", "50", "75", "100"}, 4);
     }
 
     protected void buttonOutcome(int value) {
@@ -84,7 +87,6 @@ public abstract class MenuState extends GameState{
                 break;
             case ButtonC.RESUME:
                 gsm.unloadState(GameStateManager.PAUSE);
-                gsm.cursor.setToOldPos();
                 break;
             case ButtonC.BEGIN:
                 gsm.setTopState(GameStateManager.FADEOUT);
@@ -112,9 +114,9 @@ public abstract class MenuState extends GameState{
 
     }
 
-    public void setCursor() {
-        gsm.cursor.setSprite(MouseCursor.CURSOR);
-    }
+//    public void setCursor() {
+//        gsm.cursor.setSprite(MouseCursor.CURSOR);
+//    }
 
     private boolean snapSliders;
 

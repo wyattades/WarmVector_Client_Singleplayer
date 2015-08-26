@@ -30,10 +30,12 @@ public class PauseState extends MenuState {
     public void init() {
         startY = Game.HEIGHT - 200;
         initButtons();
+        gsm.cursor.setSprite(MouseCursor.CURSOR);
     }
 
     public void unload() {
         gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
+        gsm.cursor.setMouseToCenter();
         gsm.cursor.setToOldPos();
     }
 
@@ -47,13 +49,16 @@ public class PauseState extends MenuState {
             b.update(InputManager.mouse.x,InputManager.mouse.y);
             b.draw(g);
         }
+
+        gsm.cursor.draw(g);
+
     }
 
     public void update() {}
 
-    public void setCursor() {
-        gsm.cursor.setSprite(MouseCursor.CURSOR);
-    }
+//    public void setCursor() {
+//        gsm.cursor.setSprite(MouseCursor.CURSOR);
+//    }
 
     public void inputHandle() {
         defaultInputHandle();

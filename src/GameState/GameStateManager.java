@@ -1,9 +1,6 @@
 package GameState;
 
-import Main.Game;
-import StaticManagers.InputManager;
 import Visual.MouseCursor;
-import Visual.ThemeColors;
 
 import java.awt.*;
 
@@ -19,8 +16,6 @@ public class GameStateManager {
     private int topState;
 
     public int level;
-
-    public boolean paused;
 
     public MouseCursor cursor;
 
@@ -140,8 +135,9 @@ public class GameStateManager {
 
         if (gameStates[currentState] != null) {
             gameStates[currentState].draw(g);
-            if (gameStates[topState] != null) gameStates[topState].draw(g);
-            cursor.draw(g);
+            if (gameStates[topState] != null) {
+                gameStates[topState].draw(g);
+            }
         } else {
             System.out.println("gameState is null during draw()");
             System.exit(1);

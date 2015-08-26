@@ -12,8 +12,8 @@ public class ScreenMover {
     public int screenVelX, screenVelY, screenPosX, screenPosY;
     private float maxVel;
     private ThisPlayer player;
-    private static final float posAccel = 1.0f, negAccel = 1.0f;
-    private static final int MaxRadius = 70;
+    private final float posAccel = 1.0f, negAccel = 1.0f;
+    private final int MaxRadius = 100;
 
     public ScreenMover(ThisPlayer player) {
         screenVelX = screenVelY = 0;
@@ -47,7 +47,7 @@ public class ScreenMover {
 
     public void updateRotation(double mouseX, double mouseY, float orient) {
         float rotateRadius = (float) (-MaxRadius * Math.sqrt((mouseX - Game.WIDTH / 2) * (mouseX - Game.WIDTH / 2) + (mouseY - Game.HEIGHT / 2) * (mouseY - Game.HEIGHT / 2)) / (Game.WIDTH / 2));
-        //int rotateRadius = -70;
+        //rotateRadius = -50;
         screenPosX += rotateRadius * Math.cos(orient);
         screenPosY += rotateRadius * Math.sin(orient);
     }

@@ -60,6 +60,8 @@ public class NextLevelState extends MenuState {
             );
         }
 
+        gsm.cursor.draw(g);
+
     }
 
     public void update() {

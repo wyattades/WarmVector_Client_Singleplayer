@@ -1,6 +1,7 @@
 package GameState;
 
 import Main.Game;
+import Visual.MouseCursor;
 
 import java.awt.*;
 
@@ -11,10 +12,12 @@ import java.awt.*;
 public abstract class GameState {
 
     protected GameStateManager gsm;
+//    protected MouseCursor cursor;
 
     public GameState(GameStateManager gsm) {
         this.gsm = gsm;
-        setCursor();
+//        cursor = new MouseCursor(MouseCursor.CURSOR);
+//        setCursor();
     }
 
     public abstract void init();
@@ -26,8 +29,6 @@ public abstract class GameState {
     public abstract void update();
 
     public abstract void inputHandle();
-
-    protected abstract void setCursor();
 
     protected void drawBackground(Graphics2D g, Color color) {
         g.setColor(color);

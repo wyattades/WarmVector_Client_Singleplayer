@@ -13,6 +13,7 @@ public class M4rifle extends Weapon {
         super(x, y, w, h, orient, i_user);
     }
 
+    //USE ENUM INSTEAD???? IDK I WILL OVERHAUL Weapons LATER WHEN I ADD KNIVES AND ROCKETS AND STUFF
     protected void setConstants() {
         name = "M4Rifle";
         maxAmmo = 40;

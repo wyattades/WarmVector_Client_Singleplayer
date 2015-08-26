@@ -29,7 +29,7 @@ public class FadeInState extends GameState {
 
     @Override
     public void unload() {
-
+        gsm.cursor.setMouseToCenter();
     }
 
     @Override
@@ -44,6 +44,7 @@ public class FadeInState extends GameState {
         if (opacity <= 0) {
             gsm.unloadState(GameStateManager.FADEIN);
         }
+
     }
 
     @Override
@@ -51,7 +52,7 @@ public class FadeInState extends GameState {
 
     }
 
-    @Override
-    protected void setCursor() {
-    }
+//    @Override
+//    protected void setCursor() {
+//    }
 }

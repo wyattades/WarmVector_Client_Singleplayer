@@ -53,7 +53,7 @@ public class FadeOutState extends GameState {
 
     }
 
-    @Override
-    protected void setCursor() {
-    }
+//    @Override
+//    protected void setCursor() {
+//    }
 }

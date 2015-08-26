@@ -2,10 +2,7 @@ package GameState;
 
 import Main.Game;
 import StaticManagers.InputManager;
-import Visual.BarVisualizer;
-import Visual.ButtonC;
-import Visual.Slider;
-import Visual.ThemeColors;
+import Visual.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -79,6 +76,8 @@ public class StartMenuState extends MenuState {
         g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 200);
         g.drawString("V", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("V", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 40);
 
+        gsm.cursor.draw(g);
+
     }
 
     public void update() {
@@ -91,8 +90,7 @@ public class StartMenuState extends MenuState {
 
     public void inputHandle() {
         defaultInputHandle();
-        barVisualizer.react(InputManager.mouse.y);
-        if (InputManager.isMousePressed("LEFTMOUSE")) barVisualizer.spike(InputManager.mouse.y);
+        barVisualizer.react(InputManager.isMousePressed("LEFTMOUSE"), InputManager.mouse.y);
     }
 
 }

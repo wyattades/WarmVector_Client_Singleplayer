@@ -56,6 +56,15 @@ public class Game implements Runnable {
 
         canvas.requestFocus();
 
+        //setWindowed(frame);
+
+        canvas.createBufferStrategy(2);
+        bufferStrategy = canvas.getBufferStrategy();
+
+        canvas.requestFocus();
+
+
+
         //Set default mouse cursor to transparent
         Cursor transparentCursor = Toolkit.getDefaultToolkit().createCustomCursor(
                 Toolkit.getDefaultToolkit().createImage(
@@ -83,7 +92,29 @@ public class Game implements Runnable {
         run();
     }
 
+    void setWindowed(Frame frame) {
 
+        //hide the frame so we can change it.
+        frame.setVisible(false);
+
+        //remove the frame from being displayable.
+        frame.dispose();
+
+        //put the borders back on the frame.
+        frame.setUndecorated(false);
+
+        //needed to unset this window as the fullscreen window.
+        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
+
+        //make sure the size of the window is correct.
+        frame.setSize(1920, 1080);
+
+        //recenter window
+        frame.setLocationRelativeTo(null);
+
+        //reset the display mode to what it was before we changed it.
+        frame.setVisible(true);
+    }
 
     public static int currentTimeMillis() {
         long millisLong = System.currentTimeMillis();
@@ -144,6 +175,7 @@ public class Game implements Runnable {
 //            }
         }
     }
+
 
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
