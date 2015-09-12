@@ -60,7 +60,8 @@ public class TileMap {
                 int a = (pixel >> 24) & 0xFF;
                 Color color = new Color(r, g, b, a);
                 if (color.equals(new Color(0, 0, 0, 255))) {
-                    tArray[i][j] = SOLID;
+                    //TEMP
+                   // tArray[i][j] = SOLID;
                 } else if (color.equals(new Color(0, 255, 0, 255))) {
                     tArray[i][j] = SPAWN;
                 } else if (color.equals(new Color(0, 0, 255, 255))) {
@@ -86,9 +87,11 @@ public class TileMap {
         tp.weapon.user = tp;
         values.get("thisPlayer").add(tp);
 
-        GeneratedMap generatedMap = new GeneratedMap(10,10);
+        //TEMP
+        GeneratedMap generatedMap = new GeneratedMap(2*width*tileSize,2*height*tileSize,0.0f);
         for (Tile t : generatedMap.walls) {
-            values.get("tiles").add(t);
+            values.get("tile").add(t);
+            //tileArray[i][j]
         }
 
         for (int i = 0; i < width; i++) {

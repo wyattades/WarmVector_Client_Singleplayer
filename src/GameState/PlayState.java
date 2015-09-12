@@ -25,7 +25,7 @@ import java.util.Iterator;
  */
 public class PlayState extends GameState {
 
-    private static float SCALEFACTOR = 3;
+    private static float SCALEFACTOR = 1;
 
     private HashMap<String, ArrayList<Entity>> entityList;
     private TileMap tileMap;
@@ -59,6 +59,8 @@ public class PlayState extends GameState {
         gsm.cursor.x = Game.WIDTH/2 + 70;
         gsm.cursor.y = Game.HEIGHT/2;
 
+
+        System.out.println(entityList.get("tile").size());
     }
 
     public void unload() {
@@ -68,6 +70,10 @@ public class PlayState extends GameState {
     }
 
     public void draw(Graphics2D g) {
+
+        //TEMP
+        g.setColor(Color.white);
+        g.fillRect(0,0,Game.WIDTH,Game.HEIGHT);
 
         //Create copy of transform for later
         AffineTransform oldT = g.getTransform();
@@ -110,10 +116,17 @@ public class PlayState extends GameState {
             a.draw(g);
         }
 
-        shadow.draw(g);
+        //TEMP commented out
+        //shadow.draw(g);
 
         //tileMap.drawFore(g);
-        for (Tile t : )
+        //TEMP
+        g.setColor(Color.black);
+
+        for (int i = 0; i < entityList.get("tile").size(); i++) {
+            Tile t = (Tile)entityList.get("tile").get(i);
+            g.drawRect(t.x - t.w / 2, t.y - t.h / 2, t.w, t.h);
+        }
 
         //reset transformation
         g.setTransform(oldT);
@@ -191,6 +204,14 @@ public class PlayState extends GameState {
                         if (entry.getKey().equals("enemy")) { //enemy dies
                             Enemy e = (Enemy) entry.getValue().get(i);
                             entityList.get("weapon").add(e.getWeapon());
+                            int enemyCount = entityList.get("enemy").size();
+                            hud.updateEnemyAmount(enemyCount);
+                            //if there are no enemies left...
+                            if (enemyCount <= 0) {
+                                //move on to next level
+                                //TEMP commented out \/
+                                //gsm.setState(GameStateManager.NEXTLEVEL);
+                            }
                         }
                         entry.getValue().remove(i);
                     } else { //player dies
@@ -199,14 +220,10 @@ public class PlayState extends GameState {
                 }
             }
         }
-        int enemyCount = entityList.get("enemy").size();
-        hud.updateEnemyAmount(enemyCount);
 
-        //if there are no enemies left...
-        if (enemyCount <= 0) {
-            //move on to next level
-            gsm.setState(GameStateManager.NEXTLEVEL);
-        }
+
+
+
 
     }
 

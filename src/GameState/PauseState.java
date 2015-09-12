@@ -31,6 +31,7 @@ public class PauseState extends MenuState {
         startY = Game.HEIGHT - 200;
         initButtons();
         gsm.cursor.setSprite(MouseCursor.CURSOR);
+        gsm.cursor.setMouse(gsm.cursor.x, gsm.cursor.y);
     }
 
     public void unload() {

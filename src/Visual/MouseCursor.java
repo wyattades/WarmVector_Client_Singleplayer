@@ -68,9 +68,14 @@ public class MouseCursor {
         y = constrain(new_y, 0, Game.HEIGHT);
     }
 
-    public void setMouseToCenter() {
-        robot.mouseMove(Game.WIDTH / 2, Game.HEIGHT / 2);
+    public void setMouse(int x, int y) {
+        robot.mouseMove(x,y);
     }
+
+    public void setMouseToCenter() {
+        robot.mouseMove(Game.WIDTH/2, Game.HEIGHT/2);
+    }
+
 
     private int constrain(int value, int min, int max) {
         return Math.min(Math.max(value, min), max);
