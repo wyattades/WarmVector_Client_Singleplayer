@@ -5,6 +5,7 @@ import Entity.Entity;
 import Entity.Player;
 import Entity.ThisPlayer;
 import Entity.Weapon.Weapon;
+import Entity.Tile;
 import Main.Game;
 import Map.TileMap;
 import StaticManagers.InputManager;
@@ -111,7 +112,8 @@ public class PlayState extends GameState {
 
         shadow.draw(g);
 
-        tileMap.drawFore(g);
+        //tileMap.drawFore(g);
+        for (Tile t : )
 
         //reset transformation
         g.setTransform(oldT);

@@ -86,11 +86,12 @@ public class StartMenuState extends MenuState {
         backgroundHue += 0.001f;
         if (backgroundHue >= 1) backgroundHue = 0;
 
+        barVisualizer.react(InputManager.isMousePressed("LEFTMOUSE"), InputManager.mouse.y);
+
     }
 
     public void inputHandle() {
         defaultInputHandle();
-        barVisualizer.react(InputManager.isMousePressed("LEFTMOUSE"), InputManager.mouse.y);
     }
 
 }

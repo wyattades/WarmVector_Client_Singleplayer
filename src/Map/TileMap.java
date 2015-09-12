@@ -85,22 +85,28 @@ public class TileMap {
         ThisPlayer tp = new ThisPlayer(0, 0, 0, 0, 0, new M4rifle(0, 0, 0, 0, 0, null), this, values.get("tile"));
         tp.weapon.user = tp;
         values.get("thisPlayer").add(tp);
+
+        GeneratedMap generatedMap = new GeneratedMap(10,10);
+        for (Tile t : generatedMap.walls) {
+            values.get("tiles").add(t);
+        }
+
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 int t = tileArray[i][j];
                 if (t == SOLID) {
-                    values.get("tile").add(new Tile((int) ((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), SOLID));
+//                    values.get("tile").add(new Tile((int) ((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), SOLID));
                 } else if (t == WINDOW) {
-                    values.get("tile").add(new Tile((int) ((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), WINDOW));
+//                    values.get("tile").add(new Tile((int) ((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), WINDOW));
                 } else if (t == SPAWN) {
                     values.get("thisPlayer").get(0).x = i * tileSize;
                     values.get("thisPlayer").get(0).y = j * tileSize;
                     tileArray[i][j] = EMPTY;
                 } else if (t == ENEMY) {
-                    Enemy e = new Enemy(i * tileSize, j * tileSize, 0, 0, 0, new M4rifle(0, 0, 64, 32, 0, null), this, values.get("tile"));
-                    e.weapon.user = e;
-                    values.get("enemy").add(e);
-                    tileArray[i][j] = EMPTY;
+//                    Enemy e = new Enemy(i * tileSize, j * tileSize, 0, 0, 0, new M4rifle(0, 0, 64, 32, 0, null), this, values.get("tile"));
+//                    e.weapon.user = e;
+//                    values.get("enemy").add(e);
+//                    tileArray[i][j] = EMPTY;
 
                 }
             }
