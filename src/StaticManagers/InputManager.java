@@ -1,5 +1,7 @@
 package StaticManagers;
 
+import Main.Game;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -66,10 +68,11 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     public class Mouse {
 
-        public int x, y;
-        public boolean dragged, inScreen;
+        public int x, y, dx, dy, px, py;
+        public boolean dragged, inScreen, robotControlling;
 
         public Mouse() {
+            robotControlling = false;
         }
 
     }
@@ -224,16 +227,27 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
     @Override
     public void mouseDragged(MouseEvent e) {
         mouse.dragged = true;
-        mouse.x = e.getX();
-        mouse.y = e.getY();
-
+        if (!mouse.robotControlling) {
+            mouse.x = e.getX();
+            mouse.y = e.getY();
+            mouse.dx = mouse.x - mouse.px;
+            mouse.dy = mouse.y - mouse.py;
+            mouse.px = mouse.x;
+            mouse.py = mouse.y;
+        }
 
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         mouse.dragged = false;
-        mouse.x = e.getX();
-        mouse.y = e.getY();
+        if (!mouse.robotControlling) {
+            mouse.x = e.getX();
+            mouse.y = e.getY();
+            mouse.dx = mouse.x - mouse.px;
+            mouse.dy = mouse.y - mouse.py;
+            mouse.px = mouse.x;
+            mouse.py = mouse.y;
+        }
     }
 }

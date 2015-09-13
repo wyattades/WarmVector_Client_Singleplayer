@@ -1,5 +1,7 @@
-key_quality 0
-text_anti_aliasing 1
-key_anti_aliasing 1
-x_sensitivity 50
-y_sensitivity 50
+fullscreen 1
+quality 1
+anti_aliasing 1
+music_volume 4
+sfx_volume 2
+x_sensitivity 2
+y_sensitivity 2

@@ -26,7 +26,7 @@ public class HUD {
 
     public int startEnemies;
 
-    private static Color defaultHudColor = new Color(100, 100, 100, 200),
+    private static final Color defaultHudColor = new Color(100, 100, 100, 200),
             nearDeathHudColor = new Color(200, 0, 0, 200),
             enemyBoxColor = new Color(255, 0, 0, 180);
 
@@ -34,6 +34,7 @@ public class HUD {
     public HUD(Player user, int i_enemies) {
         this.user = user;
         startEnemies = i_enemies;
+        enemies = i_enemies;
     }
 
     public void updateEnemyAmount(int amount) {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class EntityManager {
 
-    //WORK IN PROGRESS, MIGHT USE EntityManager IF EntityList PROVES UNSTABLE
+    //WORK IN PROGRESS, might use EntityManager if EntityList proves inefficient
 
     private ThisPlayer thisPlayer;
     private ArrayList<Enemy> enemies;

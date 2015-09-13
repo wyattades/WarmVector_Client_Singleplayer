@@ -60,14 +60,13 @@ public class TileMap {
                 int a = (pixel >> 24) & 0xFF;
                 Color color = new Color(r, g, b, a);
                 if (color.equals(new Color(0, 0, 0, 255))) {
-                    //TEMP
-                   // tArray[i][j] = SOLID;
+                    //tArray[i][j] = SOLID;
                 } else if (color.equals(new Color(0, 255, 0, 255))) {
                     tArray[i][j] = SPAWN;
                 } else if (color.equals(new Color(0, 0, 255, 255))) {
-                    tArray[i][j] = WINDOW;
+                    //tArray[i][j] = WINDOW;
                 } else if (color.equals(new Color(255, 0, 0, 255))) {
-                    tArray[i][j] = ENEMY;
+                    //tArray[i][j] = ENEMY;
                 } else {
                     tArray[i][j] = EMPTY;
                 }
@@ -87,30 +86,22 @@ public class TileMap {
         tp.weapon.user = tp;
         values.get("thisPlayer").add(tp);
 
-        //TEMP
-        GeneratedMap generatedMap = new GeneratedMap(2*width*tileSize,2*height*tileSize,0.0f);
-        for (Tile t : generatedMap.walls) {
-            values.get("tile").add(t);
-            //tileArray[i][j]
-        }
-
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 int t = tileArray[i][j];
                 if (t == SOLID) {
-//                    values.get("tile").add(new Tile((int) ((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), SOLID));
+                    values.get("tile").add(new Tile((int) ((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), SOLID));
                 } else if (t == WINDOW) {
-//                    values.get("tile").add(new Tile((int) ((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), WINDOW));
+                    values.get("tile").add(new Tile((int) ((i + 0.5f) * tileSize), (int) ((j + 0.5f) * tileSize), WINDOW));
                 } else if (t == SPAWN) {
                     values.get("thisPlayer").get(0).x = i * tileSize;
                     values.get("thisPlayer").get(0).y = j * tileSize;
                     tileArray[i][j] = EMPTY;
                 } else if (t == ENEMY) {
-//                    Enemy e = new Enemy(i * tileSize, j * tileSize, 0, 0, 0, new M4rifle(0, 0, 64, 32, 0, null), this, values.get("tile"));
-//                    e.weapon.user = e;
-//                    values.get("enemy").add(e);
-//                    tileArray[i][j] = EMPTY;
-
+                    Enemy e = new Enemy(i * tileSize, j * tileSize, 0, 0, 0, new M4rifle(0, 0, 64, 32, 0, null), this, values.get("tile"));
+                    e.weapon.user = e;
+                    values.get("enemy").add(e);
+                    tileArray[i][j] = EMPTY;
                 }
             }
         }

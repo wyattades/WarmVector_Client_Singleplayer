@@ -53,7 +53,7 @@ public class StartMenuState extends MenuState {
         barVisualizer.draw(g);
 
         for (ButtonC b : buttons) {
-            b.update(gsm.cursor.x,gsm.cursor.y);
+            b.update(gsm.cursor.x, gsm.cursor.y);
             b.draw(g);
         }
 

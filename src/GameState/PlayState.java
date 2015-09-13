@@ -7,6 +7,7 @@ import Entity.ThisPlayer;
 import Entity.Weapon.Weapon;
 import Entity.Tile;
 import Main.Game;
+import Map.GeneratedMap;
 import Map.TileMap;
 import StaticManagers.InputManager;
 import Visual.*;
@@ -25,7 +26,7 @@ import java.util.Iterator;
  */
 public class PlayState extends GameState {
 
-    private static float SCALEFACTOR = 1;
+    private static float SCALEFACTOR = 1.0f;
 
     private HashMap<String, ArrayList<Entity>> entityList;
     private TileMap tileMap;
@@ -36,7 +37,7 @@ public class PlayState extends GameState {
     private ThisPlayer thisPlayer;
     private Visibility shadow;
     private boolean dead;
-
+    private GeneratedMap generatedMap;
     public PlayState(GameStateManager gsm) {
         super(gsm);
     }
@@ -55,12 +56,11 @@ public class PlayState extends GameState {
         hud = new HUD(thisPlayer, entityList.get("enemy").size());
         shadow = new Visibility(tileMap);
         gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
-        gsm.cursor.setMouseToCenter();
-        gsm.cursor.x = Game.WIDTH/2 + 70;
-        gsm.cursor.y = Game.HEIGHT/2;
+        gsm.cursor.setMouse(Game.WIDTH / 2 + 70, Game.HEIGHT / 2);
+
+        generatedMap = new GeneratedMap(Game.WIDTH, Game.HEIGHT, 0);
 
 
-        System.out.println(entityList.get("tile").size());
     }
 
     public void unload() {
@@ -85,7 +85,7 @@ public class PlayState extends GameState {
         g.translate(screenMover.screenPosX - thisPlayer.x + Game.WIDTH / 2 / SCALEFACTOR, screenMover.screenPosY - thisPlayer.y + Game.HEIGHT / 2 / SCALEFACTOR);
 
         //background image
-        tileMap.drawBack(g);
+        //tileMap.drawBack(g);
 
         //draw objects \/
         for (Bullet b : bullets) {
@@ -116,16 +116,13 @@ public class PlayState extends GameState {
             a.draw(g);
         }
 
-        //TEMP commented out
-        //shadow.draw(g);
-
-        //tileMap.drawFore(g);
         //TEMP
+//        shadow.draw(g);
+//        tileMap.drawFore(g);
         g.setColor(Color.black);
-
-        for (int i = 0; i < entityList.get("tile").size(); i++) {
-            Tile t = (Tile)entityList.get("tile").get(i);
-            g.drawRect(t.x - t.w / 2, t.y - t.h / 2, t.w, t.h);
+        for (int i = 0; i < generatedMap.walls.size(); i++) {
+            Tile t = generatedMap.walls.get(i);
+            g.fillRect(t.x - t.w / 2, t.y - t.h / 2, t.w, t.h);
         }
 
         //reset transformation
@@ -144,7 +141,8 @@ public class PlayState extends GameState {
 
     public void update() {
 
-        gsm.cursor.setMouseToCenter();
+        //This is here, rather than in inputHandle(), because it needs to be run before thisPlayer is updated
+        gsm.cursor.setPosition(InputManager.mouse.x+screenMover.screenVelX, InputManager.mouse.y+screenMover.screenVelY);
 
         //create a copy of thisPlayer for convenience
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
@@ -153,17 +151,12 @@ public class PlayState extends GameState {
             //update objects
             thisPlayer.update();
             thisPlayer.regenHealth();
-            thisPlayer.updateAngle(gsm.cursor.x, gsm.cursor.y);
+            thisPlayer.updateAngle(gsm.cursor.x-screenMover.screenVelX, gsm.cursor.y-screenMover.screenVelY);
 
-//            px = thisPlayer.x;
-//            py = thisPlayer.y;
             screenMover.updatePosition();
-            screenMover.updateRotation(gsm.cursor.x, gsm.cursor.y, thisPlayer.orient);
+            screenMover.updateRotation(gsm.cursor.x, gsm.cursor.y);
             thisPlayer.stopMove();
         }
-
-        //This is here, rather than in inputHandle(), because it needs to be run before thisPlayer is updated
-        gsm.cursor.updatePosition(InputManager.mouse.x - Game.WIDTH / 2 + screenMover.screenVelX/4, InputManager.mouse.y - Game.HEIGHT / 2 + screenMover.screenVelY/4);
 
         shadow.setLightLocation(thisPlayer.x, thisPlayer.y);
         shadow.sweep(999);
@@ -180,7 +173,7 @@ public class PlayState extends GameState {
             e.normalBehavior(thisPlayer.x, thisPlayer.y, dead);
             e.update();
             if (e.shooting) addBullets(e);
-            if (e.life < 0) entityList.get("weapon").add(e.weapon);
+            //if (e.life < 0) entityList.get("weapon").add(e.weapon);
         }
         for (Animation a : animations) {
             a.update();
@@ -202,20 +195,21 @@ public class PlayState extends GameState {
                 if (!entry.getValue().get(i).state) {
                     if (!entry.getKey().equals("thisPlayer")) {
                         if (entry.getKey().equals("enemy")) { //enemy dies
-                            Enemy e = (Enemy) entry.getValue().get(i);
-                            entityList.get("weapon").add(e.getWeapon());
-                            int enemyCount = entityList.get("enemy").size();
+                            Player p = (Player) entry.getValue().get(i);
+                            entityList.get("weapon").add(p.getWeapon());
+                            int enemyCount = entityList.get("enemy").size()-1;
                             hud.updateEnemyAmount(enemyCount);
                             //if there are no enemies left...
                             if (enemyCount <= 0) {
                                 //move on to next level
-                                //TEMP commented out \/
-                                //gsm.setState(GameStateManager.NEXTLEVEL);
+                                gsm.setState(GameStateManager.NEXTLEVEL);
                             }
                         }
                         entry.getValue().remove(i);
                     } else { //player dies
                         dead = true;
+                        Player p = (Player) entry.getValue().get(i);
+                        p.deathSequence();
                     }
                 }
             }
@@ -230,7 +224,7 @@ public class PlayState extends GameState {
     private void addBullets(Player p) {
         if (p.weapon != null && Game.currentTimeMillis() - p.shootTime > p.weapon.rate && p.weapon.ammo > 0) {
             for (int i = 0; i < p.weapon.amount; i++) {
-                Bullet b = new Bullet(p.x, p.y, p.orient, p.weapon.spread, p.weapon.damage, entityList, p);
+                Bullet b = new Bullet(entityList, p);
                 for (Bullet.CollidePoint point : b.collidePoints) {
                     animations.add(new Animation(point.x, point.y, b.orient + (float) Math.PI, 2, point.hitColor, "hit_"));
                     p.weapon.hitSound.stop();
@@ -309,11 +303,11 @@ public class PlayState extends GameState {
         }
         if (InputManager.isKeyPressed("ESC") && Game.currentTimeMillis() - InputManager.getKeyTime("ESC") > 400) {
             InputManager.setKeyTime("ESC", Game.currentTimeMillis());
-            gsm.cursor.updateOldPos();
+//            gsm.cursor.updateOldPos();
             //gsm.setPaused(true);
             gsm.setTopState(GameStateManager.PAUSE);
         }
-        if (dead && (InputManager.isMousePressed("LEFTMOUSE") || InputManager.isKeyPressed("SPACE"))) {
+        if (dead && InputManager.isKeyPressed("SPACE")) {
             init();
         }
 

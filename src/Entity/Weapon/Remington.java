@@ -15,6 +15,7 @@ public class Remington extends Weapon {
 
     protected void setConstants() {
         name = "Remington";
+        sprite = FileManager.images.get("m4.png");
         maxAmmo = 12;
         type = 2;
         bVel = 7;
@@ -23,7 +24,7 @@ public class Remington extends Weapon {
         damage = 15;
         rate = 400;
         shootSound = FileManager.sounds.get("m4_shoot.wav");
-
+        gunLength = 44;
     }
 
 }

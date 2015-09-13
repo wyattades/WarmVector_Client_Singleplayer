@@ -23,7 +23,7 @@ public abstract class Player extends Entity {
     public int shootTime;
     ArrayList<Entity> tiles;
     private TileMap tileMap;
-    protected BufferedImage shootSprite, defaultSprite;
+    protected BufferedImage shootSprite, defaultSprite, deadSprite;
 
     Player(int x, int y, int w, int h, float orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
         super(x, y, w, h, orient);
@@ -102,4 +102,9 @@ public abstract class Player extends Entity {
     }
 
 
+    public void deathSequence() {
+        weapon = null;
+        sprite = deadSprite;
+        //animation???
+    }
 }

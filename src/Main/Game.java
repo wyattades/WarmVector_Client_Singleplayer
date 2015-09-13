@@ -29,8 +29,6 @@ public class Game implements Runnable {
 
     public Game() {
 
-        OutputManager.setSetting("key_anti_aliasing", 1);
-
         running = true;
         JFrame frame = new JFrame("WarmVector Singleplayer V2");
 

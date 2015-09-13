@@ -20,7 +20,6 @@ public class Bullet {
     public float orient;
     private long displayTime;
     public boolean state;
-    private static final int gunLength = 44;
     private Color fill;
     public ArrayList<CollidePoint> collidePoints;
 
@@ -47,19 +46,18 @@ public class Bullet {
         }
     }
 
-    public Bullet(int x, int y, float orient, float spread, int damage, HashMap<String, ArrayList<Entity>> allEnts, Player shooter) {
+    public Bullet(HashMap<String, ArrayList<Entity>> allEnts, Player shooter) {
         state = true;
         fill = new Color(255, 255, (int) Game.random(50, 220), 200);
         collidePoints = new ArrayList<CollidePoint>();
         ArrayList<TestPoint> testPoints = new ArrayList<TestPoint>();
         displayTime = Game.currentTimeMillis();
-        orient += Game.random(-spread, spread);
-        this.orient = orient;
+        orient = shooter.orient + Game.random(-shooter.getWeapon().spread, shooter.getWeapon().spread);
         int checkLine = 10000; //just a big number
-        fx = (int) (x + checkLine * Math.cos(orient));
-        fy = (int) (y + checkLine * Math.sin(orient));
-        ix = x;
-        iy = y;
+        fx = (int) (shooter.getWeapon().x + checkLine * Math.cos(orient));
+        fy = (int) (shooter.getWeapon().y + checkLine * Math.sin(orient));
+        ix = shooter.getWeapon().x;
+        iy = shooter.getWeapon().y;
 
         for (HashMap.Entry<String, ArrayList<Entity>> entry : allEnts.entrySet()) {
             for (Entity e : entry.getValue()) {
@@ -81,14 +79,14 @@ public class Bullet {
 
         for (TestPoint p : testPoints) {
             collidePoints.add(new CollidePoint((int) (ix + (p.dist) * Math.cos(orient)), (int) (iy + (p.dist) * Math.sin(orient)), p.e.hitColor));
-            if (!p.e.hit(damage, orient)) {
+            if (!p.e.hit(shooter.getWeapon().damage, orient)) {
                 fx = (int) (ix + (p.dist) * Math.cos(orient));
                 fy = (int) (iy + (p.dist) * Math.sin(orient));
                 break;
             }
         }
-        ix = ix + gunLength * (int) Math.cos(orient);
-        iy = iy + gunLength * (int) Math.sin(orient);
+        ix = ix + shooter.getWeapon().gunLength * (int) Math.cos(orient);
+        iy = iy + shooter.getWeapon().gunLength * (int) Math.sin(orient);
     }
 
     public void draw(Graphics2D g) {

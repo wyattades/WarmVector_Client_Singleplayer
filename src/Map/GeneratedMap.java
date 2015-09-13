@@ -16,22 +16,27 @@ import static Map.TileMap.*;
  */
 public class GeneratedMap {
 
-    final int roomSize = 8;
     private int width,height;
+
+    private float factor;
+
     public ArrayList<Tile> walls;
+    public ArrayList<Rect> cells;
+
 
     public GeneratedMap(int width, int height, float factor) {
         this.width = width;
         this.height = height;
+        this.factor = factor;
         walls = new ArrayList<Tile>();
         addWalls();
     }
 
-    private ArrayList<Rect> cells;
-
     private class Cell {
 
         public Cell cellA, cellB;
+
+        private static final int leeWay = 200;
 
         public int x,y,w,h;
 
@@ -41,7 +46,6 @@ public class GeneratedMap {
             this.y = y;
             this.w = w;
             this.h = h;
-            int leeWay = 200;
 
             if (iteration + 1 <= max_iteration) {
                 //float randDir = Game.random(0.0f, 100.0f);
@@ -92,7 +96,7 @@ public class GeneratedMap {
         Cell fatherCell = new Cell(0, 0, width,height, 0, 4);
 
         //randomly shrink the rects
-        int maxReduction = 100;
+        int maxReduction = 50;
         for (Rect r : cells) {
             int x_left = (int)Game.random(0,maxReduction);
             int x_right = (int)Game.random(0,maxReduction);
@@ -108,14 +112,53 @@ public class GeneratedMap {
         int thickness = 60;
         int length = cells.size();
         for (int i = 0; i < length; i += 2) {
+
             Rect r1 = cells.get(i),
                  r2 = cells.get(i+1);
+//            int chanceOf2Segments = (int)Game.random(1,1.7f);
+//            for (int j = 0; j < chanceOf2Segments; j++) {
+                if (Math.abs(r1.x - r2.x) > Math.abs(r1.y - r2.y)) { //If the sister rooms are horizontally adjacent...
+
+                    int randomY = (int) Game.random(Math.max(r1.y, r2.y), Math.min(r1.y + r1.h, r2.y + r2.h) - thickness);
+                    cells.add(new Rect(r1.x + r1.w, randomY, r2.x - (r1.x + r1.w), thickness));
+
+                } else { //or vertically adjacent...
+
+                    int randomX = (int) Game.random(Math.max(r1.x, r2.x), Math.min(r1.x + r1.w, r2.x + r2.w) - thickness);
+                    cells.add(new Rect(randomX, r1.y + r1.h, thickness, r2.y - (r1.y + r1.h)));
+
+                }
+//            }
+        }
+
+        for (int i = 0; i < length; i += 4) {
+            //Rooms
+            Rect r1, r2;
+            int randomRoom = (int)Game.random(0,3);
+            if (randomRoom == 0) {
+                r1= cells.get(i);
+                r2 = cells.get(i+2);
+
+            } else if (randomRoom == 1) {
+                r1 = cells.get(i+1);
+                r2 = cells.get(i+3);
+
+            } else if (randomRoom == 2) {
+                r1 = cells.get(i/4);
+                r2 = cells.get(i/4 + 2);
+            }
+
+            //Corridors
+
             //If the sister rooms are horizontally adjacent...
             if (Math.abs(r1.x-r2.x) > Math.abs(r1.y - r2.y)) {
-                cells.add(new Rect(r1.x+r1.w,r1.y+r1.h/2,r2.x-(r1.x+r1.w),thickness));
-            } else {
-                cells.add(new Rect(r1.x+r1.h/2,r1.y+r1.h,thickness,r2.y-(r1.y+r1.h)));
+                int randomY = (int)Game.random(Math.max(r1.y, r2.y),  Math.min(r1.y + r1.h, r2.y + r2.h) - thickness);
+                cells.add(new Rect(r1.x+r1.w, randomY, r2.x-(r1.x+r1.w), thickness));
+            } else { //or vertically adjacent...
+                int randomX = (int)Game.random(Math.max(r1.x, r2.x), Math.min(r1.x + r1.w, r2.x + r2.w) - thickness);
+                cells.add(new Rect(randomX, r1.y+r1.h, thickness, r2.y-(r1.y+r1.h)));
             }
+
         }
 
         //TEMP

@@ -43,7 +43,7 @@ public class NextLevelState extends MenuState {
 //        nextLevelTransition.draw(g);
 
         for (ButtonC b : buttons) {
-            b.update(InputManager.mouse.x,InputManager.mouse.y);
+            b.update(gsm.cursor.x, gsm.cursor.y);
             b.draw(g);
         }
 

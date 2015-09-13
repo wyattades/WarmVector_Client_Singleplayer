@@ -16,6 +16,7 @@ public class M4rifle extends Weapon {
     //USE ENUM INSTEAD???? IDK I WILL OVERHAUL Weapons LATER WHEN I ADD KNIVES AND ROCKETS AND STUFF
     protected void setConstants() {
         name = "M4Rifle";
+        sprite = FileManager.images.get("m4.png");
         maxAmmo = 40;
         type = 1;
         bVel = 8;
@@ -24,6 +25,8 @@ public class M4rifle extends Weapon {
         damage = 15;
         rate = 100;
         shootSound = FileManager.sounds.get("m4_shoot.wav");
+        gunLength = 44;
+
     }
 
 }

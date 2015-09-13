@@ -13,7 +13,7 @@ public class ButtonC {
     private int x;
     public int y;
     private int w;
-    private final int h = 43;
+    private static final int h = 43;
     public String text;
 
     public boolean setWidth;
@@ -47,7 +47,6 @@ public class ButtonC {
 
         if (!setWidth) {
             w = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
-//            h = (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
             setWidth = true;
         }
 
@@ -64,8 +63,6 @@ public class ButtonC {
     }
 
     private boolean overBox(int mx, int my) {
-//        return mx > x - w / 2 && mx < x + w / 2 &&
-//                my > y - h / 2 && my < y + h / 2;
         return  mx > x - w && mx < x &&
                 my > y  && my < y + h;
     }

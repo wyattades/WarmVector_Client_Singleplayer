@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 public class MouseCursor {
 
     private final static float x_sensitivity = 1.0f, y_sensitivity = 1.0f;
-    public static int CURSOR = 1, CROSSHAIR = 2; //,NONE = 0;
+    public static final int CURSOR = 1, CROSSHAIR = 2; //,NONE = 0;
     public int x, y;
     private int oldPosX, oldPosY;
     private int w, h;
@@ -22,14 +22,8 @@ public class MouseCursor {
     private Robot robot;
 
     public MouseCursor() {
-        x = Game.WIDTH / 2 + 70;
-        y = Game.HEIGHT / 2;
 
         cursor = FileManager.images.get("cursor.png");
-        crosshair = FileManager.images.get("crosshair.png");
-//        transparent = new BufferedImage(2,2,BufferedImage.TYPE_3BYTE_BGR);
-
-        cursor = FileManager.images.get("cursor.png");;
         crosshair = FileManager.images.get("crosshair.png");
 
         sprite = cursor;
@@ -47,9 +41,17 @@ public class MouseCursor {
     }
 
     public void setSprite(int type) {
-        if (type == CURSOR) sprite = cursor;
-        else if (type == CROSSHAIR) sprite = crosshair;
-//        else if (type == NONE) sprite = transparent;
+        switch(type) {
+            case CURSOR:
+                sprite = cursor;
+                break;
+            case CROSSHAIR:
+                sprite = crosshair;
+                break;
+            default:
+                System.out.println("Crosshair name DNE");
+                break;
+        }
         w = sprite.getWidth();
         h = sprite.getHeight();
     }
@@ -58,10 +60,13 @@ public class MouseCursor {
         g.drawImage(sprite, x - (w / 2), y - (h / 2), null);
     }
 
-    public void updatePosition(int deltaX, int deltaY) {
-        x = constrain((int) (x + x_sensitivity * deltaX), 0, Game.WIDTH);
-        y = constrain((int) (y + y_sensitivity * deltaY), 0, Game.HEIGHT);
-    }
+//    public void updatePosition(int deltaX, int deltaY) {
+//        x = constrain((int) (x + x_sensitivity * deltaX), 0, Game.WIDTH);
+//        y = constrain((int) (y + y_sensitivity * deltaY), 0, Game.HEIGHT);
+////        x = constrain(x + InputManager.mouse.dx, 0, Game.WIDTH);
+////        y = constrain(y + InputManager.mouse.dy, 0, Game.HEIGHT);
+//
+//    }
 
     public void setPosition(int new_x, int new_y) {
         x = constrain(new_x, 0, Game.WIDTH);
@@ -69,13 +74,8 @@ public class MouseCursor {
     }
 
     public void setMouse(int x, int y) {
-        robot.mouseMove(x,y);
+        robot.mouseMove(x, y);
     }
-
-    public void setMouseToCenter() {
-        robot.mouseMove(Game.WIDTH/2, Game.HEIGHT/2);
-    }
-
 
     private int constrain(int value, int min, int max) {
         return Math.min(Math.max(value, min), max);
@@ -87,7 +87,8 @@ public class MouseCursor {
     }
 
     public void setToOldPos() {
-        x = oldPosX - InputManager.mouse.x + Game.WIDTH / 2;
-        y = oldPosY - InputManager.mouse.y + Game.HEIGHT / 2;
+        robot.mouseMove(oldPosX, oldPosY);
+        x = oldPosX;
+        y = oldPosY;
     }
 }

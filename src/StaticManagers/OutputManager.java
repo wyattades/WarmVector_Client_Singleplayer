@@ -20,16 +20,31 @@ public class OutputManager {
         settings = loadSettings();
 
         //TEMP FOR DEBUGGING
+//        for (int i = 0; i < settings.length; i++) {
+//            System.out.println(settings[i]);
+//        }
+    }
+
+    public static int getSettingValue(String name) {
+
         for (int i = 0; i < settings.length; i++) {
-            System.out.println(settings[i]);
+            String settingName = settings[i].split(" ")[0];
+            if (settingName.equals(name)) {
+                String value = settings[i].split(" ")[1];
+                return Integer.parseInt(value);
+            }
         }
+
+        System.out.println("Cannot locate setting (to get): " + name);
+        System.exit(1);
+        return 0;
     }
 
     public static void setSetting(String name, int value) {
         String newData = name + " " + value;
         for (int i = 0; i < settings.length; i++) {
-            String s = settings[i];
-            if (s.contains(name)) {
+            String settingName = settings[i].split(" ")[0];
+            if (settingName.equals(name)) {
                 File file = new File(filePath);
                 List<String> lines;
                 try {
@@ -39,9 +54,16 @@ public class OutputManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                return;
 
             }
         }
+        System.out.println("Cannot locate setting (to set): " + name);
+        System.exit(1);
+    }
+
+    public static void reloadSettings() {
+        settings = loadSettings();
     }
 
     public static String[] loadSettings() {

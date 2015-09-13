@@ -2,6 +2,7 @@ package GameState;
 
 import Main.Game;
 import StaticManagers.InputManager;
+import StaticManagers.OutputManager;
 import Visual.ButtonC;
 import Visual.MouseCursor;
 import Visual.Slider;
@@ -38,7 +39,7 @@ public abstract class MenuState extends GameState{
         buttons.add(new ButtonC(name, value, Game.WIDTH - 50, y));
     }
 
-    protected void addSlider(String name, int value, String[] options, int current_pos) {
+    protected void addSlider(String text, String name, String[] options, int current_pos) {
         int y = startY;
         for (ButtonC b : buttons) {
             if (y >= b.y) y = b.y - buttonDist;
@@ -46,7 +47,7 @@ public abstract class MenuState extends GameState{
         for (Slider s : sliders) {
             if (y >= s.y) y = s.y - buttonDist;
         }
-        sliders.add(new Slider(Game.WIDTH - 50, y, name, value, options, current_pos));
+        sliders.add(new Slider(Game.WIDTH - 50, y, text, name, options, current_pos));
     }
 
     protected abstract void initButtons();
@@ -63,11 +64,12 @@ public abstract class MenuState extends GameState{
         buttons = new ArrayList<ButtonC>();
         sliders = new ArrayList<Slider>();
         addButton("BACK", ButtonC.BACK);
-        addSlider("Fullscreen", Slider.FULLSCREEN, new String[]{"On","Off"}, 0);
-        addSlider("Anti-Aliasing", Slider.AA, new String[]{"On", "Off"}, 1);
-        addSlider("Quality", Slider.QUALITY, new String[]{"Good", "Great"}, 0);
-        addSlider("Music Level", Slider.MUSIC, new String[]{"0", "25", "50", "75", "100"}, 4);
-        addSlider("SFX Level", Slider.SFX, new String[]{"0", "25", "50", "75", "100"}, 4);
+        OutputManager.reloadSettings();
+        addSlider("Fullscreen", "fullscreen", new String[]{"On", "Off"}, OutputManager.getSettingValue("fullscreen"));
+        addSlider("Anti-Aliasing", "anti_aliasing", new String[]{"On", "Off"}, OutputManager.getSettingValue("anti_aliasing"));
+        addSlider("Quality", "quality", new String[]{"Good", "Great"}, OutputManager.getSettingValue("quality"));
+        addSlider("Music Level", "music_volume", new String[]{"0", "25", "50", "75", "100"}, OutputManager.getSettingValue("music_volume"));
+        addSlider("SFX Level", "sfx_volume", new String[]{"0", "25", "50", "75", "100"}, OutputManager.getSettingValue("sfx_volume"));
     }
 
     protected void buttonOutcome(int value) {
@@ -110,13 +112,9 @@ public abstract class MenuState extends GameState{
         }
     }
 
-    protected void sliderOutcome(int name, int newSetting) {
+    protected void sliderOutcome(String name, int setting) {
 
     }
-
-//    public void setCursor() {
-//        gsm.cursor.setSprite(MouseCursor.CURSOR);
-//    }
 
     private boolean snapSliders;
 
@@ -151,6 +149,8 @@ public abstract class MenuState extends GameState{
             if (!snapSliders) {
                 for (Slider s : sliders) {
                     s.snapSlider();
+                    OutputManager.setSetting(s.name, s.current_option);
+                    sliderOutcome(s.text, s.current_option);
                     s.pressed = false;
                 }
                 snapSliders = true;

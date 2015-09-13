@@ -29,7 +29,7 @@ public class FadeInState extends GameState {
 
     @Override
     public void unload() {
-        gsm.cursor.setMouseToCenter();
+        gsm.cursor.setMouse(Game.WIDTH/2 + 70, Game.HEIGHT/2);
     }
 
     @Override
