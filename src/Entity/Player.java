@@ -97,8 +97,11 @@ public abstract class Player extends Entity {
     private boolean inTile(float x, float y) {
         x = x / TileMap.tileSize;
         y = y / TileMap.tileSize;
-        int tileType = tileMap.tileArray[(int) x][(int) y];
-        return tileType == TileMap.SOLID || tileType == TileMap.WINDOW;
+
+        //TEMP
+        return false;
+//        int tileType = tileMap.tileArray[(int) x][(int) y];
+//        return tileType == TileMap.SOLID || tileType == TileMap.WINDOW;
     }
 
 

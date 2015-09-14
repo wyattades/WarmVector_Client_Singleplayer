@@ -10,57 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79328cf6-c427-44a6-a23b-90c221e9f3ec" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/SFX/ric0.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/SFX/ric1.wav" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Entity/Projectile.java" />
-      <change type="DELETED" beforePath="C:\Users\Wyatt\Documents\GitHub\WarmVector_Client_Singleplayer_V1.03\out\production\WarmVector_Client_Singleplayer\Images\hit_3.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Wyatt\Documents\GitHub\WarmVector_Client_Singleplayer_V1.03\out\production\WarmVector_Client_Singleplayer\SFX\ric4.wav" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Wyatt\Documents\GitHub\WarmVector_Client_Singleplayer_V1.03\out\production\WarmVector_Client_Singleplayer\SFX\ric5.wav" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Wyatt\Documents\GitHub\WarmVector_Client_Singleplayer_V1.03\src\Images\hit_3.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Wyatt\Documents\GitHub\WarmVector_Client_Singleplayer_V1.03\src\SFX\ric4.wav" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Wyatt\Documents\GitHub\WarmVector_Client_Singleplayer_V1.03\src\SFX\ric5.wav" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Bullet$1.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Bullet$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Bullet$CollidePoint.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Bullet$CollidePoint.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Bullet$TestPoint.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Bullet$TestPoint.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Bullet.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Bullet.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/ButtonC.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/ButtonC.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Main/Game.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Main/Game.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/GameOverState.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/GameOverState.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/HUD.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/HUD.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Entity/Weapon/M4rifle.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Entity/Weapon/M4rifle.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/MenuState.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/MenuState.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/MouseCursor.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/MouseCursor.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PauseState.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PauseState.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PlayState.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PlayState.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Entity/Player.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Entity/Player.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Entity/Weapon/Remington.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Entity/Weapon/Remington.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/ScreenMover.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/ScreenMover.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Map/TileMap.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Map/TileMap.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Entity/Weapon/Weapon.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Entity/Weapon/Weapon.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/Bullet.java" afterPath="$PROJECT_DIR$/src/Visual/Bullet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/ButtonC.java" afterPath="$PROJECT_DIR$/src/Visual/ButtonC.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entity/EntityManager.java" afterPath="$PROJECT_DIR$/src/Entity/EntityManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/FadeInState.java" afterPath="$PROJECT_DIR$/src/GameState/FadeInState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Main/Game.java" afterPath="$PROJECT_DIR$/src/Main/Game.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/GameOverState.java" afterPath="$PROJECT_DIR$/src/GameState/GameOverState.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Map/GeneratedMap.java" afterPath="$PROJECT_DIR$/src/Map/GeneratedMap.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/HUD.java" afterPath="$PROJECT_DIR$/src/Visual/HUD.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/StaticManagers/InputManager.java" afterPath="$PROJECT_DIR$/src/StaticManagers/InputManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entity/Weapon/M4rifle.java" afterPath="$PROJECT_DIR$/src/Entity/Weapon/M4rifle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/MenuState.java" afterPath="$PROJECT_DIR$/src/GameState/MenuState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/MouseCursor.java" afterPath="$PROJECT_DIR$/src/Visual/MouseCursor.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/NextLevelState.java" afterPath="$PROJECT_DIR$/src/GameState/NextLevelState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/StaticManagers/OutputManager.java" afterPath="$PROJECT_DIR$/src/StaticManagers/OutputManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/PauseState.java" afterPath="$PROJECT_DIR$/src/GameState/PauseState.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/PlayState.java" afterPath="$PROJECT_DIR$/src/GameState/PlayState.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entity/Player.java" afterPath="$PROJECT_DIR$/src/Entity/Player.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entity/Weapon/Remington.java" afterPath="$PROJECT_DIR$/src/Entity/Weapon/Remington.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/ScreenMover.java" afterPath="$PROJECT_DIR$/src/Visual/ScreenMover.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/Slider.java" afterPath="$PROJECT_DIR$/src/Visual/Slider.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/StartMenuState.java" afterPath="$PROJECT_DIR$/src/GameState/StartMenuState.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Map/TileMap.java" afterPath="$PROJECT_DIR$/src/Map/TileMap.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entity/Weapon/Weapon.java" afterPath="$PROJECT_DIR$/src/Entity/Weapon/Weapon.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Output/config" afterPath="$PROJECT_DIR$/src/Output/config" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/Wyatt.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/Wyatt.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="WarmVector_Client_Singleplayer.iws" />
@@ -83,21 +41,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="StartMenuState.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GameState/StartMenuState.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="55" column="35" selection-start-line="55" selection-start-column="35" selection-end-line="55" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="PlayState.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/GameState/PlayState.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="87" column="10" selection-start-line="87" selection-start-column="10" selection-end-line="87" selection-end-column="10" />
+              <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -119,7 +67,7 @@
         <entry file="file://$PROJECT_DIR$/src/Entity/Player.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+              <caret line="102" column="29" selection-start-line="102" selection-start-column="29" selection-end-line="102" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -139,7 +87,7 @@
         <entry file="file://$PROJECT_DIR$/src/Map/TileMap.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="104" column="17" selection-start-line="104" selection-start-column="17" selection-end-line="104" selection-end-column="17" />
+              <caret line="72" column="18" selection-start-line="72" selection-start-column="18" selection-end-line="72" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -158,8 +106,27 @@
       <file leaf-file-name="GeneratedMap.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Map/GeneratedMap.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.26086956">
-              <caret line="138" column="33" selection-start-line="138" selection-start-column="33" selection-end-line="138" selection-end-column="33" />
+            <state vertical-scroll-proportion="1.1059783">
+              <caret line="162" column="17" selection-start-line="162" selection-start-column="17" selection-end-line="162" selection-end-column="17" />
+              <folding>
+                <element signature="e#3497#3498#0" expanded="true" />
+                <element signature="e#3563#3564#0" expanded="true" />
+                <element signature="e#3625#3626#0" expanded="true" />
+                <element signature="e#3693#3694#0" expanded="true" />
+                <element signature="e#3912#3918#0" expanded="true" />
+                <element signature="e#3978#3984#0" expanded="true" />
+                <element signature="e#4609#4618#0" expanded="true" />
+                <element signature="e#5622#5631#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="InputManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/StaticManagers/InputManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="234" column="27" selection-start-line="234" selection-start-column="27" selection-end-line="234" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -227,7 +194,6 @@
         <option value="$PROJECT_DIR$/src/GameState/IntroState.java" />
         <option value="$PROJECT_DIR$/src/Visual/ThemeColors.java" />
         <option value="$PROJECT_DIR$/src/GameState/GameStateManager.java" />
-        <option value="$PROJECT_DIR$/src/StaticManagers/InputManager.java" />
         <option value="$PROJECT_DIR$/src/Visual/ScreenMover.java" />
         <option value="$PROJECT_DIR$/src/Entity/EntityManager.java" />
         <option value="$PROJECT_DIR$/src/Entity/Weapon/Weapon.java" />
@@ -247,11 +213,12 @@
         <option value="$PROJECT_DIR$/src/GameState/StartMenuState.java" />
         <option value="$PROJECT_DIR$/src/GameState/PauseState.java" />
         <option value="$PROJECT_DIR$/src/Main/Game.java" />
-        <option value="$PROJECT_DIR$/src/Entity/Player.java" />
         <option value="$PROJECT_DIR$/src/Entity/Entity.java" />
         <option value="$PROJECT_DIR$/src/Entity/Projectile.java" />
         <option value="$PROJECT_DIR$/src/Map/TileMap.java" />
+        <option value="$PROJECT_DIR$/src/Entity/Player.java" />
         <option value="$PROJECT_DIR$/src/GameState/PlayState.java" />
+        <option value="$PROJECT_DIR$/src/StaticManagers/InputManager.java" />
         <option value="$PROJECT_DIR$/src/Map/GeneratedMap.java" />
       </list>
     </option>
@@ -296,6 +263,8 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -496,8 +465,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -527,7 +494,7 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="971" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
-    <property name="SearchEverywhereHistoryKey" value="setPosition&#9;PSI&#9;JAVA://Visual.MouseCursor#setPosition&#10;y_sen&#9;PSI&#9;JAVA://Visual.MouseCursor#y_sensitivity&#10;fft&#9;PSI&#9;JAVA://com.sun.media.sound.FFT" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/Wyatt/Documents/GitHub/WarmVector_Client_Singleplayer_V1.03/src/Map/GeneratedMap.java&#10;setPosition&#9;PSI&#9;JAVA://Visual.MouseCursor#setPosition&#10;y_sen&#9;PSI&#9;JAVA://Visual.MouseCursor#y_sensitivity&#10;fft&#9;PSI&#9;JAVA://com.sun.media.sound.FFT" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
@@ -800,20 +767,28 @@
       <option name="project" value="LOCAL" />
       <updated>1442053934326</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="almost finished room creation&#10;many bug fixes (mouse lag mostly)">
+      <created>1442107864284</created>
+      <option name="number" value="00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1442107864284</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27742615" sideWeight="0.49791667" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2056962" sideWeight="0.50208336" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.0" sideWeight="0.49791667" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19409283" sideWeight="0.49166667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16822916" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -821,16 +796,14 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27742615" sideWeight="0.49791667" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16983122" sideWeight="0.49166667" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="JProfiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.49791667" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -857,7 +830,8 @@
     <MESSAGE value="improved compatibility and performance of GameStates" />
     <MESSAGE value="fade in and out feature" />
     <MESSAGE value="experimenting with procedural generation. FUN! YAY!" />
-    <option name="LAST_COMMIT_MESSAGE" value="experimenting with procedural generation. FUN! YAY!" />
+    <MESSAGE value="almost finished room creation&#10;many bug fixes (mouse lag mostly)" />
+    <option name="LAST_COMMIT_MESSAGE" value="almost finished room creation&#10;many bug fixes (mouse lag mostly)" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.7838542" />
   </component>
   <component name="XDebuggerManager">
@@ -974,6 +948,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1092,13 +1067,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/StaticManagers/InputManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="74" column="37" selection-start-line="74" selection-start-column="37" selection-end-line="74" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Output/config">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1179,14 +1147,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Entity/Player.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Entity/Entity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1214,7 +1174,15 @@
     <entry file="file://$PROJECT_DIR$/src/Map/TileMap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="104" column="17" selection-start-line="104" selection-start-column="17" selection-end-line="104" selection-end-column="17" />
+          <caret line="72" column="18" selection-start-line="72" selection-start-column="18" selection-end-line="72" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Entity/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="102" column="29" selection-start-line="102" selection-start-column="29" selection-end-line="102" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -1222,18 +1190,35 @@
     <entry file="file://$PROJECT_DIR$/src/GameState/PlayState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="87" column="10" selection-start-line="87" selection-start-column="10" selection-end-line="87" selection-end-column="10" />
+          <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/StaticManagers/InputManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="234" column="27" selection-start-line="234" selection-start-column="27" selection-end-line="234" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Map/GeneratedMap.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.26086956">
-          <caret line="138" column="33" selection-start-line="138" selection-start-column="33" selection-end-line="138" selection-end-column="33" />
-          <folding />
+        <state vertical-scroll-proportion="1.1059783">
+          <caret line="162" column="17" selection-start-line="162" selection-start-column="17" selection-end-line="162" selection-end-column="17" />
+          <folding>
+            <element signature="e#3497#3498#0" expanded="true" />
+            <element signature="e#3563#3564#0" expanded="true" />
+            <element signature="e#3625#3626#0" expanded="true" />
+            <element signature="e#3693#3694#0" expanded="true" />
+            <element signature="e#3912#3918#0" expanded="true" />
+            <element signature="e#3978#3984#0" expanded="true" />
+            <element signature="e#4609#4618#0" expanded="true" />
+            <element signature="e#5622#5631#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

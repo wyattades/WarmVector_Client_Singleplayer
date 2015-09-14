@@ -58,7 +58,7 @@ public class PlayState extends GameState {
         gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
         gsm.cursor.setMouse(Game.WIDTH / 2 + 70, Game.HEIGHT / 2);
 
-        generatedMap = new GeneratedMap(Game.WIDTH, Game.HEIGHT, 0);
+        generatedMap = new GeneratedMap(200, 200, 0);
 
 
     }
@@ -120,9 +120,13 @@ public class PlayState extends GameState {
 //        shadow.draw(g);
 //        tileMap.drawFore(g);
         g.setColor(Color.black);
-        for (int i = 0; i < generatedMap.walls.size(); i++) {
-            Tile t = generatedMap.walls.get(i);
-            g.fillRect(t.x - t.w / 2, t.y - t.h / 2, t.w, t.h);
+        g.setStroke(new BasicStroke(1));
+        for (int i = 0; i < generatedMap.cells.size(); i++) {
+            GeneratedMap.Rect t = generatedMap.cells.get(i);
+            g.drawRect((int)t.x, (int)t.y, (int)t.w,(int) t.h);
+        }
+        if (InputManager.isKeyPressed("SPACE")) {
+            generatedMap.addWalls();
         }
 
         //reset transformation

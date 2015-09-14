@@ -227,27 +227,22 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
     @Override
     public void mouseDragged(MouseEvent e) {
         mouse.dragged = true;
-        if (!mouse.robotControlling) {
-            mouse.x = e.getX();
-            mouse.y = e.getY();
-            mouse.dx = mouse.x - mouse.px;
-            mouse.dy = mouse.y - mouse.py;
-            mouse.px = mouse.x;
-            mouse.py = mouse.y;
-        }
-
+        mouse.x = e.getX();
+        mouse.y = e.getY();
+        mouse.dx = mouse.x - mouse.px;
+        mouse.dy = mouse.y - mouse.py;
+        mouse.px = mouse.x;
+        mouse.py = mouse.y;
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         mouse.dragged = false;
-        if (!mouse.robotControlling) {
-            mouse.x = e.getX();
-            mouse.y = e.getY();
-            mouse.dx = mouse.x - mouse.px;
-            mouse.dy = mouse.y - mouse.py;
-            mouse.px = mouse.x;
-            mouse.py = mouse.y;
-        }
+        mouse.x = e.getX();
+        mouse.y = e.getY();
+        mouse.dx = mouse.x - mouse.px;
+        mouse.dy = mouse.y - mouse.py;
+        mouse.px = mouse.x;
+        mouse.py = mouse.y;
     }
 }
