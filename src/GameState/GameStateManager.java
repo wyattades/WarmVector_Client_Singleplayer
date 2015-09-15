@@ -1,5 +1,6 @@
 package GameState;
 
+import StaticManagers.InputManager;
 import Visual.MouseCursor;
 
 import java.awt.*;
@@ -22,9 +23,9 @@ public class GameStateManager {
     public static final int
             MAXLEVEL = 2,
 
-            NUM_STATES = 8,
+    NUM_STATES = 8,
 
-            INTRO = 0,
+    INTRO = 0,
             MAINMENU = 1,
             PLAY = 2,
             GAMEOVER = 3,
@@ -97,20 +98,12 @@ public class GameStateManager {
 
     }
 
-//    public void setPaused(boolean p) {
-//
-//        paused = p;
-//        if (p) cursor.setSprite(MouseCursor.CURSOR);
-//        else cursor.setSprite(MouseCursor.CROSSHAIR);
-//
-//    }
-
-    public void inputHandle() {
+    public void inputHandle(InputManager inputManager) {
 
         if (gameStates[topState] != null) {
-            gameStates[topState].inputHandle();
+            gameStates[topState].inputHandle(inputManager);
         } else if (gameStates[currentState] != null) {
-            gameStates[currentState].inputHandle();
+            gameStates[currentState].inputHandle(inputManager);
         } else {
             System.out.println("gameState is null during inputHandle()");
             System.exit(1);

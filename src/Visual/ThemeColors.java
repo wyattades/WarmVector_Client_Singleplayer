@@ -12,10 +12,10 @@ public abstract class ThemeColors {
             outline = new Color(22, 20, 22),
             textDefault = new Color(22, 20, 22),
             textOver = new Color(158, 158, 158),
-            textTitle = new Color(0,0,0,200),
+            textTitle = new Color(0, 0, 0, 200),
             buttonSelected = new Color(220, 220, 220),
             buttonDefault = new Color(160, 160, 160, 200),
-            buttonOver = new Color(249,249,249),
+            buttonOver = new Color(249, 249, 249),
             cursor = new Color(198, 198, 198),
             menuBackground = new Color(22, 20, 22),
             buttonOverOld = buttonOver;

@@ -1,7 +1,5 @@
 package Visual;
 
-import StaticManagers.InputManager;
-
 import java.awt.*;
 
 /**
@@ -59,12 +57,12 @@ public class ButtonC {
     }
 
     public void update(int x, int y) {
-        overBox = overBox(x,y);
+        overBox = overBox(x, y);
     }
 
     private boolean overBox(int mx, int my) {
-        return  mx > x - w && mx < x &&
-                my > y  && my < y + h;
+        return mx > x - w && mx < x &&
+                my > y && my < y + h;
     }
 
 }

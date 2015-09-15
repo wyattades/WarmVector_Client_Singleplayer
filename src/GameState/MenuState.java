@@ -4,7 +4,6 @@ import Main.Game;
 import StaticManagers.InputManager;
 import StaticManagers.OutputManager;
 import Visual.ButtonC;
-import Visual.MouseCursor;
 import Visual.Slider;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by wyatt on 8/17/2015.
  */
-public abstract class MenuState extends GameState{
+public abstract class MenuState extends GameState {
 
     protected ArrayList<ButtonC> buttons;
     protected ArrayList<Slider> sliders;
@@ -73,7 +72,7 @@ public abstract class MenuState extends GameState{
     }
 
     protected void buttonOutcome(int value) {
-        switch(value) {
+        switch (value) {
             case ButtonC.OPTIONS:
                 initSettings();
                 break;
@@ -118,11 +117,11 @@ public abstract class MenuState extends GameState{
 
     private boolean snapSliders;
 
-    protected void defaultInputHandle() {
-        gsm.cursor.setPosition(InputManager.mouse.x, InputManager.mouse.y);
+    protected void defaultInputHandle(InputManager inputManager) {
+        gsm.cursor.setPosition(inputManager.mouse.x, inputManager.mouse.y);
 
 
-        if (InputManager.isMousePressed("LEFTMOUSE") || InputManager.isMouseClicked("LEFTMOUSE")) {
+        if (inputManager.isMousePressed("LEFTMOUSE") || inputManager.isMouseClicked("LEFTMOUSE")) {
 
             snapSliders = false;
 
@@ -130,7 +129,7 @@ public abstract class MenuState extends GameState{
                 s.pressed = false;
                 if (s.overBox(gsm.cursor.x, gsm.cursor.y)) {
                     s.pressed = true;
-                    if (InputManager.mouse.dragged) {
+                    if (inputManager.mouse.dragged) {
                         s.slide(gsm.cursor.x - s.dragPos);
                     } else {
                         s.setDragPos(gsm.cursor.x);
@@ -139,8 +138,8 @@ public abstract class MenuState extends GameState{
             }
             for (ButtonC b : buttons) {
                 if (b.overBox &&
-                        Game.currentTimeMillis() - InputManager.getMouseTime("LEFTMOUSE") > 400) {
-                    InputManager.setMouseTime("LEFTMOUSE", Game.currentTimeMillis());
+                        Game.currentTimeMillis() - inputManager.getMouseTime("LEFTMOUSE") > 400) {
+                    inputManager.setMouseTime("LEFTMOUSE", Game.currentTimeMillis());
                     buttonOutcome(b.value);
                     break;
                 }
@@ -158,8 +157,8 @@ public abstract class MenuState extends GameState{
         }
     }
 
-    public void inputHandle() {
-        defaultInputHandle();
+    public void inputHandle(InputManager inputManager) {
+        defaultInputHandle(inputManager);
     }
 
 }

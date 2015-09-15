@@ -16,6 +16,7 @@ public class OutputManager {
     public static String filePath = "out/production/WarmVector_Client_Singleplayer/Output/config";
 
     public static String[] settings;
+
     static {
         settings = loadSettings();
 

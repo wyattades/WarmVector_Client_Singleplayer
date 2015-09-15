@@ -54,17 +54,18 @@ public class PauseState extends MenuState {
 
     }
 
-    public void update() {}
+    public void update() {
+    }
 
 //    public void setCursor() {
 //        gsm.cursor.setSprite(MouseCursor.CURSOR);
 //    }
 
-    public void inputHandle() {
-        defaultInputHandle();
-        if (InputManager.isKeyPressed("ESC") && Game.currentTimeMillis()-InputManager.getKeyTime("ESC") > 400) {
+    public void inputHandle(InputManager inputManager) {
+        defaultInputHandle(inputManager);
+        if (inputManager.isKeyPressed("ESC") && Game.currentTimeMillis() - inputManager.getKeyTime("ESC") > 400) {
             gsm.unloadState(GameStateManager.PAUSE);
-            InputManager.setKeyTime("ESC",Game.currentTimeMillis());
+            inputManager.setKeyTime("ESC", Game.currentTimeMillis());
         }
     }
 

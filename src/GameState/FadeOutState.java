@@ -1,6 +1,7 @@
 package GameState;
 
 import Main.Game;
+import StaticManagers.InputManager;
 
 import java.awt.*;
 
@@ -34,8 +35,8 @@ public class FadeOutState extends GameState {
 
     @Override
     public void draw(Graphics2D g) {
-        g.setColor(new Color(0,0,0,opacity));
-        g.fillRect(0, 0, Game.WIDTH,Game.HEIGHT);
+        g.setColor(new Color(0, 0, 0, opacity));
+        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class FadeOutState extends GameState {
     }
 
     @Override
-    public void inputHandle() {
+    public void inputHandle(InputManager inputManager) {
 
     }
 

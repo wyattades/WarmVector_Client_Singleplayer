@@ -1,7 +1,7 @@
 package Visual;
 
-import Entity.Entity;
-import Entity.Player;
+import Entities.Entity;
+import Entities.Player;
 import Main.Game;
 
 import java.awt.*;
@@ -16,7 +16,7 @@ import java.util.HashMap;
  */
 public class Bullet {
 
-    private int ix, iy, fx, fy;
+    private float ix, iy, fx, fy;
     public float orient;
     private long displayTime;
     public boolean state;
@@ -53,9 +53,9 @@ public class Bullet {
         ArrayList<TestPoint> testPoints = new ArrayList<TestPoint>();
         displayTime = Game.currentTimeMillis();
         orient = shooter.orient + Game.random(-shooter.getWeapon().spread, shooter.getWeapon().spread);
-        int checkLine = 10000; //just a big number
-        fx = (int) (shooter.getWeapon().x + checkLine * Math.cos(orient));
-        fy = (int) (shooter.getWeapon().y + checkLine * Math.sin(orient));
+        float checkLine = 10000; //just a big number
+        fx = (float) (shooter.getWeapon().x + checkLine * Math.cos(orient));
+        fy = (float) (shooter.getWeapon().y + checkLine * Math.sin(orient));
         ix = shooter.getWeapon().x;
         iy = shooter.getWeapon().y;
 
@@ -91,7 +91,7 @@ public class Bullet {
 
     public void draw(Graphics2D g) {
         g.setColor(fill);
-        g.drawLine(ix, iy, fx, fy);
+        g.drawLine(Math.round(ix), Math.round(iy), Math.round(fx), Math.round(fy));
     }
 
     public void update() {

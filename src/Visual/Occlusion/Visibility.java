@@ -1,9 +1,11 @@
 package Visual.Occlusion;
 
+import Map.GeneratedEnclosure;
 import Map.TileMap;
 
 import java.awt.*;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,7 +18,7 @@ import java.util.Comparator;
 public class Visibility {
 
     //Color of shadow
-    private static Color COLOR = new Color(20,20,20,255);
+    private static Color COLOR = new Color(20, 20, 20, 255);
 
     // These represent the map and the light location:
     private ArrayList<Segment> segments;
@@ -31,56 +33,37 @@ public class Visibility {
     // The output is a series of points that forms a visible area polygon
     public ArrayList<Point> output;
 
-    private TileMap tileMap;
+    //private TileMap tileMap;
     private Rectangle2D.Float BORDER;
 
     // Construct an empty visibility set
-    public Visibility(TileMap tileMap) {
+    public Visibility(GeneratedEnclosure map) {
         BORDER = new Rectangle2D.Float();
-        BORDER.setRect(-tileMap.width * TileMap.tileSize, -tileMap.height * TileMap.tileSize, 3 * tileMap.width * TileMap.tileSize, 3 * tileMap.height * TileMap.tileSize);
-        this.tileMap = tileMap;
+        BORDER.setRect(
+                -map.width,
+                -map.height,
+                3 * map.width,
+                3 * map.height
+        );
+
         segments = new ArrayList<Segment>();
         endpoints = new ArrayList<EndPoint>();
         open = new ArrayList<Segment>();
         center = new Point(0, 0);
         output = new ArrayList<Point>();
-        loadTileMap(tileMap);
-    }
-
-    // Set the endpoints and segments corresponding to the tiles on the map
-    private void loadTileMap(TileMap map) {
-        // Reset endpoints and segments
-        segments.clear();
-        endpoints.clear();
-        int[][] array = map.tileArray;
-        int w = map.width;
-        int h = map.height;
-        int size = TileMap.tileSize;
-
-        for (int i = 0; i < map.width; i++) {
-            for (int j = 0; j < map.height; j++) {
-                // If a tile is solid or in the border of the map, add segments for each side of the tile
-                if (array[i][j] == TileMap.SOLID || (i == 0 || i == w - 1 || j == 0 || j == h - 1)) {
-                    addSegment((i + .5f) * size - size / 2, (j + .5f) * size + size / 2,
-                            (i + .5f) * size + size / 2, (j + .5f) * size + size / 2);
-                    addSegment((i + .5f) * size + size / 2, (j + .5f) * size + size / 2,
-                            (i + .5f) * size + size / 2, (j + .5f) * size - size / 2);
-                    addSegment((i + .5f) * size + size / 2, (j + .5f) * size - size / 2,
-                            (i + .5f) * size - size / 2, (j + .5f) * size - size / 2);
-                    addSegment((i + .5f) * size - size / 2, (j + .5f) * size - size / 2,
-                            (i + .5f) * size - size / 2, (j + .5f) * size + size / 2);
-                }
-            }
+        for (Line2D w : map.walls) {
+            addSegment((float) w.getX1() , (float) w.getY1(), (float) w.getX2(), (float) w.getY2());
         }
     }
 
     public void draw(Graphics2D g) {
         Polygon CUTOUT = new Polygon();
-        for (Point s : output) {
-            CUTOUT.addPoint((int) s.x, (int) s.y);
+        for (Point p : output) {
+            CUTOUT.addPoint(Math.round(p.x), Math.round(p.y));
         }
         GeneralPath SHADOW = new GeneralPath(CUTOUT);
         SHADOW.append(BORDER, false);
+
         g.setColor(COLOR);
         g.fill(SHADOW);
     }
@@ -88,27 +71,27 @@ public class Visibility {
 
     private void addSegment(float x1, float y1, float x2, float y2) {
         // Add a segment only if there is not an existing segment in that space
-        boolean alreadyExists = false;
-        for (Segment s : segments) {
-            if (((int) x1 == (int) s.p1.x && (int) y1 == (int) s.p1.y && (int) x2 == (int) s.p2.x && (int) y2 == (int) s.p2.y) ||
-                    ((int) x1 == (int) s.p2.x && (int) y1 == (int) s.p2.y && (int) x2 == (int) s.p1.x && (int) y2 == (int) s.p1.y)) {
-                alreadyExists = true;
-            }
-        }
-        if (!alreadyExists) {
-            // Add a segment, where the first point shows up in the
-            // visualization but the second one does not. (Every endpoint is
-            // part of two segments, but we want to only show them once.)
-            EndPoint p1 = new EndPoint(x1, y1);
-            p1.visualize = true;
-            EndPoint p2 = new EndPoint(x2, y2);
-            p2.visualize = false;
-            Segment segment = new Segment(p1, p2);
-            p1.segment = p2.segment = segment;
-            segments.add(segment);
-            endpoints.add(p1);
-            endpoints.add(p2);
-        }
+//        boolean alreadyExists = false;
+//        for (Segment s : segments) {
+//            if (((int) x1 == (int) s.p1.x && (int) y1 == (int) s.p1.y && (int) x2 == (int) s.p2.x && (int) y2 == (int) s.p2.y) ||
+//                    ((int) x1 == (int) s.p2.x && (int) y1 == (int) s.p2.y && (int) x2 == (int) s.p1.x && (int) y2 == (int) s.p1.y)) {
+//                alreadyExists = true;
+//            }
+//        }
+//        if (!alreadyExists) {
+        // Add a segment, where the first point shows up in the
+        // visualization but the second one does not. (Every endpoint is
+        // part of two segments, but we want to only show them once.)
+        EndPoint p1 = new EndPoint(x1, y1);
+        p1.visualize = true;
+        EndPoint p2 = new EndPoint(x2, y2);
+        p2.visualize = false;
+        Segment segment = new Segment(p1, p2);
+        p1.segment = p2.segment = segment;
+        segments.add(segment);
+        endpoints.add(p1);
+        endpoints.add(p2);
+//        }
 
     }
 

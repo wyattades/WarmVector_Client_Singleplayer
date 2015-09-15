@@ -1,11 +1,9 @@
-package Entity;
+package Entities;
 
-import Entity.Weapon.Weapon;
+import Entities.Weapon.Weapon;
 import Main.Game;
+import Map.GeneratedEnclosure;
 import StaticManagers.FileManager;
-import Map.TileMap;
-
-import java.util.ArrayList;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -15,12 +13,13 @@ public class ThisPlayer extends Player {
 
     public int hitTime;
 
-    public ThisPlayer(int x, int y, int w, int h, float orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
-        super(x, y, w, h, orient, weapon, tileMap, tiles);
-        sprite = shootSprite = FileManager.images.get("player0g.png");
+    public ThisPlayer(int x, int y, float orient, Weapon weapon, GeneratedEnclosure ge) {
+        super(x, y, orient, weapon, ge);
+        shootSprite = FileManager.images.get("player0g.png");
         defaultSprite = FileManager.images.get("player0.png");
-        this.w = sprite.getWidth();
-        this.h = sprite.getHeight();
+        setSpriteToDefault(weapon == null);
+        w = sprite.getWidth();
+        h = sprite.getHeight();
         shootTime = Game.currentTimeMillis();
     }
 

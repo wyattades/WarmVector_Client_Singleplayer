@@ -7,7 +7,6 @@ package Main;
 
 import GameState.GameStateManager;
 import StaticManagers.InputManager;
-import StaticManagers.OutputManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,16 +17,20 @@ import java.awt.image.MemoryImageSource;
 
 public class Game implements Runnable {
 
-    public final static int WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-    public final static int HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+    public static int WIDTH;
+    public static int HEIGHT;
     private static final int MS_PER_UPDATE = 16;
 
     private boolean running;
 
     private BufferStrategy bufferStrategy;
     private GameStateManager gsm;
+    private InputManager inputManager;
 
     public Game() {
+
+        WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
         running = true;
         JFrame frame = new JFrame("WarmVector Singleplayer V2");
@@ -62,7 +65,6 @@ public class Game implements Runnable {
         canvas.requestFocus();
 
 
-
         //Set default mouse cursor to transparent
         Cursor transparentCursor = Toolkit.getDefaultToolkit().createCustomCursor(
                 Toolkit.getDefaultToolkit().createImage(
@@ -70,7 +72,7 @@ public class Game implements Runnable {
         panel.setCursor(transparentCursor);
 
         //Create a manager for handling key and mouse inputs
-        InputManager inputManager = new InputManager(canvas);
+        inputManager = new InputManager(canvas);
 
         //Add key and mouse mappings to inputManager
         inputManager.addKeyMapping("UP", KeyEvent.VK_W);
@@ -79,7 +81,7 @@ public class Game implements Runnable {
         inputManager.addKeyMapping("RIGHT", KeyEvent.VK_D);
         inputManager.addKeyMapping("ESC", KeyEvent.VK_ESCAPE);
         inputManager.addKeyMapping("ALT", KeyEvent.VK_ALT);
-        inputManager.addKeyMapping("SPACE",KeyEvent.VK_SPACE);
+        inputManager.addKeyMapping("SPACE", KeyEvent.VK_SPACE);
         inputManager.addMouseMapping("LEFTMOUSE", MouseEvent.BUTTON1);
         inputManager.addMouseMapping("RIGHTMOUSE", MouseEvent.BUTTON3);
 
@@ -126,11 +128,12 @@ public class Game implements Runnable {
         return (float) (Math.random() * (max - min) + min);
     }
 
-//    private double startTime = 0;
+    //    private double startTime = 0;
 //    private int frames = 0;
     double previous = currentTimeMillis();
     double lag = 0.0;
 
+    @Override
     public void run() {
 
         while (running) {
@@ -140,37 +143,17 @@ public class Game implements Runnable {
             previous = current;
             lag += elapsed;
 
-            inputHandle();
+            //INPUT HANDLE
+            gsm.inputHandle(inputManager);
 
-            while (lag >= MS_PER_UPDATE)
-            {
-                update();
+            //UPDATE
+            while (lag >= MS_PER_UPDATE) {
+                gsm.update();
                 lag -= MS_PER_UPDATE;
             }
 
+            //RENDER
             render();
-
-//            int start = currentTimeMillis();
-//
-//            update();
-//            render();
-//
-//            //sets fps to 60
-//            int sleepTime = (start + MS_PER_UPDATE) - currentTimeMillis();
-//            if (sleepTime > 0) {
-//                try {
-//                    Thread.sleep(sleepTime);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            frames++;
-//            if (currentTimeMillis() - startTime >= 1000) {
-//                startTime = currentTimeMillis();
-//                System.out.println(frames);
-//                frames = 0;
-//            }
         }
     }
 
@@ -198,14 +181,6 @@ public class Game implements Runnable {
 
         bufferStrategy.show();
 
-    }
-
-    void update() {
-        gsm.update();
-    }
-
-    void inputHandle() {
-        gsm.inputHandle();
     }
 
 }

@@ -1,12 +1,12 @@
-package Entity;
+package Entities;
 
-import Entity.Weapon.Weapon;
+import Entities.Weapon.Weapon;
 import Main.Game;
+import Map.GeneratedEnclosure;
 import Map.TileMap;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -15,21 +15,18 @@ import java.util.ArrayList;
 public abstract class Player extends Entity {
 
     public Weapon weapon;
-    public float vx;
-    public float vy;
+    public float vx, vy;
     public float life;
     public float maxLife;
-    public static final int topSpeed = 5;
+    private int topSpeed = 5;
     public int shootTime;
-    ArrayList<Entity> tiles;
-    private TileMap tileMap;
     protected BufferedImage shootSprite, defaultSprite, deadSprite;
+    protected GeneratedEnclosure ge;
 
-    Player(int x, int y, int w, int h, float orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
-        super(x, y, w, h, orient);
+    Player(int x, int y, float orient, Weapon weapon, GeneratedEnclosure ge) {
+        super(x, y,  orient);
+        this.ge = ge;
         this.weapon = weapon;
-        this.tiles = tiles;
-        this.tileMap = tileMap;
         hitColor = Color.red;
         vx = vy = 0;
         life = maxLife = 100.0f;
@@ -47,6 +44,7 @@ public abstract class Player extends Entity {
     public void updatePosition() {
         x += vx;
         y += vy;
+        vx -= 0;
     }
 
     public boolean hit(int amount, float angle) {
@@ -81,11 +79,13 @@ public abstract class Player extends Entity {
     }
 
     public void updateVelX(float velX) {
+        velX *= topSpeed;
         if ((velX > 0 && !collideTile(w / 2, 0, 0, h * 0.3f)) || (velX < 0 && !collideTile(-w / 2, 0, 0, h * 0.3f)))
             vx = velX;
     }
 
     public void updateVelY(float velY) {
+        velY *= topSpeed;
         if ((velY > 0 && !collideTile(0, h / 2, w * 0.3f, 0)) || (velY < 0 && !collideTile(0, -h / 2, w * 0.3f, 0)))
             vy = velY;
     }
@@ -95,12 +95,12 @@ public abstract class Player extends Entity {
     }
 
     private boolean inTile(float x, float y) {
-        x = x / TileMap.tileSize;
-        y = y / TileMap.tileSize;
+//        x = x / TileMap.tileSize;
+//        y = y / TileMap.tileSize;
 
         //TEMP
         return false;
-//        int tileType = tileMap.tileArray[(int) x][(int) y];
+//        int tileType = tileMap.tileArray[Math.round(x)][Math.round(y)]; //NOTE: if Math.round() doesn't work, cast it int instead
 //        return tileType == TileMap.SOLID || tileType == TileMap.WINDOW;
     }
 

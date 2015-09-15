@@ -1,6 +1,7 @@
 package GameState;
 
 import Main.Game;
+import StaticManagers.InputManager;
 
 import java.awt.*;
 
@@ -11,8 +12,6 @@ import java.awt.*;
 public class FadeInState extends GameState {
 
     private int opacity;
-
-    private final int rate = 2;
 
     public boolean state;
 
@@ -29,26 +28,27 @@ public class FadeInState extends GameState {
 
     @Override
     public void unload() {
-        gsm.cursor.setMouse(Game.WIDTH/2 + 70, Game.HEIGHT/2);
+        gsm.cursor.setMouse(Game.WIDTH / 2 + 70, Game.HEIGHT / 2);
     }
 
     @Override
     public void draw(Graphics2D g) {
-        g.setColor(new Color(0,0,0,opacity));
-        g.fillRect(0, 0, Game.WIDTH,Game.HEIGHT);
+        g.setColor(new Color(0, 0, 0, opacity));
+        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
     }
 
     @Override
     public void update() {
+        int rate = 3;
         opacity -= rate;
-        if (opacity <= 0) {
+        if (opacity <= 2) {
             gsm.unloadState(GameStateManager.FADEIN);
         }
 
     }
 
     @Override
-    public void inputHandle() {
+    public void inputHandle(InputManager inputManager) {
 
     }
 

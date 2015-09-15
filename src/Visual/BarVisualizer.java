@@ -5,8 +5,6 @@ import Main.Game;
 import java.awt.*;
 import java.util.Arrays;
 
-import com.sun.media.sound.FFT;
-
 /**
  * Directory: WarmVector_Client_Singleplayer/Visual/
  * Created by Wyatt on 8/18/2015.
@@ -15,7 +13,7 @@ public class BarVisualizer {
 
     private Color color;
     private int[] bars;
-    private int barH,startX;
+    private int barH, startX;
     private int lastMousePos;
     private int pressedTime;
 
@@ -23,9 +21,9 @@ public class BarVisualizer {
 
         this.color = color;
         bars = new int[128];
-        Arrays.fill(bars, Game.WIDTH-startX);
+        Arrays.fill(bars, Game.WIDTH - startX);
         startX = x;
-        barH = (int) Math.ceil((float)Game.HEIGHT/128f);
+        barH = (int) Math.ceil((float) Game.HEIGHT / 128f);
 
     }
 
@@ -36,7 +34,7 @@ public class BarVisualizer {
         g.fillRect(Game.WIDTH - startX, 0, startX, Game.HEIGHT);
 
         for (int i = 0; i < bars.length; i++) {
-            g.fillRect(Game.WIDTH-startX-bars[i], barH * i, bars[i], barH);
+            g.fillRect(Game.WIDTH - startX - bars[i], barH * i, bars[i], barH);
         }
 
     }
@@ -48,7 +46,7 @@ public class BarVisualizer {
             int timeDiff = Game.currentTimeMillis() - pressedTime;
             for (int i = 0; i < bars.length; i++) {
                 int diff = mouseY - i * barH;
-                float addition = 100.0f - (float)Math.sin(diff / 4.0f) * 80.0f - timeDiff;
+                float addition = 100.0f - (float) Math.sin(diff / 4.0f) * 80.0f - timeDiff;
                 if (addition < 0.0f) addition = 0.0f;
                 bars[i] += addition;
             }

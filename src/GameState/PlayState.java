@@ -1,13 +1,13 @@
 package GameState;
 
-import Entity.Enemy;
-import Entity.Entity;
-import Entity.Player;
-import Entity.ThisPlayer;
-import Entity.Weapon.Weapon;
-import Entity.Tile;
+import Entities.Enemy;
+import Entities.Entity;
+import Entities.Player;
+import Entities.ThisPlayer;
+import Entities.Weapon.Weapon;
 import Main.Game;
-import Map.GeneratedMap;
+import Map.GeneratedEnclosure;
+import Map.GeneratedEntities;
 import Map.TileMap;
 import StaticManagers.InputManager;
 import Visual.*;
@@ -37,7 +37,7 @@ public class PlayState extends GameState {
     private ThisPlayer thisPlayer;
     private Visibility shadow;
     private boolean dead;
-    private GeneratedMap generatedMap;
+
     public PlayState(GameStateManager gsm) {
         super(gsm);
     }
@@ -49,17 +49,21 @@ public class PlayState extends GameState {
         dead = false;
         bullets = new ArrayList<Bullet>();
         animations = new ArrayList<Animation>();
-        tileMap = new TileMap(gsm.level);
-        entityList = tileMap.setEntities();
+//        tileMap = new TileMap(gsm.level);
+        //entityList = tileMap.setEntities();
+
+        GeneratedEnclosure map = new GeneratedEnclosure(200, 200, 1.0f);
+        GeneratedEntities generatedEntities = new GeneratedEntities(map, 1.0f);
+        entityList = generatedEntities.getSpawnedEntities();
+        shadow = new Visibility(map);
+
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
+
         screenMover = new ScreenMover(thisPlayer);
         hud = new HUD(thisPlayer, entityList.get("enemy").size());
-        shadow = new Visibility(tileMap);
+
         gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
         gsm.cursor.setMouse(Game.WIDTH / 2 + 70, Game.HEIGHT / 2);
-
-        generatedMap = new GeneratedMap(200, 200, 0);
-
 
     }
 
@@ -73,7 +77,7 @@ public class PlayState extends GameState {
 
         //TEMP
         g.setColor(Color.white);
-        g.fillRect(0,0,Game.WIDTH,Game.HEIGHT);
+        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
         //Create copy of transform for later
         AffineTransform oldT = g.getTransform();
@@ -117,17 +121,20 @@ public class PlayState extends GameState {
         }
 
         //TEMP
-//        shadow.draw(g);
+        shadow.draw(g);
 //        tileMap.drawFore(g);
-        g.setColor(Color.black);
-        g.setStroke(new BasicStroke(1));
-        for (int i = 0; i < generatedMap.cells.size(); i++) {
-            GeneratedMap.Rect t = generatedMap.cells.get(i);
-            g.drawRect((int)t.x, (int)t.y, (int)t.w,(int) t.h);
-        }
-        if (InputManager.isKeyPressed("SPACE")) {
-            generatedMap.addWalls();
-        }
+        //g.scale(tileMap.tileSize, tileMap.tileSize);
+//        g.setColor(Color.blue);
+//        g.setStroke(new BasicStroke(2));
+//
+//        g.setStroke(new BasicStroke(0.7f));
+//        g.setColor(Color.green);
+//        for (Line2D line : generatedMap.walls) {
+//            g.draw(line);
+//        }
+//        if (InputManager.isKeyPressed("SPACE")) {
+//            generatedMap = new GeneratedMap(200,200,1.0f);
+//        }
 
         //reset transformation
         g.setTransform(oldT);
@@ -146,7 +153,7 @@ public class PlayState extends GameState {
     public void update() {
 
         //This is here, rather than in inputHandle(), because it needs to be run before thisPlayer is updated
-        gsm.cursor.setPosition(InputManager.mouse.x+screenMover.screenVelX, InputManager.mouse.y+screenMover.screenVelY);
+
 
         //create a copy of thisPlayer for convenience
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
@@ -155,7 +162,7 @@ public class PlayState extends GameState {
             //update objects
             thisPlayer.update();
             thisPlayer.regenHealth();
-            thisPlayer.updateAngle(gsm.cursor.x-screenMover.screenVelX, gsm.cursor.y-screenMover.screenVelY);
+            thisPlayer.updateAngle(gsm.cursor.x - screenMover.screenVelX, gsm.cursor.y - screenMover.screenVelY);
 
             screenMover.updatePosition();
             screenMover.updateRotation(gsm.cursor.x, gsm.cursor.y);
@@ -191,7 +198,7 @@ public class PlayState extends GameState {
             if (!animations.get(i).state) animations.remove(i);
         }
 
-        //Entity removal outcomes
+        //Entities removal outcomes
         Iterator<HashMap.Entry<String, ArrayList<Entity>>> it = entityList.entrySet().iterator();
         while (it.hasNext()) {
             HashMap.Entry<String, ArrayList<Entity>> entry = it.next();
@@ -201,7 +208,7 @@ public class PlayState extends GameState {
                         if (entry.getKey().equals("enemy")) { //enemy dies
                             Player p = (Player) entry.getValue().get(i);
                             entityList.get("weapon").add(p.getWeapon());
-                            int enemyCount = entityList.get("enemy").size()-1;
+                            int enemyCount = entityList.get("enemy").size() - 1;
                             hud.updateEnemyAmount(enemyCount);
                             //if there are no enemies left...
                             if (enemyCount <= 0) {
@@ -218,9 +225,6 @@ public class PlayState extends GameState {
                 }
             }
         }
-
-
-
 
 
     }
@@ -253,30 +257,32 @@ public class PlayState extends GameState {
         }
     }
 
-    public void inputHandle() {
+    public void inputHandle(InputManager inputManager) {
+
+        gsm.cursor.setPosition(inputManager.mouse.x + Math.round(screenMover.screenVelX), inputManager.mouse.y + Math.round(screenMover.screenVelY));
 
         //If leftKey is pressed and right isn't, player goes left
-        if (InputManager.isKeyPressed("LEFT") && !InputManager.isKeyPressed("RIGHT"))
-            thisPlayer.updateVelX(-ThisPlayer.topSpeed);
-        //If rightKey is pressed and left isn't, player goes right
-        else if (InputManager.isKeyPressed("RIGHT") && !InputManager.isKeyPressed("LEFT"))
-            thisPlayer.updateVelX(ThisPlayer.topSpeed);
+        if (inputManager.isKeyPressed("LEFT") && !inputManager.isKeyPressed("RIGHT"))
+            thisPlayer.updateVelX(-1);
+            //If rightKey is pressed and left isn't, player goes right
+        else if (inputManager.isKeyPressed("RIGHT") && !inputManager.isKeyPressed("LEFT"))
+            thisPlayer.updateVelX(1);
 
         //If upKey is pressed and down isn't, player goes up
-        if (InputManager.isKeyPressed("UP") && !InputManager.isKeyPressed("DOWN"))
-            thisPlayer.updateVelY(-ThisPlayer.topSpeed);
-        //If downKey is pressed and up isn't, player goes down
-        else if (InputManager.isKeyPressed("DOWN") && !InputManager.isKeyPressed("UP"))
-            thisPlayer.updateVelY(ThisPlayer.topSpeed);
+        if (inputManager.isKeyPressed("UP") && !inputManager.isKeyPressed("DOWN"))
+            thisPlayer.updateVelY(-1);
+            //If downKey is pressed and up isn't, player goes down
+        else if (inputManager.isKeyPressed("DOWN") && !inputManager.isKeyPressed("UP"))
+            thisPlayer.updateVelY(1);
 
         //If leftMouse is pressed, create bullets from player
-        if (InputManager.isMousePressed("LEFTMOUSE")) {
+        if (inputManager.isMousePressed("LEFTMOUSE")) {
             addBullets(thisPlayer);
         }
 
         //If rightMouse is clicked, check for pickup or drop a weapon
-        if ((InputManager.isMouseClicked("RIGHTMOUSE") || InputManager.isMousePressed("RIGHTMOUSE")) && Game.currentTimeMillis() - InputManager.getMouseTime("RIGHTMOUSE") > 300) {
-            InputManager.setMouseTime("RIGHTMOUSE", Game.currentTimeMillis());
+        if ((inputManager.isMouseClicked("RIGHTMOUSE") || inputManager.isMousePressed("RIGHTMOUSE")) && Game.currentTimeMillis() - inputManager.getMouseTime("RIGHTMOUSE") > 300) {
+            inputManager.setMouseTime("RIGHTMOUSE", Game.currentTimeMillis());
             if (thisPlayer.weapon != null) {
                 thisPlayer.weapon.unloadUser();
                 entityList.get("weapon").add(thisPlayer.getWeapon());
@@ -305,13 +311,13 @@ public class PlayState extends GameState {
                 }
             }
         }
-        if (InputManager.isKeyPressed("ESC") && Game.currentTimeMillis() - InputManager.getKeyTime("ESC") > 400) {
-            InputManager.setKeyTime("ESC", Game.currentTimeMillis());
+        if (inputManager.isKeyPressed("ESC") && Game.currentTimeMillis() - inputManager.getKeyTime("ESC") > 400) {
+            inputManager.setKeyTime("ESC", Game.currentTimeMillis());
 //            gsm.cursor.updateOldPos();
             //gsm.setPaused(true);
             gsm.setTopState(GameStateManager.PAUSE);
         }
-        if (dead && InputManager.isKeyPressed("SPACE")) {
+        if (dead && inputManager.isKeyPressed("SPACE")) {
             init();
         }
 

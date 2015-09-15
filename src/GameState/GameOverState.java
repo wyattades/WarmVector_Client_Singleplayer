@@ -1,7 +1,6 @@
 package GameState;
 
 import Main.Game;
-import StaticManagers.InputManager;
 import Visual.ButtonC;
 import Visual.Slider;
 import Visual.ThemeColors;
@@ -36,7 +35,7 @@ public class GameOverState extends MenuState {
 
     public void draw(Graphics2D g) {
 
-        drawBackground(g,ThemeColors.menuBackground);
+        drawBackground(g, ThemeColors.menuBackground);
 
         for (Slider s : sliders) {
             s.draw(g);
@@ -59,6 +58,7 @@ public class GameOverState extends MenuState {
 
     }
 
-    public void update() {}
+    public void update() {
+    }
 
 }

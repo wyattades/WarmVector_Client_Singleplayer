@@ -2,7 +2,6 @@ package Visual;
 
 import Main.Game;
 import StaticManagers.FileManager;
-import StaticManagers.InputManager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -41,7 +40,7 @@ public class MouseCursor {
     }
 
     public void setSprite(int type) {
-        switch(type) {
+        switch (type) {
             case CURSOR:
                 sprite = cursor;
                 break;

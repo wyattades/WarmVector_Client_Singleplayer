@@ -1,6 +1,6 @@
-package Entity;
+package Entities;
 
-import Entity.Weapon.Weapon;
+import Entities.Weapon.Weapon;
 import Visual.Bullet;
 
 import java.awt.*;

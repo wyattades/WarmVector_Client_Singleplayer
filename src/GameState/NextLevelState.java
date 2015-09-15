@@ -1,8 +1,9 @@
 package GameState;
 
 import Main.Game;
-import StaticManagers.InputManager;
-import Visual.*;
+import Visual.ButtonC;
+import Visual.Slider;
+import Visual.ThemeColors;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class NextLevelState extends MenuState {
 
     public void draw(Graphics2D g) {
 
-        drawBackground(g,ThemeColors.menuBackground);
+        drawBackground(g, ThemeColors.menuBackground);
 //        nextLevelTransition.draw(g);
 
         for (ButtonC b : buttons) {

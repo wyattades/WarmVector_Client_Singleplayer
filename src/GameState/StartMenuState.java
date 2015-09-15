@@ -2,7 +2,10 @@ package GameState;
 
 import Main.Game;
 import StaticManagers.InputManager;
-import Visual.*;
+import Visual.BarVisualizer;
+import Visual.ButtonC;
+import Visual.Slider;
+import Visual.ThemeColors;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -48,7 +51,7 @@ public class StartMenuState extends MenuState {
 
     public void draw(Graphics2D g) {
 
-        drawBackground(g,backGround);
+        drawBackground(g, backGround);
 
         barVisualizer.draw(g);
 
@@ -86,12 +89,13 @@ public class StartMenuState extends MenuState {
         backgroundHue += 0.001f;
         if (backgroundHue >= 1) backgroundHue = 0;
 
-        barVisualizer.react(InputManager.isMousePressed("LEFTMOUSE"), InputManager.mouse.y);
 
     }
 
-    public void inputHandle() {
-        defaultInputHandle();
+    public void inputHandle(InputManager inputManager) {
+        barVisualizer.react(inputManager.isMousePressed("LEFTMOUSE"), inputManager.mouse.y);
+
+        defaultInputHandle(inputManager);
     }
 
 }

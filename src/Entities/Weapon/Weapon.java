@@ -1,7 +1,7 @@
-package Entity.Weapon;
+package Entities.Weapon;
 
-import Entity.Entity;
-import Entity.Player;
+import Entities.Entity;
+import Entities.Player;
 import StaticManagers.FileManager;
 
 import javax.sound.sampled.Clip;
@@ -22,15 +22,15 @@ public abstract class Weapon extends Entity {
     public Player user;
     public Clip hitSound, shootSound;
 
-    Weapon(int x, int y, int w, int h, float orient, Player i_user) {
-        super(x, y, w, h, orient);
+    Weapon(int x, int y,  float orient, Player i_user) {
+        super(x, y,  orient);
         vx = vy = 0;
         sprite = FileManager.images.get("m4.png");
         hitSound = FileManager.sounds.get("bulletHit.wav");
         isHeld = false;
         user = i_user;
-        this.w = sprite.getWidth();
-        this.h = sprite.getHeight();
+        w = sprite.getWidth();
+        h = sprite.getHeight();
         hitColor = Color.DARK_GRAY;
         setConstants();
         ammo = maxAmmo;
@@ -44,12 +44,12 @@ public abstract class Weapon extends Entity {
         if (user != null) {
             AffineTransform oldTForm = g.getTransform();
             g.rotate(orient, x, y);
-            g.drawImage(sprite, x - w / 2 + 24, y - h / 2 + 2, null);
+            g.drawImage(sprite, Math.round(x - w / 2 + 24), Math.round(y - h / 2 + 2), null);
             g.setTransform(oldTForm);
         } else {
             AffineTransform oldTForm = g.getTransform();
             g.rotate(orient, x, y);
-            g.drawImage(sprite, x - w / 2, y - h / 2, null);
+            g.drawImage(sprite, Math.round(x - w / 2), Math.round(y - h / 2), null);
             g.setTransform(oldTForm);
         }
     }

@@ -1,6 +1,6 @@
 package Visual;
 
-import Entity.Player;
+import Entities.Player;
 import Main.Game;
 
 import java.awt.*;

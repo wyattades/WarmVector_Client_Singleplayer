@@ -1,6 +1,6 @@
-package Entity.Weapon;
+package Entities.Weapon;
 
-import Entity.Player;
+import Entities.Player;
 import StaticManagers.FileManager;
 
 /**
@@ -9,8 +9,8 @@ import StaticManagers.FileManager;
  */
 public class M4rifle extends Weapon {
 
-    public M4rifle(int x, int y, int w, int h, float orient, Player i_user) {
-        super(x, y, w, h, orient, i_user);
+    public M4rifle(int x, int y, float orient, Player i_user) {
+        super(x, y, orient, i_user);
     }
 
     //USE ENUM INSTEAD???? IDK I WILL OVERHAUL Weapons LATER WHEN I ADD KNIVES AND ROCKETS AND STUFF

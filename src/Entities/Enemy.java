@@ -1,11 +1,11 @@
-package Entity;
+package Entities;
 
-import Entity.Weapon.Weapon;
+import Entities.Weapon.Weapon;
 import Main.Game;
+import Map.GeneratedEnclosure;
 import StaticManagers.FileManager;
-import Map.TileMap;
 
-import java.util.ArrayList;
+import java.awt.geom.Line2D;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -16,13 +16,14 @@ public class Enemy extends Player {
     public boolean shooting;
     private int shootTime;
 
-    public Enemy(int x, int y, int w, int h, float orient, Weapon weapon, TileMap tileMap, ArrayList<Entity> tiles) {
-        super(x, y, w, h, orient, weapon, tileMap, tiles);
+    public Enemy(int x, int y, float orient, Weapon weapon, GeneratedEnclosure ge) {
+        super(x, y, orient, weapon, ge);
         shooting = false;
-        sprite = shootSprite = FileManager.images.get("player1g.png");
+        shootSprite = FileManager.images.get("player1g.png");
         defaultSprite = FileManager.images.get("player1.png");
-        this.w = sprite.getWidth();
-        this.h = sprite.getHeight();
+        setSpriteToDefault(weapon != null);
+        w = sprite.getWidth();
+        h = sprite.getHeight();
         life = maxLife = 25.0f;
         shootTime = Game.currentTimeMillis();
     }
@@ -90,9 +91,8 @@ public class Enemy extends Player {
     }
 
     boolean lineOfSight(float ix, float iy) {
-        for (Entity entity : tiles) {
-            Tile t = (Tile) entity;
-            if (t.collideBox.intersectsLine(x, y, ix, iy) && t.kind == TileMap.SOLID) {
+        for (Line2D w : ge.walls) {
+            if (w.intersectsLine(x, y, ix, iy)) {
                 return false;
             }
         }

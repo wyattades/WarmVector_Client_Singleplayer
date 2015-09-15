@@ -1,7 +1,5 @@
 package StaticManagers;
 
-import Main.Game;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -11,6 +9,9 @@ import java.util.ArrayList;
  * Created by Wyatt on 12/29/2014.
  */
 public class InputManager implements MouseListener, KeyListener, MouseMotionListener {
+
+
+    //TODO: have a sendEvent() function that wakes inputHandle(Event e) with an Event e (so it only runs when theres an event)
 
     class Key {
         public boolean pressed;
@@ -69,17 +70,16 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
     public class Mouse {
 
         public int x, y, dx, dy, px, py;
-        public boolean dragged, inScreen, robotControlling;
+        public boolean dragged, inScreen;
 
         public Mouse() {
-            robotControlling = false;
         }
 
     }
 
-    public static Mouse mouse;
-    private static ArrayList<Key> keys;
-    private static ArrayList<Click> clicks;
+    public Mouse mouse;
+    private ArrayList<Key> keys;
+    private ArrayList<Click> clicks;
 
     public InputManager(Canvas c) {
         c.addKeyListener(this);
@@ -100,6 +100,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void mousePressed(MouseEvent e) {
+
         for (Click click : clicks) {
             if (e.getButton() == click.mouseCode) {
                 click.togglePressed(true);
@@ -109,6 +110,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void mouseReleased(MouseEvent e) {
+
         for (Click click : clicks) {
             if (e.getButton() == click.mouseCode) {
                 click.togglePressed(false);
@@ -116,7 +118,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         }
     }
 
-    public static boolean isKeyPressed(String s) {
+    public boolean isKeyPressed(String s) {
         for (Key key : keys) {
             if (s.equals(key.name)) {
                 return key.pressed;
@@ -125,7 +127,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         return false;
     }
 
-    public static int getKeyTime(String s) {
+    public int getKeyTime(String s) {
         for (Key key : keys) {
             if (s.equals(key.name)) {
                 return key.pressTime;
@@ -134,7 +136,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         return 0;
     }
 
-    public static int getMouseTime(String s) {
+    public int getMouseTime(String s) {
         for (Click click : clicks) {
             if (s.equals(click.name)) {
                 return click.pressTime;
@@ -143,7 +145,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         return 0;
     }
 
-    public static void setKeyTime(String s, int n) {
+    public void setKeyTime(String s, int n) {
         for (Key key : keys) {
             if (s.equals(key.name)) {
                 key.pressTime = n;
@@ -151,7 +153,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         }
     }
 
-    public static void setMouseTime(String s, int n) {
+    public void setMouseTime(String s, int n) {
         for (Click click : clicks) {
             if (s.equals(click.name)) {
                 click.pressTime = n;
@@ -159,7 +161,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         }
     }
 
-    public static boolean isMouseClicked(String s) {
+    public boolean isMouseClicked(String s) {
         for (Click click : clicks) {
             if (s.equals(click.name)) {
                 if (click.clicked) {
@@ -173,7 +175,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         return false;
     }
 
-    public static boolean isMousePressed(String s) {
+    public boolean isMousePressed(String s) {
         for (Click click : clicks) {
             if (s.equals(click.name)) {
                 return click.pressed;
@@ -184,6 +186,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void keyPressed(KeyEvent e) {
+
         for (Key key : keys) {
             if (e.getKeyCode() == key.keyCode) {
                 key.toggle(true);
@@ -193,6 +196,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void keyReleased(KeyEvent e) {
+
         for (Key key : keys) {
             if (e.getKeyCode() == key.keyCode) {
                 key.toggle(false);
@@ -202,6 +206,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
         for (Click click : clicks) {
             if (e.getButton() == click.mouseCode) {
                 click.toggleClick(true);
@@ -212,10 +217,12 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
     @Override
     public void keyTyped(KeyEvent e) {
 
+
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
+
         mouse.inScreen = true;
     }
 
@@ -226,6 +233,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void mouseDragged(MouseEvent e) {
+
         mouse.dragged = true;
         mouse.x = e.getX();
         mouse.y = e.getY();
@@ -237,6 +245,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void mouseMoved(MouseEvent e) {
+
         mouse.dragged = false;
         mouse.x = e.getX();
         mouse.y = e.getY();

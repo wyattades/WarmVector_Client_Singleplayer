@@ -1,18 +1,18 @@
-package Entity;
+package Entities;
 
 import StaticManagers.FileManager;
 
 /**
- * Directory: WarmVector_Client_Singleplayer/Entity/
+ * Directory: WarmVector_Client_Singleplayer/Entities/
  * Created by Wyatt on 9/12/2015.
  */
 public class Projectile extends Entity {
 
-    private float speed,accel;
+    private float speed, accel;
 
-    public Projectile(int x, int y, int w, int h, float orient, float speed, float acceleration) {
+    public Projectile(int x, int y, float orient, float speed, float acceleration) {
 
-        super(x,y,w,h,orient);
+        super(x, y, orient);
         this.speed = speed;
         this.accel = acceleration;
         sprite = FileManager.images.get("bullet");

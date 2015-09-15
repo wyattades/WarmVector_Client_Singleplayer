@@ -1,6 +1,6 @@
 package Visual;
 
-import Entity.Entity;
+import Entities.Entity;
 import Main.Game;
 import Map.TileMap;
 
@@ -14,7 +14,7 @@ import java.awt.geom.Rectangle2D;
  */
 public class Shadow2D {
 
-
+/*
     final float SHADOW_EXTRUDE = 2 * Game.WIDTH;
 
     private final static Color COLOR = new Color(0, 0, 0);
@@ -29,7 +29,7 @@ public class Shadow2D {
     public Shadow2D(int[][] tileArray, Entity origin) {
         x = y = 0;
         //orient = 0;
-        tileSize = TileMap.tileSize;
+        tileSize = map.scale;
         this.tileArray = tileArray;
         this.origin = origin;
     }
@@ -48,7 +48,7 @@ public class Shadow2D {
                 if (tileArray[i][j] == TileMap.SOLID) {
                     Rectangle2D.Float bounds = new Rectangle2D.Float(i * tileSize, j * tileSize, tileSize + 2, tileSize + 2);
 
-                    //radius of Entity's bounding circle
+                    //radius of Entities's bounding circle
                     float r = (float) bounds.getWidth() / 2;
 
                     //get center of entity
@@ -98,9 +98,9 @@ public class Shadow2D {
         }
     }
 
-    /**
-     * Projects a point from end along the vector (end - start) by the given scalar amount.
-     */
+
+     // Projects a point from end along the vector (end - start) by the given scalar amount.
+
     private Point2D.Float project(Point2D.Float start, Point2D.Float end, float scalar) {
         float dx = end.x - start.x;
         float dy = end.y - start.y;
@@ -116,4 +116,5 @@ public class Shadow2D {
         dy *= scalar;
         return new Point2D.Float(end.x + dx, end.y + dy);
     }
+    */
 }

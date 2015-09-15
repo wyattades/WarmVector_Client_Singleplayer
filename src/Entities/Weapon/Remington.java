@@ -1,6 +1,6 @@
-package Entity.Weapon;
+package Entities.Weapon;
 
-import Entity.Player;
+import Entities.Player;
 import StaticManagers.FileManager;
 
 /**
@@ -9,8 +9,8 @@ import StaticManagers.FileManager;
  */
 public class Remington extends Weapon {
 
-    public Remington(int x, int y, int w, int h, float orient, Player i_user) {
-        super(x, y, w, h, orient, i_user);
+    public Remington(int x, int y,  float orient, Player i_user) {
+        super(x, y, orient, i_user);
     }
 
     protected void setConstants() {

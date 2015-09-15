@@ -1,7 +1,7 @@
 package GameState;
 
 import Main.Game;
-import Visual.MouseCursor;
+import StaticManagers.InputManager;
 
 import java.awt.*;
 
@@ -28,11 +28,11 @@ public abstract class GameState {
 
     public abstract void update();
 
-    public abstract void inputHandle();
+    public abstract void inputHandle(InputManager inputManager);
 
     protected void drawBackground(Graphics2D g, Color color) {
         g.setColor(color);
-        g.fillRect(0,0, Game.WIDTH,Game.HEIGHT);
+        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
     }
 
 }

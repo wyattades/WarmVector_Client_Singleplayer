@@ -1,6 +1,6 @@
 package Visual;
 
-import Entity.ThisPlayer;
+import Entities.ThisPlayer;
 import Main.Game;
 
 /**
@@ -9,11 +9,9 @@ import Main.Game;
  */
 public class ScreenMover {
 
-    public int screenVelX, screenVelY, screenPosX, screenPosY;
+    public float screenVelX, screenVelY, screenPosX, screenPosY;
     private float maxVel;
     private ThisPlayer player;
-    private final float posAccel = 1.0f, negAccel = 1.0f;
-    private final int MaxRadius = 100;
 
     public ScreenMover(ThisPlayer player) {
         screenVelX = screenVelY = 0;
@@ -30,23 +28,26 @@ public class ScreenMover {
 
     private void updateVelocity() {
 
-        if (player.vx > 0) screenVelX = (int) Math.min(screenVelX + posAccel, maxVel);
-        else if (player.vx < 0) screenVelX = (int) Math.max(screenVelX - posAccel, -maxVel);
+        float posAccel = 0.6f;
+        float negAccel = 0.5f;
+        if (player.vx > 0) screenVelX = Math.min(screenVelX + posAccel, maxVel);
+        else if (player.vx < 0) screenVelX = Math.max(screenVelX - posAccel, -maxVel);
         else {
-            if (screenVelX > 0) screenVelX = (int) Math.max(screenVelX - negAccel, 0);
-            else if (screenVelX < 0) screenVelX = (int) Math.min(screenVelX + negAccel, 0);
+            if (screenVelX >= 0) screenVelX = Math.max(screenVelX - negAccel, 0);
+            else if (screenVelX <= 0) screenVelX = Math.min(screenVelX + negAccel, 0);
         }
 
         if (player.vy > 0) screenVelY = (int) Math.min(screenVelY + posAccel, maxVel);
         else if (player.vy < 0) screenVelY = (int) Math.max(screenVelY - posAccel, -maxVel);
         else {
-            if (screenVelY > 0) screenVelY = (int) Math.max(screenVelY - negAccel, 0);
-            else if (screenVelY < 0) screenVelY = (int) Math.min(screenVelY + negAccel, 0);
+            if (screenVelY >= 0) screenVelY = (int) Math.max(screenVelY - negAccel, 0);
+            else if (screenVelY <= 0) screenVelY = (int) Math.min(screenVelY + negAccel, 0);
         }
     }
 
     public void updateRotation(double mouseX, double mouseY) {
-        float rotateRadius = (float) (-MaxRadius * Math.sqrt((mouseX - Game.WIDTH / 2) * (mouseX - Game.WIDTH / 2) + (mouseY - Game.HEIGHT / 2 ) * (mouseY - Game.HEIGHT / 2)) / (Game.WIDTH / 2 ));
+        int maxRadius = 100;
+        float rotateRadius = (float) (-maxRadius * Math.sqrt((mouseX - Game.WIDTH / 2) * (mouseX - Game.WIDTH / 2) + (mouseY - Game.HEIGHT / 2) * (mouseY - Game.HEIGHT / 2)) / (Game.WIDTH / 2));
         //rotateRadius = -50;
         screenPosX += rotateRadius * Math.cos(player.orient);
         screenPosY += rotateRadius * Math.sin(player.orient);

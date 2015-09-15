@@ -41,23 +41,23 @@ public class Slider {
         //Actual slider
         if (pressed) g.setColor(ThemeColors.buttonDefault);
         else g.setColor(ThemeColors.buttonSelected);
-        g.fillRect(slider_x-size/2, y-size/2, size, size);
+        g.fillRect(slider_x - size / 2, y - size / 2, size, size);
 
         //Text
         g.setFont(new Font("Dotum Bold", Font.BOLD, 20));
         g.setColor(ThemeColors.textOver);
-        g.drawString(text, (int) (x - w - size - g.getFontMetrics().getStringBounds(text, g).getWidth()), y+6);
+        g.drawString(text, (int) (x - w - size - g.getFontMetrics().getStringBounds(text, g).getWidth()), y + 6);
 
         //Options
         g.setFont(new Font("Dotum Bold", Font.BOLD, 16));
         for (int i = 0; i < options.length; i++) {
-            g.drawString(options[i], (int) (x - w + sub_w * i - g.getFontMetrics().getStringBounds(options[i], g).getWidth()/2), y + size);
+            g.drawString(options[i], (int) (x - w + sub_w * i - g.getFontMetrics().getStringBounds(options[i], g).getWidth() / 2), y + size);
         }
 
     }
 
     public void snapSlider() {
-        current_option = Math.round(((float)(slider_x - (x - w))/(float)sub_w));
+        current_option = Math.round(((float) (slider_x - (x - w)) / (float) sub_w));
 
         slider_x = x - w + sub_w * current_option;
     }
@@ -69,8 +69,8 @@ public class Slider {
     }
 
     public boolean overBox(int mx, int my) {
-        return  mx > slider_x - size/2 && mx < slider_x + size/2 &&
-                my > y  - size/2 && my < y + size/2;
+        return mx > slider_x - size / 2 && mx < slider_x + size / 2 &&
+                my > y - size / 2 && my < y + size / 2;
     }
 
     public void setDragPos(int i_pos) {
