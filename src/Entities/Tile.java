@@ -1,9 +1,5 @@
 package Entities;
 
-import Map.TileMap;
-
-import java.awt.*;
-
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/22/2015.

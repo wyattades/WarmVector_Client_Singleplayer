@@ -23,6 +23,9 @@ public class FadeInState extends GameState {
     public void init() {
         opacity = 255;
         state = true;
+        gsm.cursor.setMouse(Game.WIDTH / 2 + 70, Game.HEIGHT / 2);
+        gsm.cursor.setPosition(Game.WIDTH / 2 + 70, Game.HEIGHT / 2);
+
         gsm.gameStates[gsm.currentState].update();
     }
 
@@ -52,7 +55,4 @@ public class FadeInState extends GameState {
 
     }
 
-//    @Override
-//    protected void setCursor() {
-//    }
 }

@@ -75,13 +75,18 @@ public class StartMenuState extends MenuState {
                 g.setColor(ThemeColors.buttonDefault);
             }
         }
-        g.setFont(ThemeColors.fontLogo);
-        g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 200);
-        g.drawString("V", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("V", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 40);
-
+        //Cheaty hacky method, TODO: Change this
+        if (buttons.size() == 5) {
+            g.setFont(ThemeColors.fontLogo);
+            g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 200);
+            g.drawString("V", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("V", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 40);
+        }
         gsm.cursor.draw(g);
 
     }
+
+    int my;
+    boolean pressed = false;
 
     public void update() {
 
@@ -89,11 +94,13 @@ public class StartMenuState extends MenuState {
         backgroundHue += 0.001f;
         if (backgroundHue >= 1) backgroundHue = 0;
 
+        barVisualizer.react(pressed, my);
 
     }
 
     public void inputHandle(InputManager inputManager) {
-        barVisualizer.react(inputManager.isMousePressed("LEFTMOUSE"), inputManager.mouse.y);
+        pressed = inputManager.isMousePressed("LEFTMOUSE");
+        my = inputManager.mouse.y;
 
         defaultInputHandle(inputManager);
     }

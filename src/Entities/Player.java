@@ -3,9 +3,10 @@ package Entities;
 import Entities.Weapon.Weapon;
 import Main.Game;
 import Map.GeneratedEnclosure;
-import Map.TileMap;
 
 import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -78,31 +79,69 @@ public abstract class Player extends Entity {
         return w;
     }
 
-    public void updateVelX(float velX) {
-        velX *= topSpeed;
-        if ((velX > 0 && !collideTile(w / 2, 0, 0, h * 0.3f)) || (velX < 0 && !collideTile(-w / 2, 0, 0, h * 0.3f)))
-            vx = velX;
+    public void updateVelX(int dir) {
+
+        float velX = dir * topSpeed;
+
+        Rectangle2D futureX = new Rectangle2D.Float(x - w/2 + velX, y - h/2, w, h);
+
+        boolean collidesX = false;
+
+        for (Line2D line : ge.walls) {
+            if (futureX.intersectsLine(line)) {
+                collidesX = true;
+            }
+        }
+        if (!collidesX) vx = velX;
+
     }
 
-    public void updateVelY(float velY) {
-        velY *= topSpeed;
-        if ((velY > 0 && !collideTile(0, h / 2, w * 0.3f, 0)) || (velY < 0 && !collideTile(0, -h / 2, w * 0.3f, 0)))
-            vy = velY;
+    public void updateVelY(int dir) {
+
+        float velY = dir * topSpeed;
+
+        Rectangle2D futureY = new Rectangle2D.Float(x - w/2, y - h/2 + velY, w, h);
+
+        boolean collidesY = false;
+
+        for (Line2D line : ge.walls) {
+            if (futureY.intersectsLine(line)) {
+                collidesY = true;
+            }
+        }
+        if (!collidesY) vy = velY;
     }
 
-    protected boolean collideTile(float ax, float ay, float dx, float dy) {
-        return inTile(x + ax, y + ay) || inTile(x + ax + dx, y + ay + dy) || inTile(x + ax - dx, y + ay - dy);
-    }
+//    public void updateVelY(float velY) {
+//        velY *= topSpeed;
+//
+//        Rectangle2D future = new Rectangle2D.Float((x - w/2), (y - h/2 + velY), w, h);
+//        boolean collides = false;
+//        for (Line2D line : ge.walls) {
+//            if (future.intersectsLine(line)) {
+//                collides = true;
+//            }
+//        }
+//        if (!collides) vy = velY;
+//
+//
+////        if ((velY > 0 && !collideTile(0, h / 2, w * 0.3f, 0)) || (velY < 0 && !collideTile(0, -h / 2, w * 0.3f, 0)))
+////            vy = velY;
+//    }
 
-    private boolean inTile(float x, float y) {
-//        x = x / TileMap.tileSize;
-//        y = y / TileMap.tileSize;
-
-        //TEMP
-        return false;
-//        int tileType = tileMap.tileArray[Math.round(x)][Math.round(y)]; //NOTE: if Math.round() doesn't work, cast it int instead
-//        return tileType == TileMap.SOLID || tileType == TileMap.WINDOW;
-    }
+//    protected boolean collideTile(float ax, float ay, float dx, float dy) {
+//        return inTile(x + ax, y + ay) || inTile(x + ax + dx, y + ay + dy) || inTile(x + ax - dx, y + ay - dy);
+//    }
+//
+//    private boolean inTile(float x, float y) {
+////        x = x / TileMap.tileSize;
+////        y = y / TileMap.tileSize;
+//
+//        //TEMP
+//        return false;
+////        int tileType = tileMap.tileArray[Math.round(x)][Math.round(y)]; //NOTE: if Math.round() doesn't work, cast it int instead
+////        return tileType == TileMap.SOLID || tileType == TileMap.WINDOW;
+//    }
 
 
     public void deathSequence() {

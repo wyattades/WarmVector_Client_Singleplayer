@@ -1,17 +1,5 @@
 package Map;
 
-import Entities.Enemy;
-import Entities.Entity;
-import Entities.ThisPlayer;
-import Entities.Tile;
-import Entities.Weapon.M4rifle;
-import StaticManagers.FileManager;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/26/2015.

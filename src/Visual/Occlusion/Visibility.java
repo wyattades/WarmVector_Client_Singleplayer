@@ -1,7 +1,6 @@
 package Visual.Occlusion;
 
 import Map.GeneratedEnclosure;
-import Map.TileMap;
 
 import java.awt.*;
 import java.awt.geom.GeneralPath;

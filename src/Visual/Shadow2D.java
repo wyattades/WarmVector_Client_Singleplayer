@@ -1,13 +1,5 @@
 package Visual;
 
-import Entities.Entity;
-import Main.Game;
-import Map.TileMap;
-
-import java.awt.*;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 3/12/2015.

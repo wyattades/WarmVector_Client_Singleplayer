@@ -34,7 +34,7 @@ public class Enemy extends Player {
         if (!playerDead && lineOfSight(px, py) && distBetween(px, py) < 400) {
             stopMove();
             if (distBetween(px, py) > 100) {
-                goTowards(px, py, (float) 1);
+                //goTowards(px, py, (float) 1);
             }
             if (lookingAt(px, py, 0.05f)) {
                 if (Game.currentTimeMillis() - shootTime > 400) {
@@ -55,21 +55,21 @@ public class Enemy extends Player {
         }
     }
 
-    public void patrol(float speed) {
-        if (vx == 0 && vy == 0) {
-            float r = Game.random(0, 6.29f);
-            vx = speed * (float) Math.cos(r);
-            vy = speed * (float) Math.sin(r);
-        }
-        if ((vx < 0 && collideTile(-w / 2, 0, 0, h * 0.3f)) || (vx > 0 && collideTile(w / 2, 0, 0, h * 0.3f))) vx *= -1;
-        if ((vy > 0 && collideTile(0, h / 2, w * 0.3f, 0)) || (vy < 0 && collideTile(0, -h / 2, w * 0.3f, 0))) vy *= -1;
-    }
+//    public void patrol(float speed) {
+//        if (vx == 0 && vy == 0) {
+//            float r = Game.random(0, 6.29f);
+//            vx = speed * (float) Math.cos(r);
+//            vy = speed * (float) Math.sin(r);
+//        }
+//        if ((vx < 0 && collideTile(-w / 2, 0, 0, h * 0.3f)) || (vx > 0 && collideTile(w / 2, 0, 0, h * 0.3f))) vx *= -1;
+//        if ((vy > 0 && collideTile(0, h / 2, w * 0.3f, 0)) || (vy < 0 && collideTile(0, -h / 2, w * 0.3f, 0))) vy *= -1;
+//    }
 
-    void goTowards(float ix, float iy, float speed) {
-        double a = angle_Between(ix, iy);
-        updateVelX(speed * (float) Math.cos(a));
-        updateVelY(speed * (float) Math.sin(a));
-    }
+//    void goTowards(float ix, float iy, float speed) {
+//        double a = angle_Between(ix, iy);
+//        updateVelX(speed * (float) Math.cos(a));
+//        updateVelY(speed * (float) Math.sin(a));
+//    }
 
     void orientTo(float ix, float iy, float rate) {
         if (angle_Between(ix, iy) < 0) {

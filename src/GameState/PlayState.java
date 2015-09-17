@@ -16,6 +16,7 @@ import Visual.Occlusion.Visibility;
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,7 +27,7 @@ import java.util.Iterator;
  */
 public class PlayState extends GameState {
 
-    private static float SCALEFACTOR = 1.0f;
+    private static float SCALEFACTOR = 0.5f;
 
     private HashMap<String, ArrayList<Entity>> entityList;
     private TileMap tileMap;
@@ -37,7 +38,7 @@ public class PlayState extends GameState {
     private ThisPlayer thisPlayer;
     private Visibility shadow;
     private boolean dead;
-
+    GeneratedEnclosure map;
     public PlayState(GameStateManager gsm) {
         super(gsm);
     }
@@ -52,7 +53,7 @@ public class PlayState extends GameState {
 //        tileMap = new TileMap(gsm.level);
         //entityList = tileMap.setEntities();
 
-        GeneratedEnclosure map = new GeneratedEnclosure(200, 200, 1.0f);
+        map = new GeneratedEnclosure(200, 200, 1.0f);
         GeneratedEntities generatedEntities = new GeneratedEntities(map, 1.0f);
         entityList = generatedEntities.getSpawnedEntities();
         shadow = new Visibility(map);
@@ -84,6 +85,8 @@ public class PlayState extends GameState {
 
         //Zoom in
         g.scale(SCALEFACTOR, SCALEFACTOR);
+
+//        g.rotate(thisPlayer.orient, Game.WIDTH, Game.HEIGHT);
 
         //translate screen to follow player
         g.translate(screenMover.screenPosX - thisPlayer.x + Game.WIDTH / 2 / SCALEFACTOR, screenMover.screenPosY - thisPlayer.y + Game.HEIGHT / 2 / SCALEFACTOR);
@@ -127,14 +130,12 @@ public class PlayState extends GameState {
 //        g.setColor(Color.blue);
 //        g.setStroke(new BasicStroke(2));
 //
-//        g.setStroke(new BasicStroke(0.7f));
-//        g.setColor(Color.green);
-//        for (Line2D line : generatedMap.walls) {
-//            g.draw(line);
-//        }
-//        if (InputManager.isKeyPressed("SPACE")) {
-//            generatedMap = new GeneratedMap(200,200,1.0f);
-//        }
+        g.setStroke(new BasicStroke(0.7f));
+        g.setColor(Color.green);
+        for (Line2D line : map.walls) {
+            g.draw(line);
+        }
+
 
         //reset transformation
         g.setTransform(oldT);
@@ -151,9 +152,6 @@ public class PlayState extends GameState {
     }
 
     public void update() {
-
-        //This is here, rather than in inputHandle(), because it needs to be run before thisPlayer is updated
-
 
         //create a copy of thisPlayer for convenience
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
@@ -258,12 +256,16 @@ public class PlayState extends GameState {
     }
 
     public void inputHandle(InputManager inputManager) {
-
+        if (inputManager.isKeyPressed("SPACE")) {
+            map = new GeneratedEnclosure(200, 200, 1.0f);
+            shadow = new Visibility(map);
+        }
         gsm.cursor.setPosition(inputManager.mouse.x + Math.round(screenMover.screenVelX), inputManager.mouse.y + Math.round(screenMover.screenVelY));
 
         //If leftKey is pressed and right isn't, player goes left
         if (inputManager.isKeyPressed("LEFT") && !inputManager.isKeyPressed("RIGHT"))
             thisPlayer.updateVelX(-1);
+//            thisPlayer.updateVel(inputManager.isKeyPressed("LEFT"), inputManager.isKeyPressed("RIGHT"), inputManager.isKeyPressed("UP"), inputManager.isKeyPressed("DOWN"));
             //If rightKey is pressed and left isn't, player goes right
         else if (inputManager.isKeyPressed("RIGHT") && !inputManager.isKeyPressed("LEFT"))
             thisPlayer.updateVelX(1);
