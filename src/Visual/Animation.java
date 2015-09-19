@@ -25,14 +25,10 @@ public class Animation {
         this.frameRate = frameRate;
         this.orient = orient;
         sprites = FileManager.animations.get(fileName);
-        if (sprites == null) {
-            System.out.println("NullReference: Could not locate file: " + fileName);
-            System.exit(1);
-        }
         length = sprites.length;
         w = sprites[0].getWidth();
         h = sprites[0].getHeight();
-        if (hitColor != Color.white) {
+        if (hitColor != null) {
             for (int i = 0; i < length; i++) {
                 sprites[i] = tintImage(sprites[i], hitColor);
             }

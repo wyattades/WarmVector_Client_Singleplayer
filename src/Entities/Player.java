@@ -19,71 +19,78 @@ public abstract class Player extends Entity {
     public float vx, vy;
     public float life;
     public float maxLife;
-    private int topSpeed = 5;
+    public static int topSpeed = 5;
     public int shootTime;
     protected BufferedImage shootSprite, defaultSprite, deadSprite;
     protected GeneratedEnclosure ge;
 
-    Player(int x, int y, float orient, Weapon weapon, GeneratedEnclosure ge) {
+    Player(float x, float y, float orient, GeneratedEnclosure ge) {
         super(x, y,  orient);
         this.ge = ge;
-        this.weapon = weapon;
         hitColor = Color.red;
         vx = vy = 0;
         life = maxLife = 100.0f;
+        shootTime = Game.currentTimeMillis();
     }
 
-    public void setSpriteToDefault(boolean bool) {
+    public void setWeapon(Weapon w) {
+        weapon = w;
+        if (w == null) {
+            setSpriteToDefault(true);
+        } else {
+            weapon.user = this;
+            setSpriteToDefault(false);
+        }
+    }
+
+    protected void setSpriteToDefault(boolean bool) {
         if (bool) sprite = defaultSprite;
         else sprite = shootSprite;
     }
 
     public void stopMove() {
-        vx = vy = 0;
+        vx = 0;
+        vy = 0;
     }
 
     public void updatePosition() {
-        x += vx;
-        y += vy;
-        vx -= 0;
+        if (!obstacleX(vx)) x += vx;
+        if (!obstacleY(vy)) y += vy;
+        vx = 0;
+        vy = 0;
     }
 
+    @Override
     public boolean hit(int amount, float angle) {
         life -= amount;
-        return false;
-    }
-
-
-    public void updateLife() {
         if (life < 0) {
             life = 0;
             state = false;
         }
+        return false;
     }
 
     public void update() {
-        if (Math.abs(vx) > 0 && Math.abs(vy) > 0) {
-            vx /= Math.sqrt(2);
-            vy /= Math.sqrt(2);
-        }
+//        if (vx != 0 && vy != 0) {
+//            vx /= Math.sqrt(2);
+//            vy /= Math.sqrt(2);
+//        }
         updatePosition();
-        updateLife();
         updateCollideBox();
     }
 
     public Weapon getWeapon() {
+        float spawnDist = 30;
         Weapon w = weapon;
-        w.x = x;
-        w.y = y;
-        w.orient = Game.random(0, 6.28f);
+        w.x = x + spawnDist * (float)Math.cos(Game.random(0,6.29f));
+        w.y = y + spawnDist * (float)Math.sin(Game.random(0,6.29f));
+        w.orient = Game.random(0,6.29f);
         return w;
     }
 
-    public void updateVelX(int dir) {
+    private boolean obstacleX(float vx) {
 
-        float velX = dir * topSpeed;
-
-        Rectangle2D futureX = new Rectangle2D.Float(x - w/2 + velX, y - h/2, w, h);
+        Rectangle2D futureX = new Rectangle2D.Float(x - w/2 + vx, y - h/2, w, h);
 
         boolean collidesX = false;
 
@@ -92,15 +99,13 @@ public abstract class Player extends Entity {
                 collidesX = true;
             }
         }
-        if (!collidesX) vx = velX;
 
+        return collidesX;
     }
 
-    public void updateVelY(int dir) {
+    private boolean obstacleY(float vy) {
 
-        float velY = dir * topSpeed;
-
-        Rectangle2D futureY = new Rectangle2D.Float(x - w/2, y - h/2 + velY, w, h);
+        Rectangle2D futureY = new Rectangle2D.Float(x - w/2, y - h/2 + vy, w, h);
 
         boolean collidesY = false;
 
@@ -109,8 +114,39 @@ public abstract class Player extends Entity {
                 collidesY = true;
             }
         }
-        if (!collidesY) vy = velY;
+
+        return collidesY;
+
     }
+
+//    public void updateVelX(float velX) {
+//
+//        Rectangle2D futureX = new Rectangle2D.Float(x - w/2 + velX, y - h/2, w, h);
+//
+//        boolean collidesX = false;
+//
+//        for (Line2D line : ge.walls) {
+//            if (futureX.intersectsLine(line)) {
+//                collidesX = true;
+//            }
+//        }
+//        if (!collidesX) vx = velX;
+//
+//    }
+//
+//    public void updateVelY(float velY) {
+//
+//        Rectangle2D futureY = new Rectangle2D.Float(x - w/2, y - h/2 + velY, w, h);
+//
+//        boolean collidesY = false;
+//
+//        for (Line2D line : ge.walls) {
+//            if (futureY.intersectsLine(line)) {
+//                collidesY = true;
+//            }
+//        }
+//        if (!collidesY) vy = velY;
+//    }
 
 //    public void updateVelY(float velY) {
 //        velY *= topSpeed;
@@ -146,6 +182,7 @@ public abstract class Player extends Entity {
 
     public void deathSequence() {
         weapon = null;
+        stopMove();
         sprite = deadSprite;
         //animation???
     }

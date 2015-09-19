@@ -21,7 +21,7 @@ public class IntroState extends GameState {
     }
 
     public void init() {
-        intro = new Animation(Game.WIDTH / 2, Game.HEIGHT / 2, 0, 40, Color.white, "intro_");
+        intro = new Animation(Game.WIDTH / 2, Game.HEIGHT / 2, 0, 40, null, "intro_");
         intro.w = Game.WIDTH;
         intro.h = Game.HEIGHT;
     }

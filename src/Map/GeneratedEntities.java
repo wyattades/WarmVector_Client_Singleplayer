@@ -1,7 +1,12 @@
 package Map;
 
+import Entities.Enemy;
 import Entities.Entity;
+import Entities.Player;
 import Entities.ThisPlayer;
+import Entities.Weapon.M4rifle;
+import Entities.Weapon.Remington;
+import Entities.Weapon.Weapon;
 import Main.Game;
 
 import java.util.ArrayList;
@@ -28,10 +33,23 @@ public class GeneratedEntities {
 
         Rect playerSpawn = map.cells.get((int) Game.random(0, map.rooms.size() - 1));
 
-        entityList.get("thisPlayer").add(new ThisPlayer( randomRoomX(playerSpawn) , randomRoomY(playerSpawn) , 0 , null, map ));
+        entityList.get("thisPlayer").add(new ThisPlayer( randomRoomX(playerSpawn) , randomRoomY(playerSpawn), map ));
+
+        entityList.get("weapon").add(
+                new Remington(
+                        entityList.get("thisPlayer").get(0).x + 50,
+                        entityList.get("thisPlayer").get(0).y,
+                        Game.random(0,6.29f),
+                        null
+                )
+        );
 
         for (Rect r : map.rooms) {
-
+            if (!r.equals(playerSpawn)) {
+                Enemy newEnemy = new Enemy(randomRoomX(r), randomRoomY(r), Game.random(0, 6.29f), map);
+                newEnemy.setWeapon(new M4rifle(0,0,0,newEnemy));
+                entityList.get("enemy").add(newEnemy);
+            }
         }
     }
 

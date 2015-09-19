@@ -1,11 +1,10 @@
 package Map;
 
 import Main.Game;
+import Visual.Occlusion.*;
 
-import java.awt.geom.Area;
-import java.awt.geom.Line2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Rectangle2D;
+import java.awt.*;
+import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +47,7 @@ public class GeneratedEnclosure {
         //Local constants
         float roomReductionFactor = 0.42f;
         int min_spacing = 4;
-        int path_thickness = 6;
+        int path_thickness = 8;
 
         //Global constants
         splitSizeFactor = 0.22f;
@@ -282,6 +281,18 @@ public class GeneratedEnclosure {
     //Rounds to nearest multiple of v from input i
     int round(float i, int v) {
         return Math.round(i / v) * v;
+    }
+
+    public void draw(Graphics2D g) {
+        Polygon CUTOUT = new Polygon();
+        for (Line2D w : walls) {
+            CUTOUT.addPoint((int)w.getX1(), (int)w.getY1());
+        }
+        GeneralPath SHADOW = new GeneralPath(CUTOUT);
+        SHADOW.append( new Rectangle2D.Float(-width, -height, 3 * width, 3 * height), false);
+
+        g.setColor(Color.darkGray);
+        g.fill(SHADOW);
     }
 
 }

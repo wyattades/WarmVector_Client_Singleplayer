@@ -7,6 +7,7 @@ import StaticManagers.FileManager;
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -15,36 +16,41 @@ import java.awt.geom.AffineTransform;
 public abstract class Weapon extends Entity {
 
     public float vx, vy;
-    public int ammo, type, amount, damage, rate, maxAmmo, gunLength;
+    public int ammo, amount, damage, clipSize, clipAmount, rate;
     public String name;
-    public boolean isHeld;
-    public float bVel, spread;
+    public float bVel, spread, gunLength;
     public Player user;
     public Clip hitSound, shootSound;
 
-    Weapon(int x, int y,  float orient, Player i_user) {
-        super(x, y,  orient);
-        vx = vy = 0;
-        sprite = FileManager.images.get("m4.png");
-        hitSound = FileManager.sounds.get("bulletHit.wav");
-        isHeld = false;
-        user = i_user;
-        w = sprite.getWidth();
-        h = sprite.getHeight();
-        hitColor = Color.DARK_GRAY;
-        setConstants();
-        ammo = maxAmmo;
-    }
+    Weapon(float x, float y,  float orient, Player i_user,
+           String name, int clipSize, int clipAmount, int amount, int rate,
+           float gunLength, int damage, float spread, float bVel, Clip shootSound) {
 
-    public void unloadUser() {
-        user = null;
+        super(x, y,  orient);
+
+        vx = vy = 0;
+        hitSound = FileManager.sounds.get("bulletHit.wav");
+        user = i_user;
+        hitColor = Color.DARK_GRAY;
+
+        this.name = name;
+        this.ammo = this.clipSize = clipSize;
+        this.clipAmount = clipAmount;
+        this.amount = amount;
+        this.rate = rate;
+        this.gunLength = gunLength;
+        this.damage = damage;
+        this.spread = spread;
+        this.bVel = bVel;
+        this.shootSound = shootSound;
+
     }
 
     public void draw(Graphics2D g) {
         if (user != null) {
             AffineTransform oldTForm = g.getTransform();
-            g.rotate(orient, x, y);
-            g.drawImage(sprite, Math.round(x - w / 2 + 24), Math.round(y - h / 2 + 2), null);
+            g.rotate(user.orient, user.x, user.y);
+            g.drawImage(sprite, Math.round(user.x - w / 2 + 24), Math.round(user.y - h / 2 + 2), null);
             g.setTransform(oldTForm);
         } else {
             AffineTransform oldTForm = g.getTransform();
@@ -54,8 +60,6 @@ public abstract class Weapon extends Entity {
         }
     }
 
-    protected abstract void setConstants();
-
     public void changeAmmo(int amount) {
         if (ammo > 0) {
             ammo += amount;
@@ -63,19 +67,12 @@ public abstract class Weapon extends Entity {
     }
 
     public boolean hit(int amount, float angle) {
-        vx += Math.cos(angle);
-        vy += Math.sin(angle);
+//        vx += Math.cos(angle);
+//        vy += Math.sin(angle);
         return true;
     }
 
-    public void updatePos() {
-        if (user != null) {
-            orient = user.orient;
-            x = user.x;
-            y = user.y;
-        } else {
-            System.out.println("Unauthorized update of weapon position");
-            System.exit(1);
-        }
+    public void unloadUser() {
+        user = null;
     }
 }

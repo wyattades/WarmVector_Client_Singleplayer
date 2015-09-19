@@ -24,9 +24,15 @@ public abstract class Entity {
         this.y = y;
         this.orient = orient;
         state = true;
+
+        loadSprites();
+        w = sprite.getWidth();
+        h = sprite.getHeight();
         //Set color as pink for easy debugging (entity's hitColor should never be pink)
         hitColor = new Color(255, 0, 169);
     }
+
+    protected abstract void loadSprites();
 
     public void draw(Graphics2D g) {
         AffineTransform oldTForm = g.getTransform();

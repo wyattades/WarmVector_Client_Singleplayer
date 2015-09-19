@@ -10,12 +10,11 @@ public class Projectile extends Entity {
 
     private float speed, accel;
 
-    public Projectile(int x, int y, float orient, float speed, float acceleration) {
+    public Projectile(float x, float y, float orient, float speed, float acceleration) {
 
         super(x, y, orient);
         this.speed = speed;
         this.accel = acceleration;
-        sprite = FileManager.images.get("bullet");
 
     }
 
@@ -23,6 +22,11 @@ public class Projectile extends Entity {
         speed += accel;
         x += speed * Math.cos(orient);
         y += speed * Math.sin(orient);
+    }
+
+    @Override
+    protected void loadSprites() {
+        sprite = FileManager.images.get("bullet");
     }
 
     @Override

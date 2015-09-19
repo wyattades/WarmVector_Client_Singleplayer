@@ -3,30 +3,22 @@ package Entities.Weapon;
 import Entities.Player;
 import StaticManagers.FileManager;
 
+import java.awt.image.BufferedImage;
+
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/25/2015.
  */
 public class M4rifle extends Weapon {
 
-    public M4rifle(int x, int y, float orient, Player i_user) {
-        super(x, y, orient, i_user);
+    public M4rifle(float x, float y, float orient, Player i_user) {
+        super(x, y, orient, i_user,
+                "M4Rifle", 32, 2, 1, 100, 42, 15, 0.05f, 8, FileManager.sounds.get("m4_shoot.wav"));
     }
 
-    //USE ENUM INSTEAD???? IDK I WILL OVERHAUL Weapons LATER WHEN I ADD KNIVES AND ROCKETS AND STUFF
-    protected void setConstants() {
-        name = "M4Rifle";
+
+    @Override
+    protected void loadSprites() {
         sprite = FileManager.images.get("m4.png");
-        maxAmmo = 40;
-        type = 1;
-        bVel = 8;
-        amount = 1;
-        spread = 0.05f;
-        damage = 15;
-        rate = 100;
-        shootSound = FileManager.sounds.get("m4_shoot.wav");
-        gunLength = 44;
-
     }
-
 }

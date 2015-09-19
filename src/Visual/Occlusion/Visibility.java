@@ -37,8 +37,8 @@ public class Visibility {
 
     // Construct an empty visibility set
     public Visibility(GeneratedEnclosure map) {
-        BORDER = new Rectangle2D.Float();
-        BORDER.setRect(
+
+        BORDER = new Rectangle2D.Float(
                 -map.width,
                 -map.height,
                 3 * map.width,

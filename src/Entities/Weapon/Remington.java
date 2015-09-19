@@ -9,22 +9,13 @@ import StaticManagers.FileManager;
  */
 public class Remington extends Weapon {
 
-    public Remington(int x, int y,  float orient, Player i_user) {
-        super(x, y, orient, i_user);
+    public Remington(float x, float y,  float orient, Player i_user) {
+        super(x, y, orient, i_user,
+                "Remington", 6, 6, 6, 400, 42, 10, 0.25f, 7, FileManager.sounds.get("m4_shoot.wav"));
     }
 
-    protected void setConstants() {
-        name = "Remington";
+    @Override
+    protected void loadSprites() {
         sprite = FileManager.images.get("m4.png");
-        maxAmmo = 12;
-        type = 2;
-        bVel = 7;
-        amount = 6;
-        spread = 0.3f;
-        damage = 15;
-        rate = 400;
-        shootSound = FileManager.sounds.get("m4_shoot.wav");
-        gunLength = 44;
     }
-
 }

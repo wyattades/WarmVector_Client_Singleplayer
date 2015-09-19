@@ -1,6 +1,5 @@
 package Entities;
 
-import Entities.Weapon.Weapon;
 import Main.Game;
 import Map.GeneratedEnclosure;
 import StaticManagers.FileManager;
@@ -16,16 +15,18 @@ public class Enemy extends Player {
     public boolean shooting;
     private int shootTime;
 
-    public Enemy(int x, int y, float orient, Weapon weapon, GeneratedEnclosure ge) {
-        super(x, y, orient, weapon, ge);
+    public Enemy(float x, float y, float orient, GeneratedEnclosure ge) {
+        super(x, y, orient, ge);
         shooting = false;
+
+        life = maxLife = 25.0f;
+    }
+
+    @Override
+    protected void loadSprites() {
         shootSprite = FileManager.images.get("player1g.png");
         defaultSprite = FileManager.images.get("player1.png");
-        setSpriteToDefault(weapon != null);
-        w = sprite.getWidth();
-        h = sprite.getHeight();
-        life = maxLife = 25.0f;
-        shootTime = Game.currentTimeMillis();
+        setSpriteToDefault(weapon == null);
     }
 
     public void normalBehavior(float px, float py, boolean playerDead) {
@@ -34,7 +35,7 @@ public class Enemy extends Player {
         if (!playerDead && lineOfSight(px, py) && distBetween(px, py) < 400) {
             stopMove();
             if (distBetween(px, py) > 100) {
-                //goTowards(px, py, (float) 1);
+                goTowards(px, py, (float) 1);
             }
             if (lookingAt(px, py, 0.05f)) {
                 if (Game.currentTimeMillis() - shootTime > 400) {
@@ -65,11 +66,13 @@ public class Enemy extends Player {
 //        if ((vy > 0 && collideTile(0, h / 2, w * 0.3f, 0)) || (vy < 0 && collideTile(0, -h / 2, w * 0.3f, 0))) vy *= -1;
 //    }
 
-//    void goTowards(float ix, float iy, float speed) {
-//        double a = angle_Between(ix, iy);
+    void goTowards(float ix, float iy, float speed) {
+        double a = angle_Between(ix, iy);
 //        updateVelX(speed * (float) Math.cos(a));
 //        updateVelY(speed * (float) Math.sin(a));
-//    }
+       vx = (speed * (float) Math.cos(a));
+        vy = (speed * (float) Math.sin(a));
+    }
 
     void orientTo(float ix, float iy, float rate) {
         if (angle_Between(ix, iy) < 0) {

@@ -3,8 +3,12 @@ package Visual;
 import Entities.Entity;
 import Entities.Player;
 import Main.Game;
+import Map.GeneratedEnclosure;
 
+import javax.naming.LimitExceededException;
 import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,47 +30,63 @@ public class Bullet {
     public class TestPoint {
 
         public float dist;
-        public Entity e;
+        public Color hitColor;
+        public boolean goThrough;
 
-        public TestPoint(float dist, Entity e) {
+        public TestPoint(float dist, Color hitColor, boolean goThrough) {
             this.dist = dist;
-            this.e = e;
+            this.hitColor = hitColor;
+            this.goThrough = goThrough;
         }
     }
 
     public class CollidePoint {
 
         public Color hitColor;
-        public int x, y;
+        public float x, y;
 
-        public CollidePoint(int x, int y, Color c) {
+        public CollidePoint(float x, float y, Color hitColor) {
             this.x = x;
             this.y = y;
-            hitColor = c;
+            this.hitColor = hitColor;
         }
     }
 
-    public Bullet(HashMap<String, ArrayList<Entity>> allEnts, Player shooter) {
+    public Bullet(HashMap<String, ArrayList<Entity>> allEnts, GeneratedEnclosure map, Player shooter) {
+
+        float offset = 14;
+
         state = true;
         fill = new Color(255, 255, (int) Game.random(50, 220), 200);
         collidePoints = new ArrayList<CollidePoint>();
         ArrayList<TestPoint> testPoints = new ArrayList<TestPoint>();
-        displayTime = Game.currentTimeMillis();
-        orient = shooter.orient + Game.random(-shooter.getWeapon().spread, shooter.getWeapon().spread);
+        orient = shooter.orient + Game.random(-shooter.weapon.spread, shooter.weapon.spread);
         float checkLine = 10000; //just a big number
-        fx = (float) (shooter.getWeapon().x + checkLine * Math.cos(orient));
-        fy = (float) (shooter.getWeapon().y + checkLine * Math.sin(orient));
-        ix = shooter.getWeapon().x;
-        iy = shooter.getWeapon().y;
+        fx = (float) (shooter.x + checkLine * Math.cos(orient));
+        fy = (float) (shooter.y + checkLine * Math.sin(orient));
+        ix = shooter.x + shooter.weapon.gunLength * (float) Math.cos(shooter.orient);
+        iy = shooter.y + shooter.weapon.gunLength * (float) Math.sin(shooter.orient);
+
+        Line2D intersector = new Line2D.Float(ix, iy, fx, fy);
 
         for (HashMap.Entry<String, ArrayList<Entity>> entry : allEnts.entrySet()) {
             for (Entity e : entry.getValue()) {
                 if (!e.equals(shooter)) {
-                    if (e.collideBox.intersectsLine(ix, iy, fx, fy)) {
-                        float dist = (float) (Math.sqrt((ix - e.x) * (ix - e.x) + (iy - e.y) * (iy - e.y)) - 20);
-                        testPoints.add(new TestPoint(dist, e));
+                    if (e.collideBox.intersectsLine(intersector)) {
+                        float dist = (float) (Math.sqrt((ix - e.x) * (ix - e.x) + (iy - e.y) * (iy - e.y)) - offset);
+                        testPoints.add(new TestPoint(dist, e.hitColor, e.hit(shooter.weapon.damage, orient)));
                     }
                 }
+            }
+        }
+
+        for (Line2D wall : map.walls) {
+            if (wall.intersectsLine(intersector)) {
+                Point2D intersection = getIntersectionPoint(wall, intersector);
+                float dx = (float)(offset * Math.cos(orient));
+                float dy = (float)(offset * Math.sin(orient));
+                float dist = (float) (Math.sqrt((ix - intersection.getX() - dx) * (ix - intersection.getX() - dx) + (iy - intersection.getY() - dy) * (iy - intersection.getY() - dy)) - offset);
+                testPoints.add(new TestPoint(dist, ThemeColors.textTitle, false));
             }
         }
 
@@ -78,15 +98,16 @@ public class Bullet {
         });
 
         for (TestPoint p : testPoints) {
-            collidePoints.add(new CollidePoint((int) (ix + (p.dist) * Math.cos(orient)), (int) (iy + (p.dist) * Math.sin(orient)), p.e.hitColor));
-            if (!p.e.hit(shooter.getWeapon().damage, orient)) {
-                fx = (int) (ix + (p.dist) * Math.cos(orient));
-                fy = (int) (iy + (p.dist) * Math.sin(orient));
+            collidePoints.add(new CollidePoint((float) (ix + p.dist * Math.cos(orient)),(float) (iy + p.dist * Math.sin(orient)), p.hitColor));
+            if (!p.goThrough) {
+                fx = (float) (ix + (p.dist) * Math.cos(orient));
+                fy = (float) (iy + (p.dist) * Math.sin(orient));
                 break;
             }
         }
-        ix = ix + shooter.getWeapon().gunLength * (int) Math.cos(orient);
-        iy = iy + shooter.getWeapon().gunLength * (int) Math.sin(orient);
+
+        displayTime = Game.currentTimeMillis();
+
     }
 
     public void draw(Graphics2D g) {
@@ -98,6 +119,22 @@ public class Bullet {
         if (Game.currentTimeMillis() - displayTime > 16) {
             state = false;
         }
+    }
+
+    private Point2D getIntersectionPoint(Line2D line1, Line2D line2) {
+        double px = line1.getX1(),
+                py = line1.getY1(),
+                rx = line1.getX2()-px,
+                ry = line1.getY2()-py;
+        double qx = line2.getX1(),
+                qy = line2.getY1(),
+                sx = line2.getX2()-qx,
+                sy = line2.getY2()-qy;
+        double det = sx*ry - sy*rx;
+        double z = (sx*(qy-py)+sy*(px-qx))/det;
+        return new Point2D.Float(
+                (float)(px+z*rx), (float)(py+z*ry));
+
     }
 
 }

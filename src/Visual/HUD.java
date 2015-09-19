@@ -2,6 +2,7 @@ package Visual;
 
 import Entities.Player;
 import Main.Game;
+import Map.GeneratedEnclosure;
 
 import java.awt.*;
 
@@ -31,8 +32,11 @@ public class HUD {
             enemyBoxColor = new Color(255, 0, 0, 180);
 
 
-    public HUD(Player user, int i_enemies) {
+    private GeneratedEnclosure map;
+
+    public HUD(Player user, int i_enemies, GeneratedEnclosure map) {
         this.user = user;
+        this.map = map;
         startEnemies = i_enemies;
         enemies = i_enemies;
     }
@@ -42,7 +46,6 @@ public class HUD {
     }
 
     private static Polygon cross = new Polygon();
-
     static {
         int w = 10;
         cross.addPoint(-w, w / 2);
@@ -65,13 +68,13 @@ public class HUD {
         g.setFont(ThemeColors.fontHUD);
 
         String lifeS = String.valueOf((int) user.life),
-                ammoS = user.weapon == null ? "" : "Ammo: " + user.weapon.ammo + " / " + user.weapon.maxAmmo;
+                ammoS = user.weapon == null ? "" : "Ammo: " + user.weapon.ammo + " / " + user.weapon.clipAmount*user.weapon.clipSize;
         g.setColor(defaultHudColor);
 
 //        g.drawString(enemiesS, Game.WIDTH/2 - textWidth(enemiesS, g)/2, HUDy + textHeight(enemiesS,g)/2);
 
         g.drawString(ammoS, HUDx - textWidth(ammoS, g), HUDy + textHeight(ammoS, g) / 2);
-        for (int i = -startEnemies / 2; i < startEnemies / 2; i++) {
+        for (int i = -(int)Math.floor(startEnemies / 2f); i < (int)Math.ceil(startEnemies / 2f); i++) {
             g.fillRect(Game.WIDTH / 2 + i * 70, Game.HEIGHT - 50, 50, 50);
         }
         if (user.life <= 10) g.setColor(nearDeathHudColor);

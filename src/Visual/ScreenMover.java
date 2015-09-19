@@ -1,6 +1,6 @@
 package Visual;
 
-import Entities.ThisPlayer;
+import Entities.Player;
 import Main.Game;
 
 /**
@@ -11,9 +11,9 @@ public class ScreenMover {
 
     public float screenVelX, screenVelY, screenPosX, screenPosY;
     private float maxVel;
-    private ThisPlayer player;
+    private Player player;
 
-    public ScreenMover(ThisPlayer player) {
+    public ScreenMover(Player player) {
         screenVelX = screenVelY = 0;
         screenPosX = screenPosY = 0;
         maxVel = 24;

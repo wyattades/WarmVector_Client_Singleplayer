@@ -40,7 +40,6 @@ public class EntityManager {
 
     public void update() {
         for (Weapon w : weapons) {
-            w.updatePos();
             w.updateCollideBox();
         }
         for (Enemy e : enemies) {
