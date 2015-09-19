@@ -55,7 +55,7 @@ public class Visibility {
         }
     }
 
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, Color color) {
         Polygon CUTOUT = new Polygon();
         for (Point p : output) {
             CUTOUT.addPoint(Math.round(p.x), Math.round(p.y));
@@ -63,7 +63,7 @@ public class Visibility {
         GeneralPath SHADOW = new GeneralPath(CUTOUT);
         SHADOW.append(BORDER, false);
 
-        g.setColor(COLOR);
+        g.setColor(color);
         g.fill(SHADOW);
     }
 

@@ -89,7 +89,7 @@ public class PlayState extends GameState {
     public void draw(Graphics2D g) {
 
         //TEMP
-        g.setColor(Color.lightGray);
+        g.setColor(new Color(180,180,180));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
         //Create copy of transform for later
@@ -135,18 +135,14 @@ public class PlayState extends GameState {
         }
 
         //TEMP
-        shadow.draw(g);
-//        map.draw(g);
-//        tileMap.drawFore(g);
-        //g.scale(tileMap.tileSize, tileMap.tileSize);
-//        g.setColor(Color.blue);
-//        g.setStroke(new BasicStroke(2));
-//
-        g.setStroke(new BasicStroke(5f,BasicStroke.CAP_SQUARE,BasicStroke.JOIN_BEVEL));
-        g.setColor(Color.darkGray);
+        shadow.draw(g, new Color(20,20,20));
+        map.draw(g, new Color(60,60,60));
+        g.setColor(new Color(50,50,50));
+        g.setStroke(new BasicStroke(2));
         for (Line2D line : map.walls) {
             g.draw(line);
         }
+
 
 
         //reset transformation

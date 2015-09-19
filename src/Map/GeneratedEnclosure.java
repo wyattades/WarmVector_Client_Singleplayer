@@ -283,7 +283,7 @@ public class GeneratedEnclosure {
         return Math.round(i / v) * v;
     }
 
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g, Color color) {
         Polygon CUTOUT = new Polygon();
         for (Line2D w : walls) {
             CUTOUT.addPoint((int)w.getX1(), (int)w.getY1());
@@ -291,7 +291,7 @@ public class GeneratedEnclosure {
         GeneralPath SHADOW = new GeneralPath(CUTOUT);
         SHADOW.append( new Rectangle2D.Float(-width, -height, 3 * width, 3 * height), false);
 
-        g.setColor(Color.darkGray);
+        g.setColor(color);
         g.fill(SHADOW);
     }
 
