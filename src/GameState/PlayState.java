@@ -8,29 +8,17 @@ import Entities.Weapon.Weapon;
 import Main.Game;
 import Map.GeneratedEnclosure;
 import Map.GeneratedEntities;
-import Map.TileMap;
-import StaticManagers.FileManager;
 import StaticManagers.InputManager;
 import Visual.*;
 import Visual.Occlusion.Visibility;
-import com.sun.prism.*;
-import javafx.geometry.*;
-import javafx.geometry.Insets;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -41,7 +29,6 @@ public class PlayState extends GameState {
     private static float SCALEFACTOR = 3f;
 
     private HashMap<String, ArrayList<Entity>> entityList;
-    private TileMap tileMap;
     private ScreenMover screenMover;
     private HUD hud;
     private ArrayList<Bullet> bullets;
@@ -136,12 +123,12 @@ public class PlayState extends GameState {
 
         //TEMP
         shadow.draw(g, new Color(20,20,20));
+
         map.draw(g, new Color(60,60,60));
+
         g.setColor(new Color(50,50,50));
         g.setStroke(new BasicStroke(2));
-        for (Line2D line : map.walls) {
-            g.draw(line);
-        }
+        map.walls.forEach(g::draw);
 
 
 
@@ -152,7 +139,7 @@ public class PlayState extends GameState {
             hud.draw(g);
             gsm.cursor.draw(g);
         } else {
-            g.setColor(ThemeColors.textOver);
+            g.setColor(ThemeColors.buttonDefault);
             g.setFont(ThemeColors.fontButton);
             g.drawString("PRESS [SPACE] TO RESTART", Game.WIDTH / 2, Game.HEIGHT - 60);
         }
@@ -177,9 +164,7 @@ public class PlayState extends GameState {
         shadow.setLightLocation(thisPlayer.x, thisPlayer.y);
         shadow.sweep(999);
 
-        for (Bullet b : bullets) {
-            b.update();
-        }
+        bullets.forEach(Bullet::update);
         for (Entity entity : entityList.get("weapon")) {
             Weapon w = (Weapon) entity;
             w.updateCollideBox();
@@ -191,9 +176,7 @@ public class PlayState extends GameState {
             if (e.shooting) addBullets(e);
             //if (e.life < 0) entityList.get("weapon").add(e.weapon);
         }
-        for (Animation a : animations) {
-            a.update();
-        }
+        animations.forEach(Animation::update);
 
         for (int i = bullets.size() - 1; i >= 0; i--) {
             if (!bullets.get(i).state) bullets.remove(i); // <-- should I remove "object" or "index location"???
@@ -214,7 +197,7 @@ public class PlayState extends GameState {
                             Player p = (Player) entry.getValue().get(i);
                             if (p.weapon != null) {
                                 p.weapon.unloadUser();
-                                entityList.get("weapon").add(p.getWeapon());
+                                entityList.get("weapon").add(p.getWeaponForDrop());
                             }
                             int enemyCount = entityList.get("enemy").size() - 1;
                             hud.updateEnemyAmount(enemyCount);
@@ -242,7 +225,7 @@ public class PlayState extends GameState {
             for (int i = 0; i < p.weapon.amount; i++) {
                 Bullet b = new Bullet(entityList, map, p);
                 for (Bullet.CollidePoint point : b.collidePoints) {
-                    animations.add(new Animation((int)point.x,(int) point.y, b.orient + (float) Math.PI, 2, point.hitColor, "hit_"));
+                    animations.add(new Animation((int)point.x,(int) point.y, b.orient + (float) Math.PI, 1, point.hitColor, "hit_"));
                     p.weapon.hitSound.stop();
                     Clip copy = p.weapon.hitSound;
                     copy.setFramePosition(0);
@@ -251,9 +234,6 @@ public class PlayState extends GameState {
 
                 //Add bullet object to arrayList so it can be updated and displayed
                 bullets.add(b);
-
-
-
             }
             //Subtract one ammo from player
             p.weapon.changeAmmo(-1);
@@ -271,30 +251,36 @@ public class PlayState extends GameState {
     }
 
     public void inputHandle(InputManager inputManager) {
+
         gsm.cursor.setPosition(inputManager.mouse.x + Math.round(screenMover.screenVelX), inputManager.mouse.y + Math.round(screenMover.screenVelY));
 
-        //thisPlayer.stopMove();
+//        for (String eventName : inputManager.getEvents()) {
+//            switch(eventName) {
+//                case "LEFT":
+//                    thisPlayer.vx = - Player.topSpeed;
+//                    break;
+//                default:
+//                    System.out.println("Unknown event name: " + eventName);
+//                    break;
+//            }
+//        }
+
         //If leftKey is pressed and right isn't, player goes left
         if (inputManager.isKeyPressed("LEFT") && !inputManager.isKeyPressed("RIGHT"))
-//            thisPlayer.updateVelX(-Player.topSpeed);
         thisPlayer.vx = - Player.topSpeed;
-//            thisPlayer.updateVel(inputManager.isKeyPressed("LEFT"), inputManager.isKeyPressed("RIGHT"), inputManager.isKeyPressed("UP"), inputManager.isKeyPressed("DOWN"));
-            //If rightKey is pressed and left isn't, player goes right
+
+        //If rightKey is pressed and left isn't, player goes right
         else if (inputManager.isKeyPressed("RIGHT") && !inputManager.isKeyPressed("LEFT"))
-//            thisPlayer.updateVelX(Player.topSpeed);
             thisPlayer.vx = Player.topSpeed;
 
 
         //If upKey is pressed and down isn't, player goes up
         if (inputManager.isKeyPressed("UP") && !inputManager.isKeyPressed("DOWN"))
-//            thisPlayer.updateVelY(-Player.topSpeed);
             thisPlayer.vy = - Player.topSpeed;
 
-            //If downKey is pressed and up isn't, player goes down
+        //If downKey is pressed and up isn't, player goes down
         else if (inputManager.isKeyPressed("DOWN") && !inputManager.isKeyPressed("UP"))
-//            thisPlayer.updateVelY(Player.topSpeed);
             thisPlayer.vy = Player.topSpeed;
-
 
 
         //If leftMouse is pressed, create bullets from player
@@ -307,38 +293,33 @@ public class PlayState extends GameState {
 
             inputManager.setMouseTime("RIGHTMOUSE", Game.currentTimeMillis());
 
-            if (thisPlayer.weapon != null) {
-                thisPlayer.weapon.unloadUser();
-                entityList.get("weapon").add(thisPlayer.getWeapon());
-                thisPlayer.setWeapon(null);
-                for (int i = 0; i < entityList.get("weapon").size() - 1; i++) {
-                    Weapon w = (Weapon) entityList.get("weapon").get(i);
-                    if (thisPlayer.collideBox.intersects(w.collideBox)) {
-                        thisPlayer.setWeapon(w);
-                        entityList.get("weapon").remove(w);
-                        break;
-                    }
-                }
-            } else {
-                for (int i = 0; i < entityList.get("weapon").size(); i++) {
-                    Weapon w = (Weapon) entityList.get("weapon").get(i);
-                    if (thisPlayer.collideBox.intersects(w.collideBox)) {
-                        thisPlayer.setWeapon(w);
-                        entityList.get("weapon").remove(w);
-                        break;
-                    }
+            boolean availableWeapon = false;
+            for (int i = 0; i < entityList.get("weapon").size(); i++) {
+                Weapon w = (Weapon) entityList.get("weapon").get(i);
+                if (thisPlayer.collideBox.intersects(w.collideBox)) {
+                    if (thisPlayer.weapon != null) entityList.get("weapon").add(thisPlayer.getWeaponForDrop());
+                    thisPlayer.setWeapon(w);
+                    entityList.get("weapon").remove(w);
+                    availableWeapon = true;
+                    break;
                 }
             }
+            if (!availableWeapon && thisPlayer.weapon != null) {
+                entityList.get("weapon").add(thisPlayer.getWeaponForDrop());
+                thisPlayer.setWeapon(null);
+            }
+
         }
+
         if (inputManager.isKeyPressed("ESC") && Game.currentTimeMillis() - inputManager.getKeyTime("ESC") > 400) {
             inputManager.setKeyTime("ESC", Game.currentTimeMillis());
-//            gsm.cursor.updateOldPos();
-            //gsm.setPaused(true);
             gsm.setTopState(GameStateManager.PAUSE);
         }
+
         if (dead && inputManager.isKeyPressed("SPACE")) {
             init();
         }
 
     }
+
 }

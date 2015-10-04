@@ -30,6 +30,7 @@ public class ScreenMover {
 
         float posAccel = 0.6f;
         float negAccel = 0.5f;
+
         if (player.vx > 0) screenVelX = Math.min(screenVelX + posAccel, maxVel);
         else if (player.vx < 0) screenVelX = Math.max(screenVelX - posAccel, -maxVel);
         else {

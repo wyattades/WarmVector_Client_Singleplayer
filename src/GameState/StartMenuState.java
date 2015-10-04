@@ -33,6 +33,7 @@ public class StartMenuState extends MenuState {
         startY = Game.HEIGHT - 100;
         initButtons();
         barVisualizer = new BarVisualizer(menuWidth, ThemeColors.menuBackground);
+        gsm.cursor.setMouse(Game.WIDTH/2, Game.HEIGHT/2);
 
     }
 

@@ -3,22 +3,20 @@ package Visual;
 import java.awt.*;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by wyatt on 8/11/2015.
  */
 public abstract class ThemeColors {
 
     public static Color
-            //background = new Color(255, 21, 109),
-            outline = new Color(22, 20, 22),
-            textDefault = new Color(22, 20, 22),
-            textOver = new Color(158, 158, 158),
-            textTitle = new Color(0, 0, 0, 200),
+//            textOver = new Color(158, 158, 158),
+//            textTitle = new Color(0, 0, 0, 200),
             buttonSelected = new Color(220, 220, 220),
             buttonDefault = new Color(160, 160, 160, 200),
             buttonOver = new Color(249, 249, 249),
+            buttonOverOld = buttonOver,
             cursor = new Color(198, 198, 198),
-            menuBackground = new Color(22, 20, 22),
-            buttonOverOld = buttonOver;
+            menuBackground = new Color(22, 20, 22);
 
     public static Font
             fontLogo = new Font("Dotum Bold", Font.BOLD, 200),

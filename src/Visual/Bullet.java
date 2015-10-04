@@ -30,13 +30,13 @@ public class Bullet {
     public class TestPoint {
 
         public float dist;
+        public Entity e;
         public Color hitColor;
-        public boolean goThrough;
 
-        public TestPoint(float dist, Color hitColor, boolean goThrough) {
+        public TestPoint(float dist, Color hitColor, Entity e) {
             this.dist = dist;
+            this.e = e;
             this.hitColor = hitColor;
-            this.goThrough = goThrough;
         }
     }
 
@@ -67,29 +67,33 @@ public class Bullet {
         ix = shooter.x + shooter.weapon.gunLength * (float) Math.cos(shooter.orient);
         iy = shooter.y + shooter.weapon.gunLength * (float) Math.sin(shooter.orient);
 
+        //Create a line for more convenient calculation of intersection points
         Line2D intersector = new Line2D.Float(ix, iy, fx, fy);
 
+        //Add all intersection points of entities to the list testPoints
         for (HashMap.Entry<String, ArrayList<Entity>> entry : allEnts.entrySet()) {
             for (Entity e : entry.getValue()) {
                 if (!e.equals(shooter)) {
                     if (e.collideBox.intersectsLine(intersector)) {
                         float dist = (float) (Math.sqrt((ix - e.x) * (ix - e.x) + (iy - e.y) * (iy - e.y)) - offset);
-                        testPoints.add(new TestPoint(dist, e.hitColor, e.hit(shooter.weapon.damage, orient)));
+                        testPoints.add(new TestPoint(dist, e.hitColor, e));
                     }
                 }
             }
         }
 
+        //Add all intersection points of walls to the list testPoints
         for (Line2D wall : map.walls) {
             if (wall.intersectsLine(intersector)) {
                 Point2D intersection = getIntersectionPoint(wall, intersector);
                 float dx = (float)(offset * Math.cos(orient));
                 float dy = (float)(offset * Math.sin(orient));
                 float dist = (float) (Math.sqrt((ix - intersection.getX() - dx) * (ix - intersection.getX() - dx) + (iy - intersection.getY() - dy) * (iy - intersection.getY() - dy)) - offset);
-                testPoints.add(new TestPoint(dist, ThemeColors.textTitle, false));
+                testPoints.add(new TestPoint(dist, ThemeColors.menuBackground, null));
             }
         }
 
+        //Sort testPoints by distance from the starting point
         Collections.sort(testPoints, new Comparator<TestPoint>() {
             @Override
             public int compare(TestPoint p1, TestPoint p2) {
@@ -99,7 +103,7 @@ public class Bullet {
 
         for (TestPoint p : testPoints) {
             collidePoints.add(new CollidePoint((float) (ix + p.dist * Math.cos(orient)),(float) (iy + p.dist * Math.sin(orient)), p.hitColor));
-            if (!p.goThrough) {
+            if (p.e == null || !p.e.hit(shooter.weapon.damage, orient)) {
                 fx = (float) (ix + (p.dist) * Math.cos(orient));
                 fy = (float) (iy + (p.dist) * Math.sin(orient));
                 break;

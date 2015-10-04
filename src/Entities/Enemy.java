@@ -33,7 +33,7 @@ public class Enemy extends Player {
         //stopMove();
         shooting = false;
         if (!playerDead && lineOfSight(px, py) && distBetween(px, py) < 400) {
-            stopMove();
+            resetVelocity();
             if (distBetween(px, py) > 100) {
                 goTowards(px, py, (float) 1);
             }

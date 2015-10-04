@@ -48,7 +48,7 @@ public abstract class Player extends Entity {
         else sprite = shootSprite;
     }
 
-    public void stopMove() {
+    public void resetVelocity() {
         vx = 0;
         vy = 0;
     }
@@ -56,8 +56,7 @@ public abstract class Player extends Entity {
     public void updatePosition() {
         if (!obstacleX(vx)) x += vx;
         if (!obstacleY(vy)) y += vy;
-        vx = 0;
-        vy = 0;
+        resetVelocity();
     }
 
     @Override
@@ -79,12 +78,13 @@ public abstract class Player extends Entity {
         updateCollideBox();
     }
 
-    public Weapon getWeapon() {
-        float spawnDist = 30;
+    public Weapon getWeaponForDrop() {
+        float spawnDist = Game.random(10,24);
         Weapon w = weapon;
-        w.x = x + spawnDist * (float)Math.cos(Game.random(0,6.29f));
-        w.y = y + spawnDist * (float)Math.sin(Game.random(0,6.29f));
+        w.x = x + spawnDist * (float)Math.cos(Game.random(0, 6.29f));
+        w.y = y + spawnDist * (float)Math.sin(Game.random(0, 6.29f));
         w.orient = Game.random(0,6.29f);
+        w.user = null;
         return w;
     }
 
@@ -182,7 +182,7 @@ public abstract class Player extends Entity {
 
     public void deathSequence() {
         weapon = null;
-        stopMove();
+        resetVelocity();
         sprite = deadSprite;
         //animation???
     }
