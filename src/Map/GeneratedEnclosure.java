@@ -1,7 +1,6 @@
 package Map;
 
 import Main.Game;
-import Visual.Occlusion.*;
 
 import java.awt.*;
 import java.awt.geom.*;
@@ -66,9 +65,9 @@ public class GeneratedEnclosure {
             creationFailed = false;
 
             //create empty lists of rectangles
-            cells = new ArrayList<Rect>();
-            rooms = new ArrayList<Rect>();
-            corridors = new ArrayList<Rect>();
+            cells = new ArrayList<>();
+            rooms = new ArrayList<>();
+            corridors = new ArrayList<>();
 
             //add randomized subsection rects to the array
             new Cell(new Rect(0, 0, width, height), 0);
@@ -96,8 +95,8 @@ public class GeneratedEnclosure {
                 int iterateAmount = (int) Math.pow(2, i);
                 for (int j = 0; j < roomsAmount; j += 2 * iterateAmount) {
 
-                    sister1 = new ArrayList<Rect>();
-                    sister2 = new ArrayList<Rect>();
+                    sister1 = new ArrayList<>();
+                    sister2 = new ArrayList<>();
 
                     for (int k = 0; k < iterateAmount; k++) {
                         sister1.add(cells.get(j + k));
@@ -120,7 +119,7 @@ public class GeneratedEnclosure {
         }
 
         //Create an empty list of lines
-        walls = new ArrayList<Line2D>();
+        walls = new ArrayList<>();
 
         //Create a single region from all of the cells
         Area region = new Area();
@@ -128,7 +127,7 @@ public class GeneratedEnclosure {
             region.add(new Area(new Rectangle2D.Float(r.x, r.y, r.w, r.h)));
         }
 
-        List<float[]> areaPoints = new ArrayList<float[]>();
+        List<float[]> areaPoints = new ArrayList<>();
         float[] coords = new float[6];
 
         for (PathIterator pi = region.getPathIterator(null); !pi.isDone(); pi.next()) {
@@ -219,8 +218,8 @@ public class GeneratedEnclosure {
     private Rect corridorBetween(List<Rect> others, int leeWay, int path_thickness, List<Rect> sister1, List<Rect> sister2) {
         int amount = sister1.size();
 
-        ArrayList<Rect> shuffled1 = new ArrayList<Rect>(sister1);
-        ArrayList<Rect> shuffled2 = new ArrayList<Rect>(sister2);
+        ArrayList<Rect> shuffled1 = new ArrayList<>(sister1);
+        ArrayList<Rect> shuffled2 = new ArrayList<>(sister2);
         Collections.shuffle(shuffled1);
         Collections.shuffle(shuffled2);
 
@@ -235,7 +234,7 @@ public class GeneratedEnclosure {
                 if (Math.abs((r1.y + r1.h / 2.0f) - (r2.y + r2.h / 2.0f)) <= r1.h / 2.0f + r2.h / 2.0f - path_thickness) {
                     int min = Math.round(Math.max(r1.y, r2.y));
                     int max = Math.round(Math.min(r1.y + r1.h, r2.y + r2.h) - path_thickness);
-                    List<Integer> options = new ArrayList<Integer>();
+                    List<Integer> options = new ArrayList<>();
                     for (int k = 0; k < max - min; k++) {
                         options.add(min + k);
                     }
@@ -255,7 +254,7 @@ public class GeneratedEnclosure {
                 } else if (Math.abs((r1.x + r1.w / 2.0f) - (r2.x + r2.w / 2.0f)) <= r1.w / 2.0f + r2.w / 2.0f - path_thickness) {
                     float min = Math.max(r1.x, r2.x);
                     float max = Math.min(r1.x + r1.w, r2.x + r2.w) - path_thickness;
-                    List<Integer> options = new ArrayList<Integer>();
+                    List<Integer> options = new ArrayList<>();
                     for (int k = 0; k < max - min; k++) {
                         options.add(Math.round(min + k));
                     }

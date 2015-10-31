@@ -7,7 +7,6 @@ import StaticManagers.FileManager;
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/

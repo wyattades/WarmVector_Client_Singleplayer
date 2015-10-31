@@ -66,7 +66,7 @@ public abstract class Player extends Entity {
             life = 0;
             state = false;
         }
-        return false;
+        return true;
     }
 
     public void update() {

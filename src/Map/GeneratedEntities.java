@@ -2,11 +2,9 @@ package Map;
 
 import Entities.Enemy;
 import Entities.Entity;
-import Entities.Player;
 import Entities.ThisPlayer;
 import Entities.Weapon.M4rifle;
 import Entities.Weapon.Remington;
-import Entities.Weapon.Weapon;
 import Main.Game;
 
 import java.util.ArrayList;
@@ -25,11 +23,11 @@ public class GeneratedEntities {
     public GeneratedEntities(GeneratedEnclosure map, float difficultyFactor) {
         minWallDist = 6 * map.scale;
 
-        entityList = new HashMap<String, ArrayList<Entity>>();
+        entityList = new HashMap<>();
 
-        entityList.put("thisPlayer", new ArrayList<Entity>());
-        entityList.put("enemy", new ArrayList<Entity>());
-        entityList.put("weapon", new ArrayList<Entity>());
+        entityList.put("thisPlayer", new ArrayList<>());
+        entityList.put("enemy", new ArrayList<>());
+        entityList.put("weapon", new ArrayList<>());
 
         Rect playerSpawn = map.cells.get((int) Game.random(0, map.rooms.size() - 1));
 

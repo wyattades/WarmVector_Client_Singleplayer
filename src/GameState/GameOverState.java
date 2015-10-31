@@ -27,8 +27,8 @@ public class GameOverState extends MenuState {
     }
 
     protected void initButtons() {
-        buttons = new ArrayList<ButtonC>();
-        sliders = new ArrayList<Slider>();
+        buttons = new ArrayList<>();
+        sliders = new ArrayList<>();
         if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE", ButtonC.CONTINUE);
         initDefault();
     }

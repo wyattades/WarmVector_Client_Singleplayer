@@ -14,9 +14,7 @@ import Visual.Occlusion.Visibility;
 
 import javax.sound.sampled.Clip;
 import java.awt.*;
-import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -46,8 +44,8 @@ public class PlayState extends GameState {
         System.out.println("Level = " + gsm.level);
 
         dead = false;
-        bullets = new ArrayList<Bullet>();
-        animations = new ArrayList<Animation>();
+        bullets = new ArrayList<>();
+        animations = new ArrayList<>();
 //        tileMap = new TileMap(gsm.level);
         //entityList = tileMap.setEntities();
 

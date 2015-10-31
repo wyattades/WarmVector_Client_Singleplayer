@@ -86,8 +86,8 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         c.addMouseListener(this);
         c.addMouseMotionListener(this);
         mouse = new Mouse();
-        keys = new ArrayList<Key>();
-        clicks = new ArrayList<Click>();
+        keys = new ArrayList<>();
+        clicks = new ArrayList<>();
     }
 
     public void addKeyMapping(String s, int keyCode) {

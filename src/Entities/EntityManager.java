@@ -19,9 +19,9 @@ public class EntityManager {
     private ArrayList<Weapon> weapons;
 
     public EntityManager() {
-        enemies = new ArrayList<Enemy>();
-        bullets = new ArrayList<Bullet>();
-        weapons = new ArrayList<Weapon>();
+        enemies = new ArrayList<>();
+        bullets = new ArrayList<>();
+        weapons = new ArrayList<>();
         //thisPlayer = new ThisPlayer();
     }
 

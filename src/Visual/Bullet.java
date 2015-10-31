@@ -5,13 +5,11 @@ import Entities.Player;
 import Main.Game;
 import Map.GeneratedEnclosure;
 
-import javax.naming.LimitExceededException;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -58,8 +56,8 @@ public class Bullet {
 
         state = true;
         fill = new Color(255, 255, (int) Game.random(50, 220), 200);
-        collidePoints = new ArrayList<CollidePoint>();
-        ArrayList<TestPoint> testPoints = new ArrayList<TestPoint>();
+        collidePoints = new ArrayList<>();
+        ArrayList<TestPoint> testPoints = new ArrayList<>();
         orient = shooter.orient + Game.random(-shooter.weapon.spread, shooter.weapon.spread);
         float checkLine = 10000; //just a big number
         fx = (float) (shooter.x + checkLine * Math.cos(orient));
@@ -94,12 +92,7 @@ public class Bullet {
         }
 
         //Sort testPoints by distance from the starting point
-        Collections.sort(testPoints, new Comparator<TestPoint>() {
-            @Override
-            public int compare(TestPoint p1, TestPoint p2) {
-                return Float.compare(p1.dist, p2.dist);
-            }
-        });
+        Collections.sort(testPoints, (p1, p2) -> Float.compare(p1.dist, p2.dist));
 
         for (TestPoint p : testPoints) {
             collidePoints.add(new CollidePoint((float) (ix + p.dist * Math.cos(orient)),(float) (iy + p.dist * Math.sin(orient)), p.hitColor));

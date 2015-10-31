@@ -5,6 +5,10 @@ import Main.Game;
 import Map.GeneratedEnclosure;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.image.AffineTransformOp;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/Visual/
@@ -23,6 +27,8 @@ public class HUD {
             lifeBar_y = HUDy + lifeBar_h / 2,
             lifeBar_offset = 3;
 
+    private Polygon mapArea;
+
     public int enemies;
 
     public int startEnemies;
@@ -35,10 +41,20 @@ public class HUD {
     private GeneratedEnclosure map;
 
     public HUD(Player user, int i_enemies, GeneratedEnclosure map) {
+
         this.user = user;
         this.map = map;
         startEnemies = i_enemies;
         enemies = i_enemies;
+
+        mapArea = new Polygon();
+        mapArea.addPoint((int)map.walls.get(0).getX1(), (int)map.walls.get(0).getY1());
+        for (int i = 0; i < map.walls.size()-1; i++) {
+            mapArea.addPoint((int)map.walls.get(i).getX2(), (int)map.walls.get(i).getY2());
+            mapArea.addPoint((int)map.walls.get(i+1).getX1(), (int)map.walls.get(i+1).getY1());
+        }
+        mapArea.addPoint((int) map.walls.get(map.walls.size()-1).getX2(), (int)map.walls.get(map.walls.size()-1).getY2());
+
     }
 
     public void updateEnemyAmount(int amount) {
@@ -88,6 +104,26 @@ public class HUD {
             g.setColor(enemyBoxColor);
             g.fillRect(Game.WIDTH / 2 + i * 70, Game.HEIGHT - 50, 50, 50);
         }
+
+        //Draw mini-map in top-right corner (cause why not)
+
+        AffineTransform oldTransform = g.getTransform();
+
+        g.translate(Game.WIDTH - 300, 20);
+        g.scale(0.13f, 0.13f);
+
+        g.setColor(Color.gray);
+        g.fill(mapArea);
+
+        g.setStroke(new BasicStroke(8));
+        g.setColor(Color.white);
+        g.draw(mapArea);
+
+        g.setColor(Color.cyan);
+        g.setStroke(new BasicStroke(0));
+        g.fillOval((int) user.x, (int) user.y, 32, 32);
+
+        g.setTransform(oldTransform);
     }
 
     private int textWidth(String t, Graphics2D g) {

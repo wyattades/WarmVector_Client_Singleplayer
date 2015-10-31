@@ -45,11 +45,11 @@ public class Visibility {
                 3 * map.height
         );
 
-        segments = new ArrayList<Segment>();
-        endpoints = new ArrayList<EndPoint>();
-        open = new ArrayList<Segment>();
+        segments = new ArrayList<>();
+        endpoints = new ArrayList<>();
+        open = new ArrayList<>();
         center = new Point(0, 0);
-        output = new ArrayList<Point>();
+        output = new ArrayList<>();
         for (Line2D w : map.walls) {
             addSegment((float) w.getX1() , (float) w.getY1(), (float) w.getX2(), (float) w.getY2());
         }
@@ -152,11 +152,11 @@ public class Visibility {
         if (A1 == A2 && A2 != A3) return false;
         if (B1 == B2 && B2 == B3) return false;
 
-        ArrayList<Point> points = new ArrayList<Point>();
-        points.add(a.p1);
-        points.add(a.p2);
-        points.add(b.p1);
-        points.add(b.p2);
+//        ArrayList<Point> points = new ArrayList<Point>();
+//        points.add(a.p1);
+//        points.add(a.p2);
+//        points.add(b.p1);
+//        points.add(b.p2);
         return false;
     }
 
@@ -164,18 +164,14 @@ public class Visibility {
     // Run the algorithm, sweeping over all or part of the circle to find
     // the visible area, represented as a set of triangles
     public void sweep(float maxAngle) {
-        output = new ArrayList<Point>();  // output set of triangles
-        Collections.sort(endpoints, new Comparator<EndPoint>() {
-            // comparison function for sorting points by angle
-            @Override
-            public int compare(EndPoint a, EndPoint b) {
-                // Traverse in angle order
-                if (a.angle > b.angle) return 1;
-                if (a.angle < b.angle) return -1;
-                if (!a.begin && b.begin) return 1;
-                if (a.begin && !b.begin) return -1;
-                return 0;
-            }
+        output = new ArrayList<>();  // output set of triangles
+        Collections.sort(endpoints, (a, b) -> {
+            // Traverse in angle order
+            if (a.angle > b.angle) return 1;
+            if (a.angle < b.angle) return -1;
+            if (!a.begin && b.begin) return 1;
+            if (a.begin && !b.begin) return -1;
+            return 0;
         });
 
         open.clear();

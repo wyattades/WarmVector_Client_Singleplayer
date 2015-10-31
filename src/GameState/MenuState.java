@@ -60,8 +60,8 @@ public abstract class MenuState extends GameState {
     }
 
     private void initSettings() {
-        buttons = new ArrayList<ButtonC>();
-        sliders = new ArrayList<Slider>();
+        buttons = new ArrayList<>();
+        sliders = new ArrayList<>();
         addButton("BACK", ButtonC.BACK);
         OutputManager.reloadSettings();
         addSlider("Fullscreen", "fullscreen", new String[]{"On", "Off"}, OutputManager.getSettingValue("fullscreen"));

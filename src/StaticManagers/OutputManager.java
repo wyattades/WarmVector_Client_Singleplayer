@@ -76,7 +76,7 @@ public class OutputManager {
             e.printStackTrace();
             System.exit(-1);
         }
-        List<String> lines = new ArrayList<String>();
+        List<String> lines = new ArrayList<>();
         while (sc.hasNextLine()) {
             lines.add(sc.nextLine());
         }

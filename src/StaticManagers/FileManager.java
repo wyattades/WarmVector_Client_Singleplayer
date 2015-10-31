@@ -19,7 +19,7 @@ public class FileManager {
     public static final Map<String, Clip> sounds;
 
     static {
-        Map<String, Clip> temp = new HashMap<String, Clip>();
+        Map<String, Clip> temp = new HashMap<>();
         File file = new File("out/production/WarmVector_Client_Singleplayer/SFX");
         File[] listOfFiles = file.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {
@@ -48,7 +48,7 @@ public class FileManager {
     public static final Map<String, BufferedImage> images;
 
     static {
-        Map<String, BufferedImage> temp = new HashMap<String, BufferedImage>();
+        Map<String, BufferedImage> temp = new HashMap<>();
         File file = new File("out/production/WarmVector_Client_Singleplayer/Images");
         File[] listOfFiles = file.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {
@@ -64,7 +64,7 @@ public class FileManager {
     public static final Map<String, BufferedImage[]> animations;
 
     static {
-        Map<String, BufferedImage[]> temp = new HashMap<String, BufferedImage[]>();
+        Map<String, BufferedImage[]> temp = new HashMap<>();
         File file = new File("out/production/WarmVector_Client_Singleplayer/Animations");
         File[] listOfFiles = file.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {

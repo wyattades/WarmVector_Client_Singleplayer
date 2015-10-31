@@ -3,8 +3,6 @@ package Entities.Weapon;
 import Entities.Player;
 import StaticManagers.FileManager;
 
-import java.awt.image.BufferedImage;
-
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/25/2015.
