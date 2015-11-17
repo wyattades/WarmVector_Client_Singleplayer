@@ -87,7 +87,7 @@ public class Bullet {
                 float dx = (float)(offset * Math.cos(orient));
                 float dy = (float)(offset * Math.sin(orient));
                 float dist = (float) (Math.sqrt((ix - intersection.getX() - dx) * (ix - intersection.getX() - dx) + (iy - intersection.getY() - dy) * (iy - intersection.getY() - dy)) - offset);
-                testPoints.add(new TestPoint(dist, ThemeColors.menuBackground, null));
+                testPoints.add(new TestPoint(dist, Theme.menuBackground, null));
             }
         }
 

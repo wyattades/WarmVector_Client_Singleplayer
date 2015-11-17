@@ -50,7 +50,7 @@ public class GeneratedEnclosure {
 
         //Global constants
         splitSizeFactor = 0.22f;
-        minRoomSize = 30;
+        minRoomSize = 40;
 
         //Modify iterations so that the rooms sizes change based on scaleFactor (default is 4 cause it looks the best)
         iterations = 4 + (int) (Math.log(scaleFactor) / Math.log(2));
@@ -58,7 +58,9 @@ public class GeneratedEnclosure {
         //Make sure width and height are always even numbers
         width = round(width, 2);
         height = round(height, 2);
-        //Keep looping until there are no null rooms (a null room has about a 1 in 50 chance of spawning)
+
+        //Keep looping until there are no null rooms (a null room
+        //has about a 1 in 50 chance of spawning)
         boolean creationFailed = true;
         while (creationFailed) {
 
@@ -215,7 +217,10 @@ public class GeneratedEnclosure {
         }
     }
 
-    private Rect corridorBetween(List<Rect> others, int leeWay, int path_thickness, List<Rect> sister1, List<Rect> sister2) {
+    //A randomly placed corridor between two sister rooms
+    // (Can't collide with other corridors/rooms)
+    private Rect corridorBetween(List<Rect> others, int leeWay, int path_thickness,
+                                 List<Rect> sister1, List<Rect> sister2) {
         int amount = sister1.size();
 
         ArrayList<Rect> shuffled1 = new ArrayList<>(sister1);
@@ -231,7 +236,8 @@ public class GeneratedEnclosure {
                 Rect r1 = shuffled1.get(i);
                 Rect r2 = shuffled2.get(j);
 
-                if (Math.abs((r1.y + r1.h / 2.0f) - (r2.y + r2.h / 2.0f)) <= r1.h / 2.0f + r2.h / 2.0f - path_thickness) {
+                if (Math.abs((r1.y + r1.h / 2.0f) - (r2.y + r2.h / 2.0f)) <=
+                        r1.h / 2.0f + r2.h / 2.0f - path_thickness) {
                     int min = Math.round(Math.max(r1.y, r2.y));
                     int max = Math.round(Math.min(r1.y + r1.h, r2.y + r2.h) - path_thickness);
                     List<Integer> options = new ArrayList<>();
@@ -243,7 +249,8 @@ public class GeneratedEnclosure {
                         corridor = new Rect(r1.x + r1.w, option, r2.x - (r1.x + r1.w), path_thickness);
                         boolean collides = false;
                         for (Rect o : others) {
-                            if (o.x + o.w > corridor.x && o.x < corridor.x + corridor.w && o.y + o.h > corridor.y - leeWay && o.y < corridor.y + corridor.h + leeWay) {
+                            if (o.x + o.w > corridor.x && o.x < corridor.x + corridor.w &&
+                                    o.y + o.h > corridor.y - leeWay && o.y < corridor.y + corridor.h + leeWay) {
                                 collides = true;
                             }
                         }
@@ -251,7 +258,8 @@ public class GeneratedEnclosure {
                             return corridor;
                         }
                     }
-                } else if (Math.abs((r1.x + r1.w / 2.0f) - (r2.x + r2.w / 2.0f)) <= r1.w / 2.0f + r2.w / 2.0f - path_thickness) {
+                } else if (Math.abs((r1.x + r1.w / 2.0f) - (r2.x + r2.w / 2.0f)) <=
+                        r1.w / 2.0f + r2.w / 2.0f - path_thickness) {
                     float min = Math.max(r1.x, r2.x);
                     float max = Math.min(r1.x + r1.w, r2.x + r2.w) - path_thickness;
                     List<Integer> options = new ArrayList<>();
@@ -263,7 +271,8 @@ public class GeneratedEnclosure {
                         corridor = new Rect(option, r1.y + r1.h, path_thickness, r2.y - (r1.y + r1.h));
                         boolean collides = false;
                         for (Rect o : others) {
-                            if (o.x + o.w > corridor.x - leeWay && o.x < corridor.x + corridor.w + leeWay && o.y + o.h > corridor.y && o.y < corridor.y + corridor.h) {
+                            if (o.x + o.w > corridor.x - leeWay && o.x < corridor.x + corridor.w + leeWay &&
+                                    o.y + o.h > corridor.y && o.y < corridor.y + corridor.h) {
                                 collides = true;
                             }
                         }
@@ -281,6 +290,7 @@ public class GeneratedEnclosure {
     int round(float i, int v) {
         return Math.round(i / v) * v;
     }
+
 
     public void draw(Graphics2D g, Color color) {
         Polygon CUTOUT = new Polygon();

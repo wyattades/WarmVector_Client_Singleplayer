@@ -3,7 +3,7 @@ package GameState;
 import Main.Game;
 import Visual.ButtonC;
 import Visual.Slider;
-import Visual.ThemeColors;
+import Visual.Theme;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class GameOverState extends MenuState {
 
     public void draw(Graphics2D g) {
 
-        drawBackground(g, ThemeColors.menuBackground);
+        drawBackground(g, Theme.menuBackground);
 
         for (Slider s : sliders) {
             s.draw(g);
@@ -48,7 +48,7 @@ public class GameOverState extends MenuState {
 
         if (gsm.level >= GameStateManager.MAXLEVEL) {
             String text = "YOU DIED";
-            g.setColor(ThemeColors.buttonDefault);
+            g.setColor(Theme.buttonDefault);
             g.drawString(
                     text,
                     Game.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(text, g).getWidth() / 2,

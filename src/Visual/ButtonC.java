@@ -41,7 +41,7 @@ public class ButtonC {
     }
 
     public void draw(Graphics2D g) {
-        g.setFont(ThemeColors.fontButton);
+        g.setFont(Theme.fontButton);
 
         if (!setWidth) {
             w = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
@@ -49,9 +49,9 @@ public class ButtonC {
         }
 
         if (!overBox) {
-            g.setColor(ThemeColors.buttonDefault);
+            g.setColor(Theme.buttonDefault);
         } else {
-            g.setColor(ThemeColors.buttonOver);
+            g.setColor(Theme.buttonOver);
         }
         g.drawString(text, x - w, y + h);
     }

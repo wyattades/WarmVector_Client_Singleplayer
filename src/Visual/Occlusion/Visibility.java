@@ -80,7 +80,7 @@ public class Visibility {
 //        if (!alreadyExists) {
         // Add a segment, where the first point shows up in the
         // visualization but the second one does not. (Every endpoint is
-        // part of two segments, but we want to only show them once.)
+        // part of two segments, but only show them once)
         EndPoint p1 = new EndPoint(x1, y1);
         p1.visualize = true;
         EndPoint p2 = new EndPoint(x2, y2);
@@ -120,7 +120,7 @@ public class Visibility {
         }
     }
 
-    // According to an outside source: leftOf(segment, point) returns true if point is "left"
+    // leftOf(segment, point) returns true if point is "left"
     // of segment treated as a vector. Note that this assumes a 2D
     // coordinate system in which the Y axis grows downwards, which
     // matches common 2D graphics libraries, but is the opposite of
@@ -131,7 +131,6 @@ public class Visibility {
         return cross < 0;
     }
 
-    // Return p*(1-f) + q*f
     private Point interpolate(Point p, Point q, float f) {
         return new Point(p.x * (1 - f) + q.x * f, p.y * (1 - f) + q.y * f);
     }

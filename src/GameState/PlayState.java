@@ -73,7 +73,7 @@ public class PlayState extends GameState {
     public void draw(Graphics2D g) {
 
         //TEMP
-        g.setColor(new Color(180,180,180));
+        g.setColor(new Color(80,80,140));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
         //Create copy of transform for later
@@ -136,9 +136,10 @@ public class PlayState extends GameState {
             hud.draw(g);
             gsm.cursor.draw(g);
         } else {
-            g.setColor(ThemeColors.buttonDefault);
-            g.setFont(ThemeColors.fontButton);
-            g.drawString("PRESS [SPACE] TO RESTART", Game.WIDTH / 2, Game.HEIGHT - 60);
+            g.setColor(Theme.buttonDefault);
+            g.setFont(Theme.fontButton);
+            g.drawString("PRESS [SPACE]", 26, Game.HEIGHT - 90);
+            g.drawString("TO RESTART", 26, Game.HEIGHT - 26);
         }
 
     }
@@ -159,7 +160,7 @@ public class PlayState extends GameState {
         }
 
         shadow.setLightLocation(thisPlayer.x, thisPlayer.y);
-        shadow.sweep(999);
+        shadow.sweep(6.29f);
 
         bullets.forEach(Bullet::update);
         for (Entity entity : entityList.get("weapon")) {

@@ -6,9 +6,6 @@ import Map.GeneratedEnclosure;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
-import java.awt.image.AffineTransformOp;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/Visual/
@@ -78,31 +75,41 @@ public class HUD {
 
 
     public void draw(Graphics2D g) {
-        g.setFont(ThemeColors.fontHUD);
 
-        String lifeS = String.valueOf((int) user.life),
-                ammoS = user.weapon == null ? "" : "Ammo: " + user.weapon.ammo + " / " + user.weapon.clipAmount*user.weapon.clipSize;
-        g.setColor(defaultHudColor);
+        g.setFont(Theme.fontHUD);
 
-//        g.drawString(enemiesS, Game.WIDTH/2 - textWidth(enemiesS, g)/2, HUDy + textHeight(enemiesS,g)/2);
-
+        //AMMO
+        String ammoS = user.weapon == null ? "" : "Ammo: " + user.weapon.ammo + " / " + user.weapon.clipAmount*user.weapon.clipSize;
         g.drawString(ammoS, HUDx - textWidth(ammoS, g), HUDy + textHeight(ammoS, g) / 2);
-        for (int i = -(int)Math.floor(startEnemies / 2f); i < (int)Math.ceil(startEnemies / 2f); i++) {
-            g.fillRect(Game.WIDTH / 2 + i * 70, Game.HEIGHT - 50, 50, 50);
-        }
+
+        //LIFE
         if (user.life <= 10) g.setColor(nearDeathHudColor);
+        else g.setColor(defaultHudColor);
+
+        //  LIFE AMOUNT
+        String lifeS = String.valueOf((int) user.life);
         g.drawString(lifeS, 26, HUDy + textHeight(lifeS, g) / 2);
+
+        //  HEALTH BAR
         g.setStroke(new BasicStroke(2));
         g.drawRect(lifeBar_x - lifeBar_offset, lifeBar_y - lifeBar_offset, lifeBar_w + 2 * lifeBar_offset, lifeBar_h + 2 * lifeBar_offset);
         g.setStroke(new BasicStroke(1));
         g.fillRect(lifeBar_x, lifeBar_y, (int) (user.life * lifeBar_w / user.maxLife), lifeBar_h);
-        g.fill(cross);
-        for (int i = -startEnemies / 2; i < enemies - startEnemies / 2; i++) {
-            g.setColor(enemyBoxColor);
-            g.fillRect(Game.WIDTH / 2 + i * 70, Game.HEIGHT - 50, 50, 50);
-        }
 
-        //Draw mini-map in top-right corner (cause why not)
+        //  CROSS SYMBOL
+        g.fill(cross);
+
+        //ENEMY COUNTER BOX
+        g.setColor(enemyBoxColor);
+        int side = 60;
+        g.fillRect(Game.WIDTH / 2 - side/2, Game.HEIGHT - side, side, side);
+
+        //ENEMY COUNTER
+        g.setColor(new Color(255,255,255,180));
+        String enemiesS = String.valueOf(enemies);
+        g.drawString(enemiesS, Game.WIDTH/2 - textWidth(enemiesS, g) / 2, Game.HEIGHT - 16);
+
+        //MINI MAP
 
         AffineTransform oldTransform = g.getTransform();
 

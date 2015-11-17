@@ -5,7 +5,7 @@ import StaticManagers.InputManager;
 import Visual.BarVisualizer;
 import Visual.ButtonC;
 import Visual.Slider;
-import Visual.ThemeColors;
+import Visual.Theme;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -32,13 +32,13 @@ public class StartMenuState extends MenuState {
 
         startY = Game.HEIGHT - 100;
         initButtons();
-        barVisualizer = new BarVisualizer(menuWidth, ThemeColors.menuBackground);
+        barVisualizer = new BarVisualizer(menuWidth, Theme.menuBackground);
         gsm.cursor.setMouse(Game.WIDTH/2, Game.HEIGHT/2);
 
     }
 
     public void unload() {
-        ThemeColors.buttonOver = ThemeColors.buttonOverOld;
+        Theme.buttonOver = Theme.buttonOverOld;
     }
 
     protected void initButtons() {
@@ -68,17 +68,17 @@ public class StartMenuState extends MenuState {
         //Draw the "W" & "V" title
         for (ButtonC b : buttons) {
             if (b.overBox && b.value == ButtonC.BEGIN) {
-                g.setColor(ThemeColors.buttonOver);
-                g.setFont(ThemeColors.fontHUD);
+                g.setColor(Theme.buttonOver);
+                g.setFont(Theme.fontHUD);
                 g.drawString("ARM", Game.WIDTH - menuWidth / 2 + 70, Game.HEIGHT / 2 - 200);
                 g.drawString("ECTOR", Game.WIDTH - menuWidth / 2 + 28, Game.HEIGHT / 2 - 40);
             } else {
-                g.setColor(ThemeColors.buttonDefault);
+                g.setColor(Theme.buttonDefault);
             }
         }
         //Cheaty hacky method, TODO: Change this
         if (buttons.size() == 5) {
-            g.setFont(ThemeColors.fontLogo);
+            g.setFont(Theme.fontLogo);
             g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 200);
             g.drawString("V", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("V", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 40);
         }
@@ -91,7 +91,7 @@ public class StartMenuState extends MenuState {
 
     public void update() {
 
-        backGround = ThemeColors.buttonOver = Color.getHSBColor(backgroundHue, 1, 1);
+        backGround = Theme.buttonOver = Color.getHSBColor(backgroundHue, 1, 1);
         backgroundHue += 0.001f;
         if (backgroundHue >= 1) backgroundHue = 0;
 

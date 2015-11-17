@@ -6,7 +6,7 @@ import java.awt.*;
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by wyatt on 8/11/2015.
  */
-public abstract class ThemeColors {
+public abstract class Theme {
 
     public static Color
 //            textOver = new Color(158, 158, 158),

@@ -34,18 +34,18 @@ public class Slider {
     public void draw(Graphics2D g) {
 
         //Slider line
-        g.setColor(ThemeColors.buttonDefault);
+        g.setColor(Theme.buttonDefault);
         g.setStroke(new BasicStroke(4));
         g.drawLine(x - w, y, x, y);
 
         //Actual slider
-        if (pressed) g.setColor(ThemeColors.buttonOver);
-        else g.setColor(ThemeColors.buttonSelected);
+        if (pressed) g.setColor(Theme.buttonOver);
+        else g.setColor(Theme.buttonSelected);
         g.fillRect(slider_x - size / 2, y - size / 2, size, size);
 
         //Text
         g.setFont(new Font("Dotum Bold", Font.BOLD, 20));
-        g.setColor(ThemeColors.buttonDefault);
+        g.setColor(Theme.buttonDefault);
         g.drawString(text, (int) (x - w - size - g.getFontMetrics().getStringBounds(text, g).getWidth()), y + 6);
 
         //Options

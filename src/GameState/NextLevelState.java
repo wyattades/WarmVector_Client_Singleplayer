@@ -3,7 +3,7 @@ package GameState;
 import Main.Game;
 import Visual.ButtonC;
 import Visual.Slider;
-import Visual.ThemeColors;
+import Visual.Theme;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class NextLevelState extends MenuState {
         initDefault();
         if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE", ButtonC.CONTINUE);
 
-//        nextLevelTransition = new NextLevelTransition(ThemeColors.menuBackground);
+//        nextLevelTransition = new NextLevelTransition(Theme.menuBackground);
     }
 
     public void init() {
@@ -40,7 +40,7 @@ public class NextLevelState extends MenuState {
 
     public void draw(Graphics2D g) {
 
-        drawBackground(g, ThemeColors.menuBackground);
+        drawBackground(g, Theme.menuBackground);
 //        nextLevelTransition.draw(g);
 
         for (ButtonC b : buttons) {

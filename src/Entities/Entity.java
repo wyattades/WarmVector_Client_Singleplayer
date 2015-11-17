@@ -19,7 +19,7 @@ public abstract class Entity {
     public boolean state;
 
     protected Entity(float x, float y, float orient) {
-        collideBox = new Rectangle2D.Double(x, y, w, h);
+        collideBox = new Rectangle2D.Float(x, y, w, h);
         this.x = x;
         this.y = y;
         this.orient = orient;
