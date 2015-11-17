@@ -16,7 +16,7 @@ import java.util.Comparator;
  */
 public class Visibility {
 
-    //Color of shadow
+    // Color of shadow
     private static Color COLOR = new Color(20, 20, 20, 255);
 
     // These represent the map and the light location:
@@ -127,9 +127,7 @@ public class Visibility {
     // the usual convention from mathematics and in 3D graphics
     // libraries.
     private boolean leftOf(Segment s, Point p) {
-        // <http://en.wikipedia.org/wiki/Geometric_algebra>
-        float cross = (s.p2.x - s.p1.x) * (p.y - s.p1.y)
-                - (s.p2.y - s.p1.y) * (p.x - s.p1.x);
+        float cross = (s.p2.x - s.p1.x) * (p.y - s.p1.y) - (s.p2.y - s.p1.y) * (p.x - s.p1.x);
         return cross < 0;
     }
 

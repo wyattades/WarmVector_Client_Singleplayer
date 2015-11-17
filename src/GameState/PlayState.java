@@ -24,7 +24,7 @@ import java.util.HashMap;
  */
 public class PlayState extends GameState {
 
-    private static float SCALEFACTOR = 3f;
+    private final static float SCALEFACTOR = 3f;
 
     private HashMap<String, ArrayList<Entity>> entityList;
     private ScreenMover screenMover;
@@ -46,7 +46,6 @@ public class PlayState extends GameState {
         dead = false;
         bullets = new ArrayList<>();
         animations = new ArrayList<>();
-//        tileMap = new TileMap(gsm.level);
         //entityList = tileMap.setEntities();
 
         map = new GeneratedEnclosure(200, 200, 1.0f);

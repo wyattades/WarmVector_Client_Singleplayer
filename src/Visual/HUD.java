@@ -33,17 +33,14 @@ public class HUD {
 
     public int startEnemies;
 
-    private static final Color defaultHudColor = new Color(100, 100, 100, 200),
+    private static final Color defaultHudColor = new Color(180, 180, 180, 220),
             nearDeathHudColor = new Color(200, 0, 0, 200),
             enemyBoxColor = new Color(255, 0, 0, 180);
 
 
-    private GeneratedEnclosure map;
-
     public HUD(Player user, int i_enemies, GeneratedEnclosure map) {
 
         this.user = user;
-        this.map = map;
         startEnemies = i_enemies;
         enemies = i_enemies;
 
@@ -121,9 +118,10 @@ public class HUD {
 
         g.setColor(Color.cyan);
         g.setStroke(new BasicStroke(0));
-        g.fillOval((int) user.x, (int) user.y, 32, 32);
+        g.fillOval((int) (user.x-user.w/2), (int) (user.y-user.h/2), 32, 32);
 
         g.setTransform(oldTransform);
+
     }
 
     private int textWidth(String t, Graphics2D g) {

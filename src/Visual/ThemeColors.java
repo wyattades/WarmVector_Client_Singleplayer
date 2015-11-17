@@ -12,7 +12,7 @@ public abstract class ThemeColors {
 //            textOver = new Color(158, 158, 158),
 //            textTitle = new Color(0, 0, 0, 200),
             buttonSelected = new Color(220, 220, 220),
-            buttonDefault = new Color(160, 160, 160, 200),
+            buttonDefault = new Color(180, 180, 180, 220),
             buttonOver = new Color(249, 249, 249),
             buttonOverOld = buttonOver,
             cursor = new Color(198, 198, 198),
