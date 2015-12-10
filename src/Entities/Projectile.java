@@ -8,20 +8,25 @@ import StaticManagers.FileManager;
  */
 public class Projectile extends Entity {
 
-    private float speed, accel;
+    private float x, y, vx, vy, accel;
 
-    public Projectile(float x, float y, float orient, float speed, float acceleration) {
+    public Projectile(float x, float y, float orient, float i_speed, float acceleration) {
 
         super(x, y, orient);
-        this.speed = speed;
+
+        this.x = x;
+        this.y = y;
+        vx = (float) Math.cos(orient)*i_speed;
+        vy = (float) Math.sin(orient)*i_speed;
         this.accel = acceleration;
 
     }
 
     public void move() {
-        speed += accel;
-        x += speed * Math.cos(orient);
-        y += speed * Math.sin(orient);
+        vx += (float) Math.sin(orient)*accel;
+        vy += (float) Math.sin(orient)*accel;
+        x += vx;
+        y += vy;
     }
 
     @Override

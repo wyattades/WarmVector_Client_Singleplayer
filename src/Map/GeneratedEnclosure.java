@@ -127,15 +127,19 @@ public class GeneratedEnclosure {
         Area region = new Area();
         for (Rect r : cells) {
             region.add(new Area(new Rectangle2D.Float(r.x, r.y, r.w, r.h)));
+
+        }
+        for (Rect r : rooms) {
+            region.subtract(new Area(objectInRoom(r)));
         }
 
         List<float[]> areaPoints = new ArrayList<>();
         float[] coords = new float[6];
 
         for (PathIterator pi = region.getPathIterator(null); !pi.isDone(); pi.next()) {
-            // The type will be SEG_LINETO, SEG_MOVETO, or SEG_CLOSE because the Area is composed of straight lines
+            // "type" will either be SEG_LINETO, SEG_MOVETO, or SEG_CLOSE
             int type = pi.currentSegment(coords);
-            // We record a double array of {segment type, x coord, y coord}
+
             float[] pathIteratorCoords = {type, coords[0], coords[1]};
             areaPoints.add(pathIteratorCoords);
         }
@@ -215,6 +219,17 @@ public class GeneratedEnclosure {
             }
 
         }
+    }
+
+    //A randomly placed rectangular obstacle inside a room
+    private Rectangle2D.Float objectInRoom(Rect r) {
+
+        float x =  r.x + r.w/2 + Game.random(-30,30);
+        float y =  r.y + r.h/2 + Game.random(-30,30);
+        float w = Game.random(30,80);
+        float h = Game.random(30,80);
+
+        return new Rectangle2D.Float(x - w/2, y - h/2, w, h);
     }
 
     //A randomly placed corridor between two sister rooms
