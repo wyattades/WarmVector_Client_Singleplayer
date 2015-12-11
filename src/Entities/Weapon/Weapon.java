@@ -32,6 +32,9 @@ public abstract class Weapon extends Entity {
         user = i_user;
         hitColor = Color.DARK_GRAY;
 
+        w = sprite.getWidth();
+        h = sprite.getHeight();
+
         this.name = name;
         this.ammo = this.clipSize = clipSize;
         this.clipAmount = clipAmount;
@@ -49,12 +52,12 @@ public abstract class Weapon extends Entity {
         if (user != null) {
             AffineTransform oldTForm = g.getTransform();
             g.rotate(user.orient, user.x, user.y);
-            g.drawImage(sprite, Math.round(user.x - w / 2 + 24), Math.round(user.y - h / 2 + 2), null);
+            g.drawImage(sprite, Math.round(user.x - sprite_w / 2 + 26), Math.round(user.y - sprite_h / 2 + 2), null);
             g.setTransform(oldTForm);
         } else {
             AffineTransform oldTForm = g.getTransform();
             g.rotate(orient, x, y);
-            g.drawImage(sprite, Math.round(x - w / 2), Math.round(y - h / 2), null);
+            g.drawImage(sprite, Math.round(x - sprite_w / 2), Math.round(y - sprite_h / 2), null);
             g.setTransform(oldTForm);
         }
     }

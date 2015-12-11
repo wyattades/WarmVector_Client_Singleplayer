@@ -32,6 +32,10 @@ public class GeneratedEntities {
         Rect playerSpawn = map.cells.get((int) Game.random(0, map.rooms.size() - 1));
 
         entityList.get("thisPlayer").add(new ThisPlayer( randomRoomX(playerSpawn) , randomRoomY(playerSpawn), map ));
+        //Keep respawning player until he doesn't intersect with the map
+        while(map.region.intersects(entityList.get("thisPlayer").get(0).collideBox)) {
+            entityList.get("thisPlayer").set(0, new ThisPlayer( randomRoomX(playerSpawn) , randomRoomY(playerSpawn), map ));
+        }
 
         entityList.get("weapon").add(
                 new Remington(

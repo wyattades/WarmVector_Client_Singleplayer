@@ -6,6 +6,7 @@ import Map.GeneratedEnclosure;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/Visual/
@@ -24,7 +25,9 @@ public class HUD {
             lifeBar_y = HUDy + lifeBar_h / 2,
             lifeBar_offset = 3;
 
-    private Polygon mapArea;
+    private Area mapArea;
+
+    private GeneratedEnclosure map;
 
     public int enemies;
 
@@ -37,17 +40,19 @@ public class HUD {
 
     public HUD(Player user, int i_enemies, GeneratedEnclosure map) {
 
+        this.map = map;
+
         this.user = user;
         startEnemies = i_enemies;
         enemies = i_enemies;
 
-        mapArea = new Polygon();
-        mapArea.addPoint((int)map.walls.get(0).getX1(), (int)map.walls.get(0).getY1());
-        for (int i = 0; i < map.walls.size()-1; i++) {
-            mapArea.addPoint((int)map.walls.get(i).getX2(), (int)map.walls.get(i).getY2());
-            mapArea.addPoint((int)map.walls.get(i+1).getX1(), (int)map.walls.get(i+1).getY1());
-        }
-        mapArea.addPoint((int) map.walls.get(map.walls.size()-1).getX2(), (int)map.walls.get(map.walls.size()-1).getY2());
+        mapArea = map.region;
+//        mapArea.addPoint((int)map.walls.get(0).getX1(), (int)map.walls.get(0).getY1());
+//        for (int i = 0; i < map.walls.size()-1; i++) {
+//            mapArea.addPoint((int)map.walls.get(i).getX2(), (int)map.walls.get(i).getY2());
+//            mapArea.addPoint((int)map.walls.get(i+1).getX1(), (int)map.walls.get(i+1).getY1());
+//        }
+//        mapArea.addPoint((int) map.walls.get(map.walls.size()-1).getX2(), (int)map.walls.get(map.walls.size()-1).getY2());
 
     }
 
@@ -88,7 +93,7 @@ public class HUD {
 
         //  LIFE AMOUNT
         String lifeS = String.valueOf((int) user.life);
-        g.drawString(lifeS, 26, HUDy + textHeight(lifeS, g) / 2);
+        g.drawString(lifeS, 28, HUDy + textHeight(lifeS, g) / 2);
 
         //  HEALTH BAR
         g.setStroke(new BasicStroke(2));
@@ -114,18 +119,18 @@ public class HUD {
         AffineTransform oldTransform = g.getTransform();
 
         g.translate(Game.WIDTH - 300, 20);
-        g.scale(0.13f, 0.13f);
+        //g.scale(0.13f, 0.13f);
 
         g.setColor(Color.gray);
         g.fill(mapArea);
 
-        g.setStroke(new BasicStroke(8));
+        g.setStroke(new BasicStroke(1));
         g.setColor(Color.white);
         g.draw(mapArea);
 
         g.setColor(Color.cyan);
         g.setStroke(new BasicStroke(0));
-        g.fillOval((int) (user.x-user.w/2), (int) (user.y-user.h/2), 32, 32);
+        g.fillOval((int) (user.x/map.scale)-1, (int) (user.y/map.scale)-1, 4, 4);
 
         g.setTransform(oldTransform);
 

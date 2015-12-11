@@ -31,6 +31,7 @@ public abstract class Player extends Entity {
         vx = vy = 0;
         life = maxLife = 100.0f;
         shootTime = Game.currentTimeMillis();
+        w = h = 36;
     }
 
     public void setWeapon(Weapon w) {

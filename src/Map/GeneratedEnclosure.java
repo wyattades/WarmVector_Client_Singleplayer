@@ -28,6 +28,9 @@ public class GeneratedEnclosure {
     //Stores only corridors
     public List<Rect> corridors;
 
+    //Accessible area of map
+    public Area region;
+
     //Stores line segments of map (these are used for shadowing, collision detection, etc.)
     public List<Line2D> walls;
 
@@ -41,16 +44,16 @@ public class GeneratedEnclosure {
         width = i_width;
         height = i_height;
 
-        scale = 10;
+        scale = 12;
 
         //Local constants
         float roomReductionFactor = 0.42f;
         int min_spacing = 4;
-        int path_thickness = 8;
+        int path_thickness = 6;
 
         //Global constants
         splitSizeFactor = 0.22f;
-        minRoomSize = 40;
+        minRoomSize = 50;
 
         //Modify iterations so that the rooms sizes change based on scaleFactor (default is 4 cause it looks the best)
         iterations = 4 + (int) (Math.log(scaleFactor) / Math.log(2));
@@ -124,20 +127,30 @@ public class GeneratedEnclosure {
         walls = new ArrayList<>();
 
         //Create a single region from all of the cells
-        Area region = new Area();
+        region = new Area();
         for (Rect r : cells) {
             region.add(new Area(new Rectangle2D.Float(r.x, r.y, r.w, r.h)));
-
         }
+
+        //Add randomized "obstacles" to the rooms
         for (Rect r : rooms) {
-            region.subtract(new Area(objectInRoom(r)));
+
+            float area = r.w*r.h, a1 = minRoomSize*minRoomSize, a2 = 1500, b1 = 2, b2 = 4;
+
+            int amount = round(b1 + (area-a1)*(b2-b1)/(a2-a1), 1);
+
+            System.out.println(amount);
+            for (int i = 0; i < amount; i++) {
+                region.subtract(new Area(objectInRoom(r)));
+            }
         }
 
+        //Create list of points that describe the region
         List<float[]> areaPoints = new ArrayList<>();
         float[] coords = new float[6];
 
         for (PathIterator pi = region.getPathIterator(null); !pi.isDone(); pi.next()) {
-            // "type" will either be SEG_LINETO, SEG_MOVETO, or SEG_CLOSE
+            //"type" will either be SEG_LINETO, SEG_MOVETO, or SEG_CLOSE
             int type = pi.currentSegment(coords);
 
             float[] pathIteratorCoords = {type, coords[0], coords[1]};
@@ -146,17 +159,18 @@ public class GeneratedEnclosure {
 
         float[] start = new float[3]; // To record where each polygon starts
 
+        //Based on the region, add to the list of walls
         for (int i = 0; i < areaPoints.size(); i++) {
-            // If we're not on the last point, return a line from this point to the next
+            //if not on the last point, return a line from this point to the next
             float[] currentElement = areaPoints.get(i);
 
-            // We need a default value in case we've reached the end of the ArrayList
+            //default value in case it reached the end of the ArrayList
             float[] nextElement = {-1, -1, -1};
             if (i < areaPoints.size() - 1) {
                 nextElement = areaPoints.get(i + 1);
             }
 
-            // Make the lines
+            //make the lines
             if (currentElement[0] == PathIterator.SEG_MOVETO) {
                 start = currentElement; // Record where the polygon started to close it later
             }
@@ -222,14 +236,29 @@ public class GeneratedEnclosure {
     }
 
     //A randomly placed rectangular obstacle inside a room
-    private Rectangle2D.Float objectInRoom(Rect r) {
+    private Rectangle2D objectInRoom(Rect r) {
 
-        float x =  r.x + r.w/2 + Game.random(-30,30);
-        float y =  r.y + r.h/2 + Game.random(-30,30);
-        float w = Game.random(30,80);
-        float h = Game.random(30,80);
+        int w = (int)Game.random(4,12);
+        int h = (int)Game.random(4,12);
+        int x,y;
 
-        return new Rectangle2D.Float(x - w/2, y - h/2, w, h);
+        float random = Game.random(0,1);
+        if (random > 0.75f) {
+            x = r.x;
+            y = (int) Game.random(r.y, r.y + r.h);
+        } else if (random > 0.5f) {
+            x = r.x - r.w;
+            y = (int) Game.random(r.y, r.y + r.h);
+        } else if (random > 0.25f) {
+            x = (int) Game.random(r.x, r.x + r.w);
+            y = r.y;
+        } else {
+            x = (int) Game.random(r.x, r.x + r.w);
+            y = r.y - r.h;
+        }
+
+
+        return new Rectangle2D.Float(x, y, w, h);
     }
 
     //A randomly placed corridor between two sister rooms
@@ -238,8 +267,8 @@ public class GeneratedEnclosure {
                                  List<Rect> sister1, List<Rect> sister2) {
         int amount = sister1.size();
 
-        ArrayList<Rect> shuffled1 = new ArrayList<>(sister1);
-        ArrayList<Rect> shuffled2 = new ArrayList<>(sister2);
+        List<Rect> shuffled1 = new ArrayList<>(sister1);
+        List<Rect> shuffled2 = new ArrayList<>(sister2);
         Collections.shuffle(shuffled1);
         Collections.shuffle(shuffled2);
 

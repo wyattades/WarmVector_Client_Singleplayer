@@ -121,7 +121,7 @@ public class PlayState extends GameState {
         //TEMP
         shadow.draw(g, new Color(20,20,20));
 
-        map.draw(g, new Color(60,60,60));
+        //map.draw(g, new Color(60,60,60));
 
         g.setColor(new Color(50,50,50));
         g.setStroke(new BasicStroke(2));
