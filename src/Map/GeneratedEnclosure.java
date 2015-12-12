@@ -132,16 +132,18 @@ public class GeneratedEnclosure {
             region.add(new Area(new Rectangle2D.Float(r.x, r.y, r.w, r.h)));
         }
 
+
+        float area, a1 = minRoomSize*minRoomSize, a2 = 2500, b1 = 1, b2 = 4;
         //Add randomized "obstacles" to the rooms
         for (Rect r : rooms) {
 
-            float area = r.w*r.h, a1 = minRoomSize*minRoomSize, a2 = 1500, b1 = 2, b2 = 4;
+            area = r.w*r.h;
 
             int amount = round(b1 + (area-a1)*(b2-b1)/(a2-a1), 1);
 
-            System.out.println(amount);
             for (int i = 0; i < amount; i++) {
-                region.subtract(new Area(objectInRoom(r)));
+                Rectangle2D object = objectInRoom(r);
+                if (object != null) region.subtract(new Area(object));
             }
         }
 
@@ -237,28 +239,48 @@ public class GeneratedEnclosure {
 
     //A randomly placed rectangular obstacle inside a room
     private Rectangle2D objectInRoom(Rect r) {
+        Rectangle2D object = null;
+        for (int i = 0; i < 10; i++) {
+            int w = (int) Game.random(4, 12);
+            int h = (int) Game.random(4, 12);
+            int x, y;
 
-        int w = (int)Game.random(4,12);
-        int h = (int)Game.random(4,12);
-        int x,y;
+            float random = Game.random(0, 1);
+            if (random > 0.75f) {
+                x = r.x;
+                y = (int) Game.random(r.y, r.y + r.h);
+            } else if (random > 0.5f) {
+                x = r.x - r.w;
+                y = (int) Game.random(r.y, r.y + r.h);
+            } else if (random > 0.25f) {
+                x = (int) Game.random(r.x, r.x + r.w);
+                y = r.y;
+            } else {
+                x = (int) Game.random(r.x, r.x + r.w);
+                y = r.y - r.h;
+            }
 
-        float random = Game.random(0,1);
-        if (random > 0.75f) {
-            x = r.x;
-            y = (int) Game.random(r.y, r.y + r.h);
-        } else if (random > 0.5f) {
-            x = r.x - r.w;
-            y = (int) Game.random(r.y, r.y + r.h);
-        } else if (random > 0.25f) {
-            x = (int) Game.random(r.x, r.x + r.w);
-            y = r.y;
-        } else {
-            x = (int) Game.random(r.x, r.x + r.w);
-            y = r.y - r.h;
+            boolean passes = true;
+            //test for adjacency to corridors
+            for (Rect c : corridors) {
+                if (
+                        (y + h > c.y && y < c.y + h && (Math.ceil(x + w) == Math.floor(c.x) || Math.ceil(x) == Math.floor(c.x - c.w))) ||
+                        (x + w > c.x && x < c.x + w && (Math.ceil(y + h) == Math.floor(c.y) || Math.ceil(y) == Math.floor(c.y - c.h)))
+                        ) {
+                    passes = false;
+                    break;
+                }
+            }
+
+            if (passes) {
+                object = new Rectangle2D.Float(x, y, w, h);
+                break;
+            }
+
         }
 
+        return object;
 
-        return new Rectangle2D.Float(x, y, w, h);
     }
 
     //A randomly placed corridor between two sister rooms
