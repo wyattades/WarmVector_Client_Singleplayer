@@ -32,6 +32,7 @@ public class GeneratedEnclosure {
 
     //Accessible area of map
     public Area region;
+    public Area inverseRegion;
 
     //Stores line segments of map (these are used for shadowing, collision detection, etc.)
     public List<Line2D> walls;
@@ -53,6 +54,9 @@ public class GeneratedEnclosure {
         float roomReductionFactor = 0.42f;
         int min_spacing = 4;
         int path_thickness = 6;
+        int smoothingIterations = 3;
+        float smoothingFactor = 0.5f;
+        boolean randomObstaclesOnEdges = true;
 
         //Global constants
         splitSizeFactor = 0.22f;
@@ -130,33 +134,37 @@ public class GeneratedEnclosure {
             region.add(new Area(new Rectangle2D.Float(r.x, r.y, r.w, r.h)));
         }
 
-        //Create list of regions where obstacles cannot be placed
-        List<Rectangle2D> openSpaces = new ArrayList<>();
-        for (Rect c : corridors) {
-            if (c.h == path_thickness) { //horizontal corridors
-                openSpaces.add(new Rectangle2D.Float(c.x - path_thickness, c.y, path_thickness, path_thickness));
-                openSpaces.add(new Rectangle2D.Float(c.x + c.w, c.y, path_thickness, path_thickness));
+        if (randomObstaclesOnEdges) {
+
+            //Create list of regions where obstacles cannot be placed
+            List<Rectangle2D> openSpaces = new ArrayList<>();
+            for (Rect c : corridors) {
+                if (c.h == path_thickness) { //horizontal corridors
+                    openSpaces.add(new Rectangle2D.Float(c.x - path_thickness, c.y, path_thickness, path_thickness));
+                    openSpaces.add(new Rectangle2D.Float(c.x + c.w, c.y, path_thickness, path_thickness));
+                }
+                if (c.w == path_thickness) { //vertical corridors
+                    openSpaces.add(new Rectangle2D.Float(c.x, c.y - path_thickness, path_thickness, path_thickness));
+                    openSpaces.add(new Rectangle2D.Float(c.x, c.y + c.h, path_thickness, path_thickness));
+                }
             }
-            if (c.w == path_thickness){ //vertical corridors
-                openSpaces.add(new Rectangle2D.Float(c.x, c.y - path_thickness, path_thickness, path_thickness));
-                openSpaces.add(new Rectangle2D.Float(c.x, c.y + c.h, path_thickness, path_thickness));
+
+            //Add randomized "obstacles" to the rooms
+            float area, a = 100, b = 3500, c = 1, d = 5;
+            for (Rect r : rooms) {
+                area = Math.min(b, r.w * r.h);
+
+                float objectScale = (area - a) / (b - a);
+
+                int amount = Math.round(c + objectScale * (d - c));
+                //System.out.println(area + "  ,   " +amount);
+
+                for (int i = 0; i < amount; i++) {
+                    Rectangle2D object = objectInRoom(r, openSpaces);
+                    if (object != null) region.subtract(new Area(object));
+                }
             }
-        }
 
-        //Add randomized "obstacles" to the rooms
-        float area, a = 100, b = 3500, c = 1, d = 5;
-        for (Rect r : rooms) {
-            area = Math.min(b, r.w*r.h);
-
-            float objectScale = (area - a)/(b - a);
-
-            int amount = Math.round(c + objectScale*(d-c));
-            //System.out.println(area + "  ,   " +amount);
-
-            for (int i = 0; i < amount; i++) {
-                Rectangle2D object = objectInRoom(r, openSpaces);
-                if (object != null) region.subtract(new Area(object));
-            }
         }
 
         //Create list of points that describe the region
@@ -172,8 +180,8 @@ public class GeneratedEnclosure {
         }
 
         //smooth edges algorithm
-        for (int i = 0; i < 4; i++) {
-            areaPoints = smoothEdges(areaPoints, 0.5f);
+        for (int i = 0; i < smoothingIterations; i++) {
+            areaPoints = smoothEdges(areaPoints, smoothingFactor);
         }
 
         //Redefine region based on new points
@@ -185,6 +193,22 @@ public class GeneratedEnclosure {
         }
         newPoints.closePath();
         region = new Area(newPoints);
+
+        defineWalls(areaPoints);
+
+        width *= scale;
+        height *= scale;
+
+        for (Rect r : cells) {
+            r.x *= scale;
+            r.y *= scale;
+            r.w *= scale;
+            r.h *= scale;
+        }
+
+    }
+
+    private void defineWalls(List<float[]> areaPoints) {
 
         float[] start = new float[3]; // To record where each polygon starts
 
@@ -222,16 +246,6 @@ public class GeneratedEnclosure {
                         )
                 );
             }
-        }
-
-        width *= scale;
-        height *= scale;
-
-        for (Rect r : cells) {
-            r.x *= scale;
-            r.y *= scale;
-            r.w *= scale;
-            r.h *= scale;
         }
 
     }
@@ -350,6 +364,32 @@ public class GeneratedEnclosure {
         }
 
         return output;
+    }
+
+    public void addExplosion(float x, float y, int radius) {
+
+        int[] xpoints = {-2*radius, -radius, radius, 2*radius, 2*radius, radius, -radius, -2*radius};
+        int[] ypoints = {radius, 2*radius, 2*radius, radius, -radius, -2*radius, -2*radius, -radius};
+
+        Polygon subtraction = new Polygon(xpoints, ypoints, xpoints.length);
+        subtraction.translate((int)x, (int)y);
+
+        region.add(new Area(subtraction));
+
+        //Create list of points that describe the region
+        List<float[]> areaPoints = new ArrayList<>();
+        float[] coords = new float[6];
+
+        for (PathIterator pi = region.getPathIterator(null); !pi.isDone(); pi.next()) {
+            //"type" will either be SEG_LINETO, SEG_MOVETO, or SEG_CLOSE
+            int type = pi.currentSegment(coords);
+
+            float[] pathIteratorCoords = {type, coords[0] * scale, coords[1] * scale};
+            areaPoints.add(pathIteratorCoords);
+        }
+
+        defineWalls(areaPoints);
+
     }
 
     //Class used as a tree generator for new cells

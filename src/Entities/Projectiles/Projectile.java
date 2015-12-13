@@ -2,6 +2,7 @@ package Entities.Projectiles;
 
 import Entities.Entity;
 import Entities.Player;
+import Map.GeneratedEnclosure;
 import StaticManagers.FileManager;
 
 import java.awt.geom.Area;
@@ -46,8 +47,9 @@ public class Projectile extends Entity {
         y += vy;
     }
 
-    public void checkCollisions(Area region, HashMap<String, ArrayList<Entity>> entityList) {
-        if (!region.intersects(collideBox)) {
+    public void checkCollisions(GeneratedEnclosure map, HashMap<String, ArrayList<Entity>> entityList) {
+        if (!map.region.intersects(collideBox)) {
+            map.addExplosion(x, y, 40);
             state = false;
         } else {
             for (HashMap.Entry<String, ArrayList<Entity>> entry : entityList.entrySet()) {

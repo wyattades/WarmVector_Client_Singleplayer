@@ -172,7 +172,7 @@ public class PlayState extends GameState {
             Projectile p = (Projectile)entity;
             p.move();
             p.updateCollideBox();
-            p.checkCollisions(map.region, entityList);
+            p.checkCollisions(map, entityList);
         }
 
         for (Entity entity : entityList.get("weapon")) {
@@ -237,15 +237,15 @@ public class PlayState extends GameState {
 //                Bullet b = new Bullet(entityList, map, p);
 //                for (Bullet.CollidePoint point : b.collidePoints) {
 //                    animations.add(new Animation((int)point.x,(int) point.y, b.orient + (float) Math.PI, 1, point.hitColor, "hit_"));
-//                    p.weapon.hitSound.stop();
-//                    Clip copy = p.weapon.hitSound;
-//                    copy.setFramePosition(0);
-//                    copy.start();
+
 //                }
 //
 //                //Add bullet object to arrayList so it can be updated and displayed
 //                bullets.add(b);
-
+                p.weapon.hitSound.stop();
+                Clip copy = p.weapon.hitSound;
+                copy.setFramePosition(0);
+                copy.start();
                 entityList.get("bullet").add(new Projectile(p.x, p.y, p.orient, 15.0f, 0.0f, p));
             }
             //Subtract one ammo from player
