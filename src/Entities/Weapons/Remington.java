@@ -1,4 +1,4 @@
-package Entities.Weapon;
+package Entities.Weapons;
 
 import Entities.Player;
 import StaticManagers.FileManager;

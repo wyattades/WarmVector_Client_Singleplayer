@@ -3,18 +3,21 @@ package GameState;
 import Entities.Enemy;
 import Entities.Entity;
 import Entities.Player;
+import Entities.Projectiles.Projectile;
 import Entities.ThisPlayer;
-import Entities.Weapon.Weapon;
+import Entities.Weapons.Weapon;
 import Main.Game;
 import Map.GeneratedEnclosure;
 import Map.GeneratedEntities;
+import StaticManagers.FileManager;
 import StaticManagers.InputManager;
 import Visual.*;
-import Visual.Occlusion.Visibility;
+import Visual.Occlusion.Shadow;
 
 import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,9 +35,9 @@ public class PlayState extends GameState {
     private ArrayList<Bullet> bullets;
     private ArrayList<Animation> animations;
     private ThisPlayer thisPlayer;
-    private Visibility shadow;
+    private Shadow shadow;
     private boolean dead;
-    GeneratedEnclosure map;
+    private GeneratedEnclosure map;
     public PlayState(GameStateManager gsm) {
         super(gsm);
     }
@@ -51,7 +54,7 @@ public class PlayState extends GameState {
         map = new GeneratedEnclosure(200, 200, 1.0f);
         GeneratedEntities generatedEntities = new GeneratedEntities(map, 1.0f);
         entityList = generatedEntities.getSpawnedEntities();
-        shadow = new Visibility(map);
+        shadow = new Shadow(map);
 
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
 
@@ -68,28 +71,27 @@ public class PlayState extends GameState {
 
         //save stuff (stats?)
     }
-//      BufferedImage background = FileManager.images.get("background_0" + 1 + ".png");
+      BufferedImage background = FileManager.images.get("background_0" + 1 + ".png");
 
     public void draw(Graphics2D g) {
 
         //TEMP
-        g.setColor(new Color(80,80,140));
+        g.setColor(new Color(81, 105, 124));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
         //Create copy of transform for later
         AffineTransform oldT = g.getTransform();
 
+//        g.rotate(-thisPlayer.orient, Game.WIDTH/2, Game.HEIGHT/2);
+
         //Zoom in
         g.scale(SCALEFACTOR, SCALEFACTOR);
 
-//        g.rotate(thisPlayer.orient, Game.WIDTH, Game.HEIGHT);
-
         //translate screen to follow player
         g.translate(screenMover.screenPosX - thisPlayer.x + Game.WIDTH / 2 / SCALEFACTOR, screenMover.screenPosY - thisPlayer.y + Game.HEIGHT / 2 / SCALEFACTOR);
-//        g.drawImage(background, 0, 0, map.width, map.height, null);
-//
+
         //background image
-        //tileMap.drawBack(g);
+//        g.drawImage(background, 0, 0, map.width, map.height, null);
 
         //draw objects \/
         for (Bullet b : bullets) {
@@ -114,6 +116,11 @@ public class PlayState extends GameState {
 
         thisPlayer.draw(g);
 
+        for (Entity entity : entityList.get("bullet")) {
+            Projectile p = (Projectile)entity;
+            p.draw(g);
+        }
+
         for (Animation a : animations) {
             a.draw(g);
         }
@@ -121,13 +128,12 @@ public class PlayState extends GameState {
         //TEMP
         shadow.draw(g, new Color(20,20,20));
 
-        //map.draw(g, new Color(60,60,60));
+        map.draw(g, new Color(90,90,90), new Color(50,50,50));
 
-        g.setColor(new Color(50,50,50));
-        g.setStroke(new BasicStroke(2));
-        map.walls.forEach(g::draw);
-
-
+        //TEMP
+//        g.setColor(new Color(50,50,50));
+//        g.setStroke(new BasicStroke(2));
+//        map.walls.forEach(g::draw);
 
         //reset transformation
         g.setTransform(oldT);
@@ -144,13 +150,12 @@ public class PlayState extends GameState {
 
     }
 
-    public void update() {
+    public void update() { //update objects
 
         //create a copy of thisPlayer for convenience
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
 
         if (!dead) {
-            //update objects
             thisPlayer.update();
             thisPlayer.regenHealth();
             thisPlayer.updateAngle(gsm.cursor.x - screenMover.screenVelX, gsm.cursor.y - screenMover.screenVelY);
@@ -162,23 +167,31 @@ public class PlayState extends GameState {
         shadow.setLightLocation(thisPlayer.x, thisPlayer.y);
         shadow.sweep(6.29f);
 
-        bullets.forEach(Bullet::update);
+//        bullets.forEach(Bullet::update);
+        for (Entity entity : entityList.get("bullet")) {
+            Projectile p = (Projectile)entity;
+            p.move();
+            p.updateCollideBox();
+            p.checkCollisions(map.region, entityList);
+        }
+
         for (Entity entity : entityList.get("weapon")) {
             Weapon w = (Weapon) entity;
             w.updateCollideBox();
         }
+
         for (Entity entity : entityList.get("enemy")) {
             Enemy e = (Enemy) entity;
             e.normalBehavior(thisPlayer.x, thisPlayer.y, dead);
             e.update();
             if (e.shooting) addBullets(e);
-            //if (e.life < 0) entityList.get("weapon").add(e.weapon);
         }
+
         animations.forEach(Animation::update);
 
-        for (int i = bullets.size() - 1; i >= 0; i--) {
-            if (!bullets.get(i).state) bullets.remove(i); // <-- should I remove "object" or "index location"???
-        }
+//        for (int i = bullets.size() - 1; i >= 0; i--) {
+//            if (!bullets.get(i).state) bullets.remove(i); // <-- should I remove "object" or "index location"???
+//        }
 
         for (int i = animations.size() - 1; i >= 0; i--) {
             if (!animations.get(i).state) animations.remove(i);
@@ -221,17 +234,19 @@ public class PlayState extends GameState {
     private void addBullets(Player p) {
         if (p.weapon != null && Game.currentTimeMillis() - p.shootTime > p.weapon.rate && p.weapon.ammo > 0) {
             for (int i = 0; i < p.weapon.amount; i++) {
-                Bullet b = new Bullet(entityList, map, p);
-                for (Bullet.CollidePoint point : b.collidePoints) {
-                    animations.add(new Animation((int)point.x,(int) point.y, b.orient + (float) Math.PI, 1, point.hitColor, "hit_"));
-                    p.weapon.hitSound.stop();
-                    Clip copy = p.weapon.hitSound;
-                    copy.setFramePosition(0);
-                    copy.start();
-                }
+//                Bullet b = new Bullet(entityList, map, p);
+//                for (Bullet.CollidePoint point : b.collidePoints) {
+//                    animations.add(new Animation((int)point.x,(int) point.y, b.orient + (float) Math.PI, 1, point.hitColor, "hit_"));
+//                    p.weapon.hitSound.stop();
+//                    Clip copy = p.weapon.hitSound;
+//                    copy.setFramePosition(0);
+//                    copy.start();
+//                }
+//
+//                //Add bullet object to arrayList so it can be updated and displayed
+//                bullets.add(b);
 
-                //Add bullet object to arrayList so it can be updated and displayed
-                bullets.add(b);
+                entityList.get("bullet").add(new Projectile(p.x, p.y, p.orient, 15.0f, 0.0f, p));
             }
             //Subtract one ammo from player
             p.weapon.changeAmmo(-1);

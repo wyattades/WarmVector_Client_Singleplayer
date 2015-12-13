@@ -162,8 +162,8 @@ public class Game implements Runnable {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
 //        g.setRenderingHint(RenderingHints.KEY_RENDERING,
 //                RenderingHints.VALUE_RENDER_QUALITY);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+//        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+//                RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 //        g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,

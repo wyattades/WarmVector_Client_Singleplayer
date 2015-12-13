@@ -85,23 +85,23 @@ public class HUD {
 
         //AMMO
         String ammoS = user.weapon == null ? "" : "Ammo: " + user.weapon.ammo + " / " + user.weapon.clipAmount*user.weapon.clipSize;
+        g.setColor(defaultHudColor);
         g.drawString(ammoS, HUDx - textWidth(ammoS, g), HUDy + textHeight(ammoS, g) / 2);
 
         //LIFE
         if (user.life <= 10) g.setColor(nearDeathHudColor);
-        else g.setColor(defaultHudColor);
 
-        //  LIFE AMOUNT
+        //LIFE AMOUNT
         String lifeS = String.valueOf((int) user.life);
         g.drawString(lifeS, 28, HUDy + textHeight(lifeS, g) / 2);
 
-        //  HEALTH BAR
+        //HEALTH BAR
         g.setStroke(new BasicStroke(2));
         g.drawRect(lifeBar_x - lifeBar_offset, lifeBar_y - lifeBar_offset, lifeBar_w + 2 * lifeBar_offset, lifeBar_h + 2 * lifeBar_offset);
         g.setStroke(new BasicStroke(1));
         g.fillRect(lifeBar_x, lifeBar_y, (int) (user.life * lifeBar_w / user.maxLife), lifeBar_h);
 
-        //  CROSS SYMBOL
+        //CROSS SYMBOL
         g.fill(cross);
 
         //ENEMY COUNTER BOX
@@ -119,18 +119,18 @@ public class HUD {
         AffineTransform oldTransform = g.getTransform();
 
         g.translate(Game.WIDTH - 300, 20);
-        //g.scale(0.13f, 0.13f);
+        g.scale(0.1f, 0.1f);
 
         g.setColor(Color.gray);
         g.fill(mapArea);
 
-        g.setStroke(new BasicStroke(1));
+        g.setStroke(new BasicStroke(6));
         g.setColor(Color.white);
         g.draw(mapArea);
 
         g.setColor(Color.cyan);
         g.setStroke(new BasicStroke(0));
-        g.fillOval((int) (user.x/map.scale)-1, (int) (user.y/map.scale)-1, 4, 4);
+        g.fillOval((int) user.x-10, (int)user.y-10, 40, 40);
 
         g.setTransform(oldTransform);
 

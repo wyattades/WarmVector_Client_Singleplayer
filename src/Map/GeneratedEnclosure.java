@@ -18,6 +18,8 @@ public class GeneratedEnclosure {
     // I use the Binary Space Partitioning (look it up) to initially split the space into partitions.
     // Then, I randomly reduce the size of these partitions, and I add corridors that branch out to all the rooms
     // The room and corridor rectangles are stored separately, as well as the list of the surround walls
+    // Then I add random obstacles to the edges of the rooms (without blocking the corridors)
+    // Then I use my smoothing algorithm to smooth the edges and make it "cave-like" and more natural
 
     public int width, height, scale;
 
@@ -41,8 +43,9 @@ public class GeneratedEnclosure {
 
     public GeneratedEnclosure(int i_width, int i_height, float scaleFactor) {
 
-        width = i_width;
-        height = i_height;
+        //Make sure width and height are always even numbers
+        width = round(i_width,2);
+        height = round(i_height,2);
 
         scale = 12;
 
@@ -57,10 +60,6 @@ public class GeneratedEnclosure {
 
         //Modify iterations so that the rooms sizes change based on scaleFactor (default is 4 cause it looks the best)
         iterations = 4 + (int) (Math.log(scaleFactor) / Math.log(2));
-
-        //Make sure width and height are always even numbers
-        width = round(width, 2);
-        height = round(height, 2);
 
         //Keep looping until there are no null rooms (a null room
         //has about a 1 in 50 chance of spawning)
@@ -123,26 +122,39 @@ public class GeneratedEnclosure {
             }
         }
 
-        //Create an empty list of lines
-        walls = new ArrayList<>();
-
         //Create a single region from all of the cells
         region = new Area();
+
+        //Add the rooms and corridors to the region
         for (Rect r : cells) {
             region.add(new Area(new Rectangle2D.Float(r.x, r.y, r.w, r.h)));
         }
 
+        //Create list of regions where obstacles cannot be placed
+        List<Rectangle2D> openSpaces = new ArrayList<>();
+        for (Rect c : corridors) {
+            if (c.h == path_thickness) { //horizontal corridors
+                openSpaces.add(new Rectangle2D.Float(c.x - path_thickness, c.y, path_thickness, path_thickness));
+                openSpaces.add(new Rectangle2D.Float(c.x + c.w, c.y, path_thickness, path_thickness));
+            }
+            if (c.w == path_thickness){ //vertical corridors
+                openSpaces.add(new Rectangle2D.Float(c.x, c.y - path_thickness, path_thickness, path_thickness));
+                openSpaces.add(new Rectangle2D.Float(c.x, c.y + c.h, path_thickness, path_thickness));
+            }
+        }
 
-        float area, a1 = minRoomSize*minRoomSize, a2 = 2500, b1 = 1, b2 = 4;
         //Add randomized "obstacles" to the rooms
+        float area, a = 100, b = 3500, c = 1, d = 5;
         for (Rect r : rooms) {
+            area = Math.min(b, r.w*r.h);
 
-            area = r.w*r.h;
+            float objectScale = (area - a)/(b - a);
 
-            int amount = round(b1 + (area-a1)*(b2-b1)/(a2-a1), 1);
+            int amount = Math.round(c + objectScale*(d-c));
+            //System.out.println(area + "  ,   " +amount);
 
             for (int i = 0; i < amount; i++) {
-                Rectangle2D object = objectInRoom(r);
+                Rectangle2D object = objectInRoom(r, openSpaces);
                 if (object != null) region.subtract(new Area(object));
             }
         }
@@ -155,11 +167,29 @@ public class GeneratedEnclosure {
             //"type" will either be SEG_LINETO, SEG_MOVETO, or SEG_CLOSE
             int type = pi.currentSegment(coords);
 
-            float[] pathIteratorCoords = {type, coords[0], coords[1]};
+            float[] pathIteratorCoords = {type, coords[0] * scale, coords[1] * scale};
             areaPoints.add(pathIteratorCoords);
         }
 
+        //smooth edges algorithm
+        for (int i = 0; i < 4; i++) {
+            areaPoints = smoothEdges(areaPoints, 0.5f);
+        }
+
+        //Redefine region based on new points
+        Path2D newPoints = new Path2D.Float();
+        newPoints.moveTo(areaPoints.get(0)[1], areaPoints.get(0)[2]);
+        for (int i = 1; i < areaPoints.size(); i++) {
+            float[] p = areaPoints.get(i);
+            newPoints.lineTo(p[1], p[2]);
+        }
+        newPoints.closePath();
+        region = new Area(newPoints);
+
         float[] start = new float[3]; // To record where each polygon starts
+
+        //Create an empty list of lines
+        walls = new ArrayList<>();
 
         //Based on the region, add to the list of walls
         for (int i = 0; i < areaPoints.size(); i++) {
@@ -180,15 +210,15 @@ public class GeneratedEnclosure {
             if (nextElement[0] == PathIterator.SEG_LINETO) {
                 walls.add(
                         new Line2D.Float(
-                                currentElement[1] * scale, currentElement[2]* scale,
-                                nextElement[1]* scale, nextElement[2]* scale
+                                currentElement[1], currentElement[2],
+                                nextElement[1], nextElement[2]
                         )
                 );
             } else if (nextElement[0] == PathIterator.SEG_CLOSE) {
                 walls.add(
                         new Line2D.Float(
-                                currentElement[1]* scale, currentElement[2]* scale,
-                                start[1]* scale, start[2]* scale
+                                currentElement[1], currentElement[2],
+                                start[1], start[2]
                         )
                 );
             }
@@ -206,6 +236,123 @@ public class GeneratedEnclosure {
 
     }
 
+    //A randomly placed rectangular obstacle inside a room
+    private Rectangle2D objectInRoom(Rect r, List<Rectangle2D> openSpaces) {
+        Rectangle2D object;
+        for (int i = 0; i < 10; i++) {
+
+            int w = (int) (Game.random(7, 15));
+            int h = (int) (Game.random(7, 15));
+
+            int x, y;
+            float random = Game.random(1.0f, 2.0f);
+            if (random > 1.75f) {
+                x = r.x;
+                y = r.y + r.h - h;
+            } else if (random > 1.5f) {
+                x = r.x;
+                y = r.y;
+            } else if (random > 1.25f) {
+                x = r.x + r.w - w;
+                y = r.y;
+            } else// if (random > 1.0f) {
+            {    x = r.x + r.w - w;
+                y = r.y + r.h - h;
+            }/* else if (random > 0.75f) {
+                x = r.x;
+                y = (int) Game.random(r.y + path_thickness, r.y + r.h - path_thickness - h);
+            } else if (random > 0.5f) {
+                x = r.x + r.w - w;
+                y = (int) Game.random(r.y + path_thickness, r.y + r.h - path_thickness - h);
+            } else if (random > 0.25f) {
+                x = (int) Game.random(r.x + path_thickness, r.x + r.w - path_thickness - w);
+                y = r.y;
+            } else {
+                x = (int) Game.random(r.x + path_thickness, r.x + r.w - path_thickness - w);
+                y = r.y + r.h - h;
+            }*/
+
+            object = new Rectangle2D.Float(x, y, w, h);
+
+            boolean passes = true;
+            //test for adjacency to corridors
+            for (Rectangle2D openSpace : openSpaces) {
+                if (object.intersects(openSpace)) {
+                    passes = false;
+                    break;
+                }
+            }
+
+            if (passes) {
+                return object;
+            }
+
+        }
+
+        return null;
+
+    }
+
+    //An algorithm for smoothing the edges of a region:
+    //For each edge, the midpoint is found and the original vertices
+    //are moved towards their associated midpoints
+    List<float[]> smoothEdges(List<float[]> input, float factor) {
+
+        //Create list for the midpoints of all the lines
+        List<Point2D> midpoints = new ArrayList<>();
+        for (float[] edge : input) {
+            float x = (edge[1] + edge[1])/2.0f;
+            float y = (edge[2] + edge[2])/2.0f;
+            midpoints.add(new Point2D.Float(x,y));
+        }
+
+        //Create a list of points for the original vertices to move towards
+        List<Point2D> anchorPoints = new ArrayList<>();
+
+        //Define this list as the midpoints between the midpoints we made earlier
+        Point2D p0 = midpoints.get(midpoints.size()-1),
+                p1 = midpoints.get(0);
+
+        anchorPoints.add(new Point2D.Float(
+                (float)((p1.getX()+p0.getX())/2.0f),
+                (float)((p1.getY()+p0.getY())/2.0f)));
+
+        for (int i = 0; i < midpoints.size()-1; i += 1) {
+
+            Point2D pa = midpoints.get(i),
+                    pb = midpoints.get(i+1);
+
+            anchorPoints.add(new Point2D.Float(
+                    (float)((pa.getX()+pb.getX())/2.0f),
+                    (float)((pa.getY()+pb.getY())/2.0f)));
+
+        }
+
+        //Create output list of vertices
+        List<float[]> output = new ArrayList<>();
+
+        for (int i = 0; i < input.size(); i++) {
+
+            float[] vertex = input.get(i);
+            Point2D ap = anchorPoints.get(i);
+
+            //Move original vertices halfway to the anchorPoints
+            //float dist = (float) Math.sqrt( (vertex[1]-ap.getX())*(vertex[1]-ap.getX()) +(vertex[2]-ap.getY())*(vertex[2]-ap.getY()) );
+            float dx = (float)(factor*(vertex[1]-ap.getX()));
+            float dy = (float)(factor*(vertex[2]-ap.getY()));
+            vertex[1] = (float) (ap.getX() + dx);
+            vertex[2] = (float) (ap.getY() + dy);
+
+            //Add the midpoints and new vertices to the output
+            output.add(new float[]{vertex[0], (float) ap.getX(), (float) ap.getY()});
+            output.add(vertex);
+
+        }
+
+        return output;
+    }
+
+    //Class used as a tree generator for new cells
     private class Cell {
 
         public Cell cellA, cellB;
@@ -237,51 +384,6 @@ public class GeneratedEnclosure {
         }
     }
 
-    //A randomly placed rectangular obstacle inside a room
-    private Rectangle2D objectInRoom(Rect r) {
-        Rectangle2D object = null;
-        for (int i = 0; i < 10; i++) {
-            int w = (int) Game.random(4, 12);
-            int h = (int) Game.random(4, 12);
-            int x, y;
-
-            float random = Game.random(0, 1);
-            if (random > 0.75f) {
-                x = r.x;
-                y = (int) Game.random(r.y, r.y + r.h);
-            } else if (random > 0.5f) {
-                x = r.x - r.w;
-                y = (int) Game.random(r.y, r.y + r.h);
-            } else if (random > 0.25f) {
-                x = (int) Game.random(r.x, r.x + r.w);
-                y = r.y;
-            } else {
-                x = (int) Game.random(r.x, r.x + r.w);
-                y = r.y - r.h;
-            }
-
-            boolean passes = true;
-            //test for adjacency to corridors
-            for (Rect c : corridors) {
-                if (
-                        (y + h > c.y && y < c.y + h && (Math.ceil(x + w) == Math.floor(c.x) || Math.ceil(x) == Math.floor(c.x - c.w))) ||
-                        (x + w > c.x && x < c.x + w && (Math.ceil(y + h) == Math.floor(c.y) || Math.ceil(y) == Math.floor(c.y - c.h)))
-                        ) {
-                    passes = false;
-                    break;
-                }
-            }
-
-            if (passes) {
-                object = new Rectangle2D.Float(x, y, w, h);
-                break;
-            }
-
-        }
-
-        return object;
-
-    }
 
     //A randomly placed corridor between two sister rooms
     // (Can't collide with other corridors/rooms)
@@ -357,17 +459,18 @@ public class GeneratedEnclosure {
         return Math.round(i / v) * v;
     }
 
+    public void draw(Graphics2D g, Color stroke, Color fill) {
 
-    public void draw(Graphics2D g, Color color) {
-        Polygon CUTOUT = new Polygon();
-        for (Line2D w : walls) {
-            CUTOUT.addPoint((int)w.getX1(), (int)w.getY1());
-        }
-        GeneralPath SHADOW = new GeneralPath(CUTOUT);
-        SHADOW.append( new Rectangle2D.Float(-width, -height, 3 * width, 3 * height), false);
+        Area inverseRegion = new Area(new Rectangle2D.Float(-width, -height, 3 * width, 3 * height));
+        inverseRegion.subtract(region);
 
-        g.setColor(color);
-        g.fill(SHADOW);
+        g.setStroke(new BasicStroke(2,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
+        g.setColor(stroke);
+        g.draw(inverseRegion);
+
+        g.setColor(fill);
+        g.fill(inverseRegion);
+
     }
 
 }

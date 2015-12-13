@@ -3,9 +3,7 @@ package Visual.Occlusion;
 import Map.GeneratedEnclosure;
 
 import java.awt.*;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,7 +12,7 @@ import java.util.Comparator;
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 5/7/2015.
  */
-public class Visibility {
+public class Shadow {
 
     // Color of shadow
     private static Color COLOR = new Color(20, 20, 20, 255);
@@ -32,18 +30,17 @@ public class Visibility {
     // The output is a series of points that forms a visible area polygon
     public ArrayList<Point> output;
 
-    //private TileMap tileMap;
-    private Rectangle2D.Float BORDER;
+    private Area BORDER;
 
     // Construct an empty visibility set
-    public Visibility(GeneratedEnclosure map) {
+    public Shadow(GeneratedEnclosure map) {
 
-        BORDER = new Rectangle2D.Float(
-                -map.width,
-                -map.height,
-                3 * map.width,
-                3 * map.height
-        );
+        BORDER = new Area(new Rectangle2D.Float(
+                -2*map.width,
+                -2*map.height,
+                5 * map.width,
+                5 * map.height
+        ));
 
         segments = new ArrayList<>();
         endpoints = new ArrayList<>();
@@ -56,15 +53,23 @@ public class Visibility {
     }
 
     public void draw(Graphics2D g, Color color) {
-        Polygon CUTOUT = new Polygon();
-        for (Point p : output) {
-            CUTOUT.addPoint(Math.round(p.x), Math.round(p.y));
+
+        int[] xpoints = new int[output.size()];
+        int[] ypoints = new int[xpoints.length];
+
+        for (int i = 0; i < output.size(); i++) {
+            Point p = output.get(i);
+            xpoints[i] = Math.round(p.x);
+            ypoints[i] = Math.round(p.y);
         }
-        GeneralPath SHADOW = new GeneralPath(CUTOUT);
-        SHADOW.append(BORDER, false);
+
+        Polygon cutout = new Polygon(xpoints, ypoints, xpoints.length);
+
+        Area shadow = new Area(BORDER);
+        shadow.subtract(new Area(cutout));
 
         g.setColor(color);
-        g.fill(SHADOW);
+        g.fill(shadow);
     }
 
 
@@ -78,6 +83,7 @@ public class Visibility {
 //            }
 //        }
 //        if (!alreadyExists) {
+
         // Add a segment, where the first point shows up in the
         // visualization but the second one does not. (Every endpoint is
         // part of two segments, but only show them once)
@@ -120,24 +126,15 @@ public class Visibility {
         }
     }
 
-    // leftOf(segment, point) returns true if point is "left"
-    // of segment treated as a vector. Note that this assumes a 2D
-    // coordinate system in which the Y axis grows downwards, which
-    // matches common 2D graphics libraries, but is the opposite of
-    // the usual convention from mathematics and in 3D graphics
-    // libraries.
+    // returns true if point is "left" of segment treated as a vector
     private boolean leftOf(Segment s, Point p) {
         float cross = (s.p2.x - s.p1.x) * (p.y - s.p1.y) - (s.p2.y - s.p1.y) * (p.x - s.p1.x);
         return cross < 0;
     }
 
-    private Point interpolate(Point p, Point q, float f) {
-        return new Point(p.x * (1 - f) + q.x * f, p.y * (1 - f) + q.y * f);
-    }
-
-
+    // A neat algorithm that works for reasons outside of my knowledge
     private boolean _segment_in_front_of(Segment a, Segment b, Point relativeTo) {
-        // A neat algorithm that works for reasons outside of my knowledge
+
         boolean A1 = leftOf(a, interpolate(b.p1, b.p2, 0.01f));
         boolean A2 = leftOf(a, interpolate(b.p2, b.p1, 0.01f));
         boolean A3 = leftOf(a, relativeTo);
@@ -149,12 +146,12 @@ public class Visibility {
         if (A1 == A2 && A2 != A3) return false;
         if (B1 == B2 && B2 == B3) return false;
 
-//        ArrayList<Point> points = new ArrayList<Point>();
-//        points.add(a.p1);
-//        points.add(a.p2);
-//        points.add(b.p1);
-//        points.add(b.p2);
         return false;
+    }
+
+    //Part of above algorithm ^
+    private Point interpolate(Point p, Point q, float f) {
+        return new Point(p.x * (1 - f) + q.x * f, p.y * (1 - f) + q.y * f);
     }
 
 
@@ -236,8 +233,7 @@ public class Visibility {
             p4.x = segment.p2.x;
             p4.y = segment.p2.y;
         } else {
-            // Stop the triangle at a fixed distance; this probably is
-            // not what we want, but it never gets used in the demo
+            // Stop the triangle at a fixed distance just in case
             p3.x = center.x + (float) Math.cos(angle1) * 500;
             p3.y = center.y + (float) Math.sin(angle1) * 500;
             p4.x = center.x + (float) Math.cos(angle2) * 500;

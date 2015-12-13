@@ -1,6 +1,6 @@
 package Entities;
 
-import Entities.Weapon.Weapon;
+import Entities.Weapons.Weapon;
 import Main.Game;
 import Map.GeneratedEnclosure;
 
