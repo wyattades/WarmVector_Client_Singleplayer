@@ -63,12 +63,12 @@ public abstract class MenuState extends GameState {
         buttons = new ArrayList<>();
         sliders = new ArrayList<>();
         addButton("BACK", ButtonC.BACK);
-        OutputManager.reloadSettings();
-        addSlider("Fullscreen", "fullscreen", new String[]{"On", "Off"}, OutputManager.getSettingValue("fullscreen"));
-        addSlider("Anti-Aliasing", "anti_aliasing", new String[]{"On", "Off"}, OutputManager.getSettingValue("anti_aliasing"));
-        addSlider("Quality", "quality", new String[]{"Good", "Great"}, OutputManager.getSettingValue("quality"));
-        addSlider("Music Level", "music_volume", new String[]{"0", "25", "50", "75", "100"}, OutputManager.getSettingValue("music_volume"));
-        addSlider("SFX Level", "sfx_volume", new String[]{"0", "25", "50", "75", "100"}, OutputManager.getSettingValue("sfx_volume"));
+       // OutputManager.reloadSettings();
+        addSlider("Fullscreen", "fullscreen", new String[]{"Off", "On"}, OutputManager.getSetting("fullscreen"));
+        addSlider("Anti-Aliasing", "anti_aliasing", new String[]{"Off", "On"}, OutputManager.getSetting("anti_aliasing"));
+        addSlider("Quality", "quality", new String[]{"Good", "Great"}, OutputManager.getSetting("quality"));
+        addSlider("Music Level", "music_volume", new String[]{"0", "25", "50", "75", "100"}, OutputManager.getSetting("music_volume"));
+        addSlider("SFX Level", "sfx_volume", new String[]{"0", "25", "50", "75", "100"}, OutputManager.getSetting("sfx_volume"));
     }
 
     protected void buttonOutcome(int value) {
@@ -111,10 +111,6 @@ public abstract class MenuState extends GameState {
         }
     }
 
-    protected void sliderOutcome(String name, int setting) {
-
-    }
-
     private boolean snapSliders;
 
     protected void defaultInputHandle(InputManager inputManager) {
@@ -149,7 +145,6 @@ public abstract class MenuState extends GameState {
                 for (Slider s : sliders) {
                     s.snapSlider();
                     OutputManager.setSetting(s.name, s.current_option);
-                    sliderOutcome(s.text, s.current_option);
                     s.pressed = false;
                 }
                 snapSliders = true;

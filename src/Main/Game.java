@@ -7,6 +7,7 @@ package Main;
 
 import GameState.GameStateManager;
 import StaticManagers.InputManager;
+import StaticManagers.OutputManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -151,20 +152,23 @@ public class Game implements Runnable {
         }
     }
 
-
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-//        g.setRenderingHint(RenderingHints.KEY_RENDERING,
-//                RenderingHints.VALUE_RENDER_QUALITY);
-//        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-//                RenderingHints.VALUE_ANTIALIAS_ON);
+        if (OutputManager.getSetting("quality") == 1) {
+            g.setRenderingHint(RenderingHints.KEY_RENDERING,
+                    RenderingHints.VALUE_RENDER_QUALITY);
+        }
+        if (OutputManager.getSetting("anti_aliasing") == 1) {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+        }
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-//        g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
+//            g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
 //                RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-//        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
+//            g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
 //                RenderingHints.VALUE_COLOR_RENDER_SPEED);
-//        g.setRenderingHint(RenderingHints.KEY_DITHERING,
+//            g.setRenderingHint(RenderingHints.KEY_DITHERING,
 //                RenderingHints.VALUE_DITHER_ENABLE);
 
         //g.setFont(new Font("Dotum Bold", Font.BOLD, 50));
