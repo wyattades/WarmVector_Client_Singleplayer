@@ -124,12 +124,6 @@ public class Game implements Runnable {
         return (int) millisLong;
     }
 
-    public static float random(float min, float max) {
-        return (float) (Math.random() * (max - min) + min);
-    }
-
-    //    private double startTime = 0;
-//    private int frames = 0;
     double previous = currentTimeMillis();
     double lag = 0.0;
 

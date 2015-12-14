@@ -5,6 +5,7 @@ import Entities.Player;
 import Map.GeneratedEnclosure;
 import StaticManagers.FileManager;
 
+import java.awt.*;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,11 +29,14 @@ public class Projectile extends Entity {
         w = sprite_w;
         h = sprite_h;
 
-        this.x += shooter.weapon.gunLength * (float)Math.cos(orient);
-        this.y += shooter.weapon.gunLength * (float)Math.sin(orient);
+        float cosAngle = (float)Math.cos(orient);
+        float sinAngle = (float)Math.sin(orient);
 
-        vx = (float) Math.cos(orient)*i_speed;
-        vy = (float) Math.sin(orient)*i_speed;
+        this.x += shooter.weapon.gunLength * cosAngle;
+        this.y += shooter.weapon.gunLength * sinAngle;
+
+        vx = i_speed * cosAngle;
+        vy = i_speed * sinAngle;
 
         this.accel = acceleration;
 
@@ -48,8 +52,8 @@ public class Projectile extends Entity {
     }
 
     public void checkCollisions(GeneratedEnclosure map, HashMap<String, ArrayList<Entity>> entityList) {
-        if (!map.region.intersects(collideBox)) {
-            map.addExplosion(x, y, 40);
+        if (map.inverseRegion.intersects(collideBox)) {
+            map.addExplosion(x, y, 30, 8);
             state = false;
         } else {
             for (HashMap.Entry<String, ArrayList<Entity>> entry : entityList.entrySet()) {

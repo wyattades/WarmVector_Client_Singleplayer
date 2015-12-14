@@ -70,7 +70,7 @@ public class Enemy extends Player {
         double a = angle_Between(ix, iy);
 //        updateVelX(speed * (float) Math.cos(a));
 //        updateVelY(speed * (float) Math.sin(a));
-       vx = (speed * (float) Math.cos(a));
+        vx = (speed * (float) Math.cos(a));
         vy = (speed * (float) Math.sin(a));
     }
 
@@ -94,7 +94,7 @@ public class Enemy extends Player {
     }
 
     boolean lineOfSight(float ix, float iy) {
-        for (Line2D w : ge.walls) {
+        for (Line2D w : map.walls) {
             if (w.intersectsLine(x, y, ix, iy)) {
                 return false;
             }

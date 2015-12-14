@@ -1,6 +1,7 @@
 package Entities;
 
 import Entities.Weapons.Weapon;
+import Helper.MyMath;
 import Main.Game;
 import Map.GeneratedEnclosure;
 
@@ -22,13 +23,13 @@ public abstract class Player extends Entity {
     public static int topSpeed = 5;
     public int shootTime;
     protected BufferedImage shootSprite, defaultSprite, deadSprite;
-    protected GeneratedEnclosure ge;
+    protected GeneratedEnclosure map;
 
-    Player(float x, float y, float orient, GeneratedEnclosure ge) {
+    Player(float x, float y, float orient, GeneratedEnclosure map) {
         super(x, y,  orient);
-        this.ge = ge;
+        this.map = map;
         hitColor = Color.red;
-        vx = vy = 0;
+        resetVelocity();
         life = maxLife = 100.0f;
         shootTime = Game.currentTimeMillis();
         w = h = 36;
@@ -80,11 +81,11 @@ public abstract class Player extends Entity {
     }
 
     public Weapon getWeaponForDrop() {
-        float spawnDist = Game.random(10,24);
+        float spawnDist = MyMath.random(10, 24);
         Weapon w = weapon;
-        w.x = x + spawnDist * (float)Math.cos(Game.random(0, 6.29f));
-        w.y = y + spawnDist * (float)Math.sin(Game.random(0, 6.29f));
-        w.orient = Game.random(0,6.29f);
+        w.x = x + spawnDist * (float)Math.cos(MyMath.random(0, 6.29f));
+        w.y = y + spawnDist * (float)Math.sin(MyMath.random(0, 6.29f));
+        w.orient = MyMath.random(0,6.29f);
         w.user = null;
         return w;
     }
@@ -93,30 +94,34 @@ public abstract class Player extends Entity {
 
         Rectangle2D futureX = new Rectangle2D.Float(x - w/2 + vx, y - h/2, w, h);
 
-        boolean collidesX = false;
+//        boolean collidesX = false;
+//
+//        for (Line2D line : ge.walls) {
+//            if (futureX.intersectsLine(line)) {
+//                collidesX = true;
+//            }
+//        }
+//
+//        return collidesX;
 
-        for (Line2D line : ge.walls) {
-            if (futureX.intersectsLine(line)) {
-                collidesX = true;
-            }
-        }
-
-        return collidesX;
+        return map.inverseRegion.intersects(futureX);
     }
 
     private boolean obstacleY(float vy) {
 
         Rectangle2D futureY = new Rectangle2D.Float(x - w/2, y - h/2 + vy, w, h);
 
-        boolean collidesY = false;
+//        boolean collidesY = false;
+//
+//        for (Line2D line : ge.walls) {
+//            if (futureY.intersectsLine(line)) {
+//                collidesY = true;
+//            }
+//        }
+//
+//        return collidesY;
 
-        for (Line2D line : ge.walls) {
-            if (futureY.intersectsLine(line)) {
-                collidesY = true;
-            }
-        }
-
-        return collidesY;
+        return map.inverseRegion.intersects(futureY);
 
     }
 

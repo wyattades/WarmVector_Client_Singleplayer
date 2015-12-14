@@ -1,5 +1,6 @@
 package GameState;
 
+import StaticManagers.AudioManager;
 import Entities.Enemy;
 import Entities.Entity;
 import Entities.Player;
@@ -14,7 +15,6 @@ import StaticManagers.InputManager;
 import Visual.*;
 import Visual.Occlusion.Shadow;
 
-import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -237,26 +237,29 @@ public class PlayState extends GameState {
 //                Bullet b = new Bullet(entityList, map, p);
 //                for (Bullet.CollidePoint point : b.collidePoints) {
 //                    animations.add(new Animation((int)point.x,(int) point.y, b.orient + (float) Math.PI, 1, point.hitColor, "hit_"));
-
 //                }
 //
 //                //Add bullet object to arrayList so it can be updated and displayed
 //                bullets.add(b);
-                p.weapon.hitSound.stop();
-                Clip copy = p.weapon.hitSound;
-                copy.setFramePosition(0);
-                copy.start();
+//                p.weapon.hitSound.stop();
+//                Clip copy = p.weapon.hitSound;
+//                copy.setFramePosition(0);
+//                FloatControl gainControl =
+//                        (FloatControl) copy.getControl(FloatControl.Type.MASTER_GAIN);
+//                gainControl.setValue(-10.0f); // Reduce volume by 10 decibels.
+//                copy.start();
+                AudioManager.playSFX(p.weapon.shootSound);
                 entityList.get("bullet").add(new Projectile(p.x, p.y, p.orient, 15.0f, 0.0f, p));
             }
             //Subtract one ammo from player
             p.weapon.changeAmmo(-1);
 
-            //Player bullet shoot sound for each bullet shot
-            p.weapon.shootSound.stop();
-
-            Clip copy = p.weapon.shootSound;
-            copy.setFramePosition(0);
-            copy.start();
+//            //Player bullet shoot sound for each bullet shot
+//            p.weapon.shootSound.stop();
+//
+//            Clip copy = p.weapon.shootSound;
+//            copy.setFramePosition(0);
+//            copy.start();
 
             p.shootTime = Game.currentTimeMillis();
 

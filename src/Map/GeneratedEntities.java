@@ -4,6 +4,7 @@ import Entities.Enemy;
 import Entities.Entity;
 import Entities.ThisPlayer;
 import Entities.Weapons.M4rifle;
+import Helper.MyMath;
 import Main.Game;
 
 import java.awt.geom.Area;
@@ -42,11 +43,11 @@ public class GeneratedEntities {
 
         putEntity(new ThisPlayer(0, 0, map), "thisPlayer", playerSpawn);
 
-        putEntity(new M4rifle(0,0, Game.random(0,6.29f), null), "weapon", playerSpawn);
+        putEntity(new M4rifle(0,0, MyMath.random(0, 6.29f), null), "weapon", playerSpawn);
 
         for (Rect r : map.rooms) {
             if (!r.equals(playerSpawn)) {
-                Enemy newEnemy = new Enemy(0, 0, Game.random(0, 6.29f), map);
+                Enemy newEnemy = new Enemy(0, 0, MyMath.random(0, 6.29f), map);
                 newEnemy.setWeapon(new M4rifle(0,0,0,newEnemy));
                 putEntity(newEnemy, "enemy", r);
             }
@@ -78,11 +79,11 @@ public class GeneratedEntities {
     }
 
     private int randomRoomX(Rect r) {
-        return Math.round( Game.random( r.x , r.x + r.w) );
+        return Math.round( MyMath.random( r.x , r.x + r.w) );
     }
 
     private int randomRoomY(Rect r) {
-        return Math.round( Game.random( r.y , r.y + r.h) );
+        return Math.round( MyMath.random( r.y , r.y + r.h) );
     }
 
 

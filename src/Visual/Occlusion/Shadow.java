@@ -30,16 +30,20 @@ public class Shadow {
     // The output is a series of points that forms a visible area polygon
     public ArrayList<Point> output;
 
-    private Area BORDER;
+    private final Area border;
+
+    private GeneratedEnclosure map;
 
     // Construct an empty visibility set
     public Shadow(GeneratedEnclosure map) {
 
-        BORDER = new Area(new Rectangle2D.Float(
-                -2*map.width,
-                -2*map.height,
-                5 * map.width,
-                5 * map.height
+        this.map = map;
+
+        border = new Area(new Rectangle2D.Float(
+                -map.width,
+                -map.height,
+                3 * map.width,
+                3 * map.height
         ));
 
         segments = new ArrayList<>();
@@ -47,6 +51,7 @@ public class Shadow {
         open = new ArrayList<>();
         center = new Point(0, 0);
         output = new ArrayList<>();
+
         for (Line2D w : map.walls) {
             addSegment((float) w.getX1() , (float) w.getY1(), (float) w.getX2(), (float) w.getY2());
         }
@@ -65,7 +70,7 @@ public class Shadow {
 
         Polygon cutout = new Polygon(xpoints, ypoints, xpoints.length);
 
-        Area shadow = new Area(BORDER);
+        Area shadow = new Area(border);
         shadow.subtract(new Area(cutout));
 
         g.setColor(color);

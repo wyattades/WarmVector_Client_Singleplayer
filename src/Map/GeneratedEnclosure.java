@@ -1,5 +1,6 @@
 package Map;
 
+import Helper.MyMath;
 import Main.Game;
 
 import java.awt.*;
@@ -42,13 +43,17 @@ public class GeneratedEnclosure {
     private final float splitSizeFactor;
     private final int minRoomSize;
 
+    private final Area border;
+
     public GeneratedEnclosure(int i_width, int i_height, float scaleFactor) {
 
         //Make sure width and height are always even numbers
-        width = round(i_width,2);
-        height = round(i_height,2);
+        width = MyMath.round(i_width, 2);
+        height = MyMath.round(i_height, 2);
 
         scale = 12;
+
+        border = new Area(new Rectangle2D.Float(-width*scale,-height*scale,3*width*scale, 3*height*scale));
 
         //Local constants
         float roomReductionFactor = 0.42f;
@@ -85,13 +90,13 @@ public class GeneratedEnclosure {
             for (Rect r : cells) {
                 int oldRight = r.x + r.w,
                         oldBottom = r.y + r.h;
-                r.w = round(Game.random(r.w * roomReductionFactor, r.w - min_spacing), 2);
-                r.x = round(Game.random(r.x + min_spacing / 2.0f, oldRight - r.w - min_spacing / 2.0f), 2);
-                r.h = round(Game.random(r.h * roomReductionFactor, r.h - min_spacing), 2);
-                r.y = round(Game.random(r.y + min_spacing / 2.0f, oldBottom - r.h - min_spacing / 2.0f), 2);
+                r.w = MyMath.round(MyMath.random(r.w * roomReductionFactor, r.w - min_spacing), 2);
+                r.x = MyMath.round(MyMath.random(r.x + min_spacing / 2.0f, oldRight - r.w - min_spacing / 2.0f), 2);
+                r.h = MyMath.round(MyMath.random(r.h * roomReductionFactor, r.h - min_spacing), 2);
+                r.y = MyMath.round(MyMath.random(r.y + min_spacing / 2.0f, oldBottom - r.h - min_spacing / 2.0f), 2);
             }
 
-            //Copy all rooms int rooms list
+            //Copy all rooms into rooms list
             rooms.addAll(cells);
 
             //Keep a copy of cells.size() because cells is modified within the loop (below)
@@ -150,14 +155,9 @@ public class GeneratedEnclosure {
             }
 
             //Add randomized "obstacles" to the rooms
-            float area, a = 100, b = 3500, c = 1, d = 5;
             for (Rect r : rooms) {
-                area = Math.min(b, r.w * r.h);
 
-                float objectScale = (area - a) / (b - a);
-
-                int amount = Math.round(c + objectScale * (d - c));
-                //System.out.println(area + "  ,   " +amount);
+                int amount = Math.round(MyMath.map(Math.min(3500, r.w * r.h),100,3500,1,5));
 
                 for (int i = 0; i < amount; i++) {
                     Rectangle2D object = objectInRoom(r, openSpaces);
@@ -194,6 +194,11 @@ public class GeneratedEnclosure {
         newPoints.closePath();
         region = new Area(newPoints);
 
+        //Define an inverse of the region
+        inverseRegion = border;
+        inverseRegion.subtract(region);
+
+        //Define the walls (used for shadowing) based on the new region
         defineWalls(areaPoints);
 
         width *= scale;
@@ -255,11 +260,11 @@ public class GeneratedEnclosure {
         Rectangle2D object;
         for (int i = 0; i < 10; i++) {
 
-            int w = (int) (Game.random(7, 15));
-            int h = (int) (Game.random(7, 15));
+            int w = (int) (MyMath.random(7, 15));
+            int h = (int) (MyMath.random(7, 15));
 
             int x, y;
-            float random = Game.random(1.0f, 2.0f);
+            float random = MyMath.random(1.0f, 2.0f);
             if (random > 1.75f) {
                 x = r.x;
                 y = r.y + r.h - h;
@@ -366,29 +371,42 @@ public class GeneratedEnclosure {
         return output;
     }
 
-    public void addExplosion(float x, float y, int radius) {
+    public void addExplosion(float x, float y, float radius, int vertices) {
 
-        int[] xpoints = {-2*radius, -radius, radius, 2*radius, 2*radius, radius, -radius, -2*radius};
-        int[] ypoints = {radius, 2*radius, 2*radius, radius, -radius, -2*radius, -2*radius, -radius};
+//        int[] xpoints = {-2*radius, -radius, radius, 2*radius, 2*radius, radius, -radius, -2*radius};
+//        int[] ypoints = {radius, 2*radius, 2*radius, radius, -radius, -2*radius, -2*radius, -radius};
 
-        Polygon subtraction = new Polygon(xpoints, ypoints, xpoints.length);
-        subtraction.translate((int)x, (int)y);
-
-        region.add(new Area(subtraction));
-
-        //Create list of points that describe the region
-        List<float[]> areaPoints = new ArrayList<>();
-        float[] coords = new float[6];
-
-        for (PathIterator pi = region.getPathIterator(null); !pi.isDone(); pi.next()) {
-            //"type" will either be SEG_LINETO, SEG_MOVETO, or SEG_CLOSE
-            int type = pi.currentSegment(coords);
-
-            float[] pathIteratorCoords = {type, coords[0] * scale, coords[1] * scale};
-            areaPoints.add(pathIteratorCoords);
+        //create a randomized polygon
+        Polygon explosion = new Polygon();
+        float deltaTheta = 6.283f / vertices;
+        float maxRadius = radius*1.2f;
+        float minRadius = radius*0.8f;
+        for (int i = 0; i < vertices; i++) {
+            float angle = i * deltaTheta;
+            float length = MyMath.random(minRadius, maxRadius);
+            int px = (int) (Math.cos(angle) * length + x);
+            int py = (int) (Math.sin(angle) * length + y);
+            explosion.addPoint(px, py);
         }
+        Area subtraction = new Area(explosion);
 
-        defineWalls(areaPoints);
+        //Update the regions to accomidate the new explosion
+        region.add(subtraction);
+        inverseRegion.subtract(subtraction);
+
+//        //Create list of points that describe the region
+//        List<float[]> areaPoints = new ArrayList<>();
+//        float[] coords = new float[6];
+//
+//        for (PathIterator pi = region.getPathIterator(null); !pi.isDone(); pi.next()) {
+//            //"type" will either be SEG_LINETO, SEG_MOVETO, or SEG_CLOSE
+//            int type = pi.currentSegment(coords);
+//
+//            float[] pathIteratorCoords = {type, coords[0] * scale, coords[1] * scale};
+//            areaPoints.add(pathIteratorCoords);
+//        }
+//
+//        defineWalls(areaPoints);
 
     }
 
@@ -405,11 +423,11 @@ public class GeneratedEnclosure {
 
             if (iteration + 1 <= iterations) {
                 if ((p.w / 2.0f > minRoomSize && p.h / 2.0f < minRoomSize) || p.h < p.w) { //new horizontal box
-                    int randomCenter = round(Game.random(-p.w * splitSizeFactor, p.w * splitSizeFactor) + p.w / 2.0f, 2);
+                    int randomCenter = MyMath.round(MyMath.random(-p.w * splitSizeFactor, p.w * splitSizeFactor) + p.w / 2.0f, 2);
                     cellA = new Cell(new Rect(p.x, p.y, randomCenter, p.h), iteration + 1);
                     cellB = new Cell(new Rect(p.x + randomCenter, p.y, p.w - randomCenter, p.h), iteration + 1);
                 } else { //new vertical box
-                    int randomCenter = round(Game.random(-p.h * splitSizeFactor, p.h * splitSizeFactor) + p.h / 2.0f, 2);
+                    int randomCenter = MyMath.round(MyMath.random(-p.h * splitSizeFactor, p.h * splitSizeFactor) + p.h / 2.0f, 2);
                     cellA = new Cell(new Rect(p.x, p.y, p.w, randomCenter), iteration + 1);
                     cellB = new Cell(new Rect(p.x, p.y + randomCenter, p.w, p.h - randomCenter), iteration + 1);
                 }
@@ -494,17 +512,12 @@ public class GeneratedEnclosure {
         return null;
     }
 
-    //Rounds to nearest multiple of v from input i
-    int round(float i, int v) {
-        return Math.round(i / v) * v;
-    }
-
     public void draw(Graphics2D g, Color stroke, Color fill) {
 
-        Area inverseRegion = new Area(new Rectangle2D.Float(-width, -height, 3 * width, 3 * height));
-        inverseRegion.subtract(region);
+//        Area inverseRegion = new Area(new Rectangle2D.Float(-width, -height, 3 * width, 3 * height));
+//        inverseRegion.subtract(region);
 
-        g.setStroke(new BasicStroke(2,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
+        g.setStroke(new BasicStroke(1,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
         g.setColor(stroke);
         g.draw(inverseRegion);
 

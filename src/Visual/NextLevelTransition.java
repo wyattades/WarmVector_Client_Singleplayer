@@ -1,5 +1,6 @@
 package Visual;
 
+import Helper.MyMath;
 import Main.Game;
 
 import java.awt.*;
@@ -26,7 +27,7 @@ public class NextLevelTransition {
 
         float slowest = maxSpeed;
         for (int i = 0; i < speeds.length; i++) {
-            speeds[i] = Game.random(0, maxSpeed);
+            speeds[i] = MyMath.random(0, maxSpeed);
             if (speeds[i] < slowest) {
                 slowest = speeds[i];
                 slowestIndex = i;

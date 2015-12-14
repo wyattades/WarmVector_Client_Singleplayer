@@ -2,6 +2,7 @@ package Visual;
 
 import Entities.Entity;
 import Entities.Player;
+import Helper.MyMath;
 import Main.Game;
 import Map.GeneratedEnclosure;
 
@@ -55,10 +56,10 @@ public class Bullet {
         float offset = 14;
 
         state = true;
-        fill = new Color(255, 255, (int) Game.random(50, 220), 200);
+        fill = new Color(255, 255, (int) MyMath.random(50, 220), 200);
         collidePoints = new ArrayList<>();
         ArrayList<TestPoint> testPoints = new ArrayList<>();
-        orient = shooter.orient + Game.random(-shooter.weapon.spread, shooter.weapon.spread);
+        orient = shooter.orient + MyMath.random(-shooter.weapon.spread, shooter.weapon.spread);
         float checkLine = 10000; //just a big number
         fx = (float) (shooter.x + checkLine * Math.cos(orient));
         fy = (float) (shooter.y + checkLine * Math.sin(orient));

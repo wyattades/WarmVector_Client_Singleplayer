@@ -3,6 +3,7 @@ package Visual;
 import java.awt.*;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by wyatt on 8/18/2015.
  */
 public class Slider {

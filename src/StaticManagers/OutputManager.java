@@ -1,5 +1,7 @@
 package StaticManagers;
 
+import StaticManagers.AudioManager;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,8 +17,7 @@ public class OutputManager {
 
     public static String filePath = "out/production/WarmVector_Client_Singleplayer/Output/config";
 
-    public static String[] settings;
-
+    private static String[] settings;
     static {
         settings = loadSettings();
 
@@ -65,9 +66,10 @@ public class OutputManager {
 
     public static void reloadSettings() {
         settings = loadSettings();
+        AudioManager.updateSettings();
     }
 
-    public static String[] loadSettings() {
+    private static String[] loadSettings() {
 
         Scanner sc = null;
         try {
