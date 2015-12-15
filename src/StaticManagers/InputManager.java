@@ -12,6 +12,7 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
 
     //TODO: have a sendEvent() function that wakes inputHandle(Event e) with an Event e (so it only runs when there's an event)
+    //TODO: rewrite this class using hashmaps for faster access? (instead of forloop checking for equals())
 
     class Key {
         public boolean pressed;
@@ -65,6 +66,25 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
                 clickCount++;
             }
         }
+
+//        public void toggleMouseDown(boolean toggle) {
+//            if (mouseDown != toggle) {
+//                mouseDown = toggle;
+//            }
+//            if (toggle) {
+//                toggleMouseReleased(false);
+//            }
+//        }
+//
+//        public void toggleMouseReleased(boolean toggle) {
+//            if (mouseReleased != toggle) {
+//                mouseReleased = toggle;
+//            }
+//            if (toggle) {
+//                toggleMouseDown(false);
+//            }
+//        }
+
     }
 
     public class Mouse {
@@ -100,7 +120,6 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void mousePressed(MouseEvent e) {
-
         for (Click click : clicks) {
             if (e.getButton() == click.mouseCode) {
                 click.togglePressed(true);
@@ -110,7 +129,6 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
         for (Click click : clicks) {
             if (e.getButton() == click.mouseCode) {
                 click.togglePressed(false);
@@ -183,6 +201,24 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         }
         return false;
     }
+
+//    public boolean isMouseDown(String s) {
+//        for (Click click : clicks) {
+//            if (s.equals(click.name)) {
+//                return click.mouseDown;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    public boolean isMouseUp(String s) {
+//        for (Click click : clicks) {
+//            if (s.equals(click.name)) {
+//                return click.mouseReleased;
+//            }
+//        }
+//        return false;
+//    }
 
     @Override
     public void keyPressed(KeyEvent e) {

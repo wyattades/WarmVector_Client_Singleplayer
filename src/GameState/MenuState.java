@@ -111,27 +111,15 @@ public abstract class MenuState extends GameState {
         }
     }
 
-    private boolean snapSliders;
+    private Slider currentSlider = null;
 
     protected void defaultInputHandle(InputManager inputManager) {
         gsm.cursor.setPosition(inputManager.mouse.x, inputManager.mouse.y);
 
+        boolean mousePressed = inputManager.isMousePressed("LEFTMOUSE");
 
-        if (inputManager.isMousePressed("LEFTMOUSE") || inputManager.isMouseClicked("LEFTMOUSE")) {
+        if (mousePressed || inputManager.isMouseClicked("LEFTMOUSE")) {
 
-            snapSliders = false;
-
-            for (Slider s : sliders) {
-                s.pressed = false;
-                if (s.overBox(gsm.cursor.x, gsm.cursor.y)) {
-                    s.pressed = true;
-                    if (inputManager.mouse.dragged) {
-                        s.slide(gsm.cursor.x - s.dragPos);
-                    } else {
-                        s.setDragPos(gsm.cursor.x);
-                    }
-                }
-            }
             for (ButtonC b : buttons) {
                 if (b.overBox &&
                         Game.currentTimeMillis() - inputManager.getMouseTime("LEFTMOUSE") > 400) {
@@ -140,16 +128,35 @@ public abstract class MenuState extends GameState {
                     break;
                 }
             }
-        } else {
-            if (!snapSliders) {
-                for (Slider s : sliders) {
-                    s.snapSlider();
-                    OutputManager.setSetting(s.name, s.current_option);
-                    s.pressed = false;
-                }
-                snapSliders = true;
-            }
+
         }
+
+        if (mousePressed) {
+            if (currentSlider == null) {
+                for (Slider s : sliders) {
+                    if (s.overBox(gsm.cursor.x, gsm.cursor.y)) {
+                        s.pressed = true;
+                        s.setDragPos(gsm.cursor.x);
+                        currentSlider = s;
+                    }
+                }
+            }
+
+        } else {
+
+            if (currentSlider != null) {
+                currentSlider.snapSlider();
+                currentSlider.pressed = false;
+                OutputManager.setSetting(currentSlider.name, currentSlider.current_option);
+                currentSlider = null;
+            }
+
+        }
+
+        if (currentSlider != null) {
+            currentSlider.slide(gsm.cursor.x - currentSlider.dragPos);
+        }
+
     }
 
     public void inputHandle(InputManager inputManager) {

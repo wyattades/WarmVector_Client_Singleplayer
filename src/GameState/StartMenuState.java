@@ -77,11 +77,11 @@ public class StartMenuState extends MenuState {
             }
         }
         //Cheat hacky method, TODO: Change this
-        if (buttons.size() == 5) {
+        //if (buttons.size() == 5) {
             g.setFont(Theme.fontLogo);
             g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 200);
             g.drawString("V", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("V", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 40);
-        }
+        //}
         gsm.cursor.draw(g);
 
     }
