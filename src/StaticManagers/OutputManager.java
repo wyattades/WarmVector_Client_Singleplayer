@@ -15,7 +15,7 @@ import java.util.Scanner;
  */
 public class OutputManager {
 
-    public static String filePath = "out/production/WarmVector_Client_Singleplayer/Output/config";
+    public static String filePath = "src/Output/config";
 
     private static String[] settingsList;
     static {

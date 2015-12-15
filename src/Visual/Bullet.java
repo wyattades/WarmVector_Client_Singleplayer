@@ -22,7 +22,7 @@ public class Bullet {
     private float ix, iy, fx, fy;
     private float orient;
     private long displayTime;
-    private boolean state;
+    public boolean state;
     private Color fill;
     private ArrayList<CollidePoint> collidePoints;
 

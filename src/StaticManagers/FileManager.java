@@ -20,12 +20,14 @@ public class FileManager {
 
     static {
         Map<String, Clip> temp = new HashMap<>();
-        File file = new File("out/production/WarmVector_Client_Singleplayer/SFX");
+        File file = new File("src/SFX");
         File[] listOfFiles = file.listFiles();
-        for (File listOfFile : listOfFiles) {
-            if (listOfFile.isFile()) {
-                String filename = listOfFile.getName();
-                temp.put(filename, loadSound(file.getPath() + "\\" + filename));
+        if (listOfFiles != null) {
+            for (File listOfFile : listOfFiles) {
+                if (listOfFile.isFile()) {
+                    String filename = listOfFile.getName();
+                    temp.put(filename, loadSound(file.getPath() + "\\" + filename));
+                }
             }
         }
         sounds = Collections.unmodifiableMap(temp);
@@ -49,12 +51,14 @@ public class FileManager {
 
     static {
         Map<String, BufferedImage> temp = new HashMap<>();
-        File file = new File("out/production/WarmVector_Client_Singleplayer/Images");
+        File file = new File("src/Images");
         File[] listOfFiles = file.listFiles();
-        for (File listOfFile : listOfFiles) {
-            if (listOfFile.isFile()) {
-                String filename = listOfFile.getName();
-                temp.put(filename, loadImage(file.getPath() + "\\" + filename));
+        if (listOfFiles != null) {
+            for (File listOfFile : listOfFiles) {
+                if (listOfFile.isFile()) {
+                    String filename = listOfFile.getName();
+                    temp.put(filename, loadImage(file.getPath() + "\\" + filename));
+                }
             }
         }
         images = Collections.unmodifiableMap(temp);
@@ -65,13 +69,15 @@ public class FileManager {
 
     static {
         Map<String, BufferedImage[]> temp = new HashMap<>();
-        File file = new File("out/production/WarmVector_Client_Singleplayer/Animations");
+        File file = new File("src/Animations");
         File[] listOfFiles = file.listFiles();
-        for (File listOfFile : listOfFiles) {
-            if (listOfFile.isDirectory()) {
-                int amount = listOfFile.listFiles().length;
-                String filename = listOfFile.getName();
-                temp.put(filename, loadAnimation(file.getPath() + "\\" + filename + "\\" + filename, amount));
+        if (listOfFiles != null) {
+            for (File listOfFile : listOfFiles) {
+                if (listOfFile.isDirectory()) {
+                    int amount = listOfFile.listFiles().length;
+                    String filename = listOfFile.getName();
+                    temp.put(filename, loadAnimation(file.getPath() + "\\" + filename + "\\" + filename, amount));
+                }
             }
         }
         animations = Collections.unmodifiableMap(temp);

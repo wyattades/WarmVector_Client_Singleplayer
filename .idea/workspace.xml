@@ -10,34 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79328cf6-c427-44a6-a23b-90c221e9f3ec" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Helper/Vector.java" />
-      <change type="DELETED" beforePath="C:\Users\Wyatt\Documents\GitHub\WarmVector_Client_Singleplayer_V1.03\src\Audio\AudioManager.java" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Bullet.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Bullet.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Main/Game.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Main/Game.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/HUD.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/HUD.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/MenuState.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/MenuState.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PlayState.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PlayState.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/Animation.java" afterPath="$PROJECT_DIR$/src/Visual/Animation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/StaticManagers/AudioManager.java" afterPath="$PROJECT_DIR$/src/StaticManagers/AudioManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Animation.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/Animation.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/ButtonC.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/Visual/ButtonC.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/Bullet.java" afterPath="$PROJECT_DIR$/src/Visual/Bullet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/ButtonC.java" afterPath="$PROJECT_DIR$/src/Visual/ButtonC.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entities/EntityManager.java" afterPath="$PROJECT_DIR$/src/Entities/EntityManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/FadeOutState.java" afterPath="$PROJECT_DIR$/src/GameState/FadeOutState.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/StaticManagers/FileManager.java" afterPath="$PROJECT_DIR$/src/StaticManagers/FileManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Map/GeneratedEnclosure.java" afterPath="$PROJECT_DIR$/src/Map/GeneratedEnclosure.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Map/GeneratedEntities.java" afterPath="$PROJECT_DIR$/src/Map/GeneratedEntities.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/HUD.java" afterPath="$PROJECT_DIR$/src/Visual/HUD.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/StaticManagers/InputManager.java" afterPath="$PROJECT_DIR$/src/StaticManagers/InputManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Helper/MyMath.java" afterPath="$PROJECT_DIR$/src/Helper/MyMath.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/NextLevelState.java" afterPath="$PROJECT_DIR$/src/GameState/NextLevelState.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/StaticManagers/OutputManager.java" afterPath="$PROJECT_DIR$/src/StaticManagers/OutputManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/PlayState.java" afterPath="$PROJECT_DIR$/src/GameState/PlayState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entities/Player.java" afterPath="$PROJECT_DIR$/src/Entities/Player.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entities/Projectiles/Projectile.java" afterPath="$PROJECT_DIR$/src/Entities/Projectiles/Projectile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Visual/Occlusion/Shadow.java" afterPath="$PROJECT_DIR$/src/Visual/Occlusion/Shadow.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/StartMenuState.java" afterPath="$PROJECT_DIR$/src/GameState/StartMenuState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/Wyatt.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/Wyatt.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WarmVector_Client_Singleplayer.iml" afterPath="$PROJECT_DIR$/WarmVector_Client_Singleplayer.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Output/config" afterPath="$PROJECT_DIR$/src/Output/config" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="WarmVector_Client_Singleplayer.iws" />
@@ -60,11 +39,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="GeneratedEnclosure.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AudioManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/StaticManagers/AudioManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GeneratedEnclosure.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Map/GeneratedEnclosure.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.73939395">
-              <caret line="76" column="10" selection-start-line="76" selection-start-column="10" selection-end-line="76" selection-end-column="10" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="70" column="25" selection-start-line="70" selection-start-column="25" selection-end-line="70" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -72,24 +61,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MyMath.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Helper/MyMath.java">
+      <file leaf-file-name="FileManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/StaticManagers/FileManager.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="21" column="24" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
-              <folding>
-                <element signature="e#609#610#0" expanded="true" />
-                <element signature="e#647#648#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NextLevelState.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/GameState/NextLevelState.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="55" column="57" selection-start-line="55" selection-start-column="57" selection-end-line="55" selection-end-column="57" />
+              <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -115,11 +91,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Game.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Main/Game.java">
+      <file leaf-file-name="OutputManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/StaticManagers/OutputManager.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="166" column="52" selection-start-line="166" selection-start-column="52" selection-end-line="166" selection-end-column="52" />
+              <caret line="17" column="40" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MouseCursor.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Visual/MouseCursor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.6439394">
+              <caret line="29" column="12" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -129,7 +115,7 @@
         <entry file="file://$PROJECT_DIR$/src/Visual/Bullet.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="26" column="36" selection-start-line="26" selection-start-column="36" selection-end-line="26" selection-end-column="36" />
+              <caret line="24" column="7" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -166,7 +152,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/GameState/PauseState.java" />
         <option value="$PROJECT_DIR$/src/Entity/ThisPlayer.java" />
         <option value="$PROJECT_DIR$/src/Entity/Player.java" />
         <option value="$PROJECT_DIR$/src/Entity/Enemy.java" />
@@ -198,7 +183,6 @@
         <option value="$PROJECT_DIR$/src/Main/Game.java" />
         <option value="$PROJECT_DIR$/src/StaticManagers/AudioManager.java" />
         <option value="$PROJECT_DIR$/src/GameState/MenuState.java" />
-        <option value="$PROJECT_DIR$/src/StaticManagers/OutputManager.java" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/Entities/Projectiles/Projectile.java" />
         <option value="$PROJECT_DIR$/src/StaticManagers/InputManager.java" />
@@ -210,13 +194,15 @@
         <option value="$PROJECT_DIR$/src/GameState/FadeOutState.java" />
         <option value="$PROJECT_DIR$/src/Visual/HUD.java" />
         <option value="$PROJECT_DIR$/src/Visual/Animation.java" />
-        <option value="$PROJECT_DIR$/src/Visual/Bullet.java" />
         <option value="$PROJECT_DIR$/src/Visual/ButtonC.java" />
         <option value="$PROJECT_DIR$/src/Entities/EntityManager.java" />
-        <option value="$PROJECT_DIR$/src/StaticManagers/FileManager.java" />
         <option value="$PROJECT_DIR$/src/GameState/NextLevelState.java" />
         <option value="$PROJECT_DIR$/src/GameState/StartMenuState.java" />
         <option value="$PROJECT_DIR$/src/Map/GeneratedEnclosure.java" />
+        <option value="$PROJECT_DIR$/src/StaticManagers/FileManager.java" />
+        <option value="$PROJECT_DIR$/src/StaticManagers/OutputManager.java" />
+        <option value="$PROJECT_DIR$/src/Output/config" />
+        <option value="$PROJECT_DIR$/src/Visual/Bullet.java" />
       </list>
     </option>
   </component>
@@ -290,6 +276,60 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Visual" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WarmVector_Client_Singleplayer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WarmVector_Client_Singleplayer_V1.03" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="StaticManagers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WarmVector_Client_Singleplayer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WarmVector_Client_Singleplayer_V1.03" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WarmVector_Client_Singleplayer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="WarmVector_Client_Singleplayer_V1.03" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Output" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
@@ -304,9 +344,9 @@
     <property name="dynamic.classpath" value="false" />
     <property name="restartRequiresConfirmation" value="true" />
     <property name="FullScreen" value="false" />
-    <property name="project.structure.last.edited" value="Artifacts" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15625" />
+    <property name="project.structure.side.proportion" value="0.30574712" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="274" />
@@ -677,7 +717,13 @@
       <option name="project" value="LOCAL" />
       <updated>1450079173510</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Changes:&#10;update shadow map when terrain is updated&#10;fixed sounds exponential growth (almost)&#10;make settings in outputManager update the game settings&#10;&#10;TODO:&#10;fix enemy AI (movement, shooting)&#10;">
+      <created>1450142651621</created>
+      <option name="number" value="00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1450142651621</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TodoView">
@@ -691,7 +737,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972974" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -705,8 +751,8 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25621623" sideWeight="0.49166667" order="12" side_tool="false" content_ui="tabs" x="-27" y="490" width="1322" height="120" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972974" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20522387" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32756758" sideWeight="0.49791667" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20522387" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972974" sideWeight="0.49791667" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -758,7 +804,8 @@
     <MESSAGE value="destructable terrain prototype" />
     <MESSAGE value="Changes:&#10;Volume support (it grows exponentially, gotta fix that)&#10;Organization&#10;Destructable terrain improvements&#10;&#10;TODO:&#10;update shadow map when terrain is updated&#10;fix sounds exponential growth&#10;make settings in outputManager update the game settings&#10;fix enemy AI (movement, shooting)&#10;^let's start with this stuff" />
     <MESSAGE value="Changes:&#10;fixed sounds exponential growth (almost)&#10;make settings in outputManager update the game settings&#10;Destructable terrain improvements&#10;&#10;TODO:&#10;update shadow map when terrain is updated&#10;fix enemy AI (movement, shooting)&#10;" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes:&#10;fixed sounds exponential growth (almost)&#10;make settings in outputManager update the game settings&#10;Destructable terrain improvements&#10;&#10;TODO:&#10;update shadow map when terrain is updated&#10;fix enemy AI (movement, shooting)&#10;" />
+    <MESSAGE value="Changes:&#10;update shadow map when terrain is updated&#10;fixed sounds exponential growth (almost)&#10;make settings in outputManager update the game settings&#10;&#10;TODO:&#10;fix enemy AI (movement, shooting)&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes:&#10;update shadow map when terrain is updated&#10;fixed sounds exponential growth (almost)&#10;make settings in outputManager update the game settings&#10;&#10;TODO:&#10;fix enemy AI (movement, shooting)&#10;" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.7838542" />
   </component>
   <component name="XDebuggerManager">
@@ -798,13 +845,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="114" column="43" selection-start-line="114" selection-start-column="43" selection-end-line="114" selection-end-column="43" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Visual/MouseCursor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="29" column="12" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -911,14 +951,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Output/config">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="6" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Main/WarmVector_Client_Singleplayer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -941,29 +973,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/StaticManagers/OutputManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="62" column="69" selection-start-line="62" selection-start-column="69" selection-end-line="62" selection-end-column="69" />
-          <folding>
-            <element signature="e#1301#1302#0" expanded="false" />
-            <element signature="e#1342#1343#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="8" column="35" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/StaticManagers/AudioManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
           <folding />
         </state>
       </provider>
@@ -999,8 +1012,8 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="85" column="5" selection-start-line="85" selection-start-column="5" selection-end-line="85" selection-end-column="5" />
           <folding>
-            <element signature="e#2772#2773#0" expanded="true" />
-            <element signature="e#2840#2841#0" expanded="true" />
+            <element signature="e#2772#2773#0" expanded="false" />
+            <element signature="e#2840#2841#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1069,14 +1082,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/StaticManagers/FileManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Visual/Occlusion/Shadow.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1128,14 +1133,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Visual/Bullet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="26" column="36" selection-start-line="26" selection-start-column="36" selection-end-line="26" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Entities/Projectiles/Projectile.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1144,29 +1141,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/warmvector_client_singleplayer.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/warmvector_client_singleplayer.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.980303">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Map/GeneratedEnclosure.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.73939395">
-          <caret line="76" column="10" selection-start-line="76" selection-start-column="10" selection-end-line="76" selection-end-column="10" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="70" column="25" selection-start-line="70" selection-start-column="25" selection-end-line="70" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/StaticManagers/AudioManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/StaticManagers/OutputManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="40" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/StaticManagers/FileManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Output/config">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.07727273">
+          <caret line="3" column="14" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Visual/Bullet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="7" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Visual/MouseCursor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6439394">
+          <caret line="29" column="12" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1228,8 +1257,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
-                <option value="0.6" />
+                <option value="0.30574712" />
               </list>
             </option>
           </splitter-proportions>
