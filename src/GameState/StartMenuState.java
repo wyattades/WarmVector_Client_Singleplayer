@@ -76,7 +76,7 @@ public class StartMenuState extends MenuState {
                 g.setColor(Theme.buttonDefault);
             }
         }
-        //Cheaty hacky method, TODO: Change this
+        //Cheat hacky method, TODO: Change this
         if (buttons.size() == 5) {
             g.setFont(Theme.fontLogo);
             g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 200);

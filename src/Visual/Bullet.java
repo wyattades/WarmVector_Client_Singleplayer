@@ -20,11 +20,11 @@ import java.util.HashMap;
 public class Bullet {
 
     private float ix, iy, fx, fy;
-    public float orient;
+    private float orient;
     private long displayTime;
-    public boolean state;
+    private boolean state;
     private Color fill;
-    public ArrayList<CollidePoint> collidePoints;
+    private ArrayList<CollidePoint> collidePoints;
 
     public class TestPoint {
 

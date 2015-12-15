@@ -12,9 +12,9 @@ public class ButtonC {
     public int y;
     private int w;
     private static final int h = 43;
-    public String text;
+    private String text;
 
-    public boolean setWidth;
+    private boolean setWidth;
     public boolean overBox;
     public int value;
 

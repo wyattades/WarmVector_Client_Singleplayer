@@ -6,7 +6,6 @@ import Main.Game;
 import Map.GeneratedEnclosure;
 
 import java.awt.*;
-import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -55,10 +54,26 @@ public abstract class Player extends Entity {
         vy = 0;
     }
 
+    private void slowPlayer() {
+
+        if (Math.abs(vx) > 0.05f) {
+            vx *= 0.7f;
+        } else {
+            vx = 0;
+        }
+
+        if (Math.abs(vy) > 0.05f) {
+            vy *= 0.7f;
+        } else {
+            vy = 0;
+        }
+
+    }
+
     public void updatePosition() {
+        slowPlayer();
         if (!obstacleX(vx)) x += vx;
         if (!obstacleY(vy)) y += vy;
-        resetVelocity();
     }
 
     @Override

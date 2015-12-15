@@ -1,7 +1,6 @@
 package StaticManagers;
 
 import Helper.MyMath;
-import Main.Game;
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;

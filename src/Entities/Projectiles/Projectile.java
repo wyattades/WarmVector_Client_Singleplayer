@@ -5,8 +5,6 @@ import Entities.Player;
 import Map.GeneratedEnclosure;
 import StaticManagers.FileManager;
 
-import java.awt.*;
-import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -56,8 +54,10 @@ public class Projectile extends Entity {
             map.addExplosion(x, y, 30, 8);
             state = false;
         } else {
+            //TODO fix this so bullets don't hit shooter or shooter's weapon
             for (HashMap.Entry<String, ArrayList<Entity>> entry : entityList.entrySet()) {
                 if (entry.getKey().equals("enemy") || entry.getKey().equals("thisPlayer")) {
+                    //TODO replace with foreach????
                     for (Entity e : entry.getValue()) {
                         if (e.collideBox.intersects(collideBox)) {
                             if (e.hit(shooter.weapon.damage, orient)) {

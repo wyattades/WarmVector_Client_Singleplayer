@@ -13,8 +13,6 @@ public class FadeOutState extends GameState {
 
     private int opacity;
 
-    private final int rate = 2;
-
     public boolean state;
 
     public FadeOutState(GameStateManager gsm) {
@@ -41,6 +39,7 @@ public class FadeOutState extends GameState {
 
     @Override
     public void update() {
+        int rate = 2;
         opacity += rate;
         if (opacity >= 255) {
             gsm.unloadState(GameStateManager.FADEOUT);

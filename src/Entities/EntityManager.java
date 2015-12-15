@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
+ * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by wyatt on 8/18/2015.
  */
 public class EntityManager {

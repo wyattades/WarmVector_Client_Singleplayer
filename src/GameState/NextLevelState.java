@@ -53,7 +53,7 @@ public class NextLevelState extends MenuState {
         }
 
         if (gsm.level >= GameStateManager.MAXLEVEL) {
-            String text = "YOU WIN! (work in progress btdubs)";
+            String text = "YOU WIN! (work in progress btw)";
             g.drawString(
                     text,
                     Game.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(text, g).getWidth() / 2,

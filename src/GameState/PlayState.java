@@ -1,6 +1,5 @@
 package GameState;
 
-import StaticManagers.AudioManager;
 import Entities.Enemy;
 import Entities.Entity;
 import Entities.Player;
@@ -10,14 +9,13 @@ import Entities.Weapons.Weapon;
 import Main.Game;
 import Map.GeneratedEnclosure;
 import Map.GeneratedEntities;
-import StaticManagers.FileManager;
+import StaticManagers.AudioManager;
 import StaticManagers.InputManager;
 import Visual.*;
 import Visual.Occlusion.Shadow;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -54,12 +52,12 @@ public class PlayState extends GameState {
         map = new GeneratedEnclosure(200, 200, 1.0f);
         GeneratedEntities generatedEntities = new GeneratedEntities(map, 1.0f);
         entityList = generatedEntities.getSpawnedEntities();
-        shadow = new Shadow(map);
+        shadow = new Shadow(map, new Color(20,20,20));
 
         thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
 
         screenMover = new ScreenMover(thisPlayer);
-        hud = new HUD(thisPlayer, entityList.get("enemy").size(), map);
+        hud = new HUD(entityList, map);
 
         gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
         gsm.cursor.setMouse(Game.WIDTH / 2 + 70, Game.HEIGHT / 2);
@@ -71,7 +69,7 @@ public class PlayState extends GameState {
 
         //save stuff (stats?)
     }
-      BufferedImage background = FileManager.images.get("background_0" + 1 + ".png");
+      //BufferedImage background = FileManager.images.get("background_0" + 1 + ".png");
 
     public void draw(Graphics2D g) {
 
@@ -126,7 +124,7 @@ public class PlayState extends GameState {
         }
 
         //TEMP
-        shadow.draw(g, new Color(20,20,20));
+        shadow.draw(g);
 
         map.draw(g, new Color(90,90,90), new Color(50,50,50));
 

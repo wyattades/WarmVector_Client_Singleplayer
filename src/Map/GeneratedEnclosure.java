@@ -1,7 +1,6 @@
 package Map;
 
 import Helper.MyMath;
-import Main.Game;
 
 import java.awt.*;
 import java.awt.geom.*;
@@ -13,6 +12,9 @@ import java.util.List;
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by wyatt on 8/27/2015.
  */
+
+//TODO: create a "bedrock" border around the map where terrain cannot be destroyed and the player cannot pass
+
 public class GeneratedEnclosure {
 
     // This class creates a randomly generated map, consisting of rooms with corridors connecting them.
@@ -43,7 +45,9 @@ public class GeneratedEnclosure {
     private final float splitSizeFactor;
     private final int minRoomSize;
 
-    private final Area border;
+    private final Rectangle2D border;
+
+    //TODO: scale everything while generating initial map, not after
 
     public GeneratedEnclosure(int i_width, int i_height, float scaleFactor) {
 
@@ -51,9 +55,8 @@ public class GeneratedEnclosure {
         width = MyMath.round(i_width, 2);
         height = MyMath.round(i_height, 2);
 
-        scale = 12;
-
-        border = new Area(new Rectangle2D.Float(-width*scale,-height*scale,3*width*scale, 3*height*scale));
+        //Modify iterations so that the rooms sizes change based on scaleFactor (default is 4 cause it looks the best)
+        iterations = 4 + (int) (Math.log(scaleFactor) / Math.log(2));
 
         //Local constants
         float roomReductionFactor = 0.42f;
@@ -67,8 +70,11 @@ public class GeneratedEnclosure {
         splitSizeFactor = 0.22f;
         minRoomSize = 50;
 
-        //Modify iterations so that the rooms sizes change based on scaleFactor (default is 4 cause it looks the best)
-        iterations = 4 + (int) (Math.log(scaleFactor) / Math.log(2));
+        //The value in which the generated map is scaled by
+        scale = 12;
+
+        border = new Rectangle2D.Float(-width*scale,-height*scale,3*width*scale, 3*height*scale);
+        //border = new Rectangle2D.Float(0,0,width*scale, height*scale);
 
         //Keep looping until there are no null rooms (a null room
         //has about a 1 in 50 chance of spawning)
@@ -103,6 +109,7 @@ public class GeneratedEnclosure {
             int roomsAmount = cells.size();
 
             //The code below creates two lists of rectangles (sisters), where there will be one corridor
+            //(it also needs revising: the Cell class is poorly written, it should be tree data instead)
             List<Rect> sister1, sister2;
             for (int i = 0; i < iterations; i++) {
                 int iterateAmount = (int) Math.pow(2, i);
@@ -168,15 +175,11 @@ public class GeneratedEnclosure {
         }
 
         //Create list of points that describe the region
-        List<float[]> areaPoints = new ArrayList<>();
-        float[] coords = new float[6];
+        List<float[]> areaPoints = areaPoints(region);
 
-        for (PathIterator pi = region.getPathIterator(null); !pi.isDone(); pi.next()) {
-            //"type" will either be SEG_LINETO, SEG_MOVETO, or SEG_CLOSE
-            int type = pi.currentSegment(coords);
-
-            float[] pathIteratorCoords = {type, coords[0] * scale, coords[1] * scale};
-            areaPoints.add(pathIteratorCoords);
+        for (float[] p : areaPoints) {
+            p[1] *= scale;
+            p[2] *= scale;
         }
 
         //smooth edges algorithm
@@ -195,7 +198,7 @@ public class GeneratedEnclosure {
         region = new Area(newPoints);
 
         //Define an inverse of the region
-        inverseRegion = border;
+        inverseRegion = new Area(border);
         inverseRegion.subtract(region);
 
         //Define the walls (used for shadowing) based on the new region
@@ -252,6 +255,12 @@ public class GeneratedEnclosure {
                 );
             }
         }
+
+//        float x = (float) border.getX(), y = (float) border.getY(), w = (float) border.getWidth(), h = (float) border.getHeight();
+//        walls.add(new Line2D.Float(x,y,x+w,y));
+//        walls.add(new Line2D.Float(x+w,y,x+w,y+h));
+//        walls.add(new Line2D.Float(x+w,y+h,x,y+h));
+//        walls.add(new Line2D.Float(x,y+h,x,y));
 
     }
 
@@ -315,7 +324,7 @@ public class GeneratedEnclosure {
     //An algorithm for smoothing the edges of a region:
     //For each edge, the midpoint is found and the original vertices
     //are moved towards their associated midpoints
-    List<float[]> smoothEdges(List<float[]> input, float factor) {
+    private List<float[]> smoothEdges(List<float[]> input, float factor) {
 
         //Create list for the midpoints of all the lines
         List<Point2D> midpoints = new ArrayList<>();
@@ -371,10 +380,27 @@ public class GeneratedEnclosure {
         return output;
     }
 
+    private List<float[]> areaPoints(Area area) {
+        //Create list of points that describe the region
+        List<float[]> areaPoints = new ArrayList<>();
+        float[] coords = new float[6];
+
+        for (PathIterator pi = area.getPathIterator(null); !pi.isDone(); pi.next()) {
+            //"type" will either be SEG_LINETO, SEG_MOVETO, or SEG_CLOSE
+            int type = pi.currentSegment(coords);
+
+            float[] pathIteratorCoords = {type, coords[0], coords[1]};
+            areaPoints.add(pathIteratorCoords);
+        }
+
+        return areaPoints;
+
+    }
+
     public void addExplosion(float x, float y, float radius, int vertices) {
 
-//        int[] xpoints = {-2*radius, -radius, radius, 2*radius, 2*radius, radius, -radius, -2*radius};
-//        int[] ypoints = {radius, 2*radius, 2*radius, radius, -radius, -2*radius, -2*radius, -radius};
+//        int[] x_points = {-2*radius, -radius, radius, 2*radius, 2*radius, radius, -radius, -2*radius};
+//        int[] y_points = {radius, 2*radius, 2*radius, radius, -radius, -2*radius, -2*radius, -radius};
 
         //create a randomized polygon
         Polygon explosion = new Polygon();
@@ -390,23 +416,11 @@ public class GeneratedEnclosure {
         }
         Area subtraction = new Area(explosion);
 
-        //Update the regions to accomidate the new explosion
+        //Update the regions to accommodate the new explosion
         region.add(subtraction);
         inverseRegion.subtract(subtraction);
 
-//        //Create list of points that describe the region
-//        List<float[]> areaPoints = new ArrayList<>();
-//        float[] coords = new float[6];
-//
-//        for (PathIterator pi = region.getPathIterator(null); !pi.isDone(); pi.next()) {
-//            //"type" will either be SEG_LINETO, SEG_MOVETO, or SEG_CLOSE
-//            int type = pi.currentSegment(coords);
-//
-//            float[] pathIteratorCoords = {type, coords[0] * scale, coords[1] * scale};
-//            areaPoints.add(pathIteratorCoords);
-//        }
-//
-//        defineWalls(areaPoints);
+        defineWalls(areaPoints(region));
 
     }
 

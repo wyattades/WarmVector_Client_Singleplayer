@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class InputManager implements MouseListener, KeyListener, MouseMotionListener {
 
 
-    //TODO: have a sendEvent() function that wakes inputHandle(Event e) with an Event e (so it only runs when theres an event)
+    //TODO: have a sendEvent() function that wakes inputHandle(Event e) with an Event e (so it only runs when there's an event)
 
     class Key {
         public boolean pressed;

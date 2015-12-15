@@ -22,9 +22,9 @@ public class FileManager {
         Map<String, Clip> temp = new HashMap<>();
         File file = new File("out/production/WarmVector_Client_Singleplayer/SFX");
         File[] listOfFiles = file.listFiles();
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                String filename = listOfFiles[i].getName();
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isFile()) {
+                String filename = listOfFile.getName();
                 temp.put(filename, loadSound(file.getPath() + "\\" + filename));
             }
         }
@@ -51,9 +51,9 @@ public class FileManager {
         Map<String, BufferedImage> temp = new HashMap<>();
         File file = new File("out/production/WarmVector_Client_Singleplayer/Images");
         File[] listOfFiles = file.listFiles();
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isFile()) {
-                String filename = listOfFiles[i].getName();
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isFile()) {
+                String filename = listOfFile.getName();
                 temp.put(filename, loadImage(file.getPath() + "\\" + filename));
             }
         }
@@ -67,10 +67,10 @@ public class FileManager {
         Map<String, BufferedImage[]> temp = new HashMap<>();
         File file = new File("out/production/WarmVector_Client_Singleplayer/Animations");
         File[] listOfFiles = file.listFiles();
-        for (int i = 0; i < listOfFiles.length; i++) {
-            if (listOfFiles[i].isDirectory()) {
-                int amount = listOfFiles[i].listFiles().length;
-                String filename = listOfFiles[i].getName();
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isDirectory()) {
+                int amount = listOfFile.listFiles().length;
+                String filename = listOfFile.getName();
                 temp.put(filename, loadAnimation(file.getPath() + "\\" + filename + "\\" + filename, amount));
             }
         }

@@ -3,10 +3,12 @@ package Visual.Occlusion;
 import Map.GeneratedEnclosure;
 
 import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.Area;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -15,30 +17,38 @@ import java.util.Comparator;
 public class Shadow {
 
     // Color of shadow
-    private static Color COLOR = new Color(20, 20, 20, 255);
+    private Color shadowFill;
 
     // These represent the map and the light location:
-    private ArrayList<Segment> segments;
-    private ArrayList<EndPoint> endpoints;
+    private List<Segment> segments;
+    private List<EndPoint> endpoints;
     private Point center;
 
     // These are currently 'open' line segments, sorted so that the nearest
     // segment is first. It's used only during the sweep algorithm, and exposed
     // as a public field here so that the demo can display it.
-    private ArrayList<Segment> open;
+    private List<Segment> open;
 
     // The output is a series of points that forms a visible area polygon
-    public ArrayList<Point> output;
+    public List<Point> output;
 
     private final Area border;
 
     private GeneratedEnclosure map;
 
+    //An object used to check if map.walls changes
+    private Line2D changedWall;
+
     // Construct an empty visibility set
-    public Shadow(GeneratedEnclosure map) {
+    public Shadow(GeneratedEnclosure map, Color shadowFill) {
 
         this.map = map;
 
+        changedWall = map.walls.get(map.walls.size()-1);
+
+        this.shadowFill = shadowFill;
+
+        //TODO: might have to change this when we add bedrock to the generatedEnclosure
         border = new Area(new Rectangle2D.Float(
                 -map.width,
                 -map.height,
@@ -46,48 +56,49 @@ public class Shadow {
                 3 * map.height
         ));
 
+        output = new ArrayList<>();
+        center = new Point(0, 0);
+        defineSegments(map.walls);
+
+    }
+
+    public void defineSegments(List<Line2D> walls) {
+        open = new ArrayList<>();
         segments = new ArrayList<>();
         endpoints = new ArrayList<>();
-        open = new ArrayList<>();
-        center = new Point(0, 0);
-        output = new ArrayList<>();
-
-        for (Line2D w : map.walls) {
+        for (Line2D w : walls) {
             addSegment((float) w.getX1() , (float) w.getY1(), (float) w.getX2(), (float) w.getY2());
         }
     }
 
-    public void draw(Graphics2D g, Color color) {
+    public void draw(Graphics2D g) {
 
-        int[] xpoints = new int[output.size()];
-        int[] ypoints = new int[xpoints.length];
+        //TODO: find a better way to check if map changes
+        if (!map.walls.get(map.walls.size()-1).equals(changedWall)) {
+            defineSegments(map.walls);
+            changedWall = map.walls.get(map.walls.size()-1);
+        }
+
+        int[] x_points = new int[output.size()];
+        int[] y_points = new int[x_points.length];
 
         for (int i = 0; i < output.size(); i++) {
             Point p = output.get(i);
-            xpoints[i] = Math.round(p.x);
-            ypoints[i] = Math.round(p.y);
+            x_points[i] = Math.round(p.x);
+            y_points[i] = Math.round(p.y);
         }
 
-        Polygon cutout = new Polygon(xpoints, ypoints, xpoints.length);
+        Polygon cutout = new Polygon(x_points, y_points, x_points.length);
 
         Area shadow = new Area(border);
         shadow.subtract(new Area(cutout));
 
-        g.setColor(color);
+        g.setColor(shadowFill);
         g.fill(shadow);
     }
 
 
     private void addSegment(float x1, float y1, float x2, float y2) {
-        // Add a segment only if there is not an existing segment in that space
-//        boolean alreadyExists = false;
-//        for (Segment s : segments) {
-//            if (((int) x1 == (int) s.p1.x && (int) y1 == (int) s.p1.y && (int) x2 == (int) s.p2.x && (int) y2 == (int) s.p2.y) ||
-//                    ((int) x1 == (int) s.p2.x && (int) y1 == (int) s.p2.y && (int) x2 == (int) s.p1.x && (int) y2 == (int) s.p1.y)) {
-//                alreadyExists = true;
-//            }
-//        }
-//        if (!alreadyExists) {
 
         // Add a segment, where the first point shows up in the
         // visualization but the second one does not. (Every endpoint is
@@ -101,7 +112,6 @@ public class Shadow {
         segments.add(segment);
         endpoints.add(p1);
         endpoints.add(p2);
-//        }
 
     }
 

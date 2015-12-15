@@ -1,5 +1,6 @@
 package Visual;
 
+import Entities.Entity;
 import Entities.Player;
 import Main.Game;
 import Map.GeneratedEnclosure;
@@ -7,6 +8,8 @@ import Map.GeneratedEnclosure;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/Visual/
@@ -27,7 +30,7 @@ public class HUD {
 
     private Area mapArea;
 
-    private GeneratedEnclosure map;
+    //private GeneratedEnclosure map;
 
     public int enemies;
 
@@ -38,21 +41,14 @@ public class HUD {
             enemyBoxColor = new Color(255, 0, 0, 180);
 
 
-    public HUD(Player user, int i_enemies, GeneratedEnclosure map) {
+    public HUD(HashMap<String, ArrayList<Entity>> entityList, GeneratedEnclosure map) {
 
-        this.map = map;
+        //this.map = map;
 
-        this.user = user;
-        startEnemies = i_enemies;
-        enemies = i_enemies;
+        user = (Player)entityList.get("thisPlayer").get(0);
+        startEnemies = enemies = entityList.get("enemy").size();
 
         mapArea = map.region;
-//        mapArea.addPoint((int)map.walls.get(0).getX1(), (int)map.walls.get(0).getY1());
-//        for (int i = 0; i < map.walls.size()-1; i++) {
-//            mapArea.addPoint((int)map.walls.get(i).getX2(), (int)map.walls.get(i).getY2());
-//            mapArea.addPoint((int)map.walls.get(i+1).getX1(), (int)map.walls.get(i+1).getY1());
-//        }
-//        mapArea.addPoint((int) map.walls.get(map.walls.size()-1).getX2(), (int)map.walls.get(map.walls.size()-1).getY2());
 
     }
 
@@ -112,7 +108,7 @@ public class HUD {
         //ENEMY COUNTER
         g.setColor(new Color(255,255,255,180));
         String enemiesS = String.valueOf(enemies);
-        g.drawString(enemiesS, Game.WIDTH/2 - textWidth(enemiesS, g) / 2, Game.HEIGHT - 16);
+        g.drawString(enemiesS, Game.WIDTH/2 - textWidth(enemiesS, g) / 2 - 1, Game.HEIGHT - 16);
 
         //MINI MAP
 
