@@ -29,7 +29,7 @@ public abstract class Entity {
         sprite_w = sprite.getWidth();
         sprite_h = sprite.getHeight();
 
-        //Set color as pink for easy debugging
+        //Set base color as pink for easy debugging
         //because an entity's hitColor should never be pink
         hitColor = new Color(255, 0, 169);
     }
@@ -40,10 +40,10 @@ public abstract class Entity {
         if (orient != 0) {
             AffineTransform oldTForm = g.getTransform();
             g.rotate(orient, x, y);
-            g.drawImage(sprite, Math.round(x - sprite_w / 2), Math.round(y - sprite_h / 2), null);
+            g.drawImage(sprite, Math.round(x - sprite_w / 2.0f), Math.round(y - sprite_h / 2.0f), null);
             g.setTransform(oldTForm);
         } else {
-            g.drawImage(sprite, Math.round(x - sprite_w / 2), Math.round(y - sprite_h / 2), null);
+            g.drawImage(sprite, Math.round(x - sprite_w / 2.0f), Math.round(y - sprite_h / 2.0f), null);
         }
     }
 

@@ -14,18 +14,18 @@ public class GameStateManager {
     protected GameState[] gameStates;
 
     protected int currentState;
-    private int topState;
+    protected int topState;
 
     public int level;
 
     public MouseCursor cursor;
 
     public static final int
-            MAXLEVEL = 2,
+            MAXLEVEL = 5,
 
-    NUM_STATES = 8,
+            NUM_STATES = 8,
 
-    INTRO = 0,
+            INTRO = 0,
             MAINMENU = 1,
             PLAY = 2,
             GAMEOVER = 3,
@@ -115,7 +115,6 @@ public class GameStateManager {
         if (gameStates[topState] != null) {
             gameStates[topState].update();
         } else if (gameStates[currentState] != null) {
-//            gameStates[currentState].inputHandle();
             gameStates[currentState].update();
         } else {
             System.out.println("gameState is null during update()");

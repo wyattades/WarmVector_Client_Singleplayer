@@ -67,24 +67,6 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
             }
         }
 
-//        public void toggleMouseDown(boolean toggle) {
-//            if (mouseDown != toggle) {
-//                mouseDown = toggle;
-//            }
-//            if (toggle) {
-//                toggleMouseReleased(false);
-//            }
-//        }
-//
-//        public void toggleMouseReleased(boolean toggle) {
-//            if (mouseReleased != toggle) {
-//                mouseReleased = toggle;
-//            }
-//            if (toggle) {
-//                toggleMouseDown(false);
-//            }
-//        }
-
     }
 
     public class Mouse {

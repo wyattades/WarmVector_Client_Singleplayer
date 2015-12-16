@@ -42,7 +42,7 @@ public class FadeInState extends GameState {
 
     @Override
     public void update() {
-        int rate = 3;
+        int rate = 4;
         opacity -= rate;
         if (opacity <= 2) {
             gsm.unloadState(GameStateManager.FADEIN);

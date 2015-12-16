@@ -81,10 +81,11 @@ public abstract class MenuState extends GameState {
                 break;
             case ButtonC.CONTINUE:
                 gsm.level++;
+                gsm.unloadState(GameStateManager.NEXTLEVEL);
                 gsm.setState(GameStateManager.PLAY);
                 break;
             case ButtonC.QUIT:
-                System.exit(0);
+                Game.running = false;
                 break;
             case ButtonC.RESUME:
                 gsm.unloadState(GameStateManager.PAUSE);
@@ -101,8 +102,8 @@ public abstract class MenuState extends GameState {
             case ButtonC.CREDITS:
                 //Roll the credits!
                 break;
-            case ButtonC.RETURN:
-                gsm.unloadState(GameStateManager.PAUSE);
+            case ButtonC.MAINMENU:
+                gsm.unloadState(gsm.topState);
                 gsm.setState(GameStateManager.MAINMENU);
                 break;
             default:

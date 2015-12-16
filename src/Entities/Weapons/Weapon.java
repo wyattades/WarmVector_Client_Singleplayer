@@ -28,12 +28,12 @@ public abstract class Weapon extends Entity {
         super(x, y,  orient);
 
         vx = vy = 0;
-        hitSound = FileManager.sounds.get("bulletHit.wav");
+        hitSound = FileManager.getSound("bulletHit.wav");
         user = i_user;
         hitColor = Color.DARK_GRAY;
 
         w = sprite.getWidth();
-        h = sprite.getHeight();
+        h = w;
 
         this.name = name;
         this.ammo = this.clipSize = clipSize;

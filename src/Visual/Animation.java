@@ -27,7 +27,7 @@ public class Animation {
         this.y = y;
         this.frameRate = frameRate;
         this.orient = orient;
-        sprites = FileManager.animations.get(fileName);
+        sprites = FileManager.getAnimation(fileName);
         length = sprites.length;
         w = sprites[0].getWidth();
         h = sprites[0].getHeight();

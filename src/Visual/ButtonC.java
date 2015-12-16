@@ -28,7 +28,7 @@ public class ButtonC {
             RESUME = 6,
             BACK = 7,
             CREDITS = 8,
-            RETURN = 9;
+            MAINMENU = 9;
 
 
     public ButtonC(String text, int value, int x, int y) {

@@ -15,14 +15,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.MemoryImageSource;
+import java.util.TimerTask;
+import java.util.Timer;
 
 public class Game implements Runnable {
 
     public static int WIDTH;
     public static int HEIGHT;
-    private static final int MS_PER_UPDATE = 16;
 
-    private boolean running;
+    public static boolean running;
 
     private BufferStrategy bufferStrategy;
     private GameStateManager gsm;
@@ -58,13 +59,10 @@ public class Game implements Runnable {
 
         canvas.requestFocus();
 
-        //setWindowed(frame);
-
         canvas.createBufferStrategy(2);
         bufferStrategy = canvas.getBufferStrategy();
 
         canvas.requestFocus();
-
 
         //Set default mouse cursor to transparent
         Cursor transparentCursor = Toolkit.getDefaultToolkit().createCustomCursor(
@@ -93,30 +91,6 @@ public class Game implements Runnable {
         run();
     }
 
-    void setWindowed(Frame frame) {
-
-        //hide the frame so we can change it.
-        frame.setVisible(false);
-
-        //remove the frame from being displayable.
-        frame.dispose();
-
-        //put the borders back on the frame.
-        frame.setUndecorated(false);
-
-        //needed to unset this window as the fullscreen window.
-        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
-
-        //make sure the size of the window is correct.
-        frame.setSize(1920, 1080);
-
-        //recenter window
-        frame.setLocationRelativeTo(null);
-
-        //reset the display mode to what it was before we changed it.
-        frame.setVisible(true);
-    }
-
     public static int currentTimeMillis() {
         long millisLong = System.currentTimeMillis();
         while (millisLong > Integer.MAX_VALUE) {
@@ -142,18 +116,27 @@ public class Game implements Runnable {
             gsm.inputHandle(inputManager);
 
             //UPDATE
-            while (lag >= MS_PER_UPDATE) {
+            int MS_PER_UPDATE = 16;
+            if (lag >= MS_PER_UPDATE) {
                 gsm.update();
                 lag -= MS_PER_UPDATE;
             }
 
             //RENDER
             render();
+
+            System.out.println(1000d/elapsed);
+
         }
+
+        exit();
+
     }
 
     private void render() {
+
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
+
         if (OutputManager.getSetting("quality") == 1) {
             g.setRenderingHint(RenderingHints.KEY_RENDERING,
                     RenderingHints.VALUE_RENDER_QUALITY);
@@ -164,20 +147,19 @@ public class Game implements Runnable {
         }
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                 RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-//            g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,
-//                RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-//            g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
-//                RenderingHints.VALUE_COLOR_RENDER_SPEED);
-//            g.setRenderingHint(RenderingHints.KEY_DITHERING,
-//                RenderingHints.VALUE_DITHER_ENABLE);
-
-        //g.setFont(new Font("Dotum Bold", Font.BOLD, 50));
 
         gsm.draw(g); //game is drawn
 
         g.dispose();
 
         bufferStrategy.show();
+
+    }
+
+    private void exit() {
+
+        System.out.println("Closing program...");
+        System.exit(0);
 
     }
 

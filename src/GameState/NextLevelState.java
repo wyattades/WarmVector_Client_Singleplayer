@@ -24,9 +24,8 @@ public class NextLevelState extends MenuState {
         buttons = new ArrayList<>();
         sliders = new ArrayList<>();
         initDefault();
+        addButton("MAIN MENU", ButtonC.MAINMENU);
         if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE", ButtonC.CONTINUE);
-
-//        nextLevelTransition = new NextLevelTransition(Theme.menuBackground);
     }
 
     public void init() {
@@ -35,13 +34,11 @@ public class NextLevelState extends MenuState {
     }
 
     public void unload() {
-
     }
 
     public void draw(Graphics2D g) {
 
-        drawBackground(g, Theme.menuBackground);
-//        nextLevelTransition.draw(g);
+       // drawBackground(g, Theme.menuBackground);
 
         for (ButtonC b : buttons) {
             b.update(gsm.cursor.x, gsm.cursor.y);
@@ -54,6 +51,7 @@ public class NextLevelState extends MenuState {
 
         if (gsm.level >= GameStateManager.MAXLEVEL) {
             String text = "YOU WIN! (work in progress btw)";
+            g.setColor(Theme.buttonOverOld);
             g.drawString(
                     text,
                     Game.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(text, g).getWidth() / 2,
@@ -66,7 +64,7 @@ public class NextLevelState extends MenuState {
     }
 
     public void update() {
-//        nextLevelTransition.transition();
+
     }
 
 }

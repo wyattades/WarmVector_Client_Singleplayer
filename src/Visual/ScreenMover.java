@@ -21,7 +21,7 @@ public class ScreenMover {
     }
 
     public void updatePosition() {
-        updateVelocity();
+        //updateVelocity();
         screenPosX = screenVelX;
         screenPosY = screenVelY;
     }

@@ -16,8 +16,34 @@ import java.util.Map;
  */
 public class FileManager {
 
-    public static final Map<String, Clip> sounds;
+    public static Clip getSound(String name) {
+        Clip sound = sounds.get(name);
+        if (sound == null) {
+            System.out.println("Sound " + name + " does not exist");
+            System.exit(1);
+        }
+        return sound;
+    }
 
+    public static BufferedImage getImage(String name) {
+        BufferedImage image = images.get(name);
+        if (image == null) {
+            System.out.println("Image " + name + " does not exist");
+            System.exit(1);
+        }
+        return image;
+    }
+
+    public static BufferedImage[] getAnimation(String name) {
+        BufferedImage[] animation = animations.get(name);
+        if (animation == null) {
+            System.out.println("Animation " + name + " does not exist");
+            System.exit(1);
+        }
+        return animation;
+    }
+
+    private static final Map<String, Clip> sounds;
     static {
         Map<String, Clip> temp = new HashMap<>();
         File file = new File("src/SFX");
@@ -47,8 +73,7 @@ public class FileManager {
         return null;
     }
 
-    public static final Map<String, BufferedImage> images;
-
+    private static final Map<String, BufferedImage> images;
     static {
         Map<String, BufferedImage> temp = new HashMap<>();
         File file = new File("src/Images");
@@ -65,8 +90,7 @@ public class FileManager {
 
     }
 
-    public static final Map<String, BufferedImage[]> animations;
-
+    private static final Map<String, BufferedImage[]> animations;
     static {
         Map<String, BufferedImage[]> temp = new HashMap<>();
         File file = new File("src/Animations");

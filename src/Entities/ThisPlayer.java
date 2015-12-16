@@ -20,8 +20,8 @@ public class ThisPlayer extends Player {
 
     @Override
     protected void loadSprites() {
-        shootSprite = FileManager.images.get("player0g.png");
-        defaultSprite = FileManager.images.get("player0.png");
+        shootSprite = FileManager.getImage("player0g.png");
+        defaultSprite = FileManager.getImage("player0.png");
         setSpriteToDefault(weapon == null);
     }
 

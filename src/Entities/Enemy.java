@@ -24,8 +24,8 @@ public class Enemy extends Player {
 
     @Override
     protected void loadSprites() {
-        shootSprite = FileManager.images.get("player1g.png");
-        defaultSprite = FileManager.images.get("player1.png");
+        shootSprite = FileManager.getImage("player1g.png");
+        defaultSprite = FileManager.getImage("player1.png");
         setSpriteToDefault(weapon == null);
     }
 

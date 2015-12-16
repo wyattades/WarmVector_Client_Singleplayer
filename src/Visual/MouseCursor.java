@@ -22,8 +22,8 @@ public class MouseCursor {
 
     public MouseCursor() {
 
-        cursor = FileManager.images.get("cursor.png");
-        crosshair = FileManager.images.get("crosshair.png");
+        cursor = FileManager.getImage("cursor.png");
+        crosshair = FileManager.getImage("crosshair.png");
 
         sprite = cursor;
 

@@ -72,7 +72,7 @@ public class Projectile extends Entity {
 
     @Override
     protected void loadSprites() {
-        sprite = FileManager.images.get("bullet.png");
+        sprite = FileManager.getImage("bullet.png");
     }
 
     @Override

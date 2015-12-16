@@ -10,12 +10,14 @@ import Main.Game;
 import Map.GeneratedEnclosure;
 import Map.GeneratedEntities;
 import StaticManagers.AudioManager;
+import StaticManagers.FileManager;
 import StaticManagers.InputManager;
 import Visual.*;
 import Visual.Occlusion.Shadow;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -69,7 +71,7 @@ public class PlayState extends GameState {
 
         //save stuff (stats?)
     }
-      //BufferedImage background = FileManager.images.get("background_0" + 1 + ".png");
+    BufferedImage background = FileManager.getImage("background_0" + 1 + ".png");
 
     public void draw(Graphics2D g) {
 
@@ -89,7 +91,7 @@ public class PlayState extends GameState {
         g.translate(screenMover.screenPosX - thisPlayer.x + Game.WIDTH / 2 / SCALEFACTOR, screenMover.screenPosY - thisPlayer.y + Game.HEIGHT / 2 / SCALEFACTOR);
 
         //background image
-//        g.drawImage(background, 0, 0, map.width, map.height, null);
+        g.drawImage(background, 0, 0, map.width, map.height, null);
 
         //draw objects \/
         for (Bullet b : bullets) {
@@ -125,13 +127,7 @@ public class PlayState extends GameState {
 
         //TEMP
         shadow.draw(g);
-
         map.draw(g, new Color(90,90,90), new Color(50,50,50));
-
-        //TEMP
-//        g.setColor(new Color(50,50,50));
-//        g.setStroke(new BasicStroke(2));
-//        map.walls.forEach(g::draw);
 
         //reset transformation
         g.setTransform(oldT);
@@ -149,9 +145,6 @@ public class PlayState extends GameState {
     }
 
     public void update() { //update objects
-
-        //create a copy of thisPlayer for convenience
-        thisPlayer = (ThisPlayer) entityList.get("thisPlayer").get(0);
 
         if (!dead) {
             thisPlayer.update();
@@ -213,7 +206,7 @@ public class PlayState extends GameState {
                             //if there are no enemies left...
                             if (enemyCount <= 0) {
                                 //move on to next level
-                                gsm.setState(GameStateManager.NEXTLEVEL);
+                                gsm.setTopState(GameStateManager.NEXTLEVEL);
                             }
                         }
                         entry.getValue().remove(i);
@@ -231,35 +224,15 @@ public class PlayState extends GameState {
 
     private void addBullets(Player p) {
         if (p.weapon != null && Game.currentTimeMillis() - p.shootTime > p.weapon.rate && p.weapon.ammo > 0) {
+
             for (int i = 0; i < p.weapon.amount; i++) {
-//                Bullet b = new Bullet(entityList, map, p);
-//                for (Bullet.CollidePoint point : b.collidePoints) {
-//                    animations.add(new Animation((int)point.x,(int) point.y, b.orient + (float) Math.PI, 1, point.hitColor, "hit_"));
-//                }
-//
-//                //Add bullet object to arrayList so it can be updated and displayed
-//                bullets.add(b);
-//                p.weapon.hitSound.stop();
-//                Clip copy = p.weapon.hitSound;
-//                copy.setFramePosition(0);
-//                FloatControl gainControl =
-//                        (FloatControl) copy.getControl(FloatControl.Type.MASTER_GAIN);
-//                gainControl.setValue(-10.0f); // Reduce volume by 10 decibels.
-//                copy.start();
                 AudioManager.playSFX(p.weapon.shootSound);
                 entityList.get("bullet").add(new Projectile(p.x, p.y, p.orient, 15.0f, 0.0f, p));
             }
+            p.shootTime = Game.currentTimeMillis();
+
             //Subtract one ammo from player
             p.weapon.changeAmmo(-1);
-
-//            //Player bullet shoot sound for each bullet shot
-//            p.weapon.shootSound.stop();
-//
-//            Clip copy = p.weapon.shootSound;
-//            copy.setFramePosition(0);
-//            copy.start();
-
-            p.shootTime = Game.currentTimeMillis();
 
         }
     }

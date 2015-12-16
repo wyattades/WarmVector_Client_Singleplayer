@@ -35,11 +35,12 @@ public class FadeOutState extends GameState {
     public void draw(Graphics2D g) {
         g.setColor(new Color(0, 0, 0, opacity));
         g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+
     }
 
     @Override
     public void update() {
-        int rate = 2;
+        int rate = 3;
         opacity += rate;
         if (opacity >= 255) {
             gsm.unloadState(GameStateManager.FADEOUT);
