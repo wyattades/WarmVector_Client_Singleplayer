@@ -13,6 +13,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.MemoryImageSource;
 import java.util.TimerTask;
@@ -52,6 +54,14 @@ public class Game implements Runnable {
         frame.setUndecorated(true);
         frame.add(new JLabel("WarmVector V2", SwingConstants.CENTER), BorderLayout.CENTER);
         frame.validate();
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                exit();
+            }
+        });
+
+
         GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
 
         canvas.createBufferStrategy(2);
@@ -155,6 +165,7 @@ public class Game implements Runnable {
     private void exit() {
 
         System.out.println("Closing program...");
+        OutputManager.saveAllSettings();
         System.exit(0);
 
     }
