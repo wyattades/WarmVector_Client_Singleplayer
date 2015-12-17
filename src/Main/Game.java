@@ -80,6 +80,7 @@ public class Game implements Runnable {
         inputManager = new InputManager(canvas);
 
         //Add key and mouse mappings to inputManager
+        inputManager.addKeyMapping("R", KeyEvent.VK_R);
         inputManager.addKeyMapping("UP", KeyEvent.VK_W);
         inputManager.addKeyMapping("DOWN", KeyEvent.VK_S);
         inputManager.addKeyMapping("LEFT", KeyEvent.VK_A);

@@ -119,6 +119,7 @@ public class OutputManager {
             System.out.println("Could not locate setting to replace: " + name);
         }
 
+        //TODO: don't do this somehow
         if (name.equals("sfx_volume") || name.equals("music_volume")) {
             AudioManager.updateSettings();
         }

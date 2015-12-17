@@ -3,7 +3,7 @@ package Map;
 import Entities.Enemy;
 import Entities.Entity;
 import Entities.ThisPlayer;
-import Entities.Weapons.M4rifle;
+import Entities.Weapons.*;
 import Helper.MyMath;
 
 import java.awt.geom.Area;
@@ -21,7 +21,16 @@ public class GeneratedEntities {
 
     private Area region;
 
+    private String[] weaponTypes;
+
     public GeneratedEntities(GeneratedEnclosure map, float difficultyFactor) {
+
+        weaponTypes = new String[]{
+                "LMG",
+                "M4rifle",
+                "Sniper",
+                "Remington"
+        };
 
         entityList = new HashMap<>();
 
@@ -47,10 +56,35 @@ public class GeneratedEntities {
         for (Rect r : map.rooms) {
             if (!r.equals(playerSpawn)) {
                 Enemy newEnemy = new Enemy(0, 0, MyMath.random(0, 6.29f), map);
-                newEnemy.setWeapon(new M4rifle(0,0,0,newEnemy));
+                newEnemy.setWeapon(randomWeapon());
+                newEnemy.weapon.user = newEnemy;
                 putEntity(newEnemy, "enemy", r);
             }
         }
+    }
+
+    private Weapon randomWeapon() {
+        switch((int) Math.floor(MyMath.random(0, 4))) {
+            case(0):
+                return new M4rifle(0,0,0,null);
+            case(1):
+                return new LMG(0,0,0,null);
+            case(2):
+                return new Remington(0,0,0,null);
+            case(3):
+                return new Sniper(0,0,0,null);
+            default:
+                return null;
+        }
+//        try {
+//            Class someWeaponClass = Class.forName("Entities.Weapons." + weaponTypes[Math.round(MyMath.random(0, weaponTypes.length - 1))]);
+//            return (Weapon) someWeaponClass.newInstance();
+//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+//            e.printStackTrace();
+//            System.out.println("Random weapon spawn did not work");
+//            System.exit(1);
+//        }
+//        return null;
     }
 
     private void putEntity(Entity entity, String category, Rect room) {

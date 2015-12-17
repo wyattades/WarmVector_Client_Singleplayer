@@ -7,11 +7,11 @@ import StaticManagers.FileManager;
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/25/2015.
  */
-public class M4rifle extends Weapon {
+public class Sniper extends Weapon {
 
-    public M4rifle(float x, float y, float orient, Player i_user) {
+    public Sniper(float x, float y, float orient, Player i_user) {
         super(x, y, orient, i_user,
-                "M4Rifle", 32, 64, 1, 100, 42, 15, 0.05f, 8, FileManager.getSound("m4_shoot.wav"));
+                "Sniper", 10, 20, 1, 1000, 42, 50, 0.01f, 12, FileManager.getSound("m4_shoot.wav"));
     }
 
 

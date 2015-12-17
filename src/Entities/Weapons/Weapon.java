@@ -15,14 +15,15 @@ import java.awt.geom.AffineTransform;
 public abstract class Weapon extends Entity {
 
     public float vx, vy;
-    public int ammo, amount, damage, clipSize, clipAmount, rate;
-    public String name;
-    public float bVel, spread, gunLength;
+    public int ammo, reserveAmmo;
+    public final int clipSize, amountPerShot, damage, rate;
+    public final String name;
+    public final float bVel, spread, gunLength;
     public Player user;
-    public Clip hitSound, shootSound;
+    public final Clip hitSound, shootSound;
 
     Weapon(float x, float y,  float orient, Player i_user,
-           String name, int clipSize, int clipAmount, int amount, int rate,
+           String name, int clipSize, int reserveAmmo, int amountPerShot, int rate,
            float gunLength, int damage, float spread, float bVel, Clip shootSound) {
 
         super(x, y,  orient);
@@ -37,8 +38,8 @@ public abstract class Weapon extends Entity {
 
         this.name = name;
         this.ammo = this.clipSize = clipSize;
-        this.clipAmount = clipAmount;
-        this.amount = amount;
+        this.reserveAmmo = reserveAmmo;
+        this.amountPerShot = amountPerShot;
         this.rate = rate;
         this.gunLength = gunLength;
         this.damage = damage;

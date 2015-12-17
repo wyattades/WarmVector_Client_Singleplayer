@@ -6,6 +6,7 @@ import Entities.Player;
 import Entities.Projectiles.Projectile;
 import Entities.ThisPlayer;
 import Entities.Weapons.Weapon;
+import Helper.MyMath;
 import Main.Game;
 import Map.GeneratedEnclosure;
 import Map.GeneratedEntities;
@@ -190,6 +191,7 @@ public class PlayState extends GameState {
 
         //Entities removal outcomes
         //Create an iterator to loop iterate through every entity
+        outerloop:
         for (HashMap.Entry<String, ArrayList<Entity>> entry : entityList.entrySet()) {
             for (int i = entry.getValue().size() - 1; i >= 0; i--) {
                 //If an entity's state is ever false...
@@ -214,6 +216,7 @@ public class PlayState extends GameState {
                         dead = true;
                         Player p = (Player) entry.getValue().get(i);
                         p.deathSequence();
+                        break outerloop;
                     }
                 }
             }
@@ -225,9 +228,9 @@ public class PlayState extends GameState {
     private void addBullets(Player p) {
         if (p.weapon != null && Game.currentTimeMillis() - p.shootTime > p.weapon.rate && p.weapon.ammo > 0) {
 
-            for (int i = 0; i < p.weapon.amount; i++) {
+            for (int i = 0; i < p.weapon.amountPerShot; i++) {
                 AudioManager.playSFX(p.weapon.shootSound);
-                entityList.get("bullet").add(new Projectile(p.x, p.y, p.orient, 15.0f, 0.0f, p));
+                entityList.get("bullet").add(new Projectile(p.x, p.y, p.orient + MyMath.random(-p.weapon.spread/2f, p.weapon.spread/2f), 15.0f, 0.0f, p));
             }
             p.shootTime = Game.currentTimeMillis();
 
@@ -251,6 +254,17 @@ public class PlayState extends GameState {
 //                    break;
 //            }
 //        }
+
+        //If R is pressed, player reloads
+        if (inputManager.isKeyPressed("R") &&
+                Game.currentTimeMillis() - inputManager.getKeyTime("R") > 1000 &&
+                thisPlayer.weapon != null &&
+                thisPlayer.weapon.reserveAmmo > 0) {
+            int addedAmmo = thisPlayer.weapon.clipSize - thisPlayer.weapon.ammo;
+            thisPlayer.weapon.ammo += addedAmmo;
+            thisPlayer.weapon.reserveAmmo -= addedAmmo;
+            inputManager.setKeyTime("R", Game.currentTimeMillis());
+        }
 
         //If leftKey is pressed and right isn't, player goes left
         if (inputManager.isKeyPressed("LEFT") && !inputManager.isKeyPressed("RIGHT"))

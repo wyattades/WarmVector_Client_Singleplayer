@@ -8,9 +8,9 @@ import java.awt.*;
  */
 public class Slider {
 
-    private int x;
+    public int x;
     public int y;
-    private int w;
+    public int w;
     public int slider_x;
     public int current_option;
     public String[] options;

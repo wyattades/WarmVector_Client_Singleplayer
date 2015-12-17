@@ -80,7 +80,7 @@ public class HUD {
         g.setFont(Theme.fontHUD);
 
         //AMMO
-        String ammoS = user.weapon == null ? "" : "Ammo: " + user.weapon.ammo + " / " + user.weapon.clipAmount*user.weapon.clipSize;
+        String ammoS = user.weapon == null ? "" : "Ammo: " + user.weapon.ammo + " / " + user.weapon.reserveAmmo;
         g.setColor(defaultHudColor);
         g.drawString(ammoS, HUDx - textWidth(ammoS, g), HUDy + textHeight(ammoS, g) / 2);
 
