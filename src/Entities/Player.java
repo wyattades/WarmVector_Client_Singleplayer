@@ -20,14 +20,14 @@ import java.awt.image.BufferedImage;
 public abstract class Player extends Entity {
 
     public Weapon weapon;
-    public float vx, vy;
+    protected float vx, vy;
     public float life;
     public float maxLife;
-    public static int topSpeed = 5;
+    public static float topSpeed = 5.0f;
+    public static float acceleration = 1.4f;
     public int shootTime;
     protected BufferedImage shootSprite, defaultSprite, deadSprite;
     protected GeneratedEnclosure map;
-    private boolean walking;
     private Clip walkSound;
 
     Player(float x, float y, float orient, GeneratedEnclosure map) {
@@ -63,8 +63,8 @@ public abstract class Player extends Entity {
 
     private void slowPlayer() {
 
-        float minSpeed = 0.3f;
-        float reductionFactor = 0.4f;
+        //float minSpeed = 0.1f;
+//        float reductionFactor = 0.1f;
 
 //        if (Math.abs(vx) > minSpeed) {
 //            vx *= reductionFactor;
@@ -78,33 +78,65 @@ public abstract class Player extends Entity {
 //            vy = 0;
 //        }
 
-        if (vx > minSpeed) {
-            vx -= reductionFactor;
-        } else if (vx < -minSpeed) {
-            vx += reductionFactor;
-        } else {
-            vx = 0;
+//        if (vx > minSpeed) {
+//            vx -= reductionFactor;
+//        } else if (vx < -minSpeed) {
+//            vx += reductionFactor;
+//        } else {
+//            vx = 0;
+//        }
+//
+//        if (vy > minSpeed) {
+//            vy -= reductionFactor;
+//        } else if (vy < -minSpeed) {
+//            vy += reductionFactor;
+//        } else {
+//            vy = 0;
+//        }
+
+        float a = 0.6f;
+
+        if (vx > 0) {
+            vx = Math.max(vx-a, 0);
+        } else if (vx < 0) {
+            vx = Math.min(vx+a, 0);
         }
 
-        if (vy > minSpeed) {
-            vy -= reductionFactor;
-        } else if (vy < -minSpeed) {
-            vy += reductionFactor;
-        } else {
-            vy = 0;
+        if (vy > 0) {
+            vy = Math.max(vy-a, 0);
+        } else if (vy < 0) {
+            vy = Math.min(vy + a, 0);
         }
+
 
     }
 
+    private boolean accelerating = false;
+
+    public void moveX(float deltaV) {
+        accelerating = true;
+        vx += deltaV;
+        if (vx > topSpeed) vx = topSpeed;
+        else if (vx < -topSpeed) vx = -topSpeed;
+    }
+
+    public void moveY(float deltaV) {
+        accelerating = true;
+        vy += deltaV;
+        if (vy > topSpeed) vy = topSpeed;
+        else if (vy < -topSpeed) vy = -topSpeed;
+    }
+
     public void updatePosition() {
-        walking = false;
         if (!obstacleX(vx)) {
             x += vx;
-            walking = true;
+        } else {
+            vx = 0;
         }
         if (!obstacleY(vy)) {
             y += vy;
-            walking = true;
+        } else {
+            vy = 0;
         }
     }
 
@@ -118,15 +150,15 @@ public abstract class Player extends Entity {
         return true;
     }
 
-    int stepTime = 0;
+    int stepTime = Game.currentTimeMillis();
 
     public void update() {
-
-        updatePosition();
         slowPlayer();
+        updatePosition();
         updateCollideBox();
 
-        if (walking && Game.currentTimeMillis() - stepTime > 400) {
+        //TODO: fix walking sounds
+        if (this.getClass().getSuperclass().getName().equals("ThisPlayer") && Game.currentTimeMillis() - stepTime > 500) {
             stepTime = Game.currentTimeMillis();
             AudioManager.playSFX(walkSound);
         }

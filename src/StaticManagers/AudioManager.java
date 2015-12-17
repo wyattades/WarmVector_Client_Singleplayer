@@ -4,6 +4,7 @@ import Helper.MyMath;
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
+import java.util.*;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/StaticManagers/
@@ -16,6 +17,12 @@ public class AudioManager {
         updateSettings();
     }
 
+//    private static Map<String, Clip> audioFiles;
+//    static {
+//        Map<String, Clip> temp = new HashMap<>(FileManager.sounds);
+//        audioFiles = Collections.unmodifiableMap(temp);
+//    }
+
     public static void updateSettings() {
 
         musicVolume = MyMath.map(OutputManager.getSetting("music_volume"), 0, 4, -80, 6);
@@ -25,6 +32,8 @@ public class AudioManager {
     }
 
     public static void playSFX(Clip clip) {
+
+//        Clip clip = audioFiles.get(name);
 
         //reset clip
         clip.stop();

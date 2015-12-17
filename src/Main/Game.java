@@ -59,10 +59,6 @@ public class Game implements Runnable {
 
         canvas.requestFocus();
 
-        canvas.createBufferStrategy(2);
-        bufferStrategy = canvas.getBufferStrategy();
-
-        canvas.requestFocus();
 
         //Set default mouse cursor to transparent
         Cursor transparentCursor = Toolkit.getDefaultToolkit().createCustomCursor(
@@ -125,7 +121,7 @@ public class Game implements Runnable {
             //RENDER
             render();
 
-            System.out.println(1000d/elapsed);
+            //System.out.println(1000d/elapsed);
 
         }
 

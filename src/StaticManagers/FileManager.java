@@ -6,6 +6,9 @@ import javax.sound.sampled.Clip;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Array;
+import java.net.URL;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +18,26 @@ import java.util.Map;
  * Created by Wyatt on 1/24/2015.
  */
 public class FileManager {
+
+    private static String location;
+    static {
+//        location = ClassLoader.getSystemResource("").getPath();
+//        InputStream is = FileManager.class.getResourceAsStream("");
+        location = FileManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+//        location = location.replace(".jar","");
+//        location += "/";
+//        System.out.println("LOCATION: "+location);
+//      location = "src/";
+
+//        try {
+//            BufferedImage image = ImageIO.read(FileManager.class.getResourceAsStream("/Images/cursor.png"));
+//            System.out.println("IT WORKED");
+//        } catch(Exception e) {
+//            System.out.println("COULDNT FIND SHIT");
+//        }
+//        InputStream is = this.getClass().getClassLoader().getResourceAsStream(fileFromJarFile);
+//        BufferedImage b = is.;
+    }
 
     public static Clip getSound(String name) {
         Clip sound = sounds.get(name);
@@ -46,7 +69,7 @@ public class FileManager {
     private static final Map<String, Clip> sounds;
     static {
         Map<String, Clip> temp = new HashMap<>();
-        File file = new File("src/SFX");
+        File file = new File(location + "SFX");
         File[] listOfFiles = file.listFiles();
         if (listOfFiles != null) {
             for (File listOfFile : listOfFiles) {
@@ -76,7 +99,7 @@ public class FileManager {
     private static final Map<String, BufferedImage> images;
     static {
         Map<String, BufferedImage> temp = new HashMap<>();
-        File file = new File("src/Images");
+        File file = new File(location + "Images");
         File[] listOfFiles = file.listFiles();
         if (listOfFiles != null) {
             for (File listOfFile : listOfFiles) {
@@ -87,13 +110,12 @@ public class FileManager {
             }
         }
         images = Collections.unmodifiableMap(temp);
-
     }
 
     private static final Map<String, BufferedImage[]> animations;
     static {
         Map<String, BufferedImage[]> temp = new HashMap<>();
-        File file = new File("src/Animations");
+        File file = new File(location + "Animations");
         File[] listOfFiles = file.listFiles();
         if (listOfFiles != null) {
             for (File listOfFile : listOfFiles) {
@@ -110,7 +132,6 @@ public class FileManager {
 
     private static BufferedImage loadImage(String s) {
         try {
-
             return ImageIO.read(new File(s));
         } catch (IOException e) {
             e.printStackTrace();

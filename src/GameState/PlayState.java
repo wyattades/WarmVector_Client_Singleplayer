@@ -254,20 +254,20 @@ public class PlayState extends GameState {
 
         //If leftKey is pressed and right isn't, player goes left
         if (inputManager.isKeyPressed("LEFT") && !inputManager.isKeyPressed("RIGHT"))
-        thisPlayer.vx = - Player.topSpeed;
+        thisPlayer.moveX(-Player.acceleration);
 
         //If rightKey is pressed and left isn't, player goes right
         else if (inputManager.isKeyPressed("RIGHT") && !inputManager.isKeyPressed("LEFT"))
-            thisPlayer.vx = Player.topSpeed;
+            thisPlayer.moveX(Player.acceleration);
 
 
         //If upKey is pressed and down isn't, player goes up
         if (inputManager.isKeyPressed("UP") && !inputManager.isKeyPressed("DOWN"))
-            thisPlayer.vy = - Player.topSpeed;
+            thisPlayer.moveY(-Player.acceleration);
 
         //If downKey is pressed and up isn't, player goes down
         else if (inputManager.isKeyPressed("DOWN") && !inputManager.isKeyPressed("UP"))
-            thisPlayer.vy = Player.topSpeed;
+            thisPlayer.moveY(Player.acceleration);
 
 
         //If leftMouse is pressed, create bullets from player

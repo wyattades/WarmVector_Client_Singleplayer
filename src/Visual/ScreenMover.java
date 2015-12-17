@@ -26,25 +26,25 @@ public class ScreenMover {
         screenPosY = screenVelY;
     }
 
-    private void updateVelocity() {
-
-        float posAccel = 0.6f;
-        float negAccel = 0.5f;
-
-        if (player.vx > 0) screenVelX = Math.min(screenVelX + posAccel, maxVel);
-        else if (player.vx < 0) screenVelX = Math.max(screenVelX - posAccel, -maxVel);
-        else {
-            if (screenVelX >= 0) screenVelX = Math.max(screenVelX - negAccel, 0);
-            else if (screenVelX <= 0) screenVelX = Math.min(screenVelX + negAccel, 0);
-        }
-
-        if (player.vy > 0) screenVelY = (int) Math.min(screenVelY + posAccel, maxVel);
-        else if (player.vy < 0) screenVelY = (int) Math.max(screenVelY - posAccel, -maxVel);
-        else {
-            if (screenVelY >= 0) screenVelY = (int) Math.max(screenVelY - negAccel, 0);
-            else if (screenVelY <= 0) screenVelY = (int) Math.min(screenVelY + negAccel, 0);
-        }
-    }
+//    private void updateVelocity() {
+//
+//        float posAccel = 0.6f;
+//        float negAccel = 0.5f;
+//
+//        if (player.vx > 0) screenVelX = Math.min(screenVelX + posAccel, maxVel);
+//        else if (player.vx < 0) screenVelX = Math.max(screenVelX - posAccel, -maxVel);
+//        else {
+//            if (screenVelX >= 0) screenVelX = Math.max(screenVelX - negAccel, 0);
+//            else if (screenVelX <= 0) screenVelX = Math.min(screenVelX + negAccel, 0);
+//        }
+//
+//        if (player.vy > 0) screenVelY = (int) Math.min(screenVelY + posAccel, maxVel);
+//        else if (player.vy < 0) screenVelY = (int) Math.max(screenVelY - posAccel, -maxVel);
+//        else {
+//            if (screenVelY >= 0) screenVelY = (int) Math.max(screenVelY - negAccel, 0);
+//            else if (screenVelY <= 0) screenVelY = (int) Math.min(screenVelY + negAccel, 0);
+//        }
+//    }
 
     public void updateRotation(double mouseX, double mouseY) {
         int maxRadius = 100;
