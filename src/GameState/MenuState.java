@@ -148,7 +148,7 @@ public abstract class MenuState extends GameState {
             if (currentSlider != null) {
                 currentSlider.snapSlider();
                 currentSlider.pressed = false;
-                OutputManager.setSetting(currentSlider.name, currentSlider.slider_x);
+                OutputManager.setSetting(currentSlider.name, currentSlider.current_option);
                 currentSlider = null;
             }
 

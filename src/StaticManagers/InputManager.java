@@ -75,6 +75,8 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
         public boolean dragged, inScreen;
 
         public Mouse() {
+            dragged = false;
+            inScreen = true;
         }
 
     }
