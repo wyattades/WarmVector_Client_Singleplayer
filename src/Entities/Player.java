@@ -24,7 +24,7 @@ public abstract class Player extends Entity {
     public float life;
     public float maxLife;
     public static float topSpeed = 5.0f;
-    public static float acceleration = 1.4f;
+    public static float acceleration = 1.0f;
     public int shootTime;
     protected BufferedImage shootSprite, defaultSprite, deadSprite;
     protected GeneratedEnclosure map;

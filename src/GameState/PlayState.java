@@ -189,6 +189,13 @@ public class PlayState extends GameState {
             if (!animations.get(i).state) animations.remove(i);
         }
 
+//        TODO: remove entities like so:
+//        for (int i = blahs.size() - 1; i >= 0; i--) {
+//            Blah b = blahs.get(i);
+//            b.update();
+//            if (!b.state) blahs.remove(i);
+//        }
+
         //Entities removal outcomes
         //Create an iterator to loop iterate through every entity
         outerloop:

@@ -60,7 +60,7 @@ public class Projectile extends Entity {
                     //TODO replace with foreach????
                     for (Entity e : entry.getValue()) {
                         if (e.collideBox.intersects(collideBox)) {
-                            if (e.hit(shooter.weapon.damage, orient)) {
+                            if (e.hit(shooter.weapon == null?0:shooter.weapon.damage, orient)) {
                                 state = false;
                             }
                         }
