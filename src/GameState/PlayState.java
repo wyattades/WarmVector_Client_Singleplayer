@@ -250,7 +250,6 @@ public class PlayState extends GameState {
     public void inputHandle(InputManager inputManager) {
 
         gsm.cursor.setPosition(inputManager.mouse.x + Math.round(screenMover.screenVelX), inputManager.mouse.y + Math.round(screenMover.screenVelY));
-
 //        for (String eventName : inputManager.getEvents()) {
 //            switch(eventName) {
 //                case "LEFT":
