@@ -95,8 +95,8 @@ public class GeneratedEntities {
             checkCollider.setRect(randomRoomX(room), randomRoomY(room), entity.w, entity.h);
             i++;
             if (i > 20) {
-                System.out.println("broke    " + entity.w + " , " + entity.h);
-                break;
+                System.out.println("No space for entity to be spawned at " + entity.w + " , " + entity.h);
+                return;
             }
         }
 

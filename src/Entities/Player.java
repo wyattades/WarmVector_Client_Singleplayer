@@ -41,6 +41,14 @@ public abstract class Player extends Entity {
         walkSound = FileManager.getSound("concrete1.wav");
     }
 
+    public void reloadWeapon() {
+        if (weapon != null) {
+            int addedAmmo = Math.min(weapon.clipSize - weapon.ammo, weapon.reserveAmmo);
+            weapon.ammo += addedAmmo;
+            weapon.reserveAmmo -= addedAmmo;
+        }
+    }
+
     public void setWeapon(Weapon w) {
         weapon = w;
         if (w == null) {
