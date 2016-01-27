@@ -9,18 +9,9 @@
     <bookmark url="file://$PROJECT_DIR$/src/GameState/GameStateManager.java" line="36" mnemonic="4" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="79328cf6-c427-44a6-a23b-90c221e9f3ec" name="Default" comment="Now with Mac support">
+    <list default="true" id="79328cf6-c427-44a6-a23b-90c221e9f3ec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PlayState.class" afterPath="$PROJECT_DIR$/out/production/WarmVector_Client_Singleplayer/GameState/PlayState.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entities/Player.java" afterPath="$PROJECT_DIR$/src/Entities/Player.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Entities/Projectiles/Projectile.java" afterPath="$PROJECT_DIR$/src/Entities/Projectiles/Projectile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/PlayState.java" afterPath="$PROJECT_DIR$/src/GameState/PlayState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/GameState/StartMenuState.java" afterPath="$PROJECT_DIR$/src/GameState/StartMenuState.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Map/GeneratedEnclosure.java" afterPath="$PROJECT_DIR$/src/Map/GeneratedEnclosure.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Map/GeneratedEntities.java" afterPath="$PROJECT_DIR$/src/Map/GeneratedEntities.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/StaticManagers/FileManager.java" afterPath="$PROJECT_DIR$/src/StaticManagers/FileManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/StaticManagers/OutputManager.java" afterPath="$PROJECT_DIR$/src/StaticManagers/OutputManager.java" />
     </list>
     <ignored path="WarmVector_Client_Singleplayer.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -882,7 +873,13 @@
       <option name="project" value="LOCAL" />
       <updated>1450489979432</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="fixed bud">
+      <created>1453930726738</created>
+      <option name="number" value="00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1453930726738</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TodoView">
@@ -967,7 +964,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="current" />
     <MESSAGE value="menu gui changes ( very pretty now)" />
     <MESSAGE value="improved compatibility and performance of GameStates" />
     <MESSAGE value="fade in and out feature" />
@@ -992,7 +988,8 @@
     <MESSAGE value="I have successfully exported a working, compressed .jar, so now you can run the program seperate from the IDE&#10;this required an overhaul of the FileManager and OutputManager classes&#10;It was painful" />
     <MESSAGE value="More weapons&#10;enemies spawn with a random weapon" />
     <MESSAGE value="Now with Mac support" />
-    <option name="LAST_COMMIT_MESSAGE" value="Now with Mac support" />
+    <MESSAGE value="fixed bud" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed bud" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.7838542" />
   </component>
   <component name="XDebuggerManager">
