@@ -56,13 +56,15 @@ public class FileManager {
 
     private static final Map<String, Clip> sounds;
     static {
-        System.out.println("Loading Sounds...");
+        System.out.print("Loading Sounds...");
         Map<String, Clip> temp = new HashMap<>();
         List<String> fileNames = listFiles("SFX");
         for (String name : fileNames) {
             temp.put(name, loadSound("SFX/" + name));
         }
         sounds = Collections.unmodifiableMap(temp);
+        System.out.println("Success");
+
     }
 
     private static Clip loadSound(String s) {
@@ -83,7 +85,7 @@ public class FileManager {
 
     private static final Map<String, BufferedImage> images;
     static {
-        System.out.println("Loading Images...");
+        System.out.print("Loading Images...");
         Map<String, BufferedImage> temp = new HashMap<>();
         List<String> fileNames = listFiles("Images");
         for (String name : fileNames) {
@@ -92,13 +94,15 @@ public class FileManager {
             }
         }
         images = Collections.unmodifiableMap(temp);
+        System.out.println("Success");
+
     }
 
     private static final Map<String, BufferedImage[]> animations;
     static {
         Map<String, BufferedImage[]> temp = new HashMap<>();
         List<String> folderNames = listFiles("Animations");
-        System.out.println("Loading Animations...");
+        System.out.print("Loading Animations...");
         for (String folderName : folderNames) {
             folderName = folderName.replace("/","");
             if (folderName.endsWith("_")) {
@@ -111,7 +115,7 @@ public class FileManager {
             }
         }
         animations = Collections.unmodifiableMap(temp);
-
+        System.out.println("Success");
     }
 
     private static BufferedImage loadImage(String s) {

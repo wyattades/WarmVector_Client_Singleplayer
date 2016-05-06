@@ -74,8 +74,8 @@ public class GeneratedEnclosure {
         //The value in which the generated map is scaled by
         scale = 12;
 
-        //border = new Rectangle2D.Float(-width*scale,-height*scale,3*width*scale, 3*height*scale);
-        border = new Rectangle2D.Float(0,0,width*scale, height*scale);
+        border = new Rectangle2D.Float(-width*scale,-height*scale,3*width*scale, 3*height*scale);
+        //border = new Rectangle2D.Float(0,0,width*scale, height*scale);
 
         //Keep looping until there are no null rooms (a null room
         //has about a 1 in 50 chance of spawning)

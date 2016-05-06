@@ -250,7 +250,6 @@ public class PlayState extends GameState {
     public void inputHandle(InputManager inputManager) {
 
         gsm.cursor.setPosition(inputManager.mouse.x + Math.round(screenMover.screenVelX), inputManager.mouse.y + Math.round(screenMover.screenVelY));
-
 //        for (String eventName : inputManager.getEvents()) {
 //            switch(eventName) {
 //                case "LEFT":
@@ -263,13 +262,8 @@ public class PlayState extends GameState {
 //        }
 
         //If R is pressed, player reloads
-        if (inputManager.isKeyPressed("R") &&
-                Game.currentTimeMillis() - inputManager.getKeyTime("R") > 1000 &&
-                thisPlayer.weapon != null &&
-                thisPlayer.weapon.reserveAmmo > 0) {
-            int addedAmmo = thisPlayer.weapon.clipSize - thisPlayer.weapon.ammo;
-            thisPlayer.weapon.ammo += addedAmmo;
-            thisPlayer.weapon.reserveAmmo -= addedAmmo;
+        if (inputManager.isKeyPressed("R") && Game.currentTimeMillis() - inputManager.getKeyTime("R") > 1000) {
+            thisPlayer.reloadWeapon();
             inputManager.setKeyTime("R", Game.currentTimeMillis());
         }
 

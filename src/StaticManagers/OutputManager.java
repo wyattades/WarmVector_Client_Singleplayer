@@ -34,7 +34,7 @@ public class OutputManager {
     private static String filePath = "";
     static {
 
-        System.out.println("Loading settings...");
+        System.out.print("Loading settings...");
 
         JFileChooser fr = new JFileChooser();
         FileSystemView fw = fr.getFileSystemView();
@@ -82,6 +82,8 @@ public class OutputManager {
             settings.put(line[0], Integer.parseInt(line[1]));
 
         }
+
+        System.out.println("Success");
 
     }
 
