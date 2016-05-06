@@ -27,8 +27,6 @@ import java.util.zip.ZipInputStream;
  */
 public class FileManager {
 
-
-
     public static Clip getSound(String name) {
         Clip sound = sounds.get(name);
         if (sound == null) {

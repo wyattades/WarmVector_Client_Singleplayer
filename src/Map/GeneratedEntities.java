@@ -5,6 +5,7 @@ import Entities.Entity;
 import Entities.ThisPlayer;
 import Entities.Weapons.*;
 import Helper.MyMath;
+import Helper.Rect;
 
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;

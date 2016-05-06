@@ -1,4 +1,4 @@
-package Map;
+package Helper;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/Map/

@@ -27,6 +27,7 @@ public class OutputManager {
             "x_sensitivity 1",
             "y_sensitivity 1"
     );
+    private static int settingsSize = defaultSettings.size();
 
 
     private static HashMap<String, Integer> settings;
@@ -63,7 +64,7 @@ public class OutputManager {
             lines.add(sc.nextLine());
         }
 
-        if (lines.size() != defaultSettings.size()) {
+        if (lines.size() != settingsSize) {
             try {
                 Files.write(saveFile.toPath(), defaultSettings);
             } catch (IOException e) {

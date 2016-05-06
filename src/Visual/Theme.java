@@ -1,5 +1,7 @@
 package Visual;
 
+import Main.Game;
+
 import java.awt.*;
 
 /**
@@ -19,7 +21,10 @@ public abstract class Theme {
             menuBackground = new Color(22, 20, 22);
 
     public static Font
-            fontLogo = new Font("Dotum Bold", Font.BOLD, 200),
-            fontButton = new Font("Dotum Bold", Font.BOLD, 60),
+            fontLogo = new Font("Dotum Bold", Font.BOLD, (int) (200.0 / Game.HEIGHT * 700.0)),
+            fontButton = new Font("Dotum Bold", Font.BOLD, (int) (60.0 / Game.HEIGHT * 700.0)),
             fontHUD = new Font("Dotum Bold", Font.BOLD, 40);
+
+    public static int
+            buttonHeight = (int) (50.0 / Game.HEIGHT * 700.0);
 }

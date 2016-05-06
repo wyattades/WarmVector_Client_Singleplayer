@@ -22,6 +22,7 @@ public class HUD {
     private final static int
             HUDx = (int) (Game.WIDTH - 20),
             HUDy = (int) (Game.HEIGHT - 40),
+//            SCALE = (int)(Game.WIDTH/1080.0f),
             lifeBar_w = 150,
             lifeBar_h = 12,
             lifeBar_x = 110,
@@ -56,6 +57,7 @@ public class HUD {
         enemies = Math.max(0, amount);
     }
 
+    // TODO: replace this with vector image file?
     private static Polygon cross = new Polygon();
     static {
         int w = 10;

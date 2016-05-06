@@ -11,7 +11,6 @@ public class ButtonC {
     private int x;
     public int y;
     private int w;
-    private static final int h = 43;
     private String text;
 
     private boolean setWidth;
@@ -53,7 +52,7 @@ public class ButtonC {
         } else {
             g.setColor(Theme.buttonOver);
         }
-        g.drawString(text, x - w, y + h);
+        g.drawString(text, x - w, y + Theme.buttonHeight);
     }
 
     public void update(int x, int y) {
@@ -62,7 +61,7 @@ public class ButtonC {
 
     private boolean overBox(int mx, int my) {
         return mx > x - w && mx < x &&
-                my > y && my < y + h;
+                my > y && my < y + Theme.buttonHeight;
     }
 
 }

@@ -1,6 +1,7 @@
 package Map;
 
 import Helper.MyMath;
+import Helper.Rect;
 
 import java.awt.*;
 import java.awt.geom.*;
@@ -183,9 +184,9 @@ public class GeneratedEnclosure {
         }
 
         //smooth edges algorithm
-        for (int i = 0; i < smoothingIterations; i++) {
-            areaPoints = smoothEdges(areaPoints, smoothingFactor);
-        }
+//        for (int i = 0; i < smoothingIterations; i++) {
+//            areaPoints = smoothEdges(areaPoints, smoothingFactor);
+//        }
 
         //Redefine region based on new points
         Path2D newPoints = new Path2D.Float();

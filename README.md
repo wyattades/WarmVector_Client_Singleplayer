@@ -7,3 +7,5 @@ To Do:
 - Add level difficulty progression
 - Rewrite playState class (Reason: inefficiently written, OCD)
 - Minimize the rendering of built-in Graphics2D objects e.g. drawString(), and maximize the use of bufferedImages
+- Minimize extensive use of memory
+- Can shoot through walls if adjacent to them
