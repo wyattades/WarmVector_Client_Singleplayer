@@ -14,12 +14,19 @@ public class Enemy extends Player {
 
     public boolean shooting;
     private int shootTime;
+    private ThisPlayer thisPlayer;
 
-    public Enemy(float x, float y, float orient, GeneratedEnclosure ge) {
+    public Enemy(float x, float y, float orient, GeneratedEnclosure ge, ThisPlayer thisPlayer) {
         super(x, y, orient, ge);
         shooting = false;
+        this.thisPlayer = thisPlayer;
 
         life = maxLife = 25.0f;
+    }
+
+    @Override
+    protected void updateSpecific() {
+        normalBehavior(thisPlayer.x, thisPlayer.y, !thisPlayer.state);
     }
 
     @Override
@@ -29,7 +36,7 @@ public class Enemy extends Player {
         setSpriteToDefault(weapon == null);
     }
 
-    public void normalBehavior(float px, float py, boolean playerDead) {
+    private void normalBehavior(float px, float py, boolean playerDead) {
         //stopMove();
         shooting = false;
         if (!playerDead && lineOfSight(px, py) && distBetween(px, py) < 400) {
@@ -66,7 +73,7 @@ public class Enemy extends Player {
 //        if ((vy > 0 && collideTile(0, h / 2, w * 0.3f, 0)) || (vy < 0 && collideTile(0, -h / 2, w * 0.3f, 0))) vy *= -1;
 //    }
 
-    void goTowards(float ix, float iy, float speed) {
+    private void goTowards(float ix, float iy, float speed) {
         double a = angle_Between(ix, iy);
 //        updateVelX(speed * (float) Math.cos(a));
 //        updateVelY(speed * (float) Math.sin(a));
@@ -74,7 +81,7 @@ public class Enemy extends Player {
         vy = (speed * (float) Math.sin(a));
     }
 
-    void orientTo(float ix, float iy, float rate) {
+    private void orientTo(float ix, float iy, float rate) {
         if (angle_Between(ix, iy) < 0) {
             orient += rate;
         } else {
@@ -83,17 +90,17 @@ public class Enemy extends Player {
 
     }
 
-    float angle_Between(float ix, float iy) {
+    private float angle_Between(float ix, float iy) {
         return orient + (float) Math.atan2(ix - x, iy - y) - (float) Math.PI / 2;
     }
 
-    float distBetween(float ix, float iy) {
+    private float distBetween(float ix, float iy) {
         ix -= x;
         iy -= y;
         return (float) Math.sqrt(ix * ix + iy * iy);
     }
 
-    boolean lineOfSight(float ix, float iy) {
+    private boolean lineOfSight(float ix, float iy) {
         for (Line2D w : map.walls) {
             if (w.intersectsLine(x, y, ix, iy)) {
                 return false;
@@ -102,7 +109,7 @@ public class Enemy extends Player {
         return true;
     }
 
-    boolean lookingAt(float ix, float iy, float tolerance) {
+    private boolean lookingAt(float ix, float iy, float tolerance) {
         return Math.abs(angle_Between(ix, iy)) < tolerance;
     }
 

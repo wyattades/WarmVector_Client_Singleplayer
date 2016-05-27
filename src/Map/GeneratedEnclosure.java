@@ -63,6 +63,7 @@ public class GeneratedEnclosure {
         float roomReductionFactor = 0.42f;
         int min_spacing = 4;
         int path_thickness = 6;
+        boolean smooth = false;
         int smoothingIterations = 3;
         float smoothingFactor = 0.5f;
         boolean randomObstaclesOnEdges = true;
@@ -184,9 +185,11 @@ public class GeneratedEnclosure {
         }
 
         //smooth edges algorithm
-//        for (int i = 0; i < smoothingIterations; i++) {
-//            areaPoints = smoothEdges(areaPoints, smoothingFactor);
-//        }
+        if (smooth) {
+            for (int i = 0; i < smoothingIterations; i++) {
+                areaPoints = smoothEdges(areaPoints, smoothingFactor);
+            }
+        }
 
         //Redefine region based on new points
         Path2D newPoints = new Path2D.Float();

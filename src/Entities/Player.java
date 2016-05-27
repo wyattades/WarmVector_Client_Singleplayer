@@ -28,7 +28,7 @@ public abstract class Player extends Entity {
     public int shootTime;
     protected BufferedImage shootSprite, defaultSprite, deadSprite;
     protected GeneratedEnclosure map;
-    private Clip walkSound;
+    protected Clip walkSound;
 
     Player(float x, float y, float orient, GeneratedEnclosure map) {
         super(x, y,  orient);
@@ -165,13 +165,10 @@ public abstract class Player extends Entity {
         updatePosition();
         updateCollideBox();
 
-        //TODO: fix walking sounds
-        if (this.getClass().getSuperclass().getName().equals("ThisPlayer") && Game.currentTimeMillis() - stepTime > 500) {
-            stepTime = Game.currentTimeMillis();
-            AudioManager.playSFX(walkSound);
-        }
-
+        updateSpecific();
     }
+
+    abstract protected void updateSpecific();
 
     public Weapon getWeaponForDrop() {
         float spawnDist = MyMath.random(10, 24);

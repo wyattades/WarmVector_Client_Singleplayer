@@ -22,16 +22,16 @@ public class GeneratedEntities {
 
     private Area region;
 
-    private String[] weaponTypes;
+//    private String[] weaponTypes;
 
     public GeneratedEntities(GeneratedEnclosure map, float difficultyFactor) {
 
-        weaponTypes = new String[]{
-                "LMG",
-                "M4rifle",
-                "Sniper",
-                "Remington"
-        };
+//        weaponTypes = new String[]{
+//                "LMG",
+//                "M4rifle",
+//                "Sniper",
+//                "Remington"
+//        };
 
         entityList = new HashMap<>();
 
@@ -56,7 +56,7 @@ public class GeneratedEntities {
 
         for (Rect r : map.rooms) {
             if (!r.equals(playerSpawn)) {
-                Enemy newEnemy = new Enemy(0, 0, MyMath.random(0, 6.29f), map);
+                Enemy newEnemy = new Enemy(0, 0, MyMath.random(0, 6.29f), map, (ThisPlayer) entityList.get("thisPlayer").get(0));
                 newEnemy.setWeapon(randomWeapon());
                 newEnemy.weapon.user = newEnemy;
                 putEntity(newEnemy, "enemy", r);

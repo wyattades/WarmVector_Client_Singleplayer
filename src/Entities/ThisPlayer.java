@@ -2,6 +2,7 @@ package Entities;
 
 import Main.Game;
 import Map.GeneratedEnclosure;
+import StaticManagers.AudioManager;
 import StaticManagers.FileManager;
 
 /**
@@ -25,14 +26,17 @@ public class ThisPlayer extends Player {
         setSpriteToDefault(weapon == null);
     }
 
-//    @Override
-//    public boolean hit(int amount, float angle) {
-//        life -= amount;
-//        hitTime = Game.currentTimeMillis();
-//        return false;
-//    }
+    protected void updateSpecific() {
+        //TODO: fix walking sounds
+        if ((vx != 0 || vy != 0) && Game.currentTimeMillis() - stepTime > 500) {
+            stepTime = Game.currentTimeMillis();
+            AudioManager.playSFX(walkSound);
+        }
 
-    public void regenHealth() {
+        regenHealth();
+    }
+
+    private void regenHealth() {
         if (Game.currentTimeMillis() - hitTime > 2000) {
             life = (float) Math.min(maxLife, life + 0.04);
         }

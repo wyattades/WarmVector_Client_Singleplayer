@@ -64,15 +64,16 @@ public class StartMenuState extends MenuState {
         for (ButtonC b : buttons) {
 
             if (b.value == ButtonC.BEGIN) {
-                g.setFont(Theme.fontLogo);
-                g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 200);
-                g.drawString("V", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("V", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 40);
                 if (b.overBox) {
                     g.setColor(Theme.buttonOver);
                     g.setFont(Theme.fontHUD);
                     g.drawString("ARM", Game.WIDTH - menuWidth / 2 + 70, Game.HEIGHT / 2 - 200);
                     g.drawString("ECTOR", Game.WIDTH - menuWidth / 2 + 28, Game.HEIGHT / 2 - 40);
                 }
+                //TODO: fix colors
+                g.setFont(Theme.fontLogo);
+                g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 200);
+                g.drawString("V", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("V", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 40);
             } else {
                 g.setColor(Theme.buttonDefault);
             }

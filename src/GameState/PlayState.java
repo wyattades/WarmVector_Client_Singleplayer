@@ -28,7 +28,7 @@ import java.util.HashMap;
  */
 public class PlayState extends GameState {
 
-    private final static float SCALEFACTOR = 3f;
+    private final static float SCALEFACTOR = 1920.0f / Game.WIDTH * 1.5f;
 
     private HashMap<String, ArrayList<Entity>> entityList;
     private ScreenMover screenMover;
@@ -37,7 +37,7 @@ public class PlayState extends GameState {
     private ArrayList<Animation> animations;
     private ThisPlayer thisPlayer;
     private Shadow shadow;
-    private boolean dead;
+//    private boolean dead;
     private GeneratedEnclosure map;
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -47,7 +47,7 @@ public class PlayState extends GameState {
 
         System.out.println("Level = " + gsm.level);
 
-        dead = false;
+//        dead = false;
         bullets = new ArrayList<>();
         animations = new ArrayList<>();
         //entityList = tileMap.setEntities();
@@ -133,7 +133,7 @@ public class PlayState extends GameState {
         //reset transformation
         g.setTransform(oldT);
 
-        if (!dead) {
+        if (thisPlayer.state) {
             hud.draw(g);
             gsm.cursor.draw(g);
         } else {
@@ -147,9 +147,8 @@ public class PlayState extends GameState {
 
     public void update() { //update objects
 
-        if (!dead) {
+        if (thisPlayer.state) {
             thisPlayer.update();
-            thisPlayer.regenHealth();
             thisPlayer.updateAngle(gsm.cursor.x - screenMover.screenVelX, gsm.cursor.y - screenMover.screenVelY);
 
             screenMover.updatePosition();
@@ -174,7 +173,7 @@ public class PlayState extends GameState {
 
         for (Entity entity : entityList.get("enemy")) {
             Enemy e = (Enemy) entity;
-            e.normalBehavior(thisPlayer.x, thisPlayer.y, dead);
+//            e.normalBehavior(thisPlayer.x, thisPlayer.y, dead);
             e.update();
             if (e.shooting) addBullets(e);
         }
@@ -220,9 +219,8 @@ public class PlayState extends GameState {
                         }
                         entry.getValue().remove(i);
                     } else { //player dies
-                        dead = true;
-                        Player p = (Player) entry.getValue().get(i);
-                        p.deathSequence();
+                        thisPlayer.state = false;
+                        thisPlayer.deathSequence();
                         break outerloop;
                     }
                 }
@@ -318,7 +316,7 @@ public class PlayState extends GameState {
             gsm.setTopState(GameStateManager.PAUSE);
         }
 
-        if (dead && inputManager.isKeyPressed("SPACE")) {
+        if (!thisPlayer.state && inputManager.isKeyPressed("SPACE")) {
             init();
         }
 
