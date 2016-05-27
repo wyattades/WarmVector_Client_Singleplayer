@@ -22,7 +22,7 @@ public class GeneratedEntities {
 
     private Area region;
 
-//    private String[] weaponTypes;
+    //TODO: abandon entityList idea and just do arrayLists?
 
     public GeneratedEntities(GeneratedEnclosure map, float difficultyFactor) {
 

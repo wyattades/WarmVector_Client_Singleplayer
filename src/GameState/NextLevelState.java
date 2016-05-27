@@ -24,8 +24,8 @@ public class NextLevelState extends MenuState {
         buttons = new ArrayList<>();
         sliders = new ArrayList<>();
         initDefault();
-        addButton("MAIN MENU", ButtonC.MAINMENU);
-        if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE", ButtonC.CONTINUE);
+        addButton("MAIN MENU", ButtonC.ButtonType.MAINMENU);
+        if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE", ButtonC.ButtonType.CONTINUE);
     }
 
     public void init() {

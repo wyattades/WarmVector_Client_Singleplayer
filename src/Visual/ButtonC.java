@@ -15,22 +15,23 @@ public class ButtonC {
 
     private boolean setWidth;
     public boolean overBox;
-    public int value;
+    public ButtonType value;
 
-    public static final int
-            BEGIN = 0,
-            CONTINUE = 1,
-            OPTIONS = 2,
-            HELP = 3,
-            QUIT = 4,
-            RESTART = 5,
-            RESUME = 6,
-            BACK = 7,
-            CREDITS = 8,
-            MAINMENU = 9;
+    public enum ButtonType {
+        BEGIN,
+        CONTINUE,
+        OPTIONS,
+        HELP,
+        QUIT,
+        RESTART,
+        RESUME,
+        BACK,
+        CREDITS,
+        MAINMENU
+    }
 
 
-    public ButtonC(String text, int value, int x, int y) {
+    public ButtonC(String text, ButtonType value, int x, int y) {
         this.text = text;
         this.value = value;
         this.x = x;

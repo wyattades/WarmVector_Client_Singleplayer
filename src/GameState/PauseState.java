@@ -24,8 +24,8 @@ public class PauseState extends MenuState {
         buttons = new ArrayList<>();
         sliders = new ArrayList<>();
         initDefault();
-        addButton("MAIN MENU", ButtonC.MAINMENU);
-        addButton("RESUME", ButtonC.RESUME);
+        addButton("MAIN MENU", ButtonC.ButtonType.MAINMENU);
+        addButton("RESUME", ButtonC.ButtonType.RESUME);
     }
 
     public void init() {

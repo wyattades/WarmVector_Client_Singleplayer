@@ -57,19 +57,14 @@ public class BarVisualizer {
 
         }
 
-        int deltaY = Math.abs(mouseY - lastMousePos);
+        float deltaY = (float)Math.abs(mouseY - lastMousePos);
 
         for (int i = 0; i < bars.length; i++) {
-            //These two blocks of code do the same thing, except the bottom one is more compact (but harder to read)
-
-//            int diff = Math.abs(mouseY - i * barH);
-//            float addition = 3.0f * (float)deltaY - diff;
-//            if (addition < 0) addition = 0;
-//            bars[i] += (addition - (float)bars[i]/20.0f);
-//            if (bars[i] > Game.WIDTH-startX) bars[i] = Game.WIDTH-startX;
-//            if (bars[i] < 0) bars[i] = 0;
-
-            bars[i] = (int) Math.min(Game.WIDTH - startX, Math.max(0.0f, bars[i] + Math.max(0.0f, 3.0f * (float) deltaY - Math.abs(mouseY - i * barH)) - (float) bars[i] / 20.0f));
+            float addition = 3.0f * deltaY - Math.abs(mouseY - i * barH);
+            if (addition < 0) addition = 0;
+            bars[i] += (addition - (float)bars[i]/20.0f);
+            if (bars[i] > Game.WIDTH-startX) bars[i] = Game.WIDTH-startX;
+            if (bars[i] < 0) bars[i] = 0;
         }
 
         lastMousePos = mouseY;

@@ -16,6 +16,8 @@ import java.util.List;
 
 //TODO: create a "bedrock" border around the map where terrain cannot be destroyed and the player cannot pass
 
+//TODO: only render local region of map to reduce performance, but how???
+
 public class GeneratedEnclosure {
 
     // This class creates a randomly generated map, consisting of rooms with corridors connecting them.

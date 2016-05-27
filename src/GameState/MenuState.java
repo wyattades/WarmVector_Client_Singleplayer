@@ -26,7 +26,7 @@ public abstract class MenuState extends GameState {
         super(gsm);
     }
 
-    protected void addButton(String name, int value) {
+    protected void addButton(String name, ButtonC.ButtonType value) {
         int y = startY;
         for (ButtonC b : buttons) {
             if (y >= b.y) y = b.y - buttonDist;
@@ -53,17 +53,17 @@ public abstract class MenuState extends GameState {
     protected abstract void initButtons();
 
     protected void initDefault() {
-        addButton("QUIT", ButtonC.QUIT);
-        addButton("HELP", ButtonC.HELP);
-        addButton("CREDITS", ButtonC.CREDITS);
-        addButton("OPTIONS", ButtonC.OPTIONS);
+        addButton("QUIT", ButtonC.ButtonType.QUIT);
+        addButton("HELP", ButtonC.ButtonType.HELP);
+        addButton("CREDITS", ButtonC.ButtonType.CREDITS);
+        addButton("OPTIONS", ButtonC.ButtonType.OPTIONS);
 
     }
 
     private void initSettings() {
         buttons = new ArrayList<>();
         sliders = new ArrayList<>();
-        addButton("BACK", ButtonC.BACK);
+        addButton("BACK", ButtonC.ButtonType.BACK);
        // OutputManager.reloadSettings();
         addSlider("Fullscreen", "fullscreen", new String[]{"Off", "On"}, OutputManager.getSetting("fullscreen"));
         addSlider("Anti-Aliasing", "anti_aliasing", new String[]{"Off", "On"}, OutputManager.getSetting("anti_aliasing"));
@@ -72,38 +72,38 @@ public abstract class MenuState extends GameState {
         addSlider("SFX Level", "sfx_volume", new String[]{"0", "25", "50", "75", "100"}, OutputManager.getSetting("sfx_volume"));
     }
 
-    protected void buttonOutcome(int value) {
+    protected void buttonOutcome(ButtonC.ButtonType value) {
         switch (value) {
-            case ButtonC.OPTIONS:
+            case OPTIONS:
                 initSettings();
                 break;
-            case ButtonC.HELP:
+            case HELP:
                 //Open help menu
                 break;
-            case ButtonC.CONTINUE:
+            case CONTINUE:
                 gsm.level++;
                 gsm.unloadState(GameStateManager.NEXTLEVEL);
                 gsm.setState(GameStateManager.PLAY);
                 break;
-            case ButtonC.QUIT:
+            case QUIT:
                 Game.running = false;
                 break;
-            case ButtonC.RESUME:
+            case RESUME:
                 gsm.unloadState(GameStateManager.PAUSE);
                 break;
-            case ButtonC.BEGIN:
+            case BEGIN:
                 gsm.setTopState(GameStateManager.FADEOUT);
                 break;
-            case ButtonC.RESTART:
+            case RESTART:
                 gsm.setState(GameStateManager.PLAY);
                 break;
-            case ButtonC.BACK:
+            case BACK:
                 initButtons();
                 break;
-            case ButtonC.CREDITS:
+            case CREDITS:
                 //Roll the credits!
                 break;
-            case ButtonC.MAINMENU:
+            case MAINMENU:
                 gsm.unloadState(gsm.topState);
                 gsm.setState(GameStateManager.MAINMENU);
                 break;

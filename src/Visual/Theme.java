@@ -20,11 +20,13 @@ public abstract class Theme {
             cursor = new Color(198, 198, 198),
             menuBackground = new Color(22, 20, 22);
 
+    private static float scale = Game.HEIGHT / 1080.0f;
+
     public static Font
-            fontLogo = new Font("Dotum Bold", Font.BOLD, (int) (200.0 / Game.HEIGHT * 700.0)),
-            fontButton = new Font("Dotum Bold", Font.BOLD, (int) (60.0 / Game.HEIGHT * 700.0)),
-            fontHUD = new Font("Dotum Bold", Font.BOLD, 40);
+            fontLogo = new Font("Dotum Bold", Font.BOLD, (int) (200.0f * scale)),
+            fontButton = new Font("Dotum Bold", Font.BOLD, (int) (60.0f * scale)),
+            fontHUD = new Font("Dotum Bold", Font.BOLD, (int) (40.0f * scale));
 
     public static int
-            buttonHeight = (int) (50.0 / Game.HEIGHT * 700.0);
+            buttonHeight = (int) (50.0f * scale);
 }

@@ -37,7 +37,6 @@ public class PlayState extends GameState {
     private ArrayList<Animation> animations;
     private ThisPlayer thisPlayer;
     private Shadow shadow;
-//    private boolean dead;
     private GeneratedEnclosure map;
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -47,10 +46,8 @@ public class PlayState extends GameState {
 
         System.out.println("Level = " + gsm.level);
 
-//        dead = false;
         bullets = new ArrayList<>();
         animations = new ArrayList<>();
-        //entityList = tileMap.setEntities();
 
         map = new GeneratedEnclosure(200, 200, 1.0f);
         GeneratedEntities generatedEntities = new GeneratedEntities(map, 1.0f);
@@ -72,6 +69,8 @@ public class PlayState extends GameState {
 
         //save stuff (stats?)
     }
+
+    //TODO: should'nt be here
     BufferedImage background = FileManager.getImage("background_0" + 1 + ".png");
 
     public void draw(Graphics2D g) {
@@ -158,7 +157,6 @@ public class PlayState extends GameState {
         shadow.setLightLocation(thisPlayer.x, thisPlayer.y);
         shadow.sweep(6.29f);
 
-//        bullets.forEach(Bullet::update);
         for (Entity entity : entityList.get("bullet")) {
             Projectile p = (Projectile)entity;
             p.move();
@@ -197,7 +195,7 @@ public class PlayState extends GameState {
 
         //Entities removal outcomes
         //Create an iterator to loop iterate through every entity
-        outerloop:
+        outerLoop:
         for (HashMap.Entry<String, ArrayList<Entity>> entry : entityList.entrySet()) {
             for (int i = entry.getValue().size() - 1; i >= 0; i--) {
                 //If an entity's state is ever false...
@@ -221,7 +219,7 @@ public class PlayState extends GameState {
                     } else { //player dies
                         thisPlayer.state = false;
                         thisPlayer.deathSequence();
-                        break outerloop;
+                        break outerLoop;
                     }
                 }
             }
