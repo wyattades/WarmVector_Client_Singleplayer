@@ -5,7 +5,6 @@ import StaticManagers.InputManager;
 import StaticManagers.OutputManager;
 import Visual.ButtonC;
 import Visual.Slider;
-import Visual.Theme;
 
 import java.util.ArrayList;
 
@@ -20,7 +19,7 @@ public abstract class MenuState extends GameState {
 
     protected int startY;
 
-    static final int buttonDist = (int)(Theme.buttonHeight * 1.4);
+    private static final int buttonDist = (int)(ButtonC.BUTTON_HEIGHT * 1.4);
 
     public MenuState(GameStateManager gsm) {
         super(gsm);

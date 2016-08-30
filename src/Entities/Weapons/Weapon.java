@@ -1,81 +1,66 @@
 package Entities.Weapons;
 
 import Entities.Entity;
-import Entities.Player;
 import StaticManagers.FileManager;
 
-import javax.sound.sampled.Clip;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/22/2015.
  */
-public abstract class Weapon extends Entity {
+public abstract class Weapon extends Entity implements Cloneable {
 
-    public float vx, vy;
+    public static final float ORIGIN_RADIUS = 20.0f;
+
     public int ammo, reserveAmmo;
+
     public final int clipSize, amountPerShot, damage, rate;
-    public final String name;
-    public final float bVel, spread, gunLength;
-    public Player user;
-    public final Clip hitSound, shootSound;
+    public final String name, shootSound;
+    public final float i_speed, spread, accel, explodeRadius;
 
-    Weapon(float x, float y,  float orient, Player i_user,
-           String name, int clipSize, int reserveAmmo, int amountPerShot, int rate,
-           float gunLength, int damage, float spread, float bVel, Clip shootSound) {
+    public Weapon(String _name, int _clipSize,
+           int _reserveAmmo, int _amountPerShot, int _rate, int _damage,
+           float _spread, float _i_speed, float _accel, float _explodeRadius) {
 
-        super(x, y,  orient);
+        super(0, 0, 0, Color.DARK_GRAY);
 
-        vx = vy = 0;
-        hitSound = FileManager.getSound("bulletHit.wav");
-        user = i_user;
-        hitColor = Color.DARK_GRAY;
+        name = _name;
+        ammo = clipSize = _clipSize;
+        reserveAmmo = _reserveAmmo;
+        amountPerShot = _amountPerShot;
+        rate = _rate;
+        damage = _damage;
+        spread = _spread;
+        i_speed = _i_speed;
+        accel = _accel;
+        explodeRadius = _explodeRadius;
 
-        w = sprite.getWidth();
-        h = w;
-
-        this.name = name;
-        this.ammo = this.clipSize = clipSize;
-        this.reserveAmmo = reserveAmmo;
-        this.amountPerShot = amountPerShot;
-        this.rate = rate;
-        this.gunLength = gunLength;
-        this.damage = damage;
-        this.spread = spread;
-        this.bVel = bVel;
-        this.shootSound = shootSound;
+        shootSound = "m4_shoot.wav";
+        sprite = FileManager.getImage("gun_" + name + ".png");
+        setBounds(sprite.getWidth(), sprite.getWidth());
 
     }
 
-    public void draw(Graphics2D g) {
-        if (user != null) {
-            AffineTransform oldTForm = g.getTransform();
-            g.rotate(user.orient, user.x, user.y);
-            g.drawImage(sprite, Math.round(user.x - sprite_w / 2 + 26), Math.round(user.y - sprite_h / 2 + 2), null);
-            g.setTransform(oldTForm);
-        } else {
-            AffineTransform oldTForm = g.getTransform();
-            g.rotate(orient, x, y);
-            g.drawImage(sprite, Math.round(x - sprite_w / 2), Math.round(y - sprite_h / 2), null);
-            g.setTransform(oldTForm);
+    @Override
+    public Weapon clone() {
+        try {
+            final Weapon result = (Weapon) super.clone();
+            result.state = true;
+            return result;
+        } catch (final CloneNotSupportedException ex) {
+            throw new AssertionError();
         }
     }
 
     public void changeAmmo(int amount) {
-        if (ammo > 0) {
-            ammo += amount;
-        }
+        ammo += amount;
+        if (ammo < 0) ammo = 0;
     }
 
-    public boolean hit(int amount, float angle) {
+    public void handleHit(float damage, float angle) {
 //        vx += Math.cos(angle);
 //        vy += Math.sin(angle);
-        return true;
     }
 
-    public void unloadUser() {
-        user = null;
-    }
 }

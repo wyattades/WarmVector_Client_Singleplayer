@@ -2,7 +2,8 @@ package StaticManagers;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -10,18 +11,14 @@ import java.util.ArrayList;
  */
 public class InputManager implements MouseListener, KeyListener, MouseMotionListener {
 
-
     //TODO: have a sendEvent() function that wakes inputHandle(Event e) with an Event e (so it only runs when there's an event)
-    //TODO: rewrite this class using hashmaps for faster access? (instead of forloop checking for equals())
 
     class Key {
         public boolean pressed;
         public int keyCode, pressCount, pressTime;
-        public String name;
 
-        public Key(String name, int keyCode) {
-            this.name = name;
-            this.keyCode = keyCode;
+        public Key(int _keyCode) {
+            keyCode = _keyCode;
             pressed = false;
             pressTime = 0;
         }
@@ -37,13 +34,11 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
     }
 
     class Click {
-        public String name;
         public int mouseCode, clickCount, pressCount, pressTime;
         public boolean pressed, clicked;
 
-        public Click(String name, int mouseCode) {
-            this.name = name;
-            this.mouseCode = mouseCode;
+        public Click(int _mouseCode) {
+            mouseCode = _mouseCode;
             pressed = false;
             clicked = false;
             pressTime = 0;
@@ -82,108 +77,78 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
     }
 
     public Mouse mouse;
-    private ArrayList<Key> keys;
-    private ArrayList<Click> clicks;
+    private Map<String, Key> keys;
+    private Map<String, Click> clicks;
 
     public InputManager(Canvas c) {
         c.addKeyListener(this);
         c.addMouseListener(this);
         c.addMouseMotionListener(this);
         mouse = new Mouse();
-        keys = new ArrayList<>();
-        clicks = new ArrayList<>();
+        keys = new HashMap<>();
+        clicks = new HashMap<>();
     }
 
     public void addKeyMapping(String s, int keyCode) {
-        keys.add(new Key(s, keyCode));
+        keys.put(s, new Key(keyCode));
     }
 
     public void addMouseMapping(String s, int mouseCode) {
-        clicks.add(new Click(s, mouseCode));
+        clicks.put(s, new Click(mouseCode));
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        for (Click click : clicks) {
+        for (Click click : clicks.values()) {
             if (e.getButton() == click.mouseCode) {
                 click.togglePressed(true);
+                break;
             }
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        for (Click click : clicks) {
+        for (Click click : clicks.values()) {
             if (e.getButton() == click.mouseCode) {
                 click.togglePressed(false);
+                break;
             }
         }
     }
 
     public boolean isKeyPressed(String s) {
-        for (Key key : keys) {
-            if (s.equals(key.name)) {
-                return key.pressed;
-            }
-        }
-        return false;
+        return keys.get(s).pressed;
     }
 
     public int getKeyTime(String s) {
-        for (Key key : keys) {
-            if (s.equals(key.name)) {
-                return key.pressTime;
-            }
-        }
-        return 0;
+        return keys.get(s).pressTime;
     }
 
     public int getMouseTime(String s) {
-        for (Click click : clicks) {
-            if (s.equals(click.name)) {
-                return click.pressTime;
-            }
-        }
-        return 0;
+        return clicks.get(s).pressTime;
     }
 
     public void setKeyTime(String s, int n) {
-        for (Key key : keys) {
-            if (s.equals(key.name)) {
-                key.pressTime = n;
-            }
-        }
+        keys.get(s).pressTime = n;
     }
 
     public void setMouseTime(String s, int n) {
-        for (Click click : clicks) {
-            if (s.equals(click.name)) {
-                click.pressTime = n;
-            }
-        }
+        clicks.get(s).pressTime = n;
     }
 
     public boolean isMouseClicked(String s) {
-        for (Click click : clicks) {
-            if (s.equals(click.name)) {
-                if (click.clicked) {
-                    click.clicked = false;
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+        Click click = clicks.get(s);
+        if (click.clicked) {
+            click.clicked = false;
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     public boolean isMousePressed(String s) {
-        for (Click click : clicks) {
-            if (s.equals(click.name)) {
-                return click.pressed;
-            }
-        }
-        return false;
+        return clicks.get(s).pressed;
     }
 
 //    public boolean isMouseDown(String s) {
@@ -207,9 +172,10 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
     @Override
     public void keyPressed(KeyEvent e) {
 
-        for (Key key : keys) {
+        for (Key key : keys.values()) {
             if (e.getKeyCode() == key.keyCode) {
                 key.toggle(true);
+                break;
             }
         }
     }
@@ -217,9 +183,10 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
     @Override
     public void keyReleased(KeyEvent e) {
 
-        for (Key key : keys) {
+        for (Key key : keys.values()) {
             if (e.getKeyCode() == key.keyCode) {
                 key.toggle(false);
+                break;
             }
         }
     }
@@ -227,9 +194,10 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
     @Override
     public void mouseClicked(MouseEvent e) {
 
-        for (Click click : clicks) {
+        for (Click click : clicks.values()) {
             if (e.getButton() == click.mouseCode) {
                 click.toggleClick(true);
+                break;
             }
         }
     }
@@ -242,7 +210,6 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
         mouse.inScreen = true;
     }
 
@@ -253,7 +220,6 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
         mouse.dragged = true;
         mouse.x = e.getX();
         mouse.y = e.getY();
@@ -265,7 +231,6 @@ public class InputManager implements MouseListener, KeyListener, MouseMotionList
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
         mouse.dragged = false;
         mouse.x = e.getX();
         mouse.y = e.getY();

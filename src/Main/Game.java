@@ -17,13 +17,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.MemoryImageSource;
-import java.util.TimerTask;
-import java.util.Timer;
 
 public class Game implements Runnable {
 
+    private static final int MS_PER_UPDATE = 16; // Translate to 60 updates per second
+
     public static int WIDTH;
     public static int HEIGHT;
+    public static float SCALE;
 
     public static boolean running;
 
@@ -35,8 +36,8 @@ public class Game implements Runnable {
 
         WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        SCALE = HEIGHT / 1080.0f;
 
-        running = true;
         JFrame frame = new JFrame("WarmVector Singleplayer V2");
 
         JPanel panel = (JPanel) frame.getContentPane();
@@ -60,7 +61,6 @@ public class Game implements Runnable {
                 exit();
             }
         });
-
 
         GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
 
@@ -95,6 +95,7 @@ public class Game implements Runnable {
         gsm = new GameStateManager();
 
         //Run the game thread
+        running = true;
         run();
     }
 
@@ -123,7 +124,6 @@ public class Game implements Runnable {
             gsm.inputHandle(inputManager);
 
             //UPDATE
-            int MS_PER_UPDATE = 16;
             if (lag >= MS_PER_UPDATE) {
                 gsm.update();
                 lag -= MS_PER_UPDATE;
@@ -131,8 +131,6 @@ public class Game implements Runnable {
 
             //RENDER
             render();
-
-            //System.out.println(1000d/elapsed);
 
         }
 

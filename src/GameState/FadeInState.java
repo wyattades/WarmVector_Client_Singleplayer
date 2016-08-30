@@ -23,15 +23,15 @@ public class FadeInState extends GameState {
     public void init() {
         opacity = 255;
         state = true;
-        gsm.cursor.setMouse(Game.WIDTH / 2 + 70, Game.HEIGHT / 2);
-        gsm.cursor.setPosition(Game.WIDTH / 2 + 70, Game.HEIGHT / 2);
+        gsm.cursor.setMouse((int)(Game.WIDTH * 0.5f + 70), (int)(Game.HEIGHT * 0.5f));
+        gsm.cursor.setPosition((int)(Game.WIDTH * 0.5f + 70), (int)(Game.HEIGHT * 0.5f));
 
         gsm.gameStates[gsm.currentState].update();
     }
 
     @Override
     public void unload() {
-        gsm.cursor.setMouse(Game.WIDTH / 2 + 70, Game.HEIGHT / 2);
+        gsm.cursor.setMouse((int)(Game.WIDTH * 0.5f) + 70, (int)(Game.HEIGHT * 0.5f));
     }
 
     @Override

@@ -1,10 +1,9 @@
 package StaticManagers;
 
-import Helper.MyMath;
+import Util.MyMath;
 
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import java.util.*;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/StaticManagers/
@@ -16,24 +15,24 @@ public class AudioManager {
     static {
         updateSettings();
     }
-
-//    private static Map<String, Clip> audioFiles;
-//    static {
-//        Map<String, Clip> temp = new HashMap<>(FileManager.sounds);
-//        audioFiles = Collections.unmodifiableMap(temp);
-//    }
+    private static Clip background;
+    private static String backgroundName = "";
 
     public static void updateSettings() {
 
-        musicVolume = MyMath.map(OutputManager.getSetting("music_volume"), 0, 4, -80, 6);
+        musicVolume = MyMath.map(OutputManager.getSetting("music_volume"), 0.0f, 4.0f, 0.0f, 1.0f);
+        musicVolume = 30.0f * (float) Math.log(musicVolume);
+        setVolume(background, musicVolume);
 
-        SFXVolume = MyMath.map(OutputManager.getSetting("sfx_volume"), 0, 4, -80, 6);
+
+        SFXVolume = MyMath.map(OutputManager.getSetting("sfx_volume"), 0.0f, 4.0f, 0.0f, 1.0f);
+        SFXVolume = 40.0f * (float) Math.log(SFXVolume);
 
     }
 
-    public static void playSFX(Clip clip) {
+    public static void playSFX(String name) {
 
-//        Clip clip = audioFiles.get(name);
+        Clip clip = FileManager.getSound(name);
 
         //reset clip
         clip.stop();
@@ -41,33 +40,50 @@ public class AudioManager {
         clip.setFramePosition(0);
 
         //set volume of clip
-        FloatControl gainControl =
-                (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(SFXVolume);
+        setVolume(clip, SFXVolume);
 
         clip.start();
     }
 
-    public static void playMusic(Clip clip) {
-        //reset clip
-        clip.stop();
-        clip.flush();
-        clip.setFramePosition(0);
+    public static void playMusic(String name) {
 
-        //set volume of clip
-        FloatControl gainControl =
-                (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(musicVolume);
+        if (!backgroundName.equals(name)) {
+            backgroundName = name;
 
-        clip.start();
+            //reset clip
+            if (background != null) {
+                background.stop();
+                background.flush();
+                background.setFramePosition(0);
+            }
+
+            background = FileManager.getSound(name);
+
+            //set volume of clip
+            setVolume(background, musicVolume);
+
+            background.loop(Clip.LOOP_CONTINUOUSLY);
+        }
     }
 
-    public void pauseAll() {
-
+    private static void setVolume(Clip clip, float level) {
+        if (clip != null) {
+            FloatControl gainControl =
+                    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(level);
+        }
     }
 
-    public void stopAll() {
-
-    }
+//    public void pauseAll() {
+//
+//    }
+//
+//    public void resumeAll() {
+//
+//    }
+//
+//    public void stopAll() {
+//
+//    }
 
 }

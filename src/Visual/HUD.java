@@ -1,6 +1,6 @@
 package Visual;
 
-import Entities.Entity;
+import Entities.EntityManager;
 import Entities.Player;
 import Main.Game;
 import Map.GeneratedEnclosure;
@@ -8,8 +8,6 @@ import Map.GeneratedEnclosure;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/Visual/
@@ -17,8 +15,7 @@ import java.util.HashMap;
  */
 public class HUD {
 
-    private Player user;
-
+    // Static constants
     private final static int
             HUDx = (int) (Game.WIDTH - 20),
             HUDy = (int) (Game.HEIGHT - 40),
@@ -26,72 +23,61 @@ public class HUD {
             lifeBar_w = 150,
             lifeBar_h = 12,
             lifeBar_x = 110,
-            lifeBar_y = HUDy + lifeBar_h / 2,
+            lifeBar_y = HUDy + (int)(lifeBar_h * 0.5f),
             lifeBar_offset = 3;
-
-    private Area mapArea;
-
-    //private GeneratedEnclosure map;
-
-    public int enemies;
-
-    public int startEnemies;
-
-    private static final Color defaultHudColor = new Color(180, 180, 180, 220),
-            nearDeathHudColor = new Color(200, 0, 0, 200),
-            enemyBoxColor = new Color(255, 0, 0, 180);
-
-
-    public HUD(HashMap<String, ArrayList<Entity>> entityList, GeneratedEnclosure map) {
-
-        //this.map = map;
-
-        user = (Player)entityList.get("thisPlayer").get(0);
-        startEnemies = enemies = entityList.get("enemy").size();
-
-        mapArea = map.region;
-
-    }
-
-    public void updateEnemyAmount(int amount) {
-        enemies = Math.max(0, amount);
-    }
-
-    // TODO: replace this with vector image file?
-    private static Polygon cross = new Polygon();
+    private final static Polygon cross = new Polygon();
     static {
         int w = 10;
-        cross.addPoint(-w, w / 2);
-        cross.addPoint(-w, -w / 2);
-        cross.addPoint(-w / 2, -w / 2);
-        cross.addPoint(-w / 2, -w);
-        cross.addPoint(w / 2, -w);
-        cross.addPoint(w / 2, -w / 2);
-        cross.addPoint(w, -w / 2);
-        cross.addPoint(w, w / 2);
-        cross.addPoint(w / 2, w / 2);
-        cross.addPoint(w / 2, w);
-        cross.addPoint(-w / 2, w);
-        cross.addPoint(-w / 2, w / 2);
+        int w2 = w / 2;
+        cross.addPoint(-w, w2);
+        cross.addPoint(-w, -w2);
+        cross.addPoint(-w2, -w2);
+        cross.addPoint(-w2, -w);
+        cross.addPoint(w2, -w);
+        cross.addPoint(w2, -w2);
+        cross.addPoint(w, -w2);
+        cross.addPoint(w, w2);
+        cross.addPoint(w2, w2);
+        cross.addPoint(w2, w);
+        cross.addPoint(-w2, w);
+        cross.addPoint(-w2, w2);
         cross.translate(16, HUDy + w + 2);
     }
+    private final static Color defaultHudColor = new Color(180, 180, 180, 220),
+            nearDeathHudColor = new Color(200, 0, 0, 200),
+            enemyBoxColor = new Color(255, 0, 0, 180);
+    private final static Font HUD_FONT = new Font("Dotum Bold", Font.BOLD, (int) (40.0f * Game.SCALE));
 
+
+    // Private variables
+    private Area mapArea;
+    private Player user;
+    private EntityManager entityManager;
+
+    public HUD(EntityManager _entityManager, GeneratedEnclosure _map) {
+
+        entityManager = _entityManager;
+
+        user = entityManager.thisPlayer;
+
+        mapArea = _map.region;
+    }
 
     public void draw(Graphics2D g) {
 
-        g.setFont(Theme.fontHUD);
+        g.setFont(HUD_FONT);
 
         //AMMO
-        String ammoS = user.weapon == null ? "" : "Ammo: " + user.weapon.ammo + " / " + user.weapon.reserveAmmo;
+        String ammoS = user.weapon == null ? "" : user.weapon.name + " Ammo: " + user.weapon.ammo + " / " + user.weapon.reserveAmmo;
         g.setColor(defaultHudColor);
-        g.drawString(ammoS, HUDx - textWidth(ammoS, g), HUDy + textHeight(ammoS, g) / 2);
+        g.drawString(ammoS, HUDx - textWidth(ammoS, g), HUDy + textHeight(ammoS, g) * 0.5f);
 
         //LIFE
         if (user.life <= 10) g.setColor(nearDeathHudColor);
 
         //LIFE AMOUNT
         String lifeS = String.valueOf((int) user.life);
-        g.drawString(lifeS, 28, HUDy + textHeight(lifeS, g) / 2);
+        g.drawString(lifeS, 28, HUDy + textHeight(lifeS, g) * 0.5f);
 
         //HEALTH BAR
         g.setStroke(new BasicStroke(2));
@@ -105,12 +91,12 @@ public class HUD {
         //ENEMY COUNTER BOX
         g.setColor(enemyBoxColor);
         int side = 60;
-        g.fillRect(Game.WIDTH / 2 - side/2, Game.HEIGHT - side, side, side);
+        g.fillRect((int)(Game.WIDTH * 0.5f - side * 0.5f), Game.HEIGHT - side, side, side);
 
         //ENEMY COUNTER
         g.setColor(new Color(255,255,255,180));
-        String enemiesS = String.valueOf(enemies);
-        g.drawString(enemiesS, Game.WIDTH/2 - textWidth(enemiesS, g) / 2 - 1, Game.HEIGHT - 16);
+        String enemiesS = String.valueOf(entityManager.enemies.size());
+        g.drawString(enemiesS, Game.WIDTH * 0.5f - textWidth(enemiesS, g) * 0.5f - 1, Game.HEIGHT - 16);
 
         //MINI MAP
 

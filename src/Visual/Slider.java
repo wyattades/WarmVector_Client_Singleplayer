@@ -35,24 +35,24 @@ public class Slider {
     public void draw(Graphics2D g) {
 
         //Slider line
-        g.setColor(Theme.buttonDefault);
+        g.setColor(ButtonC.buttonDefault);
         g.setStroke(new BasicStroke(4));
         g.drawLine(x - w, y, x, y);
 
         //Actual slider
-        if (pressed) g.setColor(Theme.buttonOver);
-        else g.setColor(Theme.buttonSelected);
-        g.fillRect(slider_x - size / 2, y - size / 2, size, size);
+        if (pressed) g.setColor(ButtonC.buttonOver);
+        else g.setColor(ButtonC.buttonSelected);
+        g.fillRect(slider_x - (int)(size * 0.5f), y - (int)(size * 0.5f), size, size);
 
         //Text
         g.setFont(new Font("Dotum Bold", Font.BOLD, 20));
-        g.setColor(Theme.buttonDefault);
+        g.setColor(ButtonC.buttonDefault);
         g.drawString(text, (int) (x - w - size - g.getFontMetrics().getStringBounds(text, g).getWidth()), y + 6);
 
         //Options
         g.setFont(new Font("Dotum Bold", Font.BOLD, 16));
         for (int i = 0; i < options.length; i++) {
-            g.drawString(options[i], (int) (x - w + sub_w * i - g.getFontMetrics().getStringBounds(options[i], g).getWidth() / 2), y + size);
+            g.drawString(options[i], (int) (x - w + sub_w * i - g.getFontMetrics().getStringBounds(options[i], g).getWidth() * 0.5f), y + size);
         }
 
     }
@@ -70,8 +70,8 @@ public class Slider {
     }
 
     public boolean overBox(int mx, int my) {
-        return mx > slider_x - size / 2 && mx < slider_x + size / 2 &&
-                my > y - size / 2 && my < y + size / 2;
+        return mx > slider_x - size * 0.5f && mx < slider_x + size * 0.5f &&
+                my > y - size * 0.5f && my < y + size * 0.5f;
     }
 
     public void setDragPos(int i_pos) {

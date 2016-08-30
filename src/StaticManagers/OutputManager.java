@@ -3,10 +3,7 @@ package StaticManagers;
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.*;
 

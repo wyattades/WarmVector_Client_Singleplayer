@@ -2,6 +2,8 @@
 //
 //import javax.swing.*;
 //import java.awt.*;
+//import java.awt.event.WindowAdapter;
+//import java.awt.event.WindowEvent;
 //import java.awt.image.BufferStrategy;
 //
 ///**
@@ -17,9 +19,52 @@
 //    GraphicsDevice[] devices;
 //    DisplayMode oldDisplayMode;
 //    GraphicsEnvironment ge;
+//    private BufferStrategy bufferStrategy;
 //    JFrame frame;
 //
 //    public Window() {
+//
+//        JFrame frame = new JFrame("WarmVector Singleplayer V2");
+//
+//        JPanel panel = (JPanel) frame.getContentPane();
+//        panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+//        panel.setLayout(null);
+//
+//        Canvas canvas = new Canvas();
+//        canvas.setBounds(0, 0, WIDTH, HEIGHT);
+//        canvas.setIgnoreRepaint(true);
+//
+//        panel.add(canvas);
+//
+//        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//        frame.setResizable(false);
+//        frame.setUndecorated(true);
+//        frame.add(new JLabel("WarmVector V2", SwingConstants.CENTER), BorderLayout.CENTER);
+//        frame.validate();
+//
+//        frame.addWindowListener(new WindowAdapter() {
+//            public void windowClosing(WindowEvent e) {
+//                exit();
+//            }
+//        });
+//
+//        GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+//
+//        canvas.createBufferStrategy(2);
+//        bufferStrategy = canvas.getBufferStrategy();
+//
+//        canvas.requestFocus();
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //        ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 //        devices = ge.getScreenDevices();

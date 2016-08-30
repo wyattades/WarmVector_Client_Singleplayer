@@ -12,12 +12,9 @@ import java.awt.*;
 public abstract class GameState {
 
     protected GameStateManager gsm;
-//    protected MouseCursor cursor;
 
     public GameState(GameStateManager gsm) {
         this.gsm = gsm;
-//        cursor = new MouseCursor(MouseCursor.CURSOR);
-//        setCursor();
     }
 
     public abstract void init();

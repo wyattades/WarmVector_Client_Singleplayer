@@ -48,7 +48,8 @@ public class ScreenMover {
 
     public void updateRotation(double mouseX, double mouseY) {
         int maxRadius = 100;
-        float rotateRadius = (float) (-maxRadius * Math.sqrt((mouseX - Game.WIDTH / 2) * (mouseX - Game.WIDTH / 2) + (mouseY - Game.HEIGHT / 2) * (mouseY - Game.HEIGHT / 2)) / (Game.WIDTH / 2));
+        // TODO: get rid of this sqrt
+        float rotateRadius = (float) (-maxRadius * Math.sqrt((mouseX - Game.WIDTH * 0.5f) * (mouseX - Game.WIDTH * 0.5f) + (mouseY - Game.HEIGHT * 0.5f) * (mouseY - Game.HEIGHT * 0.5f)) / (Game.WIDTH * 0.5f));
         //rotateRadius = -50;
         screenPosX += rotateRadius * Math.cos(player.orient);
         screenPosY += rotateRadius * Math.sin(player.orient);

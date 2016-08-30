@@ -3,23 +3,17 @@ package StaticManagers;
 import sun.misc.Launcher;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.security.CodeSource;
 import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -28,12 +22,7 @@ import java.util.zip.ZipInputStream;
 public class FileManager {
 
     public static Clip getSound(String name) {
-        Clip sound = sounds.get(name);
-        if (sound == null) {
-            System.out.println("Sound " + name + " does not exist");
-            System.exit(1);
-        }
-        return sound;
+        return sounds.get(name);
     }
 
     public static BufferedImage getImage(String name) {

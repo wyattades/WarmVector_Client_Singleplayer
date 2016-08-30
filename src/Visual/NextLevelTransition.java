@@ -1,7 +1,7 @@
 package Visual;
 
-import Helper.MyMath;
 import Main.Game;
+import Util.MyMath;
 
 import java.awt.*;
 
@@ -33,7 +33,7 @@ public class NextLevelTransition {
                 slowestIndex = i;
             }
         }
-        barH = (int) Math.ceil((float) Game.HEIGHT / 128);
+        barH = (int) Math.ceil((float) Game.HEIGHT / speeds.length);
     }
 
     public void draw(Graphics2D g) {

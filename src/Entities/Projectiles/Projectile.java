@@ -2,11 +2,11 @@ package Entities.Projectiles;
 
 import Entities.Entity;
 import Entities.Player;
-import Map.GeneratedEnclosure;
+import Entities.Weapons.Weapon;
 import StaticManagers.FileManager;
+import Util.MyMath;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.*;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/Entities/
@@ -14,69 +14,51 @@ import java.util.HashMap;
  */
 public class Projectile extends Entity {
 
-    private float vx, vy, accel;
+    private float vx;
+    private float vy;
+    private float accel;
+    public float explodeRadius;
+    public float damage;
 
-    private Player shooter;
+    public Player shooter;
 
-    public Projectile(float x, float y, float orient, float i_speed, float acceleration, Player shooter) {
+    public Projectile(Player _shooter) {
 
-        super(x, y, orient);
+        super(_shooter.x, _shooter.y, _shooter.orient + MyMath.random(-_shooter.weapon.spread * 0.5f, _shooter.weapon.spread * 0.5f), Color.MAGENTA);
 
-        this.shooter = shooter;
+        shooter = _shooter;
 
-        w = sprite_w;
-        h = sprite_h;
+        sprite = FileManager.getImage("bullet.png");
+        setBounds(sprite.getWidth() * 4, sprite.getHeight() * 2);
 
         float cosAngle = (float)Math.cos(orient);
         float sinAngle = (float)Math.sin(orient);
 
-        this.x += shooter.weapon.gunLength * cosAngle;
-        this.y += shooter.weapon.gunLength * sinAngle;
+        this.x += Weapon.ORIGIN_RADIUS * cosAngle;
+        this.y += Weapon.ORIGIN_RADIUS * sinAngle;
 
-        vx = i_speed * cosAngle;
-        vy = i_speed * sinAngle;
+        vx = _shooter.weapon.i_speed * cosAngle;
+        vy = _shooter.weapon.i_speed * sinAngle;
 
-        this.accel = acceleration;
+        accel = _shooter.weapon.accel;
+        explodeRadius = _shooter.weapon.explodeRadius;
+        damage = _shooter.weapon.damage;
 
     }
 
     public void move() {
         if (accel != 0) {
             vx += (float) Math.sin(orient) * accel;
-            vy += (float) Math.sin(orient) * accel;
+            vy += (float) Math.cos(orient) * accel;
         }
         x += vx;
         y += vy;
+
+        updateCollideBox();
     }
 
-    public void checkCollisions(GeneratedEnclosure map, HashMap<String, ArrayList<Entity>> entityList) {
-        if (map.inverseRegion.intersects(collideBox)) {
-            map.addExplosion(x, y, 30, 8);
-            state = false;
-        } else {
-            //TODO fix this so bullets don't hit shooter or shooter's weapon
-            for (HashMap.Entry<String, ArrayList<Entity>> entry : entityList.entrySet()) {
-                if (entry.getKey().equals("enemy") || entry.getKey().equals("thisPlayer")) {
-                    //TODO replace with foreach????
-                    for (Entity e : entry.getValue()) {
-                        if (e.collideBox.intersects(collideBox)) {
-                            if (e.hit(shooter.weapon == null?0:shooter.weapon.damage, orient)) {
-                                state = false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    public void handleHit(float damage, float angle) {
+        // NA at the moment
     }
 
-    @Override
-    protected void loadSprites() {
-        sprite = FileManager.getImage("bullet.png");
-    }
-
-    @Override
-    public boolean hit(int damage, float angle) {
-        return false;
-    }
 }

@@ -1,5 +1,7 @@
 package Visual.Occlusion;
 
+import Util.Point;
+
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 5/11/2015.

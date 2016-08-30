@@ -2,6 +2,8 @@ package GameState;
 
 
 import Main.Game;
+import StaticManagers.AudioManager;
+import StaticManagers.FileManager;
 import StaticManagers.InputManager;
 import Visual.Animation;
 
@@ -21,14 +23,14 @@ public class IntroState extends GameState {
     }
 
     public void init() {
-        intro = new Animation(Game.WIDTH / 2, Game.HEIGHT / 2, 0, 40, null, "intro_");
+        intro = new Animation(Game.WIDTH * 0.5f, Game.HEIGHT * 0.5f, 0, 40, FileManager.getAnimation("intro_"));
         intro.w = Game.WIDTH;
         intro.h = Game.HEIGHT;
+
+        AudioManager.playMusic("start_menu.wav");
     }
 
-    public void unload() {
-
-    }
+    public void unload() {}
 
     public void draw(Graphics2D g) {
         intro.draw(g);
@@ -39,23 +41,15 @@ public class IntroState extends GameState {
         intro.update();
 
         if (!intro.state) {
-            nextState();
+            gsm.setState(GameStateManager.MAINMENU);
         }
 
     }
-
-//    public void setCursor() {
-//        gsm.cursor.setSprite(MouseCursor.NONE);
-//    }
 
     public void inputHandle(InputManager inputManager) {
         if (inputManager.isMousePressed("LEFTMOUSE") || inputManager.isMouseClicked("LEFTMOUSE") || inputManager.isKeyPressed("SPACE")) {
-            nextState();
+            gsm.setState(GameStateManager.MAINMENU);
         }
-    }
-
-    private void nextState() {
-        gsm.setState(GameStateManager.MAINMENU);
     }
 
 }

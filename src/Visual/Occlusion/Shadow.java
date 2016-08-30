@@ -22,7 +22,7 @@ public class Shadow {
     // These represent the map and the light location:
     private List<Segment> segments;
     private List<EndPoint> endpoints;
-    private Point center;
+    private Util.Point center;
 
     // These are currently 'open' line segments, sorted so that the nearest
     // segment is first. It's used only during the sweep algorithm, and exposed
@@ -30,7 +30,7 @@ public class Shadow {
     private List<Segment> open;
 
     // The output is a series of points that forms a visible area polygon
-    public List<Point> output;
+    public List<Util.Point> output;
 
     private final Area border;
 
@@ -57,7 +57,7 @@ public class Shadow {
         ));
 
         output = new ArrayList<>();
-        center = new Point(0, 0);
+        center = new Util.Point(0, 0);
         defineSegments(map.walls);
 
     }
@@ -83,7 +83,7 @@ public class Shadow {
         int[] y_points = new int[x_points.length];
 
         for (int i = 0; i < output.size(); i++) {
-            Point p = output.get(i);
+            Util.Point p = output.get(i);
             x_points[i] = Math.round(p.x);
             y_points[i] = Math.round(p.y);
         }
@@ -142,13 +142,13 @@ public class Shadow {
     }
 
     // returns true if point is "left" of segment treated as a vector
-    private boolean leftOf(Segment s, Point p) {
+    private boolean leftOf(Segment s, Util.Point p) {
         float cross = (s.p2.x - s.p1.x) * (p.y - s.p1.y) - (s.p2.y - s.p1.y) * (p.x - s.p1.x);
         return cross < 0;
     }
 
     // A neat algorithm that works for reasons outside of my knowledge
-    private boolean _segment_in_front_of(Segment a, Segment b, Point relativeTo) {
+    private boolean _segment_in_front_of(Segment a, Segment b, Util.Point relativeTo) {
 
         boolean A1 = leftOf(a, interpolate(b.p1, b.p2, 0.01f));
         boolean A2 = leftOf(a, interpolate(b.p2, b.p1, 0.01f));
@@ -165,8 +165,8 @@ public class Shadow {
     }
 
     //Part of above algorithm ^
-    private Point interpolate(Point p, Point q, float f) {
-        return new Point(p.x * (1 - f) + q.x * f, p.y * (1 - f) + q.y * f);
+    private Util.Point interpolate(Util.Point p, Util.Point q, float f) {
+        return new Util.Point(p.x * (1 - f) + q.x * f, p.y * (1 - f) + q.y * f);
     }
 
 
@@ -228,18 +228,18 @@ public class Shadow {
     }
 
 
-    private Point lineIntersection(Point p1, Point p2, Point p3, Point p4) {
+    private Util.Point lineIntersection(Util.Point p1, Util.Point p2, Util.Point p3, Util.Point p4) {
         float s = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x))
                 / ((p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y));
-        return new Point(p1.x + s * (p2.x - p1.x), p1.y + s * (p2.y - p1.y));
+        return new Util.Point(p1.x + s * (p2.x - p1.x), p1.y + s * (p2.y - p1.y));
     }
 
 
     private void addTriangle(float angle1, float angle2, Segment segment) {
-        Point p1 = center;
-        Point p2 = new Point(center.x + (float) Math.cos(angle1), center.y + (float) Math.sin(angle1));
-        Point p3 = new Point(0, 0);
-        Point p4 = new Point(0, 0);
+        Util.Point p1 = center;
+        Util.Point p2 = new Util.Point(center.x + (float) Math.cos(angle1), center.y + (float) Math.sin(angle1));
+        Util.Point p3 = new Util.Point(0, 0);
+        Util.Point p4 = new Util.Point(0, 0);
 
         if (segment != null) {
             // Stop the triangle at the intersecting segment
@@ -255,11 +255,11 @@ public class Shadow {
             p4.y = center.y + (float) Math.sin(angle2) * 500;
         }
 
-        Point pBegin = lineIntersection(p3, p4, p1, p2);
+        Util.Point pBegin = lineIntersection(p3, p4, p1, p2);
 
         p2.x = center.x + (float) Math.cos(angle2);
         p2.y = center.y + (float) Math.sin(angle2);
-        Point pEnd = lineIntersection(p3, p4, p1, p2);
+        Util.Point pEnd = lineIntersection(p3, p4, p1, p2);
 
         output.add(pBegin);
         output.add(pEnd);

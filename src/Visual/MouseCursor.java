@@ -12,10 +12,11 @@ import java.awt.image.BufferedImage;
  */
 public class MouseCursor {
 
-    private final static float x_sensitivity = 1.0f, y_sensitivity = 1.0f;
+//    private static Color CURSOR_COLOR = new Color(198, 198, 198);
+
     public static final int CURSOR = 1, CROSSHAIR = 2; //,NONE = 0;
     public int x, y;
-    private int oldPosX, oldPosY;
+
     private int w, h;
     private BufferedImage sprite, cursor, crosshair;
     private Robot robot;
@@ -56,7 +57,7 @@ public class MouseCursor {
     }
 
     public void draw(Graphics2D g) {
-        g.drawImage(sprite, x - (w / 2), y - (h / 2), null);
+        g.drawImage(sprite, x - (int)(w * 0.5f), y - (int)(h * 0.5f), null);
     }
 
 //    public void updatePosition(int deltaX, int deltaY) {
@@ -80,14 +81,14 @@ public class MouseCursor {
         return Math.min(Math.max(value, min), max);
     }
 
-    public void updateOldPos() {
-        oldPosX = x;
-        oldPosY = y;
-    }
-
-    public void setToOldPos() {
-        robot.mouseMove(oldPosX, oldPosY);
-        x = oldPosX;
-        y = oldPosY;
-    }
+//    public void updateOldPos() {
+//        oldPosX = x;
+//        oldPosY = y;
+//    }
+//
+//    public void setToOldPos() {
+//        robot.mouseMove(oldPosX, oldPosY);
+//        x = oldPosX;
+//        y = oldPosY;
+//    }
 }

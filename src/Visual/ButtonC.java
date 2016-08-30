@@ -1,5 +1,7 @@
 package Visual;
 
+import Main.Game;
+
 import java.awt.*;
 
 /**
@@ -7,6 +9,14 @@ import java.awt.*;
  * Created by Wyatt on 3/7/2015.
  */
 public class ButtonC {
+
+    public static Color buttonSelected = new Color(220, 220, 220),
+            buttonDefault = new Color(180, 180, 180, 220),
+            buttonOver = new Color(249, 249, 249),
+            buttonOverOld = buttonOver;
+    public static final Font BUTTON_FONT = new Font("Dotum Bold", Font.BOLD, (int) (60.0f * Game.SCALE));
+
+    public static final int BUTTON_HEIGHT = (int) (50.0f * Game.SCALE);
 
     private int x;
     public int y;
@@ -41,7 +51,7 @@ public class ButtonC {
     }
 
     public void draw(Graphics2D g) {
-        g.setFont(Theme.fontButton);
+        g.setFont(BUTTON_FONT);
 
         if (!setWidth) {
             w = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
@@ -49,11 +59,11 @@ public class ButtonC {
         }
 
         if (!overBox) {
-            g.setColor(Theme.buttonDefault);
+            g.setColor(buttonDefault);
         } else {
-            g.setColor(Theme.buttonOver);
+            g.setColor(buttonOver);
         }
-        g.drawString(text, x - w, y + Theme.buttonHeight);
+        g.drawString(text, x - w, y + BUTTON_HEIGHT);
     }
 
     public void update(int x, int y) {
@@ -62,7 +72,7 @@ public class ButtonC {
 
     private boolean overBox(int mx, int my) {
         return mx > x - w && mx < x &&
-                my > y && my < y + Theme.buttonHeight;
+                my > y && my < y + BUTTON_HEIGHT;
     }
 
 }

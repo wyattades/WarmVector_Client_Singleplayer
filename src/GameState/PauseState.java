@@ -5,7 +5,6 @@ import StaticManagers.InputManager;
 import Visual.ButtonC;
 import Visual.MouseCursor;
 import Visual.Slider;
-import Visual.Theme;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class PauseState extends MenuState {
     }
 
     public void init() {
-        startY = Game.HEIGHT - Theme.buttonHeight * 3;
+        startY = Game.HEIGHT - ButtonC.BUTTON_HEIGHT * 3;
         initButtons();
         gsm.cursor.setSprite(MouseCursor.CURSOR);
     }
@@ -53,12 +52,7 @@ public class PauseState extends MenuState {
 
     }
 
-    public void update() {
-    }
-
-//    public void setCursor() {
-//        gsm.cursor.setSprite(MouseCursor.CURSOR);
-//    }
+    public void update() {}
 
     public void inputHandle(InputManager inputManager) {
         defaultInputHandle(inputManager);

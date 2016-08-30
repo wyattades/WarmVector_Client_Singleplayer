@@ -1,10 +1,13 @@
 package Map;
 
-import Helper.MyMath;
-import Helper.Rect;
+import StaticManagers.FileManager;
+import Util.ImageUtil;
+import Util.MyMath;
+import Util.Rect;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,32 +30,45 @@ public class GeneratedEnclosure {
     // Then I add random obstacles to the edges of the rooms (without blocking the corridors)
     // Then I use my smoothing algorithm to smooth the edges and make it "cave-like" and more natural
 
-    public int width, height, scale;
+    // Public variables
+    public int width, height;
+    public List<Rect>
+            cells, // Stores all types of rooms
+            rooms, // Stores rooms (not corridors)
+            corridors; // Stores only corridors
+    private List<Rectangle2D> openSpaces; // Adjacent regions to corridors (no obstacles can spawn here)
+    public Area
+            region, // Accessible area of map
+            inverseRegion; // Destructible wall
+    private Area borderRegion; // Indestructible wall
+    public List<Line2D> walls; //Stores line segments of map (these are used for shadowing, collision detection, etc.)
 
-    //Stores all types of rooms
-    public List<Rect> cells;
-    //Stores rooms (not corridors)
-    public List<Rect> rooms;
-    //Stores only corridors
-    public List<Rect> corridors;
-
-    //Accessible area of map
-    public Area region;
-    public Area inverseRegion;
-
-    //Stores line segments of map (these are used for shadowing, collision detection, etc.)
-    public List<Line2D> walls;
-
-    //Global variables
+    //Private variables
     private int iterations;
-    private final float splitSizeFactor;
-    private final int minRoomSize;
 
-    private final Rectangle2D border;
+    // Public constants
+    public static final Color
+            STROKE = new Color(90,90,90),
+            FILL = new Color(50,50,50);
+    public static final BufferedImage[] HIT_ANIMATION = ImageUtil.recolorAnimation(FileManager.getAnimation("hit_"), FILL);
 
-    //TODO: scale everything while generating initial map, not after
+    // Private constants
+    private static final float
+            roomReductionFactor = 0.42f,
+            smoothingFactor = 0.5f,
+            splitSizeFactor = 0.22f;
+    private static final int
+            min_spacing = 4,
+            path_thickness = 6,
+            smoothingIterations = 3,
+            minRoomSize = 50,
+            scale = 12; //The value in which the generated map is scaled by
+    private static final boolean
+            randomObstaclesOnEdges = true;
 
-    public GeneratedEnclosure(int i_width, int i_height, float scaleFactor) {
+    //TODO: scale everything while generating initial map, not after??
+
+    public GeneratedEnclosure(int i_width, int i_height, float scaleFactor, boolean smooth) {
 
         //Make sure width and height are always even numbers
         width = MyMath.round(i_width, 2);
@@ -61,24 +77,11 @@ public class GeneratedEnclosure {
         //Modify iterations so that the rooms sizes change based on scaleFactor (default is 4 cause it looks the best)
         iterations = 4 + (int) (Math.log(scaleFactor) / Math.log(2));
 
-        //Local constants
-        float roomReductionFactor = 0.42f;
-        int min_spacing = 4;
-        int path_thickness = 6;
-        boolean smooth = false;
-        int smoothingIterations = 3;
-        float smoothingFactor = 0.5f;
-        boolean randomObstaclesOnEdges = true;
-
-        //Global constants
-        splitSizeFactor = 0.22f;
-        minRoomSize = 50;
-
-        //The value in which the generated map is scaled by
-        scale = 12;
-
-        border = new Rectangle2D.Float(-width*scale,-height*scale,3*width*scale, 3*height*scale);
-        //border = new Rectangle2D.Float(0,0,width*scale, height*scale);
+        Area totalArea = new Area(new Rectangle2D.Float(
+                -0.5f * width * scale, -0.5f * height * scale, 2.0f * width * scale, 2.0f * height * scale
+        ));
+        borderRegion = new Area(totalArea);
+        borderRegion.subtract(new Area(new Rectangle2D.Float(0.0f, 0.0f, width * scale, height * scale)));
 
         //Keep looping until there are no null rooms (a null room
         //has about a 1 in 50 chance of spawning)
@@ -91,6 +94,7 @@ public class GeneratedEnclosure {
             cells = new ArrayList<>();
             rooms = new ArrayList<>();
             corridors = new ArrayList<>();
+            openSpaces = new ArrayList<>();
 
             //add randomized subsection rects to the array
             new Cell(new Rect(0, 0, width, height), 0);
@@ -101,9 +105,9 @@ public class GeneratedEnclosure {
                 int oldRight = r.x + r.w,
                         oldBottom = r.y + r.h;
                 r.w = MyMath.round(MyMath.random(r.w * roomReductionFactor, r.w - min_spacing), 2);
-                r.x = MyMath.round(MyMath.random(r.x + min_spacing / 2.0f, oldRight - r.w - min_spacing / 2.0f), 2);
+                r.x = MyMath.round(MyMath.random(r.x + min_spacing * 0.5f, oldRight - r.w - min_spacing * 0.5f), 2);
                 r.h = MyMath.round(MyMath.random(r.h * roomReductionFactor, r.h - min_spacing), 2);
-                r.y = MyMath.round(MyMath.random(r.y + min_spacing / 2.0f, oldBottom - r.h - min_spacing / 2.0f), 2);
+                r.y = MyMath.round(MyMath.random(r.y + min_spacing * 0.5f, oldBottom - r.h - min_spacing * 0.5f), 2);
             }
 
             //Copy all rooms into rooms list
@@ -152,27 +156,11 @@ public class GeneratedEnclosure {
 
         if (randomObstaclesOnEdges) {
 
-            //Create list of regions where obstacles cannot be placed
-            List<Rectangle2D> openSpaces = new ArrayList<>();
-            for (Rect c : corridors) {
-                if (c.h == path_thickness) { //horizontal corridors
-                    openSpaces.add(new Rectangle2D.Float(c.x - path_thickness, c.y, path_thickness, path_thickness));
-                    openSpaces.add(new Rectangle2D.Float(c.x + c.w, c.y, path_thickness, path_thickness));
-                }
-                if (c.w == path_thickness) { //vertical corridors
-                    openSpaces.add(new Rectangle2D.Float(c.x, c.y - path_thickness, path_thickness, path_thickness));
-                    openSpaces.add(new Rectangle2D.Float(c.x, c.y + c.h, path_thickness, path_thickness));
-                }
-            }
-
             //Add randomized "obstacles" to the rooms
             for (Rect r : rooms) {
-
-                int amount = Math.round(MyMath.map(Math.min(3500, r.w * r.h),100,3500,1,5));
-
-                for (int i = 0; i < amount; i++) {
-                    Rectangle2D object = objectInRoom(r, openSpaces);
-                    if (object != null) region.subtract(new Area(object));
+                List<Rectangle2D> objects = objectsInRoom(r);
+                for (Rectangle2D object : objects) {
+                    region.subtract(new Area(object));
                 }
             }
 
@@ -204,11 +192,11 @@ public class GeneratedEnclosure {
         region = new Area(newPoints);
 
         //Define an inverse of the region
-        inverseRegion = new Area(border);
+        inverseRegion = new Area(totalArea);
         inverseRegion.subtract(region);
 
         //Define the walls (used for shadowing) based on the new region
-        defineWalls(areaPoints);
+        walls = calculateWalls(areaPoints);
 
         width *= scale;
         height *= scale;
@@ -222,12 +210,12 @@ public class GeneratedEnclosure {
 
     }
 
-    private void defineWalls(List<float[]> areaPoints) {
+    private ArrayList<Line2D> calculateWalls(List<float[]> areaPoints) {
 
         float[] start = new float[3]; // To record where each polygon starts
 
         //Create an empty list of lines
-        walls = new ArrayList<>();
+        ArrayList<Line2D> walls = new ArrayList<>();
 
         //Based on the region, add to the list of walls
         for (int i = 0; i < areaPoints.size(); i++) {
@@ -262,6 +250,8 @@ public class GeneratedEnclosure {
             }
         }
 
+        return walls;
+
 //        float x = (float) border.getX(), y = (float) border.getY(), w = (float) border.getWidth(), h = (float) border.getHeight();
 //        walls.add(new Line2D.Float(x,y,x+w,y));
 //        walls.add(new Line2D.Float(x+w,y,x+w,y+h));
@@ -271,60 +261,56 @@ public class GeneratedEnclosure {
     }
 
     //A randomly placed rectangular obstacle inside a room
-    private Rectangle2D objectInRoom(Rect r, List<Rectangle2D> openSpaces) {
-        Rectangle2D object;
-        for (int i = 0; i < 10; i++) {
+    private List<Rectangle2D> objectsInRoom(Rect r) {
 
-            int w = (int) (MyMath.random(7, 15));
-            int h = (int) (MyMath.random(7, 15));
+        int amount = Math.round(MyMath.map(Math.min(3500, r.w * r.h),100,3500,1,5));
 
-            int x, y;
-            float random = MyMath.random(1.0f, 2.0f);
-            if (random > 1.75f) {
-                x = r.x;
-                y = r.y + r.h - h;
-            } else if (random > 1.5f) {
-                x = r.x;
-                y = r.y;
-            } else if (random > 1.25f) {
-                x = r.x + r.w - w;
-                y = r.y;
-            } else// if (random > 1.0f) {
-            {    x = r.x + r.w - w;
-                y = r.y + r.h - h;
-            }/* else if (random > 0.75f) {
-                x = r.x;
-                y = (int) Game.random(r.y + path_thickness, r.y + r.h - path_thickness - h);
-            } else if (random > 0.5f) {
-                x = r.x + r.w - w;
-                y = (int) Game.random(r.y + path_thickness, r.y + r.h - path_thickness - h);
-            } else if (random > 0.25f) {
-                x = (int) Game.random(r.x + path_thickness, r.x + r.w - path_thickness - w);
-                y = r.y;
-            } else {
-                x = (int) Game.random(r.x + path_thickness, r.x + r.w - path_thickness - w);
-                y = r.y + r.h - h;
-            }*/
+        List<Rectangle2D> objects = new ArrayList<>();
 
-            object = new Rectangle2D.Float(x, y, w, h);
+        for (int i = 0; i < amount; i++) {
+            Rectangle2D object;
+            for (int j = 0; j < 10; j++) {
 
-            boolean passes = true;
-            //test for adjacency to corridors
-            for (Rectangle2D openSpace : openSpaces) {
-                if (object.intersects(openSpace)) {
-                    passes = false;
+                int w = (int) (MyMath.random(7, 15));
+                int h = (int) (MyMath.random(7, 15));
+
+                int x, y;
+                float random = MyMath.random(1.0f, 2.0f);
+                if (random > 1.75f) {
+                    x = r.x;
+                    y = r.y + r.h - h;
+                } else if (random > 1.5f) {
+                    x = r.x;
+                    y = r.y;
+                } else if (random > 1.25f) {
+                    x = r.x + r.w - w;
+                    y = r.y;
+                } else// if (random > 1.0f) {
+                {
+                    x = r.x + r.w - w;
+                    y = r.y + r.h - h;
+                }
+
+                object = new Rectangle2D.Float(x, y, w, h);
+
+                boolean passes = true;
+                //test for adjacency to corridors
+                for (Rectangle2D openSpace : openSpaces) {
+                    if (object.intersects(openSpace)) {
+                        passes = false;
+                        break;
+                    }
+                }
+
+                if (passes) {
+                    objects.add(object);
                     break;
                 }
-            }
 
-            if (passes) {
-                return object;
             }
-
         }
 
-        return null;
-
+        return objects;
     }
 
     //An algorithm for smoothing the edges of a region:
@@ -335,8 +321,8 @@ public class GeneratedEnclosure {
         //Create list for the midpoints of all the lines
         List<Point2D> midpoints = new ArrayList<>();
         for (float[] edge : input) {
-            float x = (edge[1] + edge[1])/2.0f;
-            float y = (edge[2] + edge[2])/2.0f;
+            float x = (edge[1] + edge[1]) * 0.5f;
+            float y = (edge[2] + edge[2]) * 0.5f;
             midpoints.add(new Point2D.Float(x,y));
         }
 
@@ -348,8 +334,8 @@ public class GeneratedEnclosure {
                 p1 = midpoints.get(0);
 
         anchorPoints.add(new Point2D.Float(
-                (float)((p1.getX()+p0.getX())/2.0f),
-                (float)((p1.getY()+p0.getY())/2.0f)));
+                (float)((p1.getX()+p0.getX()) * 0.5f),
+                (float)((p1.getY()+p0.getY()) * 0.5f)));
 
         for (int i = 0; i < midpoints.size()-1; i += 1) {
 
@@ -357,8 +343,8 @@ public class GeneratedEnclosure {
                     pb = midpoints.get(i+1);
 
             anchorPoints.add(new Point2D.Float(
-                    (float)((pa.getX()+pb.getX())/2.0f),
-                    (float)((pa.getY()+pb.getY())/2.0f)));
+                    (float)((pa.getX()+pb.getX()) * 0.5f),
+                    (float)((pa.getY()+pb.getY()) * 0.5f)));
 
         }
 
@@ -416,6 +402,7 @@ public class GeneratedEnclosure {
         for (int i = 0; i < vertices; i++) {
             float angle = i * deltaTheta;
             float length = MyMath.random(minRadius, maxRadius);
+            // TODO: avoid sin and cos
             int px = (int) (Math.cos(angle) * length + x);
             int py = (int) (Math.sin(angle) * length + y);
             explosion.addPoint(px, py);
@@ -424,11 +411,11 @@ public class GeneratedEnclosure {
 
         //Update the regions to accommodate the new explosion
         region.add(subtraction);
-        region.intersect(new Area(border));
+        region.subtract(borderRegion);
         inverseRegion.subtract(subtraction);
-        inverseRegion.intersect(new Area(border));
+        inverseRegion.add(borderRegion);
 
-        defineWalls(areaPoints(region));
+        walls = calculateWalls(areaPoints(region));
 
     }
 
@@ -444,12 +431,12 @@ public class GeneratedEnclosure {
             this.p = p;
 
             if (iteration + 1 <= iterations) {
-                if ((p.w / 2.0f > minRoomSize && p.h / 2.0f < minRoomSize) || p.h < p.w) { //new horizontal box
-                    int randomCenter = MyMath.round(MyMath.random(-p.w * splitSizeFactor, p.w * splitSizeFactor) + p.w / 2.0f, 2);
+                if ((p.w * 0.5f > minRoomSize && p.h * 0.5f < minRoomSize) || p.h < p.w) { //new horizontal box
+                    int randomCenter = MyMath.round(MyMath.random(-p.w * splitSizeFactor, p.w * splitSizeFactor) + p.w * 0.5f, 2);
                     cellA = new Cell(new Rect(p.x, p.y, randomCenter, p.h), iteration + 1);
                     cellB = new Cell(new Rect(p.x + randomCenter, p.y, p.w - randomCenter, p.h), iteration + 1);
                 } else { //new vertical box
-                    int randomCenter = MyMath.round(MyMath.random(-p.h * splitSizeFactor, p.h * splitSizeFactor) + p.h / 2.0f, 2);
+                    int randomCenter = MyMath.round(MyMath.random(-p.h * splitSizeFactor, p.h * splitSizeFactor) + p.h * 0.5f, 2);
                     cellA = new Cell(new Rect(p.x, p.y, p.w, randomCenter), iteration + 1);
                     cellB = new Cell(new Rect(p.x, p.y + randomCenter, p.w, p.h - randomCenter), iteration + 1);
                 }
@@ -484,8 +471,8 @@ public class GeneratedEnclosure {
                 Rect r1 = shuffled1.get(i);
                 Rect r2 = shuffled2.get(j);
 
-                if (Math.abs((r1.y + r1.h / 2.0f) - (r2.y + r2.h / 2.0f)) <=
-                        r1.h / 2.0f + r2.h / 2.0f - path_thickness) {
+                if (Math.abs((r1.y + r1.h * 0.5f) - (r2.y + r2.h * 0.5f)) <=
+                        r1.h * 0.5f + r2.h * 0.5f - path_thickness) { // Horizontally adjacent rooms
                     int min = Math.round(Math.max(r1.y, r2.y));
                     int max = Math.round(Math.min(r1.y + r1.h, r2.y + r2.h) - path_thickness);
                     List<Integer> options = new ArrayList<>();
@@ -503,11 +490,13 @@ public class GeneratedEnclosure {
                             }
                         }
                         if (!collides) {
+                            openSpaces.add(new Rectangle2D.Float(corridor.x - path_thickness, corridor.y, path_thickness, path_thickness));
+                            openSpaces.add(new Rectangle2D.Float(corridor.x + corridor.w, corridor.y, path_thickness, path_thickness));
                             return corridor;
                         }
                     }
-                } else if (Math.abs((r1.x + r1.w / 2.0f) - (r2.x + r2.w / 2.0f)) <=
-                        r1.w / 2.0f + r2.w / 2.0f - path_thickness) {
+                } else if (Math.abs((r1.x + r1.w * 0.5f) - (r2.x + r2.w * 0.5f)) <=
+                        r1.w * 0.5f + r2.w * 0.5f - path_thickness) { // Vertically adjacent rooms
                     float min = Math.max(r1.x, r2.x);
                     float max = Math.min(r1.x + r1.w, r2.x + r2.w) - path_thickness;
                     List<Integer> options = new ArrayList<>();
@@ -525,6 +514,8 @@ public class GeneratedEnclosure {
                             }
                         }
                         if (!collides) {
+                            openSpaces.add(new Rectangle2D.Float(corridor.x, corridor.y - path_thickness, path_thickness, path_thickness));
+                            openSpaces.add(new Rectangle2D.Float(corridor.x, corridor.y + corridor.h, path_thickness, path_thickness));
                             return corridor;
                         }
                     }
@@ -534,16 +525,16 @@ public class GeneratedEnclosure {
         return null;
     }
 
-    public void draw(Graphics2D g, Color stroke, Color fill) {
+    public void draw(Graphics2D g) {
 
 //        Area inverseRegion = new Area(new Rectangle2D.Float(-width, -height, 3 * width, 3 * height));
 //        inverseRegion.subtract(region);
 
-        g.setStroke(new BasicStroke(1,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
-        g.setColor(stroke);
+        g.setStroke(new BasicStroke(3,BasicStroke.CAP_ROUND,BasicStroke.JOIN_ROUND));
+        g.setColor(STROKE);
         g.draw(inverseRegion);
 
-        g.setColor(fill);
+        g.setColor(FILL);
         g.fill(inverseRegion);
 
     }

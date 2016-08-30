@@ -2,8 +2,8 @@ package GameState;
 
 import Main.Game;
 import Visual.ButtonC;
+import Visual.MouseCursor;
 import Visual.Slider;
-import Visual.Theme;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ public class NextLevelState extends MenuState {
 
     public void init() {
         startY = Game.HEIGHT - 100;
+        gsm.cursor.setSprite(MouseCursor.CURSOR);
         initButtons();
     }
 
@@ -51,11 +52,11 @@ public class NextLevelState extends MenuState {
 
         if (gsm.level >= GameStateManager.MAXLEVEL) {
             String text = "YOU WIN! (work in progress btw)";
-            g.setColor(Theme.buttonOverOld);
+            g.setColor(ButtonC.buttonOverOld);
             g.drawString(
                     text,
-                    Game.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(text, g).getWidth() / 2,
-                    Game.HEIGHT / 2 - 150
+                    Game.WIDTH * 0.5f - (int) g.getFontMetrics().getStringBounds(text, g).getWidth() * 0.5f,
+                    Game.HEIGHT * 0.5f - 150
             );
         }
 

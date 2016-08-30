@@ -21,9 +21,9 @@ public class BarVisualizer {
 
         this.color = color;
         bars = new int[128];
-        Arrays.fill(bars, Game.WIDTH - startX);
         startX = x;
-        barH = (int) Math.ceil((float) Game.HEIGHT / 128f);
+        Arrays.fill(bars, Game.WIDTH - startX);
+        barH = (int) Math.ceil((float) Game.HEIGHT / bars.length);
 
     }
 
@@ -46,7 +46,7 @@ public class BarVisualizer {
             int timeDiff = Game.currentTimeMillis() - pressedTime;
             for (int i = 0; i < bars.length; i++) {
                 int diff = mouseY - i * barH;
-                float addition = 100.0f - (float) Math.sin(diff / 4.0f) * 80.0f - timeDiff;
+                float addition = 100.0f - (float) Math.sin(diff * 0.25f) * 80.0f - timeDiff;
                 if (addition < 0.0f) addition = 0.0f;
                 bars[i] += addition;
             }
@@ -62,7 +62,7 @@ public class BarVisualizer {
         for (int i = 0; i < bars.length; i++) {
             float addition = 3.0f * deltaY - Math.abs(mouseY - i * barH);
             if (addition < 0) addition = 0;
-            bars[i] += (addition - (float)bars[i]/20.0f);
+            bars[i] += (addition - (float)bars[i] * 0.05f);
             if (bars[i] > Game.WIDTH-startX) bars[i] = Game.WIDTH-startX;
             if (bars[i] < 0) bars[i] = 0;
         }

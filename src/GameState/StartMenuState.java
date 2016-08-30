@@ -1,11 +1,11 @@
 package GameState;
 
 import Main.Game;
+import StaticManagers.AudioManager;
 import StaticManagers.InputManager;
 import Visual.BarVisualizer;
 import Visual.ButtonC;
 import Visual.Slider;
-import Visual.Theme;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,13 +16,16 @@ import java.util.ArrayList;
  */
 public class StartMenuState extends MenuState {
 
+    // Private constants
+    public static final Color BACKGROUND_COLOR = new Color(22, 20, 22);
+    private static final int MENU_WIDTH = 480;
+    private static final Font
+            fontLogo = new Font("Dotum Bold", Font.BOLD, (int) (200.0f * Game.SCALE)),
+            fontHUD = new Font("Dotum Bold", Font.BOLD, (int) (40.0f * Game.SCALE));
+
     private BarVisualizer barVisualizer;
-
     private Color backGround;
-
     private float backgroundHue = 0.0f;
-
-    private final int menuWidth = 480;
 
     public StartMenuState(GameStateManager gsm) {
         super(gsm);
@@ -30,15 +33,17 @@ public class StartMenuState extends MenuState {
 
     public void init() {
 
-        startY = Game.HEIGHT - Theme.buttonHeight * 2;
+        startY = Game.HEIGHT - ButtonC.BUTTON_HEIGHT * 2;
         initButtons();
-        barVisualizer = new BarVisualizer(menuWidth, Theme.menuBackground);
-        gsm.cursor.setMouse(Game.WIDTH/2, Game.HEIGHT/2);
+        barVisualizer = new BarVisualizer(MENU_WIDTH, BACKGROUND_COLOR);
+        gsm.cursor.setMouse((int)(Game.WIDTH * 0.5f), (int)(Game.HEIGHT * 0.5f));
+
+        AudioManager.playMusic("start_menu.wav");
 
     }
 
     public void unload() {
-        Theme.buttonOver = Theme.buttonOverOld;
+        ButtonC.buttonOver = ButtonC.buttonOverOld;
     }
 
     protected void initButtons() {
@@ -60,27 +65,33 @@ public class StartMenuState extends MenuState {
             s.draw(g);
         }
 
-        //Draw the "W" & "V" title
+        boolean beginButtonHover = false;
+
+        // Draw the buttons
         for (ButtonC b : buttons) {
 
-            if (b.value == ButtonC.ButtonType.BEGIN) {
-                if (b.overBox) {
-                    g.setColor(Theme.buttonOver);
-                    g.setFont(Theme.fontHUD);
-                    g.drawString("ARM", Game.WIDTH - menuWidth / 2 + 70, Game.HEIGHT / 2 - 200);
-                    g.drawString("ECTOR", Game.WIDTH - menuWidth / 2 + 28, Game.HEIGHT / 2 - 40);
-                }
-                g.setFont(Theme.fontLogo);
-                g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 200);
-                g.drawString("V", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("V", g).getWidth() / 2 - menuWidth / 2, Game.HEIGHT / 2 - 40);
-            } else {
-                g.setColor(Theme.buttonDefault);
+            b.update(gsm.cursor.x, gsm.cursor.y);
+
+            if (b.value == ButtonC.ButtonType.BEGIN && b.overBox) {
+                beginButtonHover = true;
             }
 
-            b.update(gsm.cursor.x, gsm.cursor.y);
             b.draw(g);
-
         }
+
+        //Draw the "W" & "V" title
+        if (beginButtonHover) {
+            g.setColor(ButtonC.buttonOver);
+            g.setFont(fontHUD);
+            g.drawString("ARM", Game.WIDTH - MENU_WIDTH * 0.5f + 70, Game.HEIGHT * 0.5f - 200);
+            g.drawString("ECTOR", Game.WIDTH - MENU_WIDTH * 0.5f + 28, Game.HEIGHT * 0.5f - 40);
+        } else {
+            g.setColor(ButtonC.buttonDefault);
+        }
+        g.setFont(fontLogo);
+        g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() * 0.5f - MENU_WIDTH * 0.5f, Game.HEIGHT * 0.5f - 200);
+        g.drawString("V", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("V", g).getWidth() * 0.5f - MENU_WIDTH * 0.5f, Game.HEIGHT * 0.5f - 40);
+
 
         gsm.cursor.draw(g);
 
@@ -91,9 +102,9 @@ public class StartMenuState extends MenuState {
 
     public void update() {
 
-        backGround = Theme.buttonOver = Color.getHSBColor(backgroundHue, 1, 1);
+        backGround = ButtonC.buttonOver = Color.getHSBColor(backgroundHue, 1, 1);
         backgroundHue += 0.001f;
-        if (backgroundHue >= 1) backgroundHue = 0;
+        if (backgroundHue >= 1.0f) backgroundHue = 0;
 
         barVisualizer.react(pressed, my);
 
