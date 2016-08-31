@@ -31,10 +31,12 @@ public class PauseState extends MenuState {
         startY = Game.HEIGHT - ButtonC.BUTTON_HEIGHT * 3;
         initButtons();
         gsm.cursor.setSprite(MouseCursor.CURSOR);
+        gsm.cursor.saveOldPos();
     }
 
     public void unload() {
         gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
+        gsm.cursor.loadOldPos();
     }
 
     public void draw(Graphics2D g) {
@@ -48,6 +50,8 @@ public class PauseState extends MenuState {
             b.draw(g);
         }
 
+        drawSpecific(g);
+
         gsm.cursor.draw(g);
 
     }
@@ -55,7 +59,7 @@ public class PauseState extends MenuState {
     public void update() {}
 
     public void inputHandle(InputManager inputManager) {
-        defaultInputHandle(inputManager);
+        super.inputHandle(inputManager);
         if (inputManager.isKeyPressed("ESC") && Game.currentTimeMillis() - inputManager.getKeyTime("ESC") > 400) {
             gsm.unloadState(GameStateManager.PAUSE);
             inputManager.setKeyTime("ESC", Game.currentTimeMillis());

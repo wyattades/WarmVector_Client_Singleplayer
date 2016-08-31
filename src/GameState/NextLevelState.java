@@ -1,6 +1,7 @@
 package GameState;
 
 import Main.Game;
+import StaticManagers.OutputManager;
 import Visual.ButtonC;
 import Visual.MouseCursor;
 import Visual.Slider;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  */
 public class NextLevelState extends MenuState {
 
-//    private NextLevelTransition nextLevelTransition;
+    private boolean win;
 
     public NextLevelState(GameStateManager gsm) {
         super(gsm);
@@ -25,17 +26,24 @@ public class NextLevelState extends MenuState {
         sliders = new ArrayList<>();
         initDefault();
         addButton("MAIN MENU", ButtonC.ButtonType.MAINMENU);
-        if (gsm.level < GameStateManager.MAXLEVEL) addButton("CONTINUE", ButtonC.ButtonType.CONTINUE);
+
+        int level = OutputManager.getSetting("level");
+        if (level < GameStateManager.MAXLEVEL) {
+            addButton("NEXT LEVEL", ButtonC.ButtonType.NEXTLEVEL);
+            OutputManager.setSetting("level", level + 1);
+        } else {
+            win = true;
+        }
     }
 
     public void init() {
+        win = false;
         startY = Game.HEIGHT - 100;
         gsm.cursor.setSprite(MouseCursor.CURSOR);
         initButtons();
     }
 
-    public void unload() {
-    }
+    public void unload() {}
 
     public void draw(Graphics2D g) {
 
@@ -50,7 +58,7 @@ public class NextLevelState extends MenuState {
             s.draw(g);
         }
 
-        if (gsm.level >= GameStateManager.MAXLEVEL) {
+        if (win) {
             String text = "YOU WIN! (work in progress btw)";
             g.setColor(ButtonC.buttonOverOld);
             g.drawString(

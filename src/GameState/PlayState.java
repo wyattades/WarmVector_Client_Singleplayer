@@ -2,22 +2,23 @@ package GameState;
 
 import Entities.EntityManager;
 import Entities.Player;
+import Entities.Projectiles.Projectile;
 import Main.Game;
 import Map.GeneratedEnclosure;
 import StaticManagers.AudioManager;
 import StaticManagers.FileManager;
 import StaticManagers.InputManager;
+import StaticManagers.OutputManager;
 import Util.ImageUtil;
 import Util.MyMath;
-import Visual.ButtonC;
-import Visual.HUD;
-import Visual.MouseCursor;
+import Visual.*;
 import Visual.Occlusion.Shadow;
-import Visual.ScreenMover;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.*;
+import java.util.List;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -33,6 +34,7 @@ public class PlayState extends GameState {
     private HUD hud;
     private Shadow shadow;
     private GeneratedEnclosure map;
+    private List<Animation> animations;
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -40,13 +42,17 @@ public class PlayState extends GameState {
 
     public void init() {
 
-        System.out.println("Level = " + gsm.level);
+        int level = OutputManager.getSetting("level");
+
+        System.out.println("Level = " + level);
 
         background = ImageUtil.colorizeImage(FileManager.getImage("background.png"), MyMath.random(0.0f, 1.0f));
 
-        map = new GeneratedEnclosure(200, 200, 1.0f, false);
-        entityManager = new EntityManager(map, gsm);
-        shadow = new Shadow(map, new Color(20,20,20));
+        map = new GeneratedEnclosure(200, 200, 1.0f, OutputManager.getSetting("cave_mode") == 1);
+        entityManager = new EntityManager(map, gsm, level, this);
+        shadow = new Shadow(map);
+
+        animations = new ArrayList<>();
 
         screenMover = new ScreenMover(entityManager.thisPlayer);
         hud = new HUD(entityManager, map);
@@ -54,15 +60,20 @@ public class PlayState extends GameState {
         gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
         gsm.cursor.setMouse((int)(Game.WIDTH * 0.5f + 70), (int)(Game.HEIGHT * 0.5f));
 
-        int musicLevel = gsm.level % 3;
+        int musicLevel = level % 3;
         AudioManager.playMusic("background" + musicLevel + ".wav");
 
     }
 
     public void unload() {
         gsm.cursor.setSprite(MouseCursor.CURSOR);
+    }
 
-        //save stuff (stats?)
+    public void addExplosion(Projectile p, BufferedImage[] hitImages) {
+        AudioManager.playSFX("bulletHit.wav");
+        map.addExplosion(p.x, p.y, p.explodeRadius, 8);
+        shadow.updateSegments();
+        animations.add(new Animation(p.x, p.y, p.orient + MyMath.PI, 1, hitImages));
     }
 
     public void draw(Graphics2D g) {
@@ -91,6 +102,10 @@ public class PlayState extends GameState {
         shadow.draw(g);
         map.draw(g);
 
+        for (Animation a : animations) {
+            a.draw(g);
+        }
+
         //reset transformation
         g.setTransform(oldT);
 
@@ -109,6 +124,13 @@ public class PlayState extends GameState {
     public void update() { //update objects
 
         entityManager.update();
+
+        for (int i = animations.size() - 1; i >= 0; i--) {
+            Animation a = animations.get(i);
+            a.update();
+            if (!a.state) animations.remove(i);
+        }
+
 
         if (entityManager.thisPlayer.state) {
             entityManager.thisPlayer.updateAngle(gsm.cursor.x - screenMover.screenVelX, gsm.cursor.y - screenMover.screenVelY);

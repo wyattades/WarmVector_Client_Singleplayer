@@ -3,6 +3,7 @@ package Entities;
 import Entities.Projectiles.Projectile;
 import Entities.Weapons.*;
 import GameState.GameStateManager;
+import GameState.PlayState;
 import Main.Game;
 import Map.GeneratedEnclosure;
 import StaticManagers.AudioManager;
@@ -27,23 +28,21 @@ public class EntityManager {
     public ArrayList<Enemy> enemies;
     public ThisPlayer thisPlayer;
 
-    private ArrayList<Animation> animations;
-
     private GeneratedEnclosure map;
     private GameStateManager gsm;
+    private PlayState playState;
 
-    public EntityManager(GeneratedEnclosure _map, GameStateManager _gsm) {
+    public EntityManager(GeneratedEnclosure _map, GameStateManager _gsm, int level, PlayState _playState) {
         map = _map;
         gsm = _gsm;
-        generateEntities(gsm.level);
+        playState = _playState;
+
+        generateEntities(level);
     }
 
     public void draw(Graphics2D g) {
         for (Entity e : entities) {
             e.draw(g);
-        }
-        for (Animation a : animations) {
-            a.draw(g);
         }
     }
 
@@ -129,28 +128,22 @@ public class EntityManager {
             }
         }
 
-        for (int i = animations.size() - 1; i >= 0; i--) {
-            Animation a = animations.get(i);
-            a.update();
-            if (!a.state) animations.remove(i);
-        }
-
     }
 
     public void checkCollisions(Projectile p) {
+
         if (map.inverseRegion.intersects(p.collideBox)) {
-            map.addExplosion(p.x, p.y, p.explodeRadius, 8);
+            playState.addExplosion(p, GeneratedEnclosure.HIT_ANIMATION);
             p.state = false;
-            AudioManager.playSFX("bulletHit.wav");
-            animations.add(new Animation(p.x, p.y, p.orient + MyMath.PI, 1, GeneratedEnclosure.HIT_ANIMATION));
+            return;
         }
 
         for (Player player : players) {
             if (!player.equals(p.shooter) && p.collideBox.intersects(player.collideBox)) {
                 player.handleHit(p.damage, p.orient);
+                playState.addExplosion(p, player.hitAnimation);
                 p.state = false;
-                AudioManager.playSFX("bulletHit.wav");
-                animations.add(new Animation(p.x, p.y, p.orient + MyMath.PI, 1, player.hitAnimation));
+                return;
             }
         }
 
@@ -163,7 +156,6 @@ public class EntityManager {
         entities = new ArrayList<>();
         players = new ArrayList<>();
         thisPlayer = new ThisPlayer(0, 0, map);
-        animations = new ArrayList<>();
 
         Rect playerSpawn = map.cells.get(map.rooms.size() - 1);
 

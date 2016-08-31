@@ -18,11 +18,12 @@ public class OutputManager {
     private static List<String> defaultSettings = Arrays.asList(
             "fullscreen 1",
             "quality 0",
-            "anti_aliasing 0",
+            "cave_mode 0",
             "music_volume 2",
             "sfx_volume 2",
             "x_sensitivity 1",
-            "y_sensitivity 1"
+            "y_sensitivity 1",
+            "level 1"
     );
     private static int settingsSize = defaultSettings.size();
 

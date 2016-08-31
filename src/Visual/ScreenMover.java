@@ -10,13 +10,13 @@ import Main.Game;
 public class ScreenMover {
 
     public float screenVelX, screenVelY, screenPosX, screenPosY;
-    private float maxVel;
+//    private float maxVel;
     private Player player;
 
     public ScreenMover(Player player) {
         screenVelX = screenVelY = 0;
         screenPosX = screenPosY = 0;
-        maxVel = 24;
+//        maxVel = 24;
         this.player = player;
     }
 

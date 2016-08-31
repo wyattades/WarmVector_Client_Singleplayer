@@ -28,7 +28,8 @@ public class ButtonC {
     public ButtonType value;
 
     public enum ButtonType {
-        BEGIN,
+        NEWGAME,
+        NEXTLEVEL,
         CONTINUE,
         OPTIONS,
         HELP,

@@ -12,12 +12,10 @@ import java.awt.image.BufferedImage;
  */
 public class MouseCursor {
 
-//    private static Color CURSOR_COLOR = new Color(198, 198, 198);
-
     public static final int CURSOR = 1, CROSSHAIR = 2; //,NONE = 0;
     public int x, y;
 
-    private int w, h;
+    private int w, h, oldX, oldY;
     private BufferedImage sprite, cursor, crosshair;
     private Robot robot;
 
@@ -60,14 +58,6 @@ public class MouseCursor {
         g.drawImage(sprite, x - (int)(w * 0.5f), y - (int)(h * 0.5f), null);
     }
 
-//    public void updatePosition(int deltaX, int deltaY) {
-//        x = constrain((int) (x + x_sensitivity * deltaX), 0, Game.WIDTH);
-//        y = constrain((int) (y + y_sensitivity * deltaY), 0, Game.HEIGHT);
-////        x = constrain(x + InputManager.mouse.dx, 0, Game.WIDTH);
-////        y = constrain(y + InputManager.mouse.dy, 0, Game.HEIGHT);
-//
-//    }
-
     public void setPosition(int new_x, int new_y) {
         x = constrain(new_x, 0, Game.WIDTH);
         y = constrain(new_y, 0, Game.HEIGHT);
@@ -81,14 +71,14 @@ public class MouseCursor {
         return Math.min(Math.max(value, min), max);
     }
 
-//    public void updateOldPos() {
-//        oldPosX = x;
-//        oldPosY = y;
-//    }
-//
-//    public void setToOldPos() {
-//        robot.mouseMove(oldPosX, oldPosY);
-//        x = oldPosX;
-//        y = oldPosY;
-//    }
+    public void saveOldPos() {
+        oldX = x;
+        oldY = y;
+    }
+
+    public void loadOldPos() {
+        robot.mouseMove(oldX, oldY);
+        x = oldX;
+        y = oldY;
+    }
 }

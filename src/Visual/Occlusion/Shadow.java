@@ -17,7 +17,7 @@ import java.util.List;
 public class Shadow {
 
     // Color of shadow
-    private Color shadowFill;
+    private static final Color shadowFill = new Color(20,20,20);
 
     // These represent the map and the light location:
     private List<Segment> segments;
@@ -32,52 +32,30 @@ public class Shadow {
     // The output is a series of points that forms a visible area polygon
     public List<Util.Point> output;
 
-    private final Area border;
-
     private GeneratedEnclosure map;
 
-    //An object used to check if map.walls changes
-    private Line2D changedWall;
-
     // Construct an empty visibility set
-    public Shadow(GeneratedEnclosure map, Color shadowFill) {
+    public Shadow(GeneratedEnclosure _map) {
 
-        this.map = map;
-
-        changedWall = map.walls.get(map.walls.size()-1);
-
-        this.shadowFill = shadowFill;
-
-        //TODO: might have to change this when we add bedrock to the generatedEnclosure
-        border = new Area(new Rectangle2D.Float(
-                -map.width,
-                -map.height,
-                3 * map.width,
-                3 * map.height
-        ));
+        map = _map;
 
         output = new ArrayList<>();
         center = new Util.Point(0, 0);
-        defineSegments(map.walls);
+        updateSegments();
 
     }
 
-    public void defineSegments(List<Line2D> walls) {
+    public void updateSegments() {
         open = new ArrayList<>();
         segments = new ArrayList<>();
         endpoints = new ArrayList<>();
-        for (Line2D w : walls) {
+
+        for (Line2D w : map.walls) {
             addSegment((float) w.getX1() , (float) w.getY1(), (float) w.getX2(), (float) w.getY2());
         }
     }
 
     public void draw(Graphics2D g) {
-
-        //TODO: find a better way to check if map changes
-        if (!map.walls.get(map.walls.size()-1).equals(changedWall)) {
-            defineSegments(map.walls);
-            changedWall = map.walls.get(map.walls.size()-1);
-        }
 
         int[] x_points = new int[output.size()];
         int[] y_points = new int[x_points.length];
@@ -90,7 +68,7 @@ public class Shadow {
 
         Polygon cutout = new Polygon(x_points, y_points, x_points.length);
 
-        Area shadow = new Area(border);
+        Area shadow = new Area(map.innerRegion);
         shadow.subtract(new Area(cutout));
 
         g.setColor(shadowFill);
@@ -147,7 +125,7 @@ public class Shadow {
         return cross < 0;
     }
 
-    // A neat algorithm that works for reasons outside of my knowledge
+    // A neat algorithm that works for reasons outside of my knowledge (I didn't write this)
     private boolean _segment_in_front_of(Segment a, Segment b, Util.Point relativeTo) {
 
         boolean A1 = leftOf(a, interpolate(b.p1, b.p2, 0.01f));
@@ -186,12 +164,8 @@ public class Shadow {
         open.clear();
         float beginAngle = 0;
 
-        // At the beginning of the sweep we want to know which
-        // segments are active. The simplest way to do this is to make
-        // a pass collecting the segments, and make another pass to
-        // both collect and process them. However it would be more
-        // efficient to go through all the segments, figure out which
-        // ones intersect the initial sweep line, and then sort them.
+        // Iterate through all the segments, figure out which
+        // ones intersect the initial sweep line, and then sort them
         for (int i = 0; i < 2; i++) {
             for (EndPoint p : endpoints) {
                 if (i == 1 && p.angle > maxAngle) {

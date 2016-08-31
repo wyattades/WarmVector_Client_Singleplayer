@@ -16,8 +16,6 @@ public class GameStateManager {
     protected int currentState;
     protected int topState;
 
-    public int level;
-
     public MouseCursor cursor;
 
     public static final int
@@ -36,7 +34,6 @@ public class GameStateManager {
 
     public GameStateManager() {
 
-        level = 1;
         cursor = new MouseCursor();
         gameStates = new GameState[NUM_STATES];
         setState(INTRO);
@@ -58,9 +55,9 @@ public class GameStateManager {
             case PLAY:
                 gameStates[i] = new PlayState(this);
                 break;
-            case GAMEOVER:
-                gameStates[i] = new GameOverState(this);
-                break;
+//            case GAMEOVER:
+//                gameStates[i] = new GameOverState(this);
+//                break;
             case NEXTLEVEL:
                 gameStates[i] = new NextLevelState(this);
                 break;

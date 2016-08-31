@@ -39,8 +39,9 @@ public class GeneratedEnclosure {
     private List<Rectangle2D> openSpaces; // Adjacent regions to corridors (no obstacles can spawn here)
     public Area
             region, // Accessible area of map
-            inverseRegion; // Destructible wall
-    private Area borderRegion; // Indestructible wall
+            inverseRegion, // Destructible wall
+            borderRegion, // Indestructible wall
+            innerRegion;
     public List<Line2D> walls; //Stores line segments of map (these are used for shadowing, collision detection, etc.)
 
     //Private variables
@@ -58,15 +59,14 @@ public class GeneratedEnclosure {
             smoothingFactor = 0.5f,
             splitSizeFactor = 0.22f;
     private static final int
-            min_spacing = 4,
-            path_thickness = 6,
+            minSpacing = 4,
+            pathThickness = 6,
             smoothingIterations = 3,
             minRoomSize = 50,
+            minObstacleSize = 6,
             scale = 12; //The value in which the generated map is scaled by
     private static final boolean
             randomObstaclesOnEdges = true;
-
-    //TODO: scale everything while generating initial map, not after??
 
     public GeneratedEnclosure(int i_width, int i_height, float scaleFactor, boolean smooth) {
 
@@ -80,8 +80,11 @@ public class GeneratedEnclosure {
         Area totalArea = new Area(new Rectangle2D.Float(
                 -0.5f * width * scale, -0.5f * height * scale, 2.0f * width * scale, 2.0f * height * scale
         ));
+
+        innerRegion = new Area(new Rectangle2D.Float(0.0f, 0.0f, width * scale, height * scale));
+
         borderRegion = new Area(totalArea);
-        borderRegion.subtract(new Area(new Rectangle2D.Float(0.0f, 0.0f, width * scale, height * scale)));
+        borderRegion.subtract(innerRegion);
 
         //Keep looping until there are no null rooms (a null room
         //has about a 1 in 50 chance of spawning)
@@ -104,10 +107,10 @@ public class GeneratedEnclosure {
             for (Rect r : cells) {
                 int oldRight = r.x + r.w,
                         oldBottom = r.y + r.h;
-                r.w = MyMath.round(MyMath.random(r.w * roomReductionFactor, r.w - min_spacing), 2);
-                r.x = MyMath.round(MyMath.random(r.x + min_spacing * 0.5f, oldRight - r.w - min_spacing * 0.5f), 2);
-                r.h = MyMath.round(MyMath.random(r.h * roomReductionFactor, r.h - min_spacing), 2);
-                r.y = MyMath.round(MyMath.random(r.y + min_spacing * 0.5f, oldBottom - r.h - min_spacing * 0.5f), 2);
+                r.w = MyMath.round(MyMath.random(r.w * roomReductionFactor, r.w - minSpacing), 2);
+                r.x = MyMath.round(MyMath.random(r.x + minSpacing * 0.5f, oldRight - r.w - minSpacing * 0.5f), 2);
+                r.h = MyMath.round(MyMath.random(r.h * roomReductionFactor, r.h - minSpacing), 2);
+                r.y = MyMath.round(MyMath.random(r.y + minSpacing * 0.5f, oldBottom - r.h - minSpacing * 0.5f), 2);
             }
 
             //Copy all rooms into rooms list
@@ -132,7 +135,7 @@ public class GeneratedEnclosure {
                     }
 
                     //Creates one corridor in between a random rectangle from both sister lists
-                    Rect corridor = corridorBetween(cells, min_spacing, path_thickness, sister1, sister2);
+                    Rect corridor = corridorBetween(cells, minSpacing, pathThickness, sister1, sister2);
 
                     //If the corridor was created successfully, add it to the list of cells
                     if (corridor != null) {
@@ -251,64 +254,74 @@ public class GeneratedEnclosure {
         }
 
         return walls;
-
-//        float x = (float) border.getX(), y = (float) border.getY(), w = (float) border.getWidth(), h = (float) border.getHeight();
-//        walls.add(new Line2D.Float(x,y,x+w,y));
-//        walls.add(new Line2D.Float(x+w,y,x+w,y+h));
-//        walls.add(new Line2D.Float(x+w,y+h,x,y+h));
-//        walls.add(new Line2D.Float(x,y+h,x,y));
-
     }
 
-    //A randomly placed rectangular obstacle inside a room
+    // Randomly placed rectangular obstacles inside a room
     private List<Rectangle2D> objectsInRoom(Rect r) {
-
-        int amount = Math.round(MyMath.map(Math.min(3500, r.w * r.h),100,3500,1,5));
 
         List<Rectangle2D> objects = new ArrayList<>();
 
-        for (int i = 0; i < amount; i++) {
+        int maxWidth = (int)((r.w - pathThickness) * 0.5f),
+                maxHeight = (int)((r.h - pathThickness) * 0.5f);
+
+        if (maxWidth > minObstacleSize && maxHeight > minObstacleSize) {
+
+            int amount = Math.round(MyMath.map(Math.min(3500, r.w * r.h), 100, 3500, 1, 5));
+
+            for (int i = 0; i < amount; i++) {
             Rectangle2D object;
-            for (int j = 0; j < 10; j++) {
+                for (int j = 0; j < 10; j++) {
 
-                int w = (int) (MyMath.random(7, 15));
-                int h = (int) (MyMath.random(7, 15));
+                    int w = (int) (MyMath.random(minObstacleSize, maxWidth));
+                    int h = (int) (MyMath.random(minObstacleSize, maxHeight));
 
-                int x, y;
-                float random = MyMath.random(1.0f, 2.0f);
-                if (random > 1.75f) {
-                    x = r.x;
-                    y = r.y + r.h - h;
-                } else if (random > 1.5f) {
-                    x = r.x;
-                    y = r.y;
-                } else if (random > 1.25f) {
-                    x = r.x + r.w - w;
-                    y = r.y;
-                } else// if (random > 1.0f) {
-                {
-                    x = r.x + r.w - w;
-                    y = r.y + r.h - h;
-                }
+                    int x, y;
+                    float random = MyMath.random(0.0f, 1.0f);
+                    if (random > 0.75f) {
+                        x = r.x;
+                        y = r.y + r.h - h;
+                    } else if (random > 0.5f) {
+                        x = r.x;
+                        y = r.y;
+                    } else if (random > 0.25f) {
+                        x = r.x + r.w - w;
+                        y = r.y;
+                    } else {
+                        x = r.x + r.w - w;
+                        y = r.y + r.h - h;
+                    }
 
-                object = new Rectangle2D.Float(x, y, w, h);
+                    object = new Rectangle2D.Float(x, y, w, h);
 
-                boolean passes = true;
-                //test for adjacency to corridors
-                for (Rectangle2D openSpace : openSpaces) {
-                    if (object.intersects(openSpace)) {
-                        passes = false;
+                    boolean passes = true;
+                    //test for adjacency to corridors
+                    for (Rectangle2D openSpace : openSpaces) {
+                        if (object.intersects(openSpace)) {
+                            passes = false;
+                            break;
+                        }
+                    }
+
+                    if (passes) {
+                        objects.add(object);
                         break;
                     }
-                }
 
-                if (passes) {
-                    objects.add(object);
-                    break;
                 }
-
             }
         }
+//        // Object in middle of room (can't work atm)
+//        int xSpace = r.w - 2 * pathThickness;
+//        int ySpace = r.h - 2 * pathThickness;
+//        if (xSpace > pathThickness && ySpace > pathThickness) {
+//            int _w = Math.round(MyMath.random(pathThickness, xSpace)),
+//                _h = Math.round(MyMath.random(pathThickness, ySpace));
+//            objects.add(new Rectangle2D.Float(Math.round(MyMath.random(pathThickness, r.w - 2 * pathThickness)), Math.round(MyMath.random(pathThickness, r.h - 2 * pathThickness)), _w, _h));
+//        } else if (xSpace > pathThickness && ySpace > 2) {
+//
+//        } else if (ySpace > pathThickness && xSpace > 2) {
+//
+//        }
 
         return objects;
     }
