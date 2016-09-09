@@ -1,6 +1,11 @@
 # WarmVector_Client_Singleplayer
 
-TODO:
+## Download
+<b>Windows Installer</b>: www.wyattades.us/warmvector-setup.exe
+
+<b>Zipped Java</b>: www.wyattades.us/warmvector-archive.zip
+
+## Known Bugs (and TODO)
 - Create more weapon/bullet types, e.g. rockets, explosives, magic??
 - Continue developing level difficulty progression
 - Add random boxes to middle of rooms (with enough space to move around them!)
