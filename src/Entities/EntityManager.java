@@ -1,19 +1,21 @@
 package Entities;
 
-import Entities.Projectiles.Projectile;
-import Entities.Weapons.*;
+import Entities.Player.Enemy;
+import Entities.Player.Player;
+import Entities.Player.ThisPlayer;
 import GameState.GameStateManager;
-import GameState.PlayState;
 import Main.Game;
-import Map.GeneratedEnclosure;
-import StaticManagers.AudioManager;
+import Main.OutputManager;
+import UI.Map;
+import UI.Sprite;
 import Util.MyMath;
 import Util.Rect;
-import Visual.Animation;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/Entities/
@@ -21,23 +23,24 @@ import java.util.ArrayList;
  */
 public class EntityManager {
 
-    public ArrayList<Projectile> projectiles;
-    public ArrayList<Weapon> weapons;
-    public ArrayList<Entity> entities;
-    public ArrayList<Player> players;
-    public ArrayList<Enemy> enemies;
+    private List<Projectile> projectiles;
+    private List<Weapon> weapons;
+    private List<Entity> entities;
+    private List<Player> players;
+    private List<Enemy> enemies;
     public ThisPlayer thisPlayer;
 
-    private GeneratedEnclosure map;
     private GameStateManager gsm;
-    private PlayState playState;
 
-    public EntityManager(GeneratedEnclosure _map, GameStateManager _gsm, int level, PlayState _playState) {
+    private Map map;
+    private Random randomGenerate;
+
+    public EntityManager(GameStateManager _gsm, Map _map, int _level, Random _randomGenerate) {
         map = _map;
         gsm = _gsm;
-        playState = _playState;
+        randomGenerate = _randomGenerate;
 
-        generateEntities(level);
+        generateEntities(_level);
     }
 
     public void draw(Graphics2D g) {
@@ -58,16 +61,14 @@ public class EntityManager {
             if (p.shooting && p.weapon != null && p.weapon.ammo > 0 &&
                     Game.currentTimeMillis() - p.shootTime > p.weapon.rate) {
 
+                p.weapon.shoot();
+
                 for (int j = 0; j < p.weapon.amountPerShot; j++) {
-                    AudioManager.playSFX("m4_shoot.wav");
-                    Projectile newProjectile = new Projectile(p);
+                    Projectile newProjectile = new Projectile(gsm, p);
                     projectiles.add(newProjectile);
                     entities.add(newProjectile);
                 }
                 p.shootTime = Game.currentTimeMillis();
-
-                //Subtract one ammo from player
-                p.weapon.changeAmmo(-1);
 
             }
 
@@ -92,7 +93,7 @@ public class EntityManager {
                 enemies.remove(i);
                 // If there are no enemies left, move on to next level
                 if (enemies.size() == 0) {
-                    gsm.setTopState(GameStateManager.NEXTLEVEL);
+                    gsm.setState(GameStateManager.NEXTLEVEL, GameStateManager.TOP);
                 }
             }
         }
@@ -112,7 +113,6 @@ public class EntityManager {
 
             p.move();
             p.updateCollideBox();
-            checkCollisions(p);
 
             if (!p.state) {
                 projectiles.remove(i);
@@ -130,23 +130,45 @@ public class EntityManager {
 
     }
 
-    public void checkCollisions(Projectile p) {
-
-        if (map.inverseRegion.intersects(p.collideBox)) {
-            playState.addExplosion(p, GeneratedEnclosure.HIT_ANIMATION);
-            p.state = false;
-            return;
-        }
+    private Hittable checkDirectHit(Projectile p) {
 
         for (Player player : players) {
-            if (!player.equals(p.shooter) && p.collideBox.intersects(player.collideBox)) {
-                player.handleHit(p.damage, p.orient);
-                playState.addExplosion(p, player.hitAnimation);
-                p.state = false;
-                return;
+            if (player.getId() != p.shooter.getId() && player.handleDirectHit(p)) {
+                return player;
             }
         }
 
+        if (map.handleDirectHit(p)) {
+            return map;
+        }
+
+        return null;
+    }
+
+    public List<Sprite> getHitAnimations() {
+
+        List<Sprite> hitAnimations = new ArrayList<>();
+
+        for (Projectile p : projectiles) {
+            Hittable hitThing = checkDirectHit(p);
+            if (hitThing != null) {
+                p.state = false;
+
+                // TODO: instead, add these to graphicsManager
+                hitAnimations.add(new Sprite(p.x, p.y, p.orient + MyMath.PI, 1, false, hitThing.getHitAnimation()));
+
+                if (hitThing.getId() != map.getId()) map.handleIndirectHit(p);
+
+                for (Player player : players) {
+                    if (hitThing.getId() != player.getId() && player.handleIndirectHit(p)) {
+                        double angle = Math.atan2(player.y - p.y, player.x - p.x);
+                        hitAnimations.add(new Sprite(player.x, player.y, angle, 1, false, player.getHitAnimation()));
+                    }
+                }
+            }
+        }
+
+        return hitAnimations;
     }
 
     public void generateEntities(int difficultyFactor) {
@@ -155,23 +177,22 @@ public class EntityManager {
         weapons = new ArrayList<>();
         entities = new ArrayList<>();
         players = new ArrayList<>();
-        thisPlayer = new ThisPlayer(0, 0, map);
+        thisPlayer = new ThisPlayer(gsm, map);
 
         Rect playerSpawn = map.cells.get(map.rooms.size() - 1);
 
         putEntity(thisPlayer, playerSpawn);
         players.add(thisPlayer);
 
-        Weapon spawnWeapon = randomWeapon();
-        spawnWeapon.orient = MyMath.random(0.0f, 6.29f);
+        Weapon spawnWeapon = randomWeapon(difficultyFactor);
         putEntity(spawnWeapon, playerSpawn);
         weapons.add(spawnWeapon);
 
         for (Rect room : map.rooms) {
             if (!room.equals(playerSpawn)) {
                 for (int i = 0; i < difficultyFactor; i++) {
-                    Enemy newEnemy = new Enemy(0, 0, MyMath.random(0.0f, 6.29f), map, thisPlayer);
-                    newEnemy.setWeapon(randomWeapon());
+                    Enemy newEnemy = new Enemy(gsm, MyMath.random(0.0, MyMath.TWO_PI, randomGenerate), map, thisPlayer);
+                    newEnemy.setWeapon(randomWeapon(difficultyFactor));
                     putEntity(newEnemy, room);
                     enemies.add(newEnemy);
                     players.add(newEnemy);
@@ -182,45 +203,39 @@ public class EntityManager {
 
     private void putEntity(Entity entity, Rect room) {
 
-        Rectangle2D checkCollider = new Rectangle2D.Float(randomRoomX(room),randomRoomY(room),entity.w,entity.h);
+        Rectangle2D checkCollider = new Rectangle2D.Double(randomRoomX(room),randomRoomY(room),entity.w,entity.h);
         int i = 0;
         while(!map.region.contains(checkCollider)) {
             checkCollider.setRect(randomRoomX(room), randomRoomY(room), entity.w, entity.h);
             i++;
             if (i > 20) {
-                System.out.println("No space for entity to be spawned at " + entity.w + " , " + entity.h);
+                OutputManager.printLog("No space for entity to be spawned at " + entity.w + " , " + entity.h);
                 return;
             }
         }
 
-        entity.x = (float) (checkCollider.getX()+checkCollider.getWidth() * 0.5f);
-        entity.y = (float) (checkCollider.getY()+checkCollider.getHeight() * 0.5f);
+        entity.x = checkCollider.getX()+checkCollider.getWidth() * 0.5;
+        entity.y = checkCollider.getY()+checkCollider.getHeight() * 0.5;
 
         entities.add(entity);
 
     }
 
     private int randomRoomX(Rect r) {
-        return Math.round( MyMath.random( r.x , r.x + r.w) );
+        return MyMath.round(MyMath.random(r.x , r.x + r.w, randomGenerate));
     }
 
     private int randomRoomY(Rect r) {
-        return Math.round( MyMath.random( r.y , r.y + r.h) );
+        return MyMath.round( MyMath.random(r.y , r.y + r.h, randomGenerate));
     }
 
-    private Weapon randomWeapon() {
-        switch ((int) Math.floor(MyMath.random(0, 4))) {
-            case (0):
-                return new M4rifle();
-            case (1):
-                return new LMG();
-            case (2):
-                return new Remington();
-            case (3):
-                return new Sniper();
-            default:
-                return null;
-        }
+    private Weapon randomWeapon(int level) {
+
+        int randomNumber;
+        do randomNumber = (int) MyMath.random(0.0, level * 2.0, randomGenerate);
+        while (randomNumber > Weapon.TYPE_AMOUNT);
+
+        return Weapon.getType(gsm, randomNumber);
     }
 
     public void attemptWeaponChange() {
@@ -246,4 +261,13 @@ public class EntityManager {
             thisPlayer.setWeapon(null);
         }
     }
+
+    public List<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public ThisPlayer getThisPlayer() {
+        return thisPlayer;
+    }
+
 }

@@ -1,7 +1,6 @@
 package GameState;
 
-import Main.Game;
-import StaticManagers.InputManager;
+import Util.MyInputEvent;
 
 import java.awt.*;
 
@@ -13,23 +12,20 @@ public abstract class GameState {
 
     protected GameStateManager gsm;
 
-    public GameState(GameStateManager gsm) {
-        this.gsm = gsm;
+    public GameState(GameStateManager _gsm) {
+        gsm = _gsm;
     }
+
+    public abstract void load();
 
     public abstract void init();
 
-    public abstract void unload();
-
     public abstract void draw(Graphics2D g);
 
-    public abstract void update();
+    public abstract void update(double deltaTime);
 
-    public abstract void inputHandle(InputManager inputManager);
+    public abstract void inputHandle(MyInputEvent event);
 
-    protected void drawBackground(Graphics2D g, Color color) {
-        g.setColor(color);
-        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
-    }
+    public abstract void unload();
 
 }

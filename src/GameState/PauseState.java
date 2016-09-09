@@ -1,13 +1,11 @@
 package GameState;
 
-import Main.Game;
-import StaticManagers.InputManager;
-import Visual.ButtonC;
-import Visual.MouseCursor;
-import Visual.Slider;
+import UI.ButtonC;
+import UI.MouseCursor;
+import Util.MyInputEvent;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.awt.event.KeyEvent;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -15,23 +13,20 @@ import java.util.ArrayList;
  */
 public class PauseState extends MenuState {
 
-    public PauseState(GameStateManager gsm) {
-        super(gsm);
+    public PauseState(GameStateManager _gsm) {
+        super(_gsm, Main.Window.HEIGHT - 2 * ButtonC.BUTTON_HEIGHT);
     }
 
-    protected void initButtons() {
-        buttons = new ArrayList<>();
-        sliders = new ArrayList<>();
-        initDefault();
-        addButton("MAIN MENU", ButtonC.ButtonType.MAINMENU);
-        addButton("RESUME", ButtonC.ButtonType.RESUME);
-    }
+    public void load() {}
 
     public void init() {
-        startY = Game.HEIGHT - ButtonC.BUTTON_HEIGHT * 3;
-        initButtons();
-        gsm.cursor.setSprite(MouseCursor.CURSOR);
+        super.init();
         gsm.cursor.saveOldPos();
+    }
+
+    protected void customMainInit() {
+        addButton("MAIN MENU", ButtonC.ButtonType.MAINMENU);
+        addButton("RESUME", ButtonC.ButtonType.RESUME);
     }
 
     public void unload() {
@@ -40,29 +35,17 @@ public class PauseState extends MenuState {
     }
 
     public void draw(Graphics2D g) {
-
-        for (Slider s : sliders) {
-            s.draw(g);
-        }
-
-        for (ButtonC b : buttons) {
-            b.update(gsm.cursor.x, gsm.cursor.y);
-            b.draw(g);
-        }
-
-        drawSpecific(g);
+        super.draw(g);
 
         gsm.cursor.draw(g);
-
     }
 
-    public void update() {}
+    public void update(double deltaTime) {}
 
-    public void inputHandle(InputManager inputManager) {
-        super.inputHandle(inputManager);
-        if (inputManager.isKeyPressed("ESC") && Game.currentTimeMillis() - inputManager.getKeyTime("ESC") > 400) {
-            gsm.unloadState(GameStateManager.PAUSE);
-            inputManager.setKeyTime("ESC", Game.currentTimeMillis());
+    public void inputHandle(MyInputEvent event) {
+        super.inputHandle(event);
+        if (event.type == MyInputEvent.KEY_DOWN && event.code == KeyEvent.VK_ESCAPE) {
+            gsm.unloadState(GameStateManager.TOP);
         }
     }
 

@@ -1,13 +1,10 @@
 package GameState;
 
-import Main.Game;
-import StaticManagers.OutputManager;
-import Visual.ButtonC;
-import Visual.MouseCursor;
-import Visual.Slider;
+import Main.OutputManager;
+import Main.Window;
+import UI.ButtonC;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/GameState/
@@ -17,18 +14,17 @@ public class NextLevelState extends MenuState {
 
     private boolean win;
 
-    public NextLevelState(GameStateManager gsm) {
-        super(gsm);
+    public NextLevelState(GameStateManager _gsm) {
+        super(_gsm, Window.HEIGHT - ButtonC.BUTTON_HEIGHT);
     }
 
-    protected void initButtons() {
-        buttons = new ArrayList<>();
-        sliders = new ArrayList<>();
-        initDefault();
+    public void load() {}
+
+    protected void customMainInit() {
         addButton("MAIN MENU", ButtonC.ButtonType.MAINMENU);
 
         int level = OutputManager.getSetting("level");
-        if (level < GameStateManager.MAXLEVEL) {
+        if (level < PlayState.MAXLEVEL) {
             addButton("NEXT LEVEL", ButtonC.ButtonType.NEXTLEVEL);
             OutputManager.setSetting("level", level + 1);
         } else {
@@ -36,35 +32,19 @@ public class NextLevelState extends MenuState {
         }
     }
 
-    public void init() {
-        win = false;
-        startY = Game.HEIGHT - 100;
-        gsm.cursor.setSprite(MouseCursor.CURSOR);
-        initButtons();
-    }
-
     public void unload() {}
 
     public void draw(Graphics2D g) {
 
-       // drawBackground(g, Theme.menuBackground);
-
-        for (ButtonC b : buttons) {
-            b.update(gsm.cursor.x, gsm.cursor.y);
-            b.draw(g);
-        }
-
-        for (Slider s : sliders) {
-            s.draw(g);
-        }
+       super.draw(g);
 
         if (win) {
             String text = "YOU WIN! (work in progress btw)";
-            g.setColor(ButtonC.buttonOverOld);
+            g.setColor(ButtonC.COLOR_OVER);
             g.drawString(
                     text,
-                    Game.WIDTH * 0.5f - (int) g.getFontMetrics().getStringBounds(text, g).getWidth() * 0.5f,
-                    Game.HEIGHT * 0.5f - 150
+                    (int)(Main.Window.WIDTH * 0.5 - g.getFontMetrics().getStringBounds(text, g).getWidth() * 0.5),
+                    (int)(Window.HEIGHT * 0.5 - 150.0)
             );
         }
 
@@ -72,8 +52,6 @@ public class NextLevelState extends MenuState {
 
     }
 
-    public void update() {
-
-    }
+    public void update(double deltaTime) {}
 
 }

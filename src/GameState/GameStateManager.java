@@ -1,7 +1,9 @@
 package GameState;
 
-import StaticManagers.InputManager;
-import Visual.MouseCursor;
+import Main.*;
+import Main.Window;
+import UI.MouseCursor;
+import Util.MyInputEvent;
 
 import java.awt.*;
 
@@ -11,127 +13,148 @@ import java.awt.*;
  */
 public class GameStateManager {
 
-    protected GameState[] gameStates;
-
-    protected int currentState;
-    protected int topState;
-
+    // This is the only object visible in all gameStates
+    // TODO put somewhere else?
     public MouseCursor cursor;
 
     public static final int
-            MAXLEVEL = 5,
+        // States
+        INTRO = 0,
+        MAINMENU = 1,
+        PLAY = 2,
+        NEXTLEVEL = 3,
+        FADEIN = 4,
+        PAUSE = 5,
+        FADEOUT = 6,
 
-            NUM_STATES = 8,
+        // Layers
+        MAIN = 0,
+        TOP = 1,
+        LOADING = 2;
+    
+    private GameState[] layers;
 
-            INTRO = 0,
-            MAINMENU = 1,
-            PLAY = 2,
-            GAMEOVER = 3,
-            NEXTLEVEL = 4,
-            FADEIN = 5,
-            PAUSE = 6,
-            FADEOUT = 7;
+    public AssetManager assetManager;
+    public AudioManager audioManager;
+    public GraphicsManager graphicsManager;
+    public Window window;
 
-    public GameStateManager() {
+    public boolean running;
 
-        cursor = new MouseCursor();
-        gameStates = new GameState[NUM_STATES];
-        setState(INTRO);
+    public GameStateManager(AssetManager _assetManager, AudioManager _audioManager, GraphicsManager _graphicsManager, Window _window) {
+        assetManager = _assetManager;
+        audioManager = _audioManager;
+        graphicsManager = _graphicsManager;
+        window = _window;
+
+        running = true;
+
+        layers = new GameState[3];
+
+        setState(INTRO, MAIN);
 
     }
 
-    private void initState(int i) {
+    private void initState(int state, int layer) {
 
-        switch (i) {
+        switch (state) {
             case INTRO:
-                gameStates[i] = new IntroState(this);
+                layers[layer] = new IntroState(this);
                 break;
             case MAINMENU:
-                gameStates[i] = new StartMenuState(this);
+                layers[layer] = new StartMenuState(this);
                 break;
             case FADEIN:
-                gameStates[i] = new FadeInState(this);
+                layers[layer] = new FadeInState(this);
                 break;
             case PLAY:
-                gameStates[i] = new PlayState(this);
+                layers[layer] = new PlayState(this);
                 break;
-//            case GAMEOVER:
-//                gameStates[i] = new GameOverState(this);
-//                break;
             case NEXTLEVEL:
-                gameStates[i] = new NextLevelState(this);
+                layers[layer] = new NextLevelState(this);
                 break;
             case PAUSE:
-                gameStates[i] = new PauseState(this);
+                layers[layer] = new PauseState(this);
                 break;
             case FADEOUT:
-                gameStates[i] = new FadeOutState(this);
+                layers[layer] = new FadeOutState(this);
                 break;
         }
-        gameStates[i].init();
 
-    }
+        layers[layer].load();
 
-    public void setState(int i) {
-
-        int previousState = currentState;
-        currentState = i;
-        if (gameStates[previousState] != null) unloadState(previousState);
-        initState(i);
-
-    }
-
-    public void setTopState(int i) {
-
-        topState = i;
-        initState(i);
-
-    }
-
-    public void unloadState(int i) {
-
-        gameStates[i].unload();
-        gameStates[i] = null;
-
-    }
-
-    public void inputHandle(InputManager inputManager) {
-
-        if (gameStates[topState] != null) {
-            gameStates[topState].inputHandle(inputManager);
-        } else if (gameStates[currentState] != null) {
-            gameStates[currentState].inputHandle(inputManager);
+        if (layer == TOP) {
+            while(!assetManager.isAvailable());
+            layers[TOP].init();
         } else {
-            System.out.println("gameState is null during inputHandle()");
-            System.exit(1);
+            if (assetManager.isAvailable()) {
+                layers[layer].init();
+            } else {
+                layers[LOADING] = new LoadingState(this);
+                layers[LOADING].init();
+            }
         }
 
     }
 
-    public void update() {
-        if (gameStates[topState] != null) {
-            gameStates[topState].update();
-        } else if (gameStates[currentState] != null) {
-            gameStates[currentState].update();
-        } else {
-            System.out.println("gameState is null during update()");
-            System.exit(1);
-        }
+    public void setState(int state, int layer) {
+        if (layers[layer] != null) unloadState(layer);
+        initState(state, layer);
+    }
 
+
+    public void unloadState(int layer) {
+        layers[layer].unload();
+
+        while(!assetManager.isAvailable());
+
+        layers[layer] = null;
+    }
+
+
+    public synchronized void inputHandle(MyInputEvent event) {
+        if (layers[LOADING] == null) {
+            if (layers[TOP] != null) {
+                layers[TOP].inputHandle(event);
+            } else if (layers[MAIN] != null) {
+                layers[MAIN].inputHandle(event);
+            } else {
+                OutputManager.printLog("Warning: All layers are null during inputHandle()");
+            }
+        }
+    }
+
+    public void update(double deltaTime) {
+        if (layers[LOADING] != null) {
+            layers[LOADING].update(deltaTime);
+            if (assetManager.isAvailable()) {
+                layers[LOADING] = null;
+                layers[MAIN].init();
+            }
+        } else if (layers[TOP] != null) {
+            layers[TOP].update(deltaTime);
+        } else if (layers[MAIN] != null) {
+            layers[MAIN].update(deltaTime);
+        } else {
+            OutputManager.printLog("Warning: All layers are null during update()");
+        }
     }
 
     public void draw(Graphics2D g) {
-
-        if (gameStates[currentState] != null) {
-            gameStates[currentState].draw(g);
-            if (gameStates[topState] != null) {
-                gameStates[topState].draw(g);
+        if (layers[LOADING] != null) {
+            layers[LOADING].draw(g);
+        } else if (layers[MAIN] != null) {
+            layers[MAIN].draw(g);
+            if (layers[TOP] != null) {
+                layers[TOP].draw(g);
             }
         } else {
-            System.out.println("gameState is null during draw()");
-            System.exit(1);
+            OutputManager.printLog("Warning: All layers are null during draw()");
         }
+    }
 
+    public void quit() {
+        running = false;
     }
 
 }

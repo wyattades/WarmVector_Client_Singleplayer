@@ -1,12 +1,15 @@
 package GameState;
 
-import Main.Game;
-import StaticManagers.InputManager;
-import StaticManagers.OutputManager;
-import Visual.ButtonC;
-import Visual.Slider;
+import Main.OutputManager;
+import Main.Window;
+import UI.ButtonC;
+import UI.MouseCursor;
+import UI.Slider;
+import UI.TextDisplay;
+import Util.MyInputEvent;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
@@ -15,11 +18,19 @@ import java.util.ArrayList;
  */
 public abstract class MenuState extends GameState {
 
-    protected static final int MENU_WIDTH = 480;
-    private static final Font textFont = new Font("Dotum Bold", Font.BOLD, (int) (30.0f * Game.SCALE));
+    protected static final int
+            MENU_WIDTH = (int) (480.0 * Window.SCALE),
+            BORDER_DIST = (int) (50.0 * Window.SCALE),
+            RIGHT_ALIGN_X = Main.Window.WIDTH - BORDER_DIST,
+            TEXT_HEIGHT = (int) (30.0 * Window.SCALE),
+            DISPLAY_DIST = (int) (ButtonC.BUTTON_HEIGHT * 1.4);
+    protected static final Font TEXT_FONT = new Font("Dotum Bold", Font.BOLD, TEXT_HEIGHT);
 
     protected ArrayList<ButtonC> buttons;
     protected ArrayList<Slider> sliders;
+    protected ArrayList<TextDisplay> strings;
+
+    protected Color buttonOver;
 
     protected enum CurrentPage {
         MAIN,
@@ -29,186 +40,230 @@ public abstract class MenuState extends GameState {
     }
     protected CurrentPage currentPage;
 
-    protected int startY;
+    private int startY;
+    protected int drawY;
 
-    private static final int buttonDist = (int)(ButtonC.BUTTON_HEIGHT * 1.4);
+    protected Window window;
 
-    public MenuState(GameStateManager gsm) {
-        super(gsm);
+    public MenuState(GameStateManager _gsm, int _startY) {
+        super(_gsm);
+        window = _gsm.window;
+        startY = _startY;
+
+        buttons = new ArrayList<>();
+        sliders = new ArrayList<>();
+        strings = new ArrayList<>();
+
+        buttonOver = ButtonC.COLOR_OVER;
+    }
+
+    public void init() {
+        setPage(CurrentPage.MAIN);
+        gsm.cursor.setSprite(MouseCursor.CURSOR);
+    }
+
+    protected abstract void customMainInit();
+
+    private void setPage(CurrentPage page) {
+
+        currentPage = page;
+
+        drawY = startY;
+
+        buttons.clear();
+        sliders.clear();
+        strings.clear();
+
+        switch (page) {
+            case MAIN:
+                addButton("QUIT", ButtonC.ButtonType.QUIT);
+                addButton("HELP", ButtonC.ButtonType.HELP);
+                addButton("CREDITS", ButtonC.ButtonType.CREDITS);
+                addButton("OPTIONS", ButtonC.ButtonType.OPTIONS);
+                customMainInit();
+                break;
+
+            case HELP:
+                addButton("BACK", ButtonC.ButtonType.BACK);
+                addLineBreak();
+                addText("enemies to progress", TEXT_FONT);
+                addText("Clear the map of", TEXT_FONT);
+                addText("OBJECTIVE:", ButtonC.BUTTON_FONT);
+                addLineBreak();
+                addText("ESC: pause", TEXT_FONT);
+                addText("R: reload", TEXT_FONT);
+                addText("RIGHT CLICK: pickup/drop", TEXT_FONT);
+                addText("LEFT CLICK: shoot", TEXT_FONT);
+                addText("W-A-S-D: move", TEXT_FONT);
+                addText("CONTROLS:", ButtonC.BUTTON_FONT);
+                break;
+
+            case CREDITS:
+                addButton("BACK", ButtonC.ButtonType.BACK);
+                addLineBreak();
+                addText("Illegal Sources", TEXT_FONT);
+                addText("MUSIC BY", ButtonC.BUTTON_FONT);
+                addLineBreak();
+                addText("Wyatt Ades", TEXT_FONT);
+                addText("ART BY", ButtonC.BUTTON_FONT);
+                addLineBreak();
+                addText("Wyatt Ades", TEXT_FONT);
+                addText("CODING BY", ButtonC.BUTTON_FONT);
+                break;
+
+            case OPTIONS:
+                addButton("BACK", ButtonC.ButtonType.BACK);
+
+                addSlider("Fix Bugs", "fix_bugs", new String[]{"Off", "On"});
+                addSlider("Cave Mode", "cave_mode", new String[]{"Off", "On"});
+                addSlider("Quality", "quality", new String[]{"Good", "Great"});
+                addSlider("Music Level", "music_volume", new String[]{"0", "25", "50", "75", "100"});
+                addSlider("SFX Level", "sfx_volume", new String[]{"0", "25", "50", "75", "100"});
+                break;
+        }
+    }
+
+    private void addLineBreak() {
+        drawY -= DISPLAY_DIST;
+    }
+
+    protected void addText(String line, Font font) {
+        strings.add(new TextDisplay(line, RIGHT_ALIGN_X, drawY, font));
+        addLineBreak();
     }
 
     protected void addButton(String name, ButtonC.ButtonType value) {
-        int y = startY;
-        for (ButtonC b : buttons) {
-            if (y >= b.y) y = b.y - buttonDist;
-        }
-        if (sliders != null) {
-            for (Slider s : sliders) {
-                if (y >= s.y) y = s.y - buttonDist;
-            }
-        }
-        buttons.add(new ButtonC(name, value, Game.WIDTH - 50, y));
+        buttons.add(new ButtonC(name, RIGHT_ALIGN_X, drawY, ButtonC.BUTTON_FONT, value));
+        addLineBreak();
     }
 
     protected void addSlider(String text, String name, String[] options) {
-        int y = startY;
-        for (ButtonC b : buttons) {
-            if (y >= b.y) y = b.y - buttonDist;
-        }
-        for (Slider s : sliders) {
-            if (y >= s.y) y = s.y - buttonDist;
-        }
-        sliders.add(new Slider(Game.WIDTH - 50, y, text, name, options, OutputManager.getSetting(name)));
-    }
-
-    protected abstract void initButtons();
-
-    protected void initDefault() {
-        currentPage = CurrentPage.MAIN;
-        addButton("QUIT", ButtonC.ButtonType.QUIT);
-        addButton("HELP", ButtonC.ButtonType.HELP);
-        addButton("CREDITS", ButtonC.ButtonType.CREDITS);
-        addButton("OPTIONS", ButtonC.ButtonType.OPTIONS);
-    }
-
-    private void initSettings() {
-        addSlider("Fullscreen", "fullscreen", new String[]{"Off", "On"});
-        addSlider("Cave Mode", "cave_mode", new String[]{"Off", "On"});
-        addSlider("Quality", "quality", new String[]{"Good", "Great"});
-        addSlider("Music Level", "music_volume", new String[]{"0", "25", "50", "75", "100"});
-        addSlider("SFX Level", "sfx_volume", new String[]{"0", "25", "50", "75", "100"});
-    }
-
-    private void pageDown() {
-        buttons = new ArrayList<>();
-        sliders = new ArrayList<>();
-        addButton("BACK", ButtonC.ButtonType.BACK);
-    }
-
-    protected void drawSpecific(Graphics2D g) {
-        if (currentPage == CurrentPage.HELP) {
-            g.setColor(ButtonC.buttonDefault);
-            g.setFont(ButtonC.BUTTON_FONT);
-            int x = Game.WIDTH - MENU_WIDTH + 20,
-                    y = 400;
-            g.drawString("CONTROLS:", x, y);
-            g.setFont(textFont);
-            g.drawString("W-A-S-D: move", x, y + ButtonC.BUTTON_HEIGHT);
-            g.drawString("LEFT CLICK: shoot", x, y + 2 * ButtonC.BUTTON_HEIGHT);
-            g.drawString("RIGHT CLICK: change weapon", x, y + 3 * ButtonC.BUTTON_HEIGHT);
-            g.drawString("ESC: pause", x, y + 4 * ButtonC.BUTTON_HEIGHT);
-            g.drawString("Clear the map of", x, y + 6 * ButtonC.BUTTON_HEIGHT);
-            g.drawString("enemies to progress!", x, y + 7 * ButtonC.BUTTON_HEIGHT);
-
-        } else if (currentPage == CurrentPage.CREDITS) {
-            g.setColor(ButtonC.buttonDefault);
-            g.setFont(ButtonC.BUTTON_FONT);
-            int x = Game.WIDTH - MENU_WIDTH + 20,
-                    y = 400;
-            g.drawString("CREDITS:", x, y);
-            g.setFont(textFont);
-            g.drawString("CODING", x + 50, y + 2 * ButtonC.BUTTON_HEIGHT);
-            g.drawString("Wyatt Ades", x + 50, y + 3 * ButtonC.BUTTON_HEIGHT);
-            g.drawString("ART", x + 50, y + 5 * ButtonC.BUTTON_HEIGHT);
-            g.drawString("Wyatt Ades", x + 50, y + 6 * ButtonC.BUTTON_HEIGHT);
-            g.drawString("MUSIC", x + 50, y + 8 * ButtonC.BUTTON_HEIGHT);
-            g.drawString("Illegal sources", x + 50, y + 9 * ButtonC.BUTTON_HEIGHT);
-        }
+        sliders.add(new Slider(RIGHT_ALIGN_X, drawY - DISPLAY_DIST, text, name, options, OutputManager.getSetting(name)));
+        addLineBreak();
     }
 
     protected void buttonOutcome(ButtonC.ButtonType value) {
         switch (value) {
             case OPTIONS:
-                currentPage = CurrentPage.OPTIONS;
-                pageDown();
-                initSettings();
+                setPage(CurrentPage.OPTIONS);
                 break;
             case HELP:
-                currentPage = CurrentPage.HELP;
-                pageDown();
+                setPage(CurrentPage.HELP);
                 break;
             case NEXTLEVEL:
-                gsm.unloadState(GameStateManager.NEXTLEVEL);
-                gsm.setState(GameStateManager.PLAY);
+                gsm.setState(GameStateManager.FADEOUT, GameStateManager.TOP);
                 break;
             case CONTINUE:
-                gsm.setTopState(GameStateManager.FADEOUT);
+                gsm.setState(GameStateManager.FADEOUT, GameStateManager.TOP);
                 break;
             case QUIT:
-                Game.running = false;
+                gsm.quit();
                 break;
             case RESUME:
-                gsm.unloadState(GameStateManager.PAUSE);
+                gsm.unloadState(GameStateManager.TOP);
                 break;
             case NEWGAME:
                 OutputManager.setSetting("level", 1);
-                gsm.setTopState(GameStateManager.FADEOUT);
+                gsm.setState(GameStateManager.FADEOUT, GameStateManager.TOP);
                 break;
             case RESTART:
-                gsm.setState(GameStateManager.PLAY);
+                gsm.setState(GameStateManager.PLAY, GameStateManager.MAIN);
                 break;
             case BACK:
-                currentPage = CurrentPage.MAIN;
-                initButtons();
+                setPage(CurrentPage.MAIN);
                 break;
             case CREDITS:
-                currentPage = CurrentPage.CREDITS;
-                pageDown();
+                setPage(CurrentPage.CREDITS);
                 break;
             case MAINMENU:
-                gsm.unloadState(gsm.topState);
-                gsm.setState(GameStateManager.MAINMENU);
+                gsm.setState(GameStateManager.MAINMENU, GameStateManager.MAIN);
+                gsm.unloadState(GameStateManager.TOP);
+                gsm.cursor.setSprite(MouseCursor.CURSOR);
                 break;
             default:
-                System.out.println("Invalid button value: " + value);
+                OutputManager.printError("Invalid button value: " + value);
+                System.exit(1);
                 break;
+        }
+    }
+
+    public void draw(Graphics2D g) {
+        for (Slider s : sliders) {
+            s.draw(g);
+        }
+        for (TextDisplay t : strings) {
+            t.draw(g);
+        }
+        for (ButtonC b : buttons) {
+            if (b.mouseOver(gsm.cursor.x, gsm.cursor.y)) {
+                b.setColor(buttonOver);
+            } else {
+                b.setColor(ButtonC.COLOR_DEFAULT);
+            }
+            b.draw(g);
         }
     }
 
     private Slider currentSlider = null;
 
-    public void inputHandle(InputManager inputManager) {
-        gsm.cursor.setPosition(inputManager.mouse.x, inputManager.mouse.y);
+    public void inputHandle(MyInputEvent event) {
 
-        boolean mousePressed = inputManager.isMousePressed("LEFTMOUSE");
+        switch(event.type) {
+            case MyInputEvent.MOUSE_MOVE:
 
-        if (mousePressed || inputManager.isMouseClicked("LEFTMOUSE")) {
+                gsm.cursor.setPosition(event.x, event.y);
 
-            for (ButtonC b : buttons) {
-                if (b.overBox &&
-                        Game.currentTimeMillis() - inputManager.getMouseTime("LEFTMOUSE") > 400) {
-                    inputManager.setMouseTime("LEFTMOUSE", Game.currentTimeMillis());
-                    buttonOutcome(b.value);
-                    break;
+                if (currentSlider != null) {
+                    currentSlider.slide(gsm.cursor.x - currentSlider.dragPos);
                 }
-            }
 
-        }
+                break;
+            case MyInputEvent.MOUSE_DOWN:
 
-        if (mousePressed) {
-            if (currentSlider == null) {
-                for (Slider s : sliders) {
-                    if (s.overBox(gsm.cursor.x, gsm.cursor.y)) {
-                        s.pressed = true;
-                        s.setDragPos(gsm.cursor.x);
-                        currentSlider = s;
+                if (event.code == MouseEvent.BUTTON1) {
+                    for (ButtonC b : buttons) {
+                        if (b.mouseOver) {
+                            buttonOutcome(b.type);
+                            break;
+                        }
+                    }
+
+                    if (currentSlider == null) {
+                        for (Slider s : sliders) {
+                            if (s.overBox(gsm.cursor.x, gsm.cursor.y)) {
+                                s.pressed = true;
+                                s.setDragPos(gsm.cursor.x);
+                                currentSlider = s;
+                                break;
+                            }
+                        }
                     }
                 }
-            }
 
-        } else {
+                break;
+            case MyInputEvent.MOUSE_UP:
 
-            if (currentSlider != null) {
-                currentSlider.snapSlider();
-                currentSlider.pressed = false;
-                OutputManager.setSetting(currentSlider.name, currentSlider.current_option);
-                currentSlider = null;
-            }
+                if (event.code == MouseEvent.BUTTON1) {
+                    if (currentSlider != null) {
+                        currentSlider.snapSlider();
+                        OutputManager.setSetting(currentSlider.name, currentSlider.current_option);
+                        switch (currentSlider.name) {
+                            case "sfx_volume":
+                            case "music_volume":
+                                gsm.audioManager.setVolume(OutputManager.getSetting("sfx_volume"), OutputManager.getSetting("music_volume"));
+                                break;
+                            case "quality":
+                                window.setQuality(OutputManager.getSetting("quality") == 1);
+                                break;
+                            case "fix_bugs":
+                                currentSlider.set(0);
+                                break;
+                        }
+                        currentSlider = null;
+                    }
+                }
 
-        }
-
-        if (currentSlider != null) {
-            currentSlider.slide(gsm.cursor.x - currentSlider.dragPos);
+                break;
         }
 
     }

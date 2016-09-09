@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/WarmVector_Client_Singleplayer.iml" filepath="$PROJECT_DIR$/WarmVector_Client_Singleplayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WarmVector.iml" filepath="$PROJECT_DIR$/WarmVector.iml" />
     </modules>
   </component>
 </project>

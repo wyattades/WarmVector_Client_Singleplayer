@@ -1,126 +1,122 @@
 package GameState;
 
-import Main.Game;
-import StaticManagers.AudioManager;
-import StaticManagers.InputManager;
-import StaticManagers.OutputManager;
-import Visual.BarVisualizer;
-import Visual.ButtonC;
-import Visual.Slider;
+import Main.OutputManager;
+import Main.Window;
+import UI.BarVisualizer;
+import UI.ButtonC;
+import Util.MyInputEvent;
+import javafx.scene.media.Media;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 1/25/2015.
+ * Last modified by ${AUTHOR_NAME} on ${DATE_MODIFIED}
  */
 public class StartMenuState extends MenuState {
 
     // Private constants
-    public static final Color BACKGROUND_COLOR = new Color(22, 20, 22);
+    public static final Color ACCENT_COLOR = new Color(22, 20, 22);
+    private static final int LOGO_HEIGHT = (int)(210.0 * Window.SCALE);
     private static final Font
-            fontLogo = new Font("Dotum Bold", Font.BOLD, (int) (200.0f * Game.SCALE)),
-            fontHUD = new Font("Dotum Bold", Font.BOLD, (int) (40.0f * Game.SCALE));
+            FONT_LOGO = new Font("Dotum Bold", Font.BOLD, LOGO_HEIGHT),
+            FONT_SUBLOGO = new Font("Dotum Bold", Font.BOLD, (int)(LOGO_HEIGHT * 0.18));
 
     private BarVisualizer barVisualizer;
-    private Color backGround;
     private float backgroundHue;
-    private int my;
-    private boolean pressed;
 
-    public StartMenuState(GameStateManager gsm) {
-        super(gsm);
+    public StartMenuState(GameStateManager _gsm) {
+        super(_gsm, Window.HEIGHT - BORDER_DIST);
+        barVisualizer = new BarVisualizer(MENU_WIDTH, ACCENT_COLOR);
+    }
+
+    public void load() {
+        gsm.assetManager.loadAssets(new String[]{"start_menu.mp3"});
     }
 
     public void init() {
 
-        pressed = false;
-        my = 0;
+        super.init();
+
         backgroundHue = 0.0f;
 
-        startY = Game.HEIGHT - ButtonC.BUTTON_HEIGHT * 2;
-        initButtons();
-        barVisualizer = new BarVisualizer(MENU_WIDTH, BACKGROUND_COLOR);
-        gsm.cursor.setMouse((int)(Game.WIDTH * 0.5f), (int)(Game.HEIGHT * 0.5f));
+        barVisualizer.init();
 
-        AudioManager.playMusic("start_menu.wav");
+        gsm.cursor.setMouse((int)(Main.Window.WIDTH * 0.5), (int)(Window.HEIGHT * 0.5));
+
+        gsm.audioManager.playSong((Media)gsm.assetManager.getAsset("start_menu.mp3"), "start_menu.mp3");
 
     }
 
-    public void unload() {
-        ButtonC.buttonOver = ButtonC.buttonOverOld;
-    }
-
-    protected void initButtons() {
-
-        buttons = new ArrayList<>();
-        sliders = new ArrayList<>();
-        initDefault();
+    protected void customMainInit() {
         addButton("NEW GAME", ButtonC.ButtonType.NEWGAME);
         if (OutputManager.getSetting("level") > 1) addButton("CONTINUE", ButtonC.ButtonType.CONTINUE);
-
     }
+
+    public void unload() {}
 
     public void draw(Graphics2D g) {
 
-        drawBackground(g, backGround);
+        g.setColor(buttonOver);
+        g.fillRect(0, 0, Window.WIDTH, Window.HEIGHT);
 
         barVisualizer.draw(g);
 
-        for (Slider s : sliders) {
-            s.draw(g);
-        }
+        super.draw(g);
+
+        int temp_fix = currentPage == CurrentPage.MAIN ? 0 : -800;
 
         boolean beginButtonHover = false;
-
-        // Draw the buttons
         for (ButtonC b : buttons) {
-
-            b.update(gsm.cursor.x, gsm.cursor.y);
-
-            if ((b.value == ButtonC.ButtonType.NEWGAME || b.value == ButtonC.ButtonType.CONTINUE) && b.overBox) {
+            if (b.mouseOver && (b.type == ButtonC.ButtonType.NEWGAME || b.type == ButtonC.ButtonType.CONTINUE)) {
                 beginButtonHover = true;
+                break;
             }
-
-            b.draw(g);
         }
 
-        float drawHeight = Game.HEIGHT * 0.5f;
-        if (currentPage != CurrentPage.MAIN) drawHeight = -500;
         //Draw the "W" & "V" title
-        if (beginButtonHover) {
-            g.setColor(ButtonC.buttonOver);
-            g.setFont(fontHUD);
-            g.drawString("ARM", Game.WIDTH - MENU_WIDTH * 0.5f + 70, drawHeight - 200);
-            g.drawString("ECTOR", Game.WIDTH - MENU_WIDTH * 0.5f + 28, drawHeight - 40);
-        } else {
-            g.setColor(ButtonC.buttonDefault);
-        }
-        g.setFont(fontLogo);
-        g.drawString("W", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("W", g).getWidth() * 0.5f - MENU_WIDTH * 0.5f, drawHeight - 200);
-        g.drawString("V", Game.WIDTH - (int) g.getFontMetrics().getStringBounds("V", g).getWidth() * 0.5f - MENU_WIDTH * 0.5f, drawHeight - 40);
+        int drawX = (int)(Window.WIDTH - MENU_WIDTH * 0.5); //TODO: change this and fix weird lag phenomenon
 
-        drawSpecific(g);
+        if (beginButtonHover) {
+            g.setColor(buttonOver);
+            g.setFont(FONT_SUBLOGO);
+            g.drawString("ARM", drawX + (int) (72.0 * Window.SCALE), LOGO_HEIGHT + temp_fix);
+            g.drawString("ECTOR", drawX + (int) (30.0 * Window.SCALE), 2 * LOGO_HEIGHT + temp_fix);
+        } else {
+            g.setColor(ButtonC.COLOR_DEFAULT);
+        }
+
+        g.setFont(FONT_LOGO);
+        g.drawString("W", drawX - (int) (g.getFontMetrics().getStringBounds("W", g).getWidth() * 0.5), LOGO_HEIGHT + temp_fix);
+        g.drawString("V", drawX - (int) (g.getFontMetrics().getStringBounds("V", g).getWidth() * 0.5), 2 * LOGO_HEIGHT + temp_fix);
 
         gsm.cursor.draw(g);
 
     }
 
-    public void update() {
+    public void update(double deltaTime) {
 
-        backGround = ButtonC.buttonOver = Color.getHSBColor(backgroundHue, 1.0f, 1.0f);
+        buttonOver = Color.getHSBColor(backgroundHue, 1.0f, 1.0f);
         backgroundHue += 0.001f;
         if (backgroundHue >= 1.0f) backgroundHue = 0;
 
-        barVisualizer.react(pressed, my);
+        barVisualizer.update();
 
     }
 
-    public void inputHandle(InputManager inputManager) {
-        super.inputHandle(inputManager);
-        pressed = inputManager.isMousePressed("LEFTMOUSE");
-        my = inputManager.mouse.y;
+    public void inputHandle(MyInputEvent event) {
+        super.inputHandle(event);
+
+        if (event.type == MyInputEvent.MOUSE_MOVE) {
+            barVisualizer.reactMove(event.y);
+        } else if (event.type == MyInputEvent.MOUSE_DOWN && event.code == MouseEvent.BUTTON1) {
+            barVisualizer.reactClick();
+        } else if (event.type == MyInputEvent.KEY_DOWN && event.code == KeyEvent.VK_ESCAPE) {
+           if (currentPage == CurrentPage.MAIN) gsm.quit();
+        }
     }
 
 }

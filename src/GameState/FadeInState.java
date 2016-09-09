@@ -1,7 +1,9 @@
 package GameState;
 
-import Main.Game;
-import StaticManagers.InputManager;
+import Main.OutputManager;
+import Main.Window;
+import Util.MyInputEvent;
+import javafx.scene.media.Media;
 
 import java.awt.*;
 
@@ -11,48 +13,47 @@ import java.awt.*;
  */
 public class FadeInState extends GameState {
 
-    private int opacity;
+    private static final double RATE = 5.0;
 
-    public boolean state;
+    private double opacity;
 
-    public FadeInState(GameStateManager gsm) {
-        super(gsm);
+    private String backgroundMusic;
+
+    public FadeInState(GameStateManager _gsm) {
+        super(_gsm);
     }
 
-    @Override
+    public void load() {
+        int musicLevel = OutputManager.getSetting("level") % 3;
+        backgroundMusic = "background" + musicLevel + ".mp3";
+
+        gsm.assetManager.loadAssets(new String[]{backgroundMusic});
+    }
+
     public void init() {
+        gsm.audioManager.playSong((Media)gsm.assetManager.getAsset(backgroundMusic), backgroundMusic);
+
         opacity = 255;
-        state = true;
-        gsm.cursor.setMouse((int)(Game.WIDTH * 0.5f + 70), (int)(Game.HEIGHT * 0.5f));
-        gsm.cursor.setPosition((int)(Game.WIDTH * 0.5f + 70), (int)(Game.HEIGHT * 0.5f));
-
-        gsm.gameStates[gsm.currentState].update();
+        gsm.cursor.setMouse((int)(Main.Window.WIDTH * 0.5 + 70), (int)(Window.HEIGHT * 0.5));
     }
 
-    @Override
     public void unload() {
-        gsm.cursor.setMouse((int)(Game.WIDTH * 0.5f) + 70, (int)(Game.HEIGHT * 0.5f));
+        gsm.cursor.setMouse((int)(Window.WIDTH * 0.5) + 70, (int)(Window.HEIGHT * 0.5));
     }
 
-    @Override
     public void draw(Graphics2D g) {
-        g.setColor(new Color(0, 0, 0, opacity));
-        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+        g.setColor(new Color(0, 0, 0, (int)Math.max(0.0, opacity)));
+        g.fillRect(0, 0, Window.WIDTH, Window.HEIGHT);
     }
 
-    @Override
-    public void update() {
-        int rate = 4;
-        opacity -= rate;
-        if (opacity <= 2) {
-            gsm.unloadState(GameStateManager.FADEIN);
+    public void update(double deltaTime) {
+        opacity -= RATE;
+        if (opacity < 0) {
+            gsm.unloadState(GameStateManager.TOP);
         }
 
     }
 
-    @Override
-    public void inputHandle(InputManager inputManager) {
-
-    }
+    public void inputHandle(MyInputEvent event) {}
 
 }

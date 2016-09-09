@@ -1,24 +1,22 @@
 package GameState;
 
 import Entities.EntityManager;
-import Entities.Player;
-import Entities.Projectiles.Projectile;
-import Main.Game;
-import Map.GeneratedEnclosure;
-import StaticManagers.AudioManager;
-import StaticManagers.FileManager;
-import StaticManagers.InputManager;
-import StaticManagers.OutputManager;
-import Util.ImageUtil;
+import Entities.Player.ThisPlayer;
+import Main.OutputManager;
+import Main.Window;
+import UI.*;
+import Util.MyInputEvent;
 import Util.MyMath;
-import Visual.*;
-import Visual.Occlusion.Shadow;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -26,170 +24,199 @@ import java.util.List;
  */
 public class PlayState extends GameState {
 
-    private final static float SCALEFACTOR = 1920.0f / Game.WIDTH * 1.5f;
+    public static final double SCALEFACTOR = Window.SCALE * 1.5;
+    public static final int MAXLEVEL = 5;
 
-    private BufferedImage background;
+    private static final String[] ASSETS = {
+            "concrete0.wav", "concrete1.wav", "concrete2.wav", "concrete3.wav", "concrete4.wav", "concrete5.wav",
+            "impact_missile.wav", "reload.wav", "ric0.wav", "ric1.wav", "ric2.wav", "shoot_LMG.wav", "shoot_Pistol.wav",
+            "shoot_Rifle.wav", "shoot_RPG.wav", "shoot_Shotgun.wav", "shoot_Sniper.wav", "player0g.png", "player1g.png",
+            "player1.png", "player0.png", "gun_Rifle.png", "gun_LMG.png", "gun_Pistol.png", "gun_Sniper.png", "gun_Shotgun.png", "gun_RPG.png",
+            "missile.png", "bullet.png", "background.png", "hit_"
+    };
+
     private EntityManager entityManager;
-    private ScreenMover screenMover;
+    private Camera camera;
     private HUD hud;
     private Shadow shadow;
-    private GeneratedEnclosure map;
-    private List<Animation> animations;
+    private Map map;
+    private List<Sprite> sprites;
+    private HashMap<String, Integer> keyMap;
+    private boolean restart;
 
-    public PlayState(GameStateManager gsm) {
-        super(gsm);
+    public PlayState(GameStateManager _gsm) {
+        super(_gsm);
+    }
+
+    public void load() {
+        gsm.assetManager.loadAssets(ASSETS);
     }
 
     public void init() {
 
+        restart = false;
+
+        //Add key and mouse mappings to inputManager
+        keyMap = new HashMap<>();
+        keyMap.put("RELOAD", KeyEvent.VK_R);
+        keyMap.put("UP", KeyEvent.VK_W);
+        keyMap.put("DOWN", KeyEvent.VK_S);
+        keyMap.put("LEFT", KeyEvent.VK_A);
+        keyMap.put("RIGHT", KeyEvent.VK_D);
+        keyMap.put("PAUSE", KeyEvent.VK_ESCAPE);
+        keyMap.put("RESTART", KeyEvent.VK_SPACE);
+        keyMap.put("ATTACK", MouseEvent.BUTTON1);
+        keyMap.put("CHANGE_WEAPON", MouseEvent.BUTTON3);
+
         int level = OutputManager.getSetting("level");
 
-        System.out.println("Level = " + level);
+        OutputManager.printLog("Starting Level " + level);
 
-        background = ImageUtil.colorizeImage(FileManager.getImage("background.png"), MyMath.random(0.0f, 1.0f));
+        // TODO: use this seed thing somehow
+        long seed = (long) MyMath.random(0, 10000000);
+        Random randomGenerate = new Random(seed);
 
-        map = new GeneratedEnclosure(200, 200, 1.0f, OutputManager.getSetting("cave_mode") == 1);
-        entityManager = new EntityManager(map, gsm, level, this);
-        shadow = new Shadow(map);
+        map = new Map(gsm, 200, 200, 1.0, OutputManager.getSetting("cave_mode") == 1, randomGenerate);
+        entityManager = new EntityManager(gsm, map, level, randomGenerate);
 
-        animations = new ArrayList<>();
+        shadow = new Shadow(map, entityManager.thisPlayer.x, entityManager.thisPlayer.y);
 
-        screenMover = new ScreenMover(entityManager.thisPlayer);
+        sprites = new ArrayList<>();
+
+        camera = new Camera(entityManager.getThisPlayer());
         hud = new HUD(entityManager, map);
 
         gsm.cursor.setSprite(MouseCursor.CROSSHAIR);
-        gsm.cursor.setMouse((int)(Game.WIDTH * 0.5f + 70), (int)(Game.HEIGHT * 0.5f));
+        gsm.cursor.setMouse((int) (Main.Window.WIDTH * 0.5 + 70), (int) (Window.HEIGHT * 0.5));
 
-        int musicLevel = level % 3;
-        AudioManager.playMusic("background" + musicLevel + ".wav");
+        update(0.0);
 
     }
 
     public void unload() {
         gsm.cursor.setSprite(MouseCursor.CURSOR);
-    }
 
-    public void addExplosion(Projectile p, BufferedImage[] hitImages) {
-        AudioManager.playSFX("bulletHit.wav");
-        map.addExplosion(p.x, p.y, p.explodeRadius, 8);
-        shadow.updateSegments();
-        animations.add(new Animation(p.x, p.y, p.orient + MyMath.PI, 1, hitImages));
+        gsm.assetManager.unload(ASSETS);
     }
 
     public void draw(Graphics2D g) {
 
         //TEMP
         g.setColor(new Color(81, 105, 124));
-        g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+        g.fillRect(0, 0, Window.WIDTH, Window.HEIGHT);
 
         //Create copy of transform for later
         AffineTransform oldT = g.getTransform();
-
-//        g.rotate(-thisPlayer.orient, Game.WIDTH/2, Game.HEIGHT/2);
 
         //Zoom in
         g.scale(SCALEFACTOR, SCALEFACTOR);
 
         //translate screen to follow player
-        g.translate(screenMover.screenPosX - entityManager.thisPlayer.x + Game.WIDTH * 0.5f / SCALEFACTOR, screenMover.screenPosY -  entityManager.thisPlayer.y + Game.HEIGHT * 0.5f / SCALEFACTOR);
+        g.translate(camera.displayX, camera.displayY);
 
         //background image
-        g.drawImage(background, 0, 0, map.width, map.height, null);
+        g.drawImage(map.background, 0, 0, map.width, map.height, null);
 
         entityManager.draw(g);
 
-        //TEMP
-        shadow.draw(g);
-        map.draw(g);
-
-        for (Animation a : animations) {
+        for (Sprite a : sprites) {
             a.draw(g);
         }
+
+        // TODO: move shadow into map maybe
+        shadow.draw(g);
+        map.draw(g);
 
         //reset transformation
         g.setTransform(oldT);
 
-        if (entityManager.thisPlayer.state) {
-            hud.draw(g);
-            gsm.cursor.draw(g);
-        } else {
-            g.setColor(ButtonC.buttonDefault);
-            g.setFont(ButtonC.BUTTON_FONT);
-            g.drawString("PRESS [SPACE]", 26, Game.HEIGHT - 90);
-            g.drawString("TO RESTART", 26, Game.HEIGHT - 26);
-        }
+        hud.draw(g);
+
+        gsm.cursor.draw(g);
 
     }
 
-    public void update() { //update objects
+    public void update(double deltaTime) {
 
         entityManager.update();
 
-        for (int i = animations.size() - 1; i >= 0; i--) {
-            Animation a = animations.get(i);
-            a.update();
-            if (!a.state) animations.remove(i);
+        // TODO: should add animations in entityManager
+        List<Sprite> hitAnimations = entityManager.getHitAnimations();
+        sprites.addAll(hitAnimations.stream().collect(Collectors.toList()));
+        if (hitAnimations.size() > 0) {
+            shadow.queueWorldUpdate();
         }
 
-
-        if (entityManager.thisPlayer.state) {
-            entityManager.thisPlayer.updateAngle(gsm.cursor.x - screenMover.screenVelX, gsm.cursor.y - screenMover.screenVelY);
-
-            screenMover.updatePosition();
-            screenMover.updateRotation(gsm.cursor.x, gsm.cursor.y);
+        for (int i = sprites.size() - 1; i >= 0; i--) {
+            Sprite a = sprites.get(i);
+            a.step();
+            if (!a.state) sprites.remove(i);
         }
 
-        shadow.setLightLocation(entityManager.thisPlayer.x, entityManager.thisPlayer.y);
-        shadow.sweep(6.29f);
+        camera.update(gsm.cursor.x, gsm.cursor.y);
+
+        // TODO: move this somewhere else (map?)
+        ThisPlayer thisPlayer = entityManager.getThisPlayer();
+        if (thisPlayer.state && thisPlayer.moving) {
+            shadow.queueOriginUpdate();
+        }
+        shadow.update(thisPlayer.x, thisPlayer.y);
+
+        if (restart) {
+            init();
+        }
 
     }
 
-    public void inputHandle(InputManager inputManager) {
+    public void inputHandle(MyInputEvent event) {
 
-        gsm.cursor.setPosition(inputManager.mouse.x + Math.round(screenMover.screenVelX), inputManager.mouse.y + Math.round(screenMover.screenVelY));
-
-        //If R is pressed, player reloads
-        if (inputManager.isKeyPressed("R") && Game.currentTimeMillis() - inputManager.getKeyTime("R") > 1000) {
-            entityManager.thisPlayer.reloadWeapon();
-            inputManager.setKeyTime("R", Game.currentTimeMillis());
-        }
-
-        //If leftKey is pressed and right isn't, player goes left
-        if (inputManager.isKeyPressed("LEFT") && !inputManager.isKeyPressed("RIGHT"))
-            entityManager.thisPlayer.moveX(-Player.acceleration);
-
-        //If rightKey is pressed and left isn't, player goes right
-        else if (inputManager.isKeyPressed("RIGHT") && !inputManager.isKeyPressed("LEFT"))
-            entityManager.thisPlayer.moveX(Player.acceleration);
-
-
-        //If upKey is pressed and down isn't, player goes up
-        if (inputManager.isKeyPressed("UP") && !inputManager.isKeyPressed("DOWN"))
-            entityManager.thisPlayer.moveY(-Player.acceleration);
-
-        //If downKey is pressed and up isn't, player goes down
-        else if (inputManager.isKeyPressed("DOWN") && !inputManager.isKeyPressed("UP"))
-            entityManager.thisPlayer.moveY(Player.acceleration);
-
-
-        //If leftMouse is pressed, create bullets from player
-        entityManager.thisPlayer.shooting = inputManager.isMousePressed("LEFTMOUSE");
-
-        //If rightMouse is clicked, check for pickup or drop a weapon
-        if ((inputManager.isMouseClicked("RIGHTMOUSE") || inputManager.isMousePressed("RIGHTMOUSE")) && Game.currentTimeMillis() - inputManager.getMouseTime("RIGHTMOUSE") > 300) {
-
-            inputManager.setMouseTime("RIGHTMOUSE", Game.currentTimeMillis());
-
-            entityManager.attemptWeaponChange();
-        }
-
-        if (inputManager.isKeyPressed("ESC") && Game.currentTimeMillis() - inputManager.getKeyTime("ESC") > 400) {
-            inputManager.setKeyTime("ESC", Game.currentTimeMillis());
-            gsm.setTopState(GameStateManager.PAUSE);
-        }
-
-        if (!entityManager.thisPlayer.state && inputManager.isKeyPressed("SPACE")) {
-            init();
+        switch (event.type) {
+            case MyInputEvent.MOUSE_MOVE:
+                gsm.cursor.setPosition(event.x, event.y);
+                break;
+            case MyInputEvent.MOUSE_DOWN:
+                if (event.code == keyMap.get("ATTACK")) {
+                    entityManager.thisPlayer.shooting = true;
+                } else if (event.code == keyMap.get("CHANGE_WEAPON")) {
+                    //If rightMouse is clicked, check for pickup or drop a weapon
+                    entityManager.attemptWeaponChange();
+                }
+                break;
+            case MyInputEvent.MOUSE_UP:
+                if (event.code == keyMap.get("ATTACK")) {
+                    entityManager.thisPlayer.shooting = false;
+                }
+                break;
+            case MyInputEvent.KEY_DOWN:
+                if (event.code == keyMap.get("RELOAD")) {
+                    entityManager.thisPlayer.reloadWeapon();
+                } else if (event.code == keyMap.get("LEFT")) {
+                    entityManager.thisPlayer.left = true;
+                } else if (event.code == keyMap.get("RIGHT")) {
+                    entityManager.thisPlayer.right = true;
+                } else if (event.code == keyMap.get("UP")) {
+                    entityManager.thisPlayer.up = true;
+                } else if (event.code == keyMap.get("DOWN")) {
+                    entityManager.thisPlayer.down = true;
+                } else if (event.code == keyMap.get("PAUSE")) {
+                    gsm.setState(GameStateManager.PAUSE, GameStateManager.TOP);
+                } else if (event.code == keyMap.get("RESTART")) {
+                    if (!entityManager.thisPlayer.state) {
+                        restart = true;
+                    }
+                }
+                break;
+            case MyInputEvent.KEY_UP:
+                if (event.code == keyMap.get("LEFT")) {
+                    entityManager.thisPlayer.left = false;
+                } else if (event.code == keyMap.get("RIGHT")) {
+                    entityManager.thisPlayer.right = false;
+                } else if (event.code == keyMap.get("UP")) {
+                    entityManager.thisPlayer.up = false;
+                } else if (event.code == keyMap.get("DOWN")) {
+                    entityManager.thisPlayer.down = false;
+                }
+                break;
         }
 
     }
