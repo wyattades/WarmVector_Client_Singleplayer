@@ -2,8 +2,8 @@
 Powered by my work-in-progress 2D-engine
 
 ## Outdated Downloads
-<b>Windows Installer</b>: www.wyattades.us/warmvector-setup.exe
-<b>Zipped Java</b>: www.wyattades.us/warmvector-archive.zip
+- <b>Windows Installer</b>: www.wyattades.us/warmvector-setup.exe
+- <b>Zipped Java</b>: www.wyattades.us/warmvector-archive.zip
 
 ## Known Bugs
 - background music is never unloaded
