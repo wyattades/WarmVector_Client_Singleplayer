@@ -1,15 +1,17 @@
-# WarmVector_Client_Singleplayer
+# WarmVector
+Powered by my work-in-progress 2D-engine
 
-## Download
+## Outdated Downloads
 <b>Windows Installer</b>: www.wyattades.us/warmvector-setup.exe
-
 <b>Zipped Java</b>: www.wyattades.us/warmvector-archive.zip
 
-## Known Bugs (and TODO)
+## Known Bugs
+- background music is never unloaded
+- deltaTime should be used to ensure consistent updates
+- Introduction of OpenGL causes very noticeable screen-tearing
+- SFX are played back with slight delay, and sometimes not at all
+
+## Planned Features
 - Create more weapon/bullet types, e.g. rockets, explosives, magic??
 - Continue developing level difficulty progression
 - Add random boxes to middle of rooms (with enough space to move around them!)
-- Setup fullscreen toggle
-- the "W" and "V" really lag the program I think???
-- replace powers of two calculations with bit shifts
-- unload background music somewhere

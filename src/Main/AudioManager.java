@@ -32,11 +32,9 @@ public class AudioManager implements Runnable {
 
         // Wait for JavaFX to initialize
         final CountDownLatch latch = new CountDownLatch(1);
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new JFXPanel(); // initializes JavaFX environment
-                latch.countDown();
-            }
+        SwingUtilities.invokeLater(() -> {
+            new JFXPanel(); // initializes JavaFX environment
+            latch.countDown();
         });
         try {
             latch.await();
@@ -62,17 +60,12 @@ public class AudioManager implements Runnable {
 
             stopBackground();
             backgroundPlayer = Executors.newSingleThreadExecutor();
-            backgroundPlayer.execute(new Runnable() {
+            backgroundPlayer.execute(new Thread() {
                 @Override
                 public void run() {
                     mediaPlayer = new MediaPlayer(source);
                     // Set song to loop
-                    mediaPlayer.setOnEndOfMedia(new Runnable() {
-                        @Override
-                        public void run() {
-                            mediaPlayer.seek(Duration.ZERO);
-                        }
-                    });
+                    mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
                     mediaPlayer.setVolume(musicVolume);
                     mediaPlayer.play();
                 }
@@ -101,11 +94,19 @@ public class AudioManager implements Runnable {
                 mediaPlayer.setVolume(musicVolume);
             }
 
-            if (!clips.isEmpty()) {
+            while (!clips.isEmpty()) {
+//                String name = clips.poll();
+//                AudioClip source = AssetManager.loadShortAudio(name);
                 AudioClip source = clips.poll();
-
+//                if (source.isPlaying()) source.stop();
                 source.play(SFXVolume);
 
+            }
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
         }

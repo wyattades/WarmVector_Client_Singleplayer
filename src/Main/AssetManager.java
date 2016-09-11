@@ -1,5 +1,6 @@
 package Main;
 
+import Util.ImageUtils;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 
@@ -66,6 +67,11 @@ public class AssetManager {
         return executor == null || executor.isTerminated();
     }
 
+    // TODO: testing!!!!!
+    public AudioClip getSFX(String name) {
+        return loadShortAudio(name);
+    }
+
     public Object getAsset(String name) {
         Object asset = null;
         if (isAvailable()) {
@@ -107,7 +113,8 @@ public class AssetManager {
     }
 
 
-    private AudioClip loadShortAudio(String name) {
+    //TODO temp, should be private
+    public static AudioClip loadShortAudio(String name) {
 
         String path = "resources/Audio/" + name;
 
@@ -122,15 +129,20 @@ public class AssetManager {
     }
 
     private BufferedImage loadImage(String path) {
+        BufferedImage image = null;
         try {
-            return ImageIO.read(new File(path));
+            image = ImageIO.read(new File(path));
 //            return ImageIO.read(getClass().getResourceAsStream(name));
         } catch (IOException e) {
             OutputManager.printError(e);
             OutputManager.printError("Error: failed to load image file: " + path);
             System.exit(1);
         }
-        return null;
+        if (image == null) {
+            OutputManager.printError("Error: image path " + path + " is null");
+            System.exit(1);
+        }
+        return ImageUtils.getCompatableVersion(image);
     }
 
     private BufferedImage[] loadAnimation(String path) {

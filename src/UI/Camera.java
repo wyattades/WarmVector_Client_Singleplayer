@@ -91,9 +91,9 @@ public class Camera {
         final double maxRadius = 100.0;
 
         // TODO: get rid of this sqrt somehow?
-//        double rotateRadius = -maxRadius * Math.sqrt(dx * dx + dy * dy) / (Game.WIDTH * 0.5);
+        double rotateRadius = -maxRadius * Math.sqrt(dx * dx + dy * dy) / (Window.WIDTH * 0.5);
 //        double rotateRadius = -50.0;
-        double rotateRadius = 0.0;
+//        double rotateRadius = 0.0;
 
         rotateOffsetX = rotateRadius * Math.cos(follower.orient);
         rotateOffsetY = rotateRadius * Math.sin(follower.orient);

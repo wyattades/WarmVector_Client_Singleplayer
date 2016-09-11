@@ -3,7 +3,7 @@ package UI;
 import Entities.Hittable;
 import Entities.Projectile;
 import GameState.GameStateManager;
-import Util.ImageFilter;
+import Util.ImageUtils;
 import Util.MyMath;
 import Util.Rect;
 import javafx.scene.media.AudioClip;
@@ -83,17 +83,18 @@ public class Map implements Hittable {
     public Map(GameStateManager _gsm, int i_width, int i_height, double scaleFactor, boolean smooth, Random _randomGenerate) {
 
         gsm = _gsm;
-        hitSound = (AudioClip)gsm.assetManager.getAsset("ric1.wav");
+//        hitSound = (AudioClip)gsm.assetManager.getAsset("ric1.wav");
+        hitSound = gsm.assetManager.getSFX("ric1.wav");
 
         // TODO: put this somewhere else so it only runs once at beginning of program
         // make a put(Asset) function in AssetManager?
-        HIT_ANIMATION = ImageFilter.recolorAnimation((BufferedImage[])gsm.assetManager.getAsset("hit_"), Color.black);
+        HIT_ANIMATION = ImageUtils.recolorAnimation((BufferedImage[])gsm.assetManager.getAsset("hit_"), Color.black);
 
         randomGenerate = _randomGenerate;
 
         float randHue = (float) MyMath.random(0.0, 1.0, randomGenerate);
         fillColor = Color.getHSBColor(randHue, 1.0f, 0.06f);
-        background = ImageFilter.colorizeImage((BufferedImage)gsm.assetManager.getAsset("background.png"), randHue);
+        background = ImageUtils.colorizeImage((BufferedImage)gsm.assetManager.getAsset("background.png"), randHue);
 
         //Make sure width and height are always even numbers
         width = MyMath.round(i_width, 2);
@@ -471,6 +472,7 @@ public class Map implements Hittable {
     public boolean handleDirectHit(Projectile p) {
         if (inverseRegion.intersects(p.collideBox)) {
             gsm.audioManager.playSFX(hitSound);
+//            gsm.audioManager.playSFX("ric2.wav");
             addExplosion(p.x, p.y, p.explodeRadius, (int) (p.explodeRadius * 1));
             return true;
         }

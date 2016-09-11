@@ -7,6 +7,7 @@ package Main;
 class Main {
 
     public static void main(String[] args) {
+        System.setProperty("sun.java2d.opengl","True");
 
         AudioManager audioManager = new AudioManager();
         GraphicsManager graphicsManager = new GraphicsManager();

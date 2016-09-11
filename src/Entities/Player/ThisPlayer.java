@@ -18,6 +18,7 @@ public class ThisPlayer extends Player {
     public boolean left, right, up, down;
 
     private AudioClip[] walkSounds;
+    private AudioClip reloadSound;
 
     public ThisPlayer(GameStateManager _gsm, Map _map) {
         super(_gsm, 0.0, _map);
@@ -25,8 +26,11 @@ public class ThisPlayer extends Player {
 
         walkSounds = new AudioClip[6];
         for (int i = 0; i <= 5; i++) {
-            walkSounds[i] = (AudioClip)gsm.assetManager.getAsset("concrete" + i + ".wav");
+//            walkSounds[i] = (AudioClip)gsm.assetManager.getAsset("concrete" + i + ".wav");
+            walkSounds[i] = gsm.assetManager.getSFX("concrete" + i + ".wav");
         }
+//        reloadSound = (AudioClip)gsm.assetManager.getAsset("reload.wav");
+        reloadSound = gsm.assetManager.getSFX("reload.wav");
 
         shootSprite = (BufferedImage)gsm.assetManager.getAsset("player0g.png");
         defaultSprite = (BufferedImage)gsm.assetManager.getAsset("player0.png");
@@ -60,6 +64,7 @@ public class ThisPlayer extends Player {
         if (moving && Game.currentTimeMillis() - stepTime > 300) {
             stepTime = Game.currentTimeMillis();
             gsm.audioManager.playSFX(walkSounds[(int)MyMath.random(0.0, 6.0)]);
+//            gsm.audioManager.playSFX(StringUtil.randomAsset("concrete%d.wav", 5));
         }
     }
 
@@ -69,7 +74,8 @@ public class ThisPlayer extends Player {
             weapon.ammo += addedAmmo;
             weapon.reserveAmmo -= addedAmmo;
 
-            gsm.audioManager.playSFX((AudioClip)gsm.assetManager.getAsset("reload.wav"));
+            gsm.audioManager.playSFX(reloadSound);
+//            gsm.audioManager.playSFX("reload.wav");
         }
     }
 

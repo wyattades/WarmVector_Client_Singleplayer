@@ -7,7 +7,7 @@ import Entities.Weapon;
 import GameState.GameStateManager;
 import Main.Game;
 import UI.Map;
-import Util.ImageFilter;
+import Util.ImageUtils;
 import Util.MyMath;
 import javafx.scene.media.AudioClip;
 
@@ -23,7 +23,6 @@ import java.awt.image.BufferedImage;
 public abstract class Player extends Entity implements Hittable {
 
     public Weapon weapon;
-    private boolean slowX, slowY;
     public double life;
     public double maxLife;
     protected double topSpeed, diagSpeed;
@@ -39,12 +38,12 @@ public abstract class Player extends Entity implements Hittable {
     protected Player(GameStateManager _gsm, double _orient, Map _map) {
         super(_gsm, 0, 0, _orient);
 
-        hitSound = (AudioClip)gsm.assetManager.getAsset("ric0.wav");
+//        hitSound = (AudioClip)gsm.assetManager.getAsset("ric0.wav");
+        hitSound = gsm.assetManager.getSFX("ric0.wav");
 
         // TODO: recolor this somewhere else (so it only runs once in entire program)
-        HIT_ANIMATION = ImageFilter.recolorAnimation((BufferedImage[])gsm.assetManager.getAsset("hit_"), Color.RED);
+        HIT_ANIMATION = ImageUtils.recolorAnimation((BufferedImage[])gsm.assetManager.getAsset("hit_"), Color.RED);
         map = _map;
-        slowX = slowY = true;
         shooting = moving = false;
         life = maxLife = 100.0;
         shootTime = Game.currentTimeMillis();
@@ -83,44 +82,31 @@ public abstract class Player extends Entity implements Hittable {
     }
 
     public void moveX(double deltaV) {
-        slowX = false;
         vx += deltaV;
+
         if (vx > topSpeed) vx = topSpeed;
         else if (vx < -topSpeed) vx = -topSpeed;
     }
 
     public void moveY(double deltaV) {
-        slowY = false;
         vy += deltaV;
+
         if (vy > topSpeed) vy = topSpeed;
         else if (vy < -topSpeed) vy = -topSpeed;
     }
 
     public void updatePosition() {
-        double a = 0.6;
-
-        moving = false;
 
         // Limit total speed to diagSpeed
         if (Math.abs(vx) > diagSpeed && Math.abs(vy) > diagSpeed) {
-            if (vx > 0) vx = diagSpeed;
+            if (vx > 0.0) vx = diagSpeed;
             else vx = -diagSpeed;
-            if (vy > 0) vy = diagSpeed;
+            if (vy > 0.0) vy = diagSpeed;
             else vy = -diagSpeed;
         }
 
         // If there is no obstacle horizontally
         if (!obstacleX(vx)) {
-            // Apply friction on x velocity if not accelerating
-            if (slowX) {
-                if (vx > 0) {
-                    vx = Math.max(vx - a, 0);
-                } else if (vx < 0) {
-                    vx = Math.min(vx + a, 0);
-                }
-            }
-            slowX = true;
-            if (vx != 0) moving = true;
             x += vx;
         } else {
             // Restrict horizontal movement
@@ -129,20 +115,45 @@ public abstract class Player extends Entity implements Hittable {
 
         // If there is no obstacle vertically
         if (!obstacleY(vy)) {
-            // Apply friction on y velocity if not accelerating
-            if (slowY) {
-                if (vy > 0) {
-                    vy = Math.max(vy - a, 0);
-                } else if (vy < 0) {
-                    vy = Math.min(vy + a, 0);
-                }
-            }
-            slowY = true;
-            if (vy != 0) moving = true;
             y += vy;
         } else {
             // Restrict vertical movement
             vy = 0;
+        }
+
+//        // Apply friction on y velocity if not accelerating
+//        if (slowY) {
+//            if (vy > 0.0) {
+//                vy = Math.max(vy - acceleration, 0.0);
+//            } else if (vy < 0.0) {
+//                vy = Math.min(vy + acceleration, 0.0);
+//            }
+//        }
+//
+//        // Apply friction on x velocity if not accelerating
+//        if (slowX) {
+//            if (vx > 0.0) {
+//                vx = Math.max(vx - acceleration, 0.0);
+//            } else if (vx < 0.0) {
+//                vx = Math.min(vx + acceleration, 0.0);
+//            }
+//        }
+
+        moving = vy != 0 || vx != 0;
+
+        double deccel = topSpeed * 0.1;
+
+        if (moving) {
+            if (vx > 0) {
+                vx = Math.max(0.0, vx - deccel);
+            } else if (vx < 0) {
+                vx = Math.min(0.0, vx + deccel);
+            }
+            if (vy > 0) {
+                vy = Math.max(0.0, vy - deccel);
+            } else if (vy < 0) {
+                vy = Math.min(0.0, vy + deccel);
+            }
         }
     }
 
@@ -168,6 +179,7 @@ public abstract class Player extends Entity implements Hittable {
         if (collideBox.intersects(p.collideBox)) {
             handleDamage(p.damage);
             gsm.audioManager.playSFX(hitSound);
+//            gsm.audioManager.playSFX("ric0.wav");
             return true;
         } else {
             return false;

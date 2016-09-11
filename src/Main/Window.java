@@ -1,6 +1,7 @@
 package Main;
 
 import GameState.GameStateManager;
+import Util.ImageUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,17 +27,7 @@ public class Window {
     private BufferedImage background;
     private Graphics2D backgroundGraphics, graphics;
     private JFrame frame;
-    private GraphicsConfiguration config =
-            GraphicsEnvironment.getLocalGraphicsEnvironment()
-                    .getDefaultScreenDevice()
-                    .getDefaultConfiguration();
 
-    // create a hardware accelerated image
-    public final BufferedImage create(final int width, final int height,
-                                      final boolean alpha) {
-        return config.createCompatibleImage(width, height, alpha
-                ? Transparency.TRANSLUCENT : Transparency.OPAQUE);
-    }
 
     public Window(WindowAdapter _exitOperation) {
 
@@ -65,12 +56,14 @@ public class Window {
         frame.setCursor(transparentCursor);
 
         // Canvas
-        canvas = new Canvas(config);
+        canvas = new Canvas(GraphicsEnvironment.getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice()
+                .getDefaultConfiguration());
         canvas.setSize(WIDTH, HEIGHT);
         frame.add(canvas, 0);
 
         // Background & Buffer
-        background = create(WIDTH, HEIGHT, false);
+        background = ImageUtils.getCompatableVersion(new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB));
         canvas.createBufferStrategy(2);
         do {
             strategy = canvas.getBufferStrategy();
@@ -118,7 +111,7 @@ public class Window {
             backgroundGraphics.setColor(Color.BLACK);
             backgroundGraphics.fillRect(0, 0, WIDTH, HEIGHT);
 
-            // TODO: idk, this is weird way of doin it
+            // TODO: this is weird way of calling draw
             gsm.draw(backgroundGraphics);
 
             bg.drawImage(background, 0, 0, null);

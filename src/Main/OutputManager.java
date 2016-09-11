@@ -76,22 +76,18 @@ public class OutputManager {
     }
 
     //TODO: use double instead of Integer to store settings??
-
-    private static final List<String> defaultSettings = Arrays.asList(
-            "fix_bugs 0",
-            "quality 0",
-            "cave_mode 0",
-            "music_volume 2",
-            "sfx_volume 2",
-            "x_sensitivity 1",
-            "y_sensitivity 1",
-            "level 1"
-    );
-    private static final int settingsSize = defaultSettings.size();
-
-    private static HashMap<String, Integer> settings;
     private static String filePath = "";
+    private static HashMap<String, Integer> settings;
     static {
+        settings = new HashMap<>();
+        settings.put("fix_bugs", 0);
+        settings.put("quality", 0);
+        settings.put("cave_mode", 0);
+        settings.put("music_volume", 2);
+        settings.put("sfx_volume", 2);
+        settings.put("x_sensitivity", 1);
+        settings.put("y_sensitivity", 1);
+        settings.put("level", 1);
 
         printLog("Loading Settings...");
 
@@ -100,45 +96,25 @@ public class OutputManager {
         filePath = fw.getDefaultDirectory().getPath() + "/My Games/WarmVector/config";
 
         File saveFile = new File(filePath);
-        if (!saveFile.exists()) {
-            saveFile.getParentFile().mkdirs();
+        if (saveFile.exists()) {
+            Scanner sc = null;
             try {
-                saveFile.createNewFile();
-                Files.write(saveFile.toPath(), defaultSettings);
-            } catch (IOException e) {
+                sc = new Scanner(new File(filePath));
+            } catch (Exception e) {
                 printError(e);
+                printError("Error: Could not locate settings file");
+                System.exit(1);
             }
-        }
-
-        Scanner sc = null;
-        try {
-            sc = new Scanner(new File(filePath));
-        } catch (Exception e) {
-            printError(e);
-            printError("Error: Could not locate settings file");
-            System.exit(1);
-        }
-        List<String> lines = new ArrayList<>();
-        while (sc.hasNextLine()) {
-            lines.add(sc.nextLine());
-        }
-
-        if (lines.size() != settingsSize) {
-            try {
-                Files.write(saveFile.toPath(), defaultSettings);
-            } catch (IOException e) {
-                printError(e);
+            while (sc.hasNextLine()) {
+                String[] line = sc.nextLine().split(" ");
+                if (line.length == 2) {
+                    String name = line[0];
+                    String value = line[1];
+                    if (settings.containsKey(name) && isInteger(value)) {
+                        settings.replace(name, Integer.parseInt(value));
+                    }
+                }
             }
-        }
-
-        settings = new HashMap<>();
-
-        for (String s : lines) {
-
-            String[] line = s.split(" ");
-
-            //           name     value
-            settings.put(line[0], Integer.parseInt(line[1]));
 
         }
 
@@ -146,38 +122,25 @@ public class OutputManager {
 
     }
 
+    private static boolean isInteger(String input){
+        try{
+            Integer.parseInt(input);
+            return true;
+        }
+        catch(NumberFormatException e){
+            return false;
+        }
+    }
+
     public static int getSetting(String name) {
         try {
             return settings.get(name);
         } catch (Exception e) {
             printError(e);
-            printLog("Error: Could not locate setting: " + name);
+            printLog("Error: Could not locate setting to get: " + name);
             System.exit(1);
         }
         return 0;
-    }
-
-    public static void saveAllSettings() {
-
-        printLog("Saving data...");
-
-        List<String> settingsList = new ArrayList<>();
-        Iterator it = settings.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            settingsList.add(pair.getKey() + " " + pair.getValue());
-        }
-
-        try {
-            Files.write((new File(filePath)).toPath(), settingsList);
-        } catch (IOException e) {
-            printError(e);
-            printError("Error: Failed to save data.");
-            System.exit(1);
-        }
-
-        printLog("Successfully saved all data.");
-
     }
 
     public static void setSetting(String name, int value) {
@@ -186,11 +149,39 @@ public class OutputManager {
         } catch (Exception e) {
             printError("Could not locate setting to replace: " + name);
         }
+    }
 
-//        //TODO: don't do this somehow
-//        if (name.equals("sfx_volume") || name.equals("music_volume")) {
-//            AudioManager.updateSettings();
-//        }
+    public static void saveAllSettings() {
+
+        printLog("Saving data...");
+
+        List<String> settingsList = new ArrayList<>();
+        for (Object o : settings.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            settingsList.add(pair.getKey() + " " + pair.getValue());
+        }
+
+        File saveFile = new File(filePath);
+        if (!saveFile.exists()) {
+            saveFile.getParentFile().mkdirs();
+            try {
+                saveFile.createNewFile();
+            } catch (IOException e) {
+                printError(e);
+                printError("Error: failed to create new save file.");
+                System.exit(1);
+            }
+        }
+
+        try {
+            Files.write(saveFile.toPath(), settingsList);
+        } catch (IOException e) {
+            printError(e);
+            printError("Error: failed to write to save file.");
+            System.exit(1);
+        }
+
+        printLog("Successfully saved all data.");
 
     }
 

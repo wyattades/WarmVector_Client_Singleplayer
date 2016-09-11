@@ -80,8 +80,10 @@ public abstract class Weapon extends Entity implements Cloneable {
 
         bulletImage = _bulletImage;
 
-        hitSound = (AudioClip)gsm.assetManager.getAsset(_hitSound);
-        shootSound = (AudioClip)gsm.assetManager.getAsset("shoot_" + name + ".wav");
+//        hitSound = (AudioClip)gsm.assetManager.getAsset(_hitSound);
+        hitSound = gsm.assetManager.getSFX(_hitSound);
+//        shootSound = (AudioClip)gsm.assetManager.getAsset("shoot_" + name + ".wav");
+        shootSound = gsm.assetManager.getSFX("shoot_" + name + ".wav");
 
         sprite = (BufferedImage)gsm.assetManager.getAsset("gun_" + name + ".png");
         setBounds(sprite.getWidth(), sprite.getWidth());
@@ -120,6 +122,7 @@ public abstract class Weapon extends Entity implements Cloneable {
 
     public void shoot() {
         gsm.audioManager.playSFX(shootSound);
+//        gsm.audioManager.playSFX("shoot_Rifle.wav");
         changeAmmo(-1);
     }
 

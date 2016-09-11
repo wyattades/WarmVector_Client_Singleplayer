@@ -2,8 +2,8 @@ package GameState;
 
 import Main.OutputManager;
 import Main.Window;
-import UI.BarVisualizer;
 import UI.ButtonC;
+import UI.InteractiveWave;
 import Util.MyInputEvent;
 import javafx.scene.media.Media;
 
@@ -25,12 +25,12 @@ public class StartMenuState extends MenuState {
             FONT_LOGO = new Font("Dotum Bold", Font.BOLD, LOGO_HEIGHT),
             FONT_SUBLOGO = new Font("Dotum Bold", Font.BOLD, (int)(LOGO_HEIGHT * 0.18));
 
-    private BarVisualizer barVisualizer;
+    private InteractiveWave interactiveWave;
     private float backgroundHue;
 
     public StartMenuState(GameStateManager _gsm) {
         super(_gsm, Window.HEIGHT - BORDER_DIST);
-        barVisualizer = new BarVisualizer(MENU_WIDTH, ACCENT_COLOR);
+        interactiveWave = new InteractiveWave(MENU_WIDTH, ACCENT_COLOR);
     }
 
     public void load() {
@@ -43,7 +43,7 @@ public class StartMenuState extends MenuState {
 
         backgroundHue = 0.0f;
 
-        barVisualizer.init();
+        interactiveWave.init();
 
         gsm.cursor.setMouse((int)(Main.Window.WIDTH * 0.5), (int)(Window.HEIGHT * 0.5));
 
@@ -63,7 +63,7 @@ public class StartMenuState extends MenuState {
         g.setColor(buttonOver);
         g.fillRect(0, 0, Window.WIDTH, Window.HEIGHT);
 
-        barVisualizer.draw(g);
+        interactiveWave.draw(g);
 
         super.draw(g);
 
@@ -103,17 +103,15 @@ public class StartMenuState extends MenuState {
         backgroundHue += 0.001f;
         if (backgroundHue >= 1.0f) backgroundHue = 0;
 
-        barVisualizer.update();
+        interactiveWave.update(gsm.cursor.y);
 
     }
 
     public void inputHandle(MyInputEvent event) {
         super.inputHandle(event);
 
-        if (event.type == MyInputEvent.MOUSE_MOVE) {
-            barVisualizer.reactMove(event.y);
-        } else if (event.type == MyInputEvent.MOUSE_DOWN && event.code == MouseEvent.BUTTON1) {
-            barVisualizer.reactClick();
+        if (event.type == MyInputEvent.MOUSE_DOWN && event.code == MouseEvent.BUTTON1) {
+            interactiveWave.reactClick();
         } else if (event.type == MyInputEvent.KEY_DOWN && event.code == KeyEvent.VK_ESCAPE) {
            if (currentPage == CurrentPage.MAIN) gsm.quit();
         }

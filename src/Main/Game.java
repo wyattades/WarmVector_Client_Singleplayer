@@ -45,29 +45,49 @@ public class Game implements Runnable {
     @Override
     public void run() {
 
-        int FPS = 60;
-        long fpsWait = (long) (1000 / FPS);
-        long renderTime = 0;
+        double previous = System.currentTimeMillis();
+        double lag = 0.0;
+        final double MS_PER_UPDATE = 16;
+
         while (gsm.running) {
+            double current = System.currentTimeMillis();
+            double elapsed = current - previous;
+            previous = current;
+            lag += elapsed;
 
-            long renderStart = System.nanoTime();
-
-            // UPDATE
-            gsm.update(renderTime);
-
-            // RENDER
-            window.render(gsm);
-
-            // fps limiting
-            renderTime = (System.nanoTime() - renderStart) / 1000000;
-            try {
-                Thread.sleep(Math.max(0, fpsWait - renderTime));
-            } catch (InterruptedException e) {
-                Thread.interrupted();
-                break;
+            //UPDATE
+            while (lag >= MS_PER_UPDATE) {
+                gsm.update(elapsed);
+                lag -= MS_PER_UPDATE;
             }
-            renderTime = (System.nanoTime() - renderStart) / 1000000;
+
+            //RENDER
+            window.render(gsm);
         }
+
+//        int FPS = 60;
+//        long fpsWait = (long) (1000 / FPS);
+//        long renderTime = 0;
+//        while (gsm.running) {
+//
+//            long renderStart = System.nanoTime();
+//
+//            // UPDATE
+//            gsm.update(renderTime);
+//
+//            // RENDER
+//            window.render(gsm);
+//
+//            // fps limiting
+//            renderTime = (System.nanoTime() - renderStart) / 1000000;
+//            try {
+//                Thread.sleep(Math.max(0, fpsWait - renderTime));
+//            } catch (InterruptedException e) {
+//                Thread.interrupted();
+//                break;
+//            }
+//            renderTime = (System.nanoTime() - renderStart) / 1000000;
+//        }
 
         exit();
 
