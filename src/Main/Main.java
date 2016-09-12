@@ -12,11 +12,11 @@ class Main {
         AudioManager audioManager = new AudioManager();
         GraphicsManager graphicsManager = new GraphicsManager();
 
-        Game game = new Game(new AssetManager(), audioManager, graphicsManager);
+        Game game = new Game(audioManager, graphicsManager);
 
         new Thread(audioManager, "audio").start();
         new Thread(graphicsManager, "graphics").start();
-        new Thread(game, "game").start();
+        game.run();
     }
 
 }

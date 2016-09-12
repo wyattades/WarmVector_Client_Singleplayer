@@ -10,7 +10,7 @@ import GameState.GameStateManager;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class Game implements Runnable {
+public class Game {
 
     // Manager stuff
     private AssetManager assetManager;
@@ -20,9 +20,9 @@ public class Game implements Runnable {
 
     private GameStateManager gsm;
 
-    Game(AssetManager _assetManager, AudioManager _audioManager, GraphicsManager _graphicsManager) {
+    Game(AudioManager _audioManager, GraphicsManager _graphicsManager) {
 
-        assetManager = _assetManager;
+        assetManager = new AssetManager();
         audioManager = _audioManager;
         graphicsManager = _graphicsManager;
 
@@ -36,13 +36,12 @@ public class Game implements Runnable {
         });
 
         //Create a manager for handling the different game states e.g. intro, play, gameOver
-        gsm = new GameStateManager(_assetManager, _audioManager, _graphicsManager, window);
+        gsm = new GameStateManager(assetManager, audioManager, graphicsManager, window);
 
         //Create a manager for handling key and mouse inputs
         new InputManager(window.canvas, gsm);
     }
 
-    @Override
     public void run() {
 
         double previous = System.currentTimeMillis();
@@ -56,7 +55,7 @@ public class Game implements Runnable {
             lag += elapsed;
 
             //UPDATE
-            while (lag >= MS_PER_UPDATE) {
+            if (lag >= MS_PER_UPDATE) {
                 gsm.update(elapsed);
                 lag -= MS_PER_UPDATE;
             }

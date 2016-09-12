@@ -81,18 +81,26 @@ public abstract class Player extends Entity implements Hittable {
         else sprite = shootSprite;
     }
 
-    public void moveX(double deltaV) {
-        vx += deltaV;
+    private boolean moveX, moveY;
 
-        if (vx > topSpeed) vx = topSpeed;
-        else if (vx < -topSpeed) vx = -topSpeed;
+    public void moveX(double deltaV) {
+//        vx += deltaV;
+        if (deltaV > 0.0) vx = topSpeed;
+        else vx = -topSpeed;
+        moveX = true;
+
+//        if (vx > topSpeed) vx = topSpeed;
+//        else if (vx < -topSpeed) vx = -topSpeed;
     }
 
     public void moveY(double deltaV) {
-        vy += deltaV;
+//        vy += deltaV;
+        if (deltaV > 0.0) vy = topSpeed;
+        else vy = -topSpeed;
+        moveY = true;
 
-        if (vy > topSpeed) vy = topSpeed;
-        else if (vy < -topSpeed) vy = -topSpeed;
+//        if (vy > topSpeed) vy = topSpeed;
+//        else if (vy < -topSpeed) vy = -topSpeed;
     }
 
     public void updatePosition() {
@@ -106,7 +114,7 @@ public abstract class Player extends Entity implements Hittable {
         }
 
         // If there is no obstacle horizontally
-        if (!obstacleX(vx)) {
+        if (vx != 0.0 && !obstacleX(vx)) {
             x += vx;
         } else {
             // Restrict horizontal movement
@@ -114,11 +122,11 @@ public abstract class Player extends Entity implements Hittable {
         }
 
         // If there is no obstacle vertically
-        if (!obstacleY(vy)) {
+        if (vy != 0.0 && !obstacleY(vy)) {
             y += vy;
         } else {
             // Restrict vertical movement
-            vy = 0;
+            vy = 0.0;
         }
 
 //        // Apply friction on y velocity if not accelerating
@@ -139,22 +147,33 @@ public abstract class Player extends Entity implements Hittable {
 //            }
 //        }
 
-        moving = vy != 0 || vx != 0;
-
-        double deccel = topSpeed * 0.1;
-
-        if (moving) {
-            if (vx > 0) {
-                vx = Math.max(0.0, vx - deccel);
-            } else if (vx < 0) {
-                vx = Math.min(0.0, vx + deccel);
-            }
-            if (vy > 0) {
-                vy = Math.max(0.0, vy - deccel);
-            } else if (vy < 0) {
-                vy = Math.min(0.0, vy + deccel);
-            }
+        if (moveX) {
+            moveX = false;
+        } else {
+            vx = 0.0;
         }
+        if (moveY) {
+            moveY = false;
+        } else {
+            vy = 0.0;
+        }
+
+        moving = vy != 0.0 || vx != 0.0;
+
+//        double deccel = topSpeed * 0.1;
+//
+//        if (moving) {
+//            if (vx > 0) {
+//                vx = Math.max(0.0, vx - deccel);
+//            } else if (vx < 0) {
+//                vx = Math.min(0.0, vx + deccel);
+//            }
+//            if (vy > 0) {
+//                vy = Math.max(0.0, vy - deccel);
+//            } else if (vy < 0) {
+//                vy = Math.min(0.0, vy + deccel);
+//            }
+//        }
     }
 
     public void handleDamage(double damage) {
