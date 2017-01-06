@@ -195,7 +195,7 @@ public abstract class Player extends Entity implements Hittable {
     }
 
     public boolean handleDirectHit(Projectile p) {
-        if (collideBox.intersects(p.collideBox)) {
+        if (collideBox.intersectsLine(p.collideLine)) {
             handleDamage(p.damage);
             gsm.audioManager.playSFX(hitSound);
 //            gsm.audioManager.playSFX("ric0.wav");

@@ -5,6 +5,7 @@ import GameState.GameStateManager;
 import Util.MyMath;
 import javafx.scene.media.AudioClip;
 
+import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -13,6 +14,8 @@ import java.awt.image.BufferedImage;
  */
 public class Projectile extends Entity {
 
+    public Line2D collideLine;
+    private double lastX, lastY;
     private double accel;
     public double explodeRadius, damage;
     public AudioClip hitSound;
@@ -26,17 +29,21 @@ public class Projectile extends Entity {
         shooter = _shooter;
 
         sprite = (BufferedImage)gsm.assetManager.getAsset(_shooter.weapon.bulletImage);
-        setBounds(sprite.getWidth() * 4, sprite.getHeight() * 2);
+        setBounds(sprite.getWidth(), sprite.getHeight());
 
         setVelocity(_shooter.weapon.i_speed);
 
         x += Weapon.ORIGIN_RADIUS * dirX;
         y += Weapon.ORIGIN_RADIUS * dirY;
+        lastX = x;
+        lastY = y;
 
         hitSound = _shooter.weapon.hitSound;
         accel = _shooter.weapon.accel;
         explodeRadius = _shooter.weapon.explodeRadius;
         damage = _shooter.weapon.damage;
+
+        collideLine = new Line2D.Double(x, y, x, y);
 
     }
 
@@ -45,10 +52,18 @@ public class Projectile extends Entity {
             vx += dirX * accel;
             vy += dirY * accel;
         }
+
+        lastX = x;
+        lastY = y;
+
         x += vx;
         y += vy;
 
         updateCollideBox();
     }
 
+    @Override
+    public void updateCollideBox() {
+        collideLine.setLine(x, y, lastX, lastY);
+    }
 }

@@ -54,12 +54,6 @@ public class OutputManager {
         if (!logFile.exists()) {
             try {
                 logFile.createNewFile();
-
-                // Set program output to print to log
-                PrintStream out = new PrintStream(new FileOutputStream(userPath + "log.txt", true));
-                System.setOut(out);
-                System.setErr(out);
-
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null,
                         "Failed to create log file: ~/My Games/WarmVector/log.txt\n" + e.toString(),
@@ -67,6 +61,16 @@ public class OutputManager {
                         JOptionPane.ERROR_MESSAGE);
             }
         }
+
+        // Set program output to print to log
+        try {
+            PrintStream out = new PrintStream(new FileOutputStream(userPath + "log.txt", true));
+            System.setOut(out);
+            System.setErr(out);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
         System.out.println("\n--- LOG START at " + currentTime() + " ---");
 

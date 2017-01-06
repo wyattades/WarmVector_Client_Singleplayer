@@ -470,7 +470,10 @@ public class Map implements Hittable {
     }
 
     public boolean handleDirectHit(Projectile p) {
-        if (inverseRegion.intersects(p.collideBox)) {
+        //TEMP until I figure how to test intersection of Area and Line
+        if (inverseRegion.contains(p.collideLine.getX1(), p.collideLine.getY1()) ||
+                inverseRegion.contains(p.collideLine.getX2(), p.collideLine.getY2())) {
+
             gsm.audioManager.playSFX(hitSound);
 //            gsm.audioManager.playSFX("ric2.wav");
             addExplosion(p.x, p.y, p.explodeRadius, (int) (p.explodeRadius * 1));
