@@ -9,7 +9,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
- * Directory: WarmVector_Client_Singleplayer/Interface/
+ * Directory: WarmVector_Client_Singleplayer/Main/
  * Created by Wyatt on 8/31/2016.
  */
 public class GraphicsManager implements Runnable {
@@ -36,8 +36,8 @@ public class GraphicsManager implements Runnable {
         try {
             queue.put(sprite);
         } catch (InterruptedException e) {
-            OutputManager.printError(e);
-            OutputManager.printError("Error: failed to queue sprite");
+            e.printStackTrace();
+            System.err.println("Error: failed to queue sprite");
         }
     }
 
@@ -73,8 +73,8 @@ public class GraphicsManager implements Runnable {
                 try {
                     addSprite(queue.take());
                 } catch (InterruptedException e) {
-                    OutputManager.printError(e);
-                    OutputManager.printError("Error while taking item from queue.");
+                    e.printStackTrace();
+                    System.err.println("Error while taking item from queue.");
                 }
             }
 

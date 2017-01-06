@@ -134,13 +134,13 @@ public class Shadow {
     }
 
     // returns true if point is "left" of segment treated as a vector
-    private boolean leftOf(Segment s, Util.Point p) {
+    private boolean leftOf(Segment s, Point p) {
         double cross = (s.p2.x - s.p1.x) * (p.y - s.p1.y) - (s.p2.y - s.p1.y) * (p.x - s.p1.x);
         return cross < 0;
     }
 
     // A neat algorithm that works for reasons outside of my knowledge (I didn't write this)
-    private boolean _segment_in_front_of(Segment a, Segment b, Util.Point relativeTo) {
+    private boolean _segment_in_front_of(Segment a, Segment b, Point relativeTo) {
 
         boolean A1 = leftOf(a, interpolate(b.p1, b.p2, 0.01));
         boolean A2 = leftOf(a, interpolate(b.p2, b.p1, 0.01));
@@ -157,8 +157,8 @@ public class Shadow {
     }
 
     //Part of above algorithm ^
-    private Util.Point interpolate(Util.Point p, Util.Point q, double f) {
-        return new Util.Point(p.x * (1.0 - f) + q.x * f, p.y * (1.0 - f) + q.y * f);
+    private Point interpolate(Point p, Point q, double f) {
+        return new Point(p.x * (1.0 - f) + q.x * f, p.y * (1.0 - f) + q.y * f);
     }
 
 
@@ -216,7 +216,7 @@ public class Shadow {
     }
 
 
-    private Point lineIntersection(Util.Point p1, Util.Point p2, Util.Point p3, Util.Point p4) {
+    private Point lineIntersection(Point p1, Point p2, Point p3, Point p4) {
         double s = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x))
                 / ((p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y));
         return new Util.Point(p1.x + s * (p2.x - p1.x), p1.y + s * (p2.y - p1.y));
@@ -261,7 +261,7 @@ public class Shadow {
         updateOrigin = true;
     }
 
-    private class EndPoint extends Util.Point {
+    private class EndPoint extends Point {
         public boolean begin = false;
         public Segment segment = null;
         public double angle = 0;

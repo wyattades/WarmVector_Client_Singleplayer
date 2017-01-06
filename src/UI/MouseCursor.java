@@ -33,7 +33,7 @@ public class MouseCursor {
         try {
             robot = new Robot();
         } catch (AWTException e) {
-            OutputManager.printError(e);
+            e.printStackTrace();
             System.exit(1);
         }
 

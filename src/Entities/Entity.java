@@ -22,6 +22,7 @@ public abstract class Entity {
     public Rectangle2D collideBox;
     public boolean state;
 
+    // TODO: static id generation is bad
     public static int genId = 0;
 
     protected GameStateManager gsm;

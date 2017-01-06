@@ -33,7 +33,7 @@ public class AssetManager {
 
     public void loadAssets(String[] fileNames) {
         if (!isAvailable()) {
-            OutputManager.printError("Error: cannot add to loading queue while loader is running." + Arrays.toString(fileNames));
+            System.err.println("Error: cannot add to loading queue while loader is running." + Arrays.toString(fileNames));
             System.exit(1);
         }
 
@@ -41,21 +41,18 @@ public class AssetManager {
         for (String fileName : fileNames) {
 
             if (!assets.containsKey(fileName)) {
-                executor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (fileName.endsWith(".mp3")) {
-                            assets.put(fileName, loadLongAudio(fileName));
-                        } else if (fileName.endsWith(".wav")) {
-                            assets.put(fileName, loadShortAudio(fileName));
-                        } else if (fileName.endsWith(".png")) {
-                            assets.put(fileName, loadImage("resources/Images/" + fileName));
-                        } else if (fileName.endsWith("_")) {
-                            assets.put(fileName, loadAnimation("resources/Animations/" + fileName));
-                        } else {
-                            OutputManager.printError("Error: invalid file type requested.");
-                            System.exit(1);
-                        }
+                executor.execute(() -> {
+                    if (fileName.endsWith(".mp3")) {
+                        assets.put(fileName, loadLongAudio(fileName));
+                    } else if (fileName.endsWith(".wav")) {
+                        assets.put(fileName, loadShortAudio(fileName));
+                    } else if (fileName.endsWith(".png")) {
+                        assets.put(fileName, loadImage("resources/Images/" + fileName));
+                    } else if (fileName.endsWith("_")) {
+                        assets.put(fileName, loadAnimation("resources/Animations/" + fileName));
+                    } else {
+                        System.err.println("Error: invalid file type requested.");
+                        System.exit(1);
                     }
                 });
             }
@@ -77,11 +74,11 @@ public class AssetManager {
         if (isAvailable()) {
             asset = assets.get(name);
         } else {
-            OutputManager.printError("Error: cannot access asset " + name + " while loader is running.");
+            System.err.println("Error: cannot access asset " + name + " while loader is running.");
             System.exit(1);
         }
         if (asset == null) {
-            OutputManager.printError("Error: asset " + name + " has not been loaded.");
+            System.err.println("Error: asset " + name + " has not been loaded.");
             System.exit(1);
         }
         return asset;
@@ -96,7 +93,7 @@ public class AssetManager {
         if (isAvailable()) {
             assets.clear();
         } else {
-            OutputManager.printError("Error: cannot unload assets while loader is running.");
+            System.err.println("Error: cannot unload assets while loader is running.");
             System.exit(1);
         }
     }
@@ -107,7 +104,7 @@ public class AssetManager {
                 assets.remove(fileName);
             }
         } else {
-            OutputManager.printError("Error: cannot unload assets while loader is running.");
+            System.err.println("Error: cannot unload assets while loader is running.");
             System.exit(1);
         }
     }
@@ -134,12 +131,12 @@ public class AssetManager {
             image = ImageIO.read(new File(path));
 //            return ImageIO.read(getClass().getResourceAsStream(name));
         } catch (IOException e) {
-            OutputManager.printError(e);
-            OutputManager.printError("Error: failed to load image file: " + path);
+            e.printStackTrace();
+            System.err.println("Error: failed to load image file: " + path);
             System.exit(1);
         }
         if (image == null) {
-            OutputManager.printError("Error: image path " + path + " is null");
+            System.err.println("Error: image path " + path + " is null");
             System.exit(1);
         }
         return ImageUtils.getCompatableVersion(image);
@@ -151,12 +148,12 @@ public class AssetManager {
 //            File folder = new File(getClass().getResource(path).toURI());
             File folder = new File(path);
             if (!folder.exists()) {
-                OutputManager.printError("Error: could not locate animation directory: " + path);
+                System.err.println("Error: could not locate animation directory: " + path);
                 System.exit(1);
             }
             File[] files = folder.listFiles();
             if (files == null) {
-                OutputManager.printError("Error: animation directory " + path + " is empty");
+                System.err.println("Error: animation directory " + path + " is empty");
                 System.exit(1);
             }
             for (File file : files) {
@@ -165,8 +162,8 @@ public class AssetManager {
                 }
             }
         } catch (Exception e) {
-            OutputManager.printError(e);
-            OutputManager.printError("Error: failed to load animation files: " + path);
+            e.printStackTrace();
+            System.err.println("Error: failed to load animation files: " + path);
             System.exit(1);
         }
         return frames.toArray(new BufferedImage[frames.size()]);

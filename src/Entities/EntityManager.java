@@ -209,7 +209,7 @@ public class EntityManager {
             checkCollider.setRect(randomRoomX(room), randomRoomY(room), entity.w, entity.h);
             i++;
             if (i > 20) {
-                OutputManager.printLog("No space for entity to be spawned at " + entity.w + " , " + entity.h);
+                System.out.println("No space for entity to be spawned at " + entity.w + " , " + entity.h);
                 return;
             }
         }

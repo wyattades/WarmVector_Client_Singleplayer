@@ -70,7 +70,7 @@ public class PlayState extends GameState {
 
         int level = OutputManager.getSetting("level");
 
-        OutputManager.printLog("Starting Level " + level);
+        System.out.println("Starting Level " + level);
 
         // TODO: use this seed thing somehow
         long seed = (long) MyMath.random(0, 10000000);

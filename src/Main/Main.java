@@ -8,6 +8,7 @@ class Main {
 
     public static void main(String[] args) {
         System.setProperty("sun.java2d.opengl","True");
+        //-Dsun.java2d.accthreshold=0
 
         AudioManager audioManager = new AudioManager();
         GraphicsManager graphicsManager = new GraphicsManager();

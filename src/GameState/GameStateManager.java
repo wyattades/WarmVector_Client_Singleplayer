@@ -119,7 +119,7 @@ public class GameStateManager {
             } else if (layers[MAIN] != null) {
                 layers[MAIN].inputHandle(event);
             } else {
-                OutputManager.printLog("Warning: All layers are null during inputHandle()");
+                System.out.println("Warning: All layers are null during inputHandle()");
             }
         }
     }
@@ -136,7 +136,7 @@ public class GameStateManager {
         } else if (layers[MAIN] != null) {
             layers[MAIN].update(deltaTime);
         } else {
-            OutputManager.printLog("Warning: All layers are null during update()");
+            System.out.println("Warning: All layers are null during update()");
         }
     }
 
@@ -149,7 +149,7 @@ public class GameStateManager {
                 layers[TOP].draw(g);
             }
         } else {
-            OutputManager.printLog("Warning: All layers are null during draw()");
+            System.out.println("Warning: All layers are null during draw()");
         }
     }
 

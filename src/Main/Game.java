@@ -1,7 +1,7 @@
 package Main;
 
 /**
- * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
+ * Directory: WarmVector_Client_Singleplayer/Main/
  * Created by Wyatt on 12/29/2014.
  */
 
@@ -100,9 +100,9 @@ public class Game {
 
         window.exit();
 
-        OutputManager.printLog("Closing program...");
+        System.out.println("Closing program...");
         OutputManager.saveAllSettings();
-        OutputManager.printLog("--- LOG END ---");
+        System.out.println("--- LOG END at " + OutputManager.currentTime() + " ---");
 
         System.exit(0);
 

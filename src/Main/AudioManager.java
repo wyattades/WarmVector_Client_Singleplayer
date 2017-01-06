@@ -39,7 +39,8 @@ public class AudioManager implements Runnable {
         try {
             latch.await();
         } catch (InterruptedException e) {
-            OutputManager.printError(e);
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 
@@ -77,8 +78,8 @@ public class AudioManager implements Runnable {
         try {
             clips.put(source);
         } catch (InterruptedException e) {
-            OutputManager.printError(e);
-            OutputManager.printError("Error while putting item in queue");
+            e.printStackTrace();
+            System.err.println("Error while putting item in queue");
             System.exit(1);
         }
     }

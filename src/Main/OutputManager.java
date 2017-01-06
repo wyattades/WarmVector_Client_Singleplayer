@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.nio.file.Files;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -12,73 +14,19 @@ import java.util.*;
  */
 public class OutputManager {
 
-    // Create/overwrite log file
-    private static String logPath = "";
+    private static final DateFormat df = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
+    public static String currentTime() {
+        return df.format(new Date());
+    }
+    
+    private static String userPath;
+
+    public static HashMap<String, Integer> settings;
+    public static HashMap<String, Integer> saves;
+    
+    
     static {
-        JFileChooser fr = new JFileChooser();
-        FileSystemView fw = fr.getFileSystemView();
-        logPath = fw.getDefaultDirectory().getPath() + "/My Games/WarmVector/log.txt";
-
-        File saveFile = new File(logPath);
-        if (!saveFile.exists()) {
-            saveFile.getParentFile().mkdirs();
-            try {
-                saveFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Failed to create log file.");
-                System.exit(1);
-            }
-        }
-
-        PrintWriter pw = null;
-        try {
-            pw = new PrintWriter(logPath);
-        } catch (FileNotFoundException e) {
-            printError(e);
-            e.printStackTrace();
-            System.exit(1);
-        }
-        pw.close();
-
-        printLog("\n--- LOG START ---");
-    }
-
-    private static void writeLog(String line) {
-        try(FileWriter fw = new FileWriter(logPath, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw))
-        {
-            out.println(line);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Could not write to log file.");
-            System.exit(1);
-        }
-    }
-
-    public static void printLog(String line) {
-        System.out.println(line);
-        writeLog(line);
-    }
-
-    public static void printError(String line) {
-        System.err.println(line);
-        writeLog(line);
-    }
-
-    public static void printError(Throwable throwable) {
-        final StringWriter sw = new StringWriter();
-        final PrintWriter pw = new PrintWriter(sw, true);
-        throwable.printStackTrace(pw);
-        throwable.printStackTrace();
-        printLog(sw.getBuffer().toString());
-    }
-
-    //TODO: use double instead of Integer to store settings??
-    private static String filePath = "";
-    private static HashMap<String, Integer> settings;
-    static {
+        // Default settings
         settings = new HashMap<>();
         settings.put("fix_bugs", 0);
         settings.put("quality", 0);
@@ -88,21 +36,72 @@ public class OutputManager {
         settings.put("x_sensitivity", 1);
         settings.put("y_sensitivity", 1);
         settings.put("level", 1);
+        
+        // Default save parameters
+        saves = new HashMap<>();
+        saves.put("level", 1);
 
-        printLog("Loading Settings...");
-
+        // Get user's default directory
         JFileChooser fr = new JFileChooser();
         FileSystemView fw = fr.getFileSystemView();
-        filePath = fw.getDefaultDirectory().getPath() + "/My Games/WarmVector/config";
+        userPath = fw.getDefaultDirectory().getPath() + "/My Games/WarmVector/";
 
-        File saveFile = new File(filePath);
-        if (saveFile.exists()) {
+        File userDirectory = new File(userPath);
+        userDirectory.mkdirs();
+
+        // Make sure log file exists
+        File logFile = new File(userPath + "log.txt");
+        if (!logFile.exists()) {
+            try {
+                logFile.createNewFile();
+
+                // Set program output to print to log
+                PrintStream out = new PrintStream(new FileOutputStream(userPath + "log.txt", true));
+                System.setOut(out);
+                System.setErr(out);
+
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null,
+                        "Failed to create log file: ~/My Games/WarmVector/log.txt\n" + e.toString(),
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        System.out.println("\n--- LOG START at " + currentTime() + " ---");
+
+
+        // Make sure save file exists
+        File saveFile = new File(userPath + "save");
+        if (!saveFile.exists()) {
+            try {
+                saveFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Failed to create save file.");
+            }
+        }
+
+        // Make sure config file exists
+        File configFile = new File(userPath + "config");
+        if (!configFile.exists()) {
+            try {
+                configFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Failed to create config file.");
+            }
+        }
+        
+        System.out.println("Loading Settings...");
+
+        if (configFile.exists()) {
             Scanner sc = null;
             try {
-                sc = new Scanner(new File(filePath));
+                sc = new Scanner(configFile);
             } catch (Exception e) {
-                printError(e);
-                printError("Error: Could not locate settings file");
+                e.printStackTrace();
+                System.err.println("Error: Could not locate config file");
                 System.exit(1);
             }
             while (sc.hasNextLine()) {
@@ -118,16 +117,15 @@ public class OutputManager {
 
         }
 
-        printLog("Successfully loaded settings.");
+        System.out.println("Successfully loaded settings.");
 
     }
 
-    private static boolean isInteger(String input){
-        try{
+    private static boolean isInteger(String input) {
+        try {
             Integer.parseInt(input);
             return true;
-        }
-        catch(NumberFormatException e){
+        } catch(NumberFormatException e) {
             return false;
         }
     }
@@ -136,8 +134,8 @@ public class OutputManager {
         try {
             return settings.get(name);
         } catch (Exception e) {
-            printError(e);
-            printLog("Error: Could not locate setting to get: " + name);
+            System.err.println(e);
+            System.out.println("Error: Could not locate setting to get: " + name);
             System.exit(1);
         }
         return 0;
@@ -147,13 +145,13 @@ public class OutputManager {
         try {
             settings.replace(name, value);
         } catch (Exception e) {
-            printError("Could not locate setting to replace: " + name);
+            System.err.println("Could not locate setting to replace: " + name);
         }
     }
 
     public static void saveAllSettings() {
 
-        printLog("Saving data...");
+        System.out.println("Saving data...");
 
         List<String> settingsList = new ArrayList<>();
         for (Object o : settings.entrySet()) {
@@ -161,27 +159,24 @@ public class OutputManager {
             settingsList.add(pair.getKey() + " " + pair.getValue());
         }
 
-        File saveFile = new File(filePath);
+        File saveFile = new File(userPath + "config");
         if (!saveFile.exists()) {
-            saveFile.getParentFile().mkdirs();
             try {
                 saveFile.createNewFile();
             } catch (IOException e) {
-                printError(e);
-                printError("Error: failed to create new save file.");
-                System.exit(1);
+                e.printStackTrace();
+                System.err.println("Error: failed to create new save file.");
             }
         }
 
         try {
             Files.write(saveFile.toPath(), settingsList);
         } catch (IOException e) {
-            printError(e);
-            printError("Error: failed to write to save file.");
-            System.exit(1);
+            e.printStackTrace();
+            System.err.println("Error: failed to write to save file.");
         }
 
-        printLog("Successfully saved all data.");
+        System.out.println("Successfully saved all data.");
 
     }
 
