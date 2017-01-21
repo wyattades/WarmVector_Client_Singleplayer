@@ -2,7 +2,7 @@ package GameState;
 
 import Main.OutputManager;
 import Main.Window;
-import UI.ButtonC;
+import UI.ButtonUI;
 import UI.InteractiveWave;
 import Util.MyInputEvent;
 import javafx.scene.media.Media;
@@ -52,8 +52,8 @@ public class StartMenuState extends MenuState {
     }
 
     protected void customMainInit() {
-        addButton("NEW GAME", ButtonC.ButtonType.NEWGAME);
-        if (OutputManager.getSetting("level") > 1) addButton("CONTINUE", ButtonC.ButtonType.CONTINUE);
+        addButton("NEW GAME", ButtonUI.ButtonType.NEWGAME);
+        if (OutputManager.getSetting("level") > 1) addButton("CONTINUE", ButtonUI.ButtonType.CONTINUE);
     }
 
     public void unload() {}
@@ -70,8 +70,8 @@ public class StartMenuState extends MenuState {
         int temp_fix = currentPage == CurrentPage.MAIN ? 0 : -800;
 
         boolean beginButtonHover = false;
-        for (ButtonC b : buttons) {
-            if (b.mouseOver && (b.type == ButtonC.ButtonType.NEWGAME || b.type == ButtonC.ButtonType.CONTINUE)) {
+        for (ButtonUI b : buttons) {
+            if (b.mouseOver && (b.type == ButtonUI.ButtonType.NEWGAME || b.type == ButtonUI.ButtonType.CONTINUE)) {
                 beginButtonHover = true;
                 break;
             }
@@ -86,7 +86,7 @@ public class StartMenuState extends MenuState {
             g.drawString("ARM", drawX + (int) (76.0 * Window.SCALE), LOGO_HEIGHT + temp_fix);
             g.drawString("ECTOR", drawX + (int) (33.0 * Window.SCALE), 2 * LOGO_HEIGHT + temp_fix);
         } else {
-            g.setColor(ButtonC.COLOR_DEFAULT);
+            g.setColor(ButtonUI.COLOR_DEFAULT);
         }
 
         g.setFont(FONT_LOGO);

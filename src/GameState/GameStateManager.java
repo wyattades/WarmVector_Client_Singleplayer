@@ -1,6 +1,8 @@
 package GameState;
 
-import Main.*;
+import Main.AssetManager;
+import Main.AudioManager;
+import Main.GraphicsManager;
 import Main.Window;
 import UI.MouseCursor;
 import Util.MyInputEvent;
@@ -31,7 +33,9 @@ public class GameStateManager {
         // Layers
         MAIN = 0,
         TOP = 1,
-        LOADING = 2;
+        LOADING = 2,
+
+        LAYERS = 3;
     
     private GameState[] layers;
 
@@ -51,7 +55,7 @@ public class GameStateManager {
 
         running = true;
 
-        layers = new GameState[3];
+        layers = new GameState[LAYERS];
 
         setState(INTRO, MAIN);
 

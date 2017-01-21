@@ -2,7 +2,6 @@ package Main;
 
 import GameState.GameStateManager;
 import Util.ImageUtils;
-import com.sun.deploy.util.SystemUtils;
 
 import javax.swing.*;
 import java.awt.*;

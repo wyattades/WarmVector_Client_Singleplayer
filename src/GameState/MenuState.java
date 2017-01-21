@@ -2,10 +2,10 @@ package GameState;
 
 import Main.OutputManager;
 import Main.Window;
-import UI.ButtonC;
+import UI.ButtonUI;
 import UI.MouseCursor;
-import UI.Slider;
-import UI.TextDisplay;
+import UI.SliderUI;
+import UI.TextUI;
 import Util.MyInputEvent;
 
 import java.awt.*;
@@ -23,12 +23,12 @@ public abstract class MenuState extends GameState {
             BORDER_DIST = (int) (50.0 * Window.SCALE),
             RIGHT_ALIGN_X = Main.Window.WIDTH - BORDER_DIST,
             TEXT_HEIGHT = (int) (30.0 * Window.SCALE),
-            DISPLAY_DIST = (int) (ButtonC.BUTTON_HEIGHT * 1.4);
+            DISPLAY_DIST = (int) (ButtonUI.BUTTON_HEIGHT * 1.4);
     protected static final Font TEXT_FONT = new Font("Dotum Bold", Font.BOLD, TEXT_HEIGHT);
 
-    protected ArrayList<ButtonC> buttons;
-    protected ArrayList<Slider> sliders;
-    protected ArrayList<TextDisplay> strings;
+    protected ArrayList<ButtonUI> buttons;
+    protected ArrayList<SliderUI> sliders;
+    protected ArrayList<TextUI> strings;
 
     protected Color buttonOver;
 
@@ -55,7 +55,7 @@ public abstract class MenuState extends GameState {
         sliders = new ArrayList<>();
         strings = new ArrayList<>();
 
-        buttonOver = ButtonC.COLOR_OVER;
+        buttonOver = ButtonUI.COLOR_OVER;
     }
 
     public void init() {
@@ -77,49 +77,49 @@ public abstract class MenuState extends GameState {
 
         switch (page) {
             case MAIN:
-                addButton("QUIT", ButtonC.ButtonType.QUIT_CONFIRM);
-                addButton("HELP", ButtonC.ButtonType.HELP);
-                addButton("CREDITS", ButtonC.ButtonType.CREDITS);
-                addButton("OPTIONS", ButtonC.ButtonType.OPTIONS);
+                addButton("QUIT", ButtonUI.ButtonType.QUIT_CONFIRM);
+                addButton("HELP", ButtonUI.ButtonType.HELP);
+                addButton("CREDITS", ButtonUI.ButtonType.CREDITS);
+                addButton("OPTIONS", ButtonUI.ButtonType.OPTIONS);
                 customMainInit();
                 break;
 
             case HELP:
-                addButton("BACK", ButtonC.ButtonType.BACK);
+                addButton("BACK", ButtonUI.ButtonType.BACK);
                 addLineBreak();
                 addText("enemies to progress", TEXT_FONT);
                 addText("Clear the map of", TEXT_FONT);
-                addText("OBJECTIVE:", ButtonC.BUTTON_FONT);
+                addText("OBJECTIVE:", ButtonUI.BUTTON_FONT);
                 addLineBreak();
                 addText("ESC: pause", TEXT_FONT);
                 addText("R: reload", TEXT_FONT);
                 addText("RIGHT CLICK: pickup/drop", TEXT_FONT);
                 addText("LEFT CLICK: shoot", TEXT_FONT);
                 addText("W-A-S-D: move", TEXT_FONT);
-                addText("CONTROLS:", ButtonC.BUTTON_FONT);
+                addText("CONTROLS:", ButtonUI.BUTTON_FONT);
                 break;
 
             case QUIT:
-                addButton("NO", ButtonC.ButtonType.BACK);
-                addButton("YES", ButtonC.ButtonType.QUIT);
-                addText("Quit?", ButtonC.BUTTON_FONT);
+                addButton("NO", ButtonUI.ButtonType.BACK);
+                addButton("YES", ButtonUI.ButtonType.QUIT);
+                addText("Quit?", ButtonUI.BUTTON_FONT);
                 break;
 
             case CREDITS:
-                addButton("BACK", ButtonC.ButtonType.BACK);
+                addButton("BACK", ButtonUI.ButtonType.BACK);
                 addLineBreak();
                 addText("Illegal Sources", TEXT_FONT);
-                addText("MUSIC BY", ButtonC.BUTTON_FONT);
+                addText("MUSIC BY", ButtonUI.BUTTON_FONT);
                 addLineBreak();
                 addText("Wyatt Ades", TEXT_FONT);
-                addText("ART BY", ButtonC.BUTTON_FONT);
+                addText("ART BY", ButtonUI.BUTTON_FONT);
                 addLineBreak();
                 addText("Wyatt Ades", TEXT_FONT);
-                addText("CODING BY", ButtonC.BUTTON_FONT);
+                addText("CODING BY", ButtonUI.BUTTON_FONT);
                 break;
 
             case OPTIONS:
-                addButton("BACK", ButtonC.ButtonType.BACK);
+                addButton("BACK", ButtonUI.ButtonType.BACK);
 
                 addSlider("Fix Bugs", "fix_bugs", new String[]{"Off", "On"});
                 addSlider("Cave Mode", "cave_mode", new String[]{"Off", "On"});
@@ -135,21 +135,21 @@ public abstract class MenuState extends GameState {
     }
 
     protected void addText(String line, Font font) {
-        strings.add(new TextDisplay(line, RIGHT_ALIGN_X, drawY, font));
+        strings.add(new TextUI(line, RIGHT_ALIGN_X, drawY, font));
         addLineBreak();
     }
 
-    protected void addButton(String name, ButtonC.ButtonType value) {
-        buttons.add(new ButtonC(name, RIGHT_ALIGN_X, drawY, ButtonC.BUTTON_FONT, value));
+    protected void addButton(String name, ButtonUI.ButtonType value) {
+        buttons.add(new ButtonUI(name, RIGHT_ALIGN_X, drawY, ButtonUI.BUTTON_FONT, value));
         addLineBreak();
     }
 
     protected void addSlider(String text, String name, String[] options) {
-        sliders.add(new Slider(RIGHT_ALIGN_X, drawY - DISPLAY_DIST, text, name, options, OutputManager.getSetting(name)));
+        sliders.add(new SliderUI(RIGHT_ALIGN_X, drawY - DISPLAY_DIST, text, name, options, OutputManager.getSetting(name)));
         addLineBreak();
     }
 
-    protected void buttonOutcome(ButtonC.ButtonType value) {
+    protected void buttonOutcome(ButtonUI.ButtonType value) {
         switch (value) {
             case OPTIONS:
                 setPage(CurrentPage.OPTIONS);
@@ -198,23 +198,23 @@ public abstract class MenuState extends GameState {
     }
 
     public void draw(Graphics2D g) {
-        for (Slider s : sliders) {
+        for (SliderUI s : sliders) {
             s.draw(g);
         }
-        for (TextDisplay t : strings) {
+        for (TextUI t : strings) {
             t.draw(g);
         }
-        for (ButtonC b : buttons) {
+        for (ButtonUI b : buttons) {
             if (b.mouseOver(gsm.cursor.x, gsm.cursor.y)) {
                 b.setColor(buttonOver);
             } else {
-                b.setColor(ButtonC.COLOR_DEFAULT);
+                b.setColor(ButtonUI.COLOR_DEFAULT);
             }
             b.draw(g);
         }
     }
 
-    private Slider currentSlider = null;
+    private SliderUI currentSlider = null;
 
     public void inputHandle(MyInputEvent event) {
 
@@ -231,7 +231,7 @@ public abstract class MenuState extends GameState {
             case MyInputEvent.MOUSE_DOWN:
 
                 if (event.code == MouseEvent.BUTTON1) {
-                    for (ButtonC b : buttons) {
+                    for (ButtonUI b : buttons) {
                         if (b.mouseOver) {
                             buttonOutcome(b.type);
                             break;
@@ -239,7 +239,7 @@ public abstract class MenuState extends GameState {
                     }
 
                     if (currentSlider == null) {
-                        for (Slider s : sliders) {
+                        for (SliderUI s : sliders) {
                             if (s.overBox(gsm.cursor.x, gsm.cursor.y)) {
                                 s.pressed = true;
                                 s.setDragPos(gsm.cursor.x);

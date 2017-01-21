@@ -2,7 +2,7 @@ package GameState;
 
 import Main.OutputManager;
 import Main.Window;
-import UI.ButtonC;
+import UI.ButtonUI;
 
 import java.awt.*;
 
@@ -15,17 +15,17 @@ public class NextLevelState extends MenuState {
     private boolean win;
 
     public NextLevelState(GameStateManager _gsm) {
-        super(_gsm, Window.HEIGHT - ButtonC.BUTTON_HEIGHT);
+        super(_gsm, Window.HEIGHT - ButtonUI.BUTTON_HEIGHT);
     }
 
     public void load() {}
 
     protected void customMainInit() {
-        addButton("MAIN MENU", ButtonC.ButtonType.MAINMENU);
+        addButton("MAIN MENU", ButtonUI.ButtonType.MAINMENU);
 
         int level = OutputManager.getSetting("level");
         if (level < PlayState.MAXLEVEL) {
-            addButton("NEXT LEVEL", ButtonC.ButtonType.NEXTLEVEL);
+            addButton("NEXT LEVEL", ButtonUI.ButtonType.NEXTLEVEL);
             OutputManager.setSetting("level", level + 1);
         } else {
             win = true;
@@ -40,7 +40,7 @@ public class NextLevelState extends MenuState {
 
         if (win) {
             String text = "YOU WIN! (work in progress btw)";
-            g.setColor(ButtonC.COLOR_OVER);
+            g.setColor(ButtonUI.COLOR_OVER);
             g.drawString(
                     text,
                     (int)(Main.Window.WIDTH * 0.5 - g.getFontMetrics().getStringBounds(text, g).getWidth() * 0.5),

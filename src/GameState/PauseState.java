@@ -1,6 +1,6 @@
 package GameState;
 
-import UI.ButtonC;
+import UI.ButtonUI;
 import UI.MouseCursor;
 import Util.MyInputEvent;
 
@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 public class PauseState extends MenuState {
 
     public PauseState(GameStateManager _gsm) {
-        super(_gsm, Window.HEIGHT - 2 * ButtonC.BUTTON_HEIGHT);
+        super(_gsm, _gsm.window.HEIGHT - 2 * ButtonUI.BUTTON_HEIGHT);
     }
 
     public void load() {}
@@ -25,8 +25,8 @@ public class PauseState extends MenuState {
     }
 
     protected void customMainInit() {
-        addButton("MAIN MENU", ButtonC.ButtonType.MAINMENU);
-        addButton("RESUME", ButtonC.ButtonType.RESUME);
+        addButton("MAIN MENU", ButtonUI.ButtonType.MAINMENU);
+        addButton("RESUME", ButtonUI.ButtonType.RESUME);
     }
 
     public void unload() {

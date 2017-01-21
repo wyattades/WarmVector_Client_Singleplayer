@@ -5,7 +5,6 @@ import Entities.Player.Player;
 import Entities.Player.ThisPlayer;
 import GameState.GameStateManager;
 import Main.Game;
-import Main.OutputManager;
 import UI.Map;
 import UI.Sprite;
 import Util.MyMath;

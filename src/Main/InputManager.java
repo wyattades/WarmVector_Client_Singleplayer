@@ -1,12 +1,10 @@
 package Main;
 
-import GameState.GameStateManager;
 import Util.MyInputEvent;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 

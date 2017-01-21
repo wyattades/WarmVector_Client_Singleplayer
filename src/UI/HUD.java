@@ -73,8 +73,8 @@ public class HUD {
         if (user.state) {
             drawHud(g);
         } else {
-            g.setColor(ButtonC.COLOR_DEFAULT);
-            g.setFont(ButtonC.BUTTON_FONT);
+            g.setColor(ButtonUI.COLOR_DEFAULT);
+            g.setFont(ButtonUI.BUTTON_FONT);
             g.drawString("PRESS SPACE", 26, Window.HEIGHT - 92);
             g.drawString("TO RESTART", 26, Window.HEIGHT - 28);
         }

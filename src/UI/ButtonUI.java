@@ -6,13 +6,13 @@ import java.awt.*;
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by Wyatt on 3/7/2015.
  */
-public class ButtonC extends TextDisplay {
+public class ButtonUI extends TextUI {
 
     public static final Color
             COLOR_DEFAULT = new Color(180, 180, 180, 220),
             COLOR_OVER = new Color(249, 249, 249);
     public static final int BUTTON_HEIGHT = (int) (50.0 * Main.Window.SCALE);
-    public static final Font BUTTON_FONT = new Font(Font.MONOSPACED, Font.BOLD, (int)(BUTTON_HEIGHT * 1.3));
+    public static final Font BUTTON_FONT = new Font("Dotum Bold", Font.BOLD, (int)(BUTTON_HEIGHT * 1.3));
 
     public boolean mouseOver;
 
@@ -32,7 +32,7 @@ public class ButtonC extends TextDisplay {
     }
     public final ButtonType type;
 
-    public ButtonC(String _text, double _x, double _y, Font _font, ButtonType _type) {
+    public ButtonUI(String _text, double _x, double _y, Font _font, ButtonType _type) {
         super(_text, _x, _y, _font);
 
         type = _type;

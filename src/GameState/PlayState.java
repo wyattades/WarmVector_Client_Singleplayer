@@ -199,6 +199,7 @@ public class PlayState extends GameState {
                 } else if (event.code == keyMap.get("DOWN")) {
                     entityManager.thisPlayer.down = true;
                 } else if (event.code == keyMap.get("PAUSE")) {
+                    System.out.println("Paused game.");
                     gsm.setState(GameStateManager.PAUSE, GameStateManager.TOP);
                 } else if (event.code == keyMap.get("RESTART")) {
                     if (!entityManager.thisPlayer.state) {

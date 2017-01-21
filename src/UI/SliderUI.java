@@ -9,7 +9,7 @@ import java.awt.*;
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
  * Created by wyatt on 8/18/2015.
  */
-public class Slider {
+public class SliderUI {
 
     private int x, y, w, slider_x;
     public int current_option;
@@ -25,7 +25,7 @@ public class Slider {
     public int dragPos;
     public String name;
 
-    public Slider(int x, int y, String text, String name, String[] options, int current_option) {
+    public SliderUI(int x, int y, String text, String name, String[] options, int current_option) {
         this.x = x;
         this.y = y;
         this.text = text;
@@ -44,18 +44,18 @@ public class Slider {
     public void draw(Graphics2D g) {
 
         //Slider line
-        g.setColor(ButtonC.COLOR_DEFAULT);
+        g.setColor(ButtonUI.COLOR_DEFAULT);
         g.setStroke(new BasicStroke(4));
         g.drawLine(x - w, y, x, y);
 
         //Actual slider
-        if (pressed) g.setColor(ButtonC.COLOR_OVER);
+        if (pressed) g.setColor(ButtonUI.COLOR_OVER);
         else g.setColor(COLOR_SELECTED);
         g.fillRect(slider_x - (int)(size * 0.5), y - (int)(size * 0.5), size, size);
 
         //Text
         g.setFont(textFont);
-        g.setColor(ButtonC.COLOR_DEFAULT);
+        g.setColor(ButtonUI.COLOR_DEFAULT);
         g.drawString(text, (int) (x - w - size - g.getFontMetrics().getStringBounds(text, g).getWidth()), y + 6);
 
         //Options

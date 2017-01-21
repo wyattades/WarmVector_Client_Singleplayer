@@ -1,7 +1,6 @@
 package UI;
 
 import GameState.GameStateManager;
-import Main.OutputManager;
 import Main.Window;
 
 import java.awt.*;

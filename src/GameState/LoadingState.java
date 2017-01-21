@@ -1,7 +1,7 @@
 package GameState;
 
 import Main.Window;
-import UI.ButtonC;
+import UI.ButtonUI;
 import Util.MyInputEvent;
 
 import java.awt.*;
@@ -33,7 +33,7 @@ public class LoadingState extends GameState {
 
     public void draw(Graphics2D g) {
         g.setColor(Color.white);
-        g.setFont(ButtonC.BUTTON_FONT);
+        g.setFont(ButtonUI.BUTTON_FONT);
         g.drawString("Loading" + dots[index], OFFSET, Window.HEIGHT - OFFSET);
         g.setColor(Color.black);
         g.drawRect(0, 0, Window.WIDTH, Window.HEIGHT);
