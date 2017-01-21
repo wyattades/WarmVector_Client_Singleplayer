@@ -33,7 +33,7 @@ public class InteractiveWave {
         color = _color;
         mousePressed = false;
 
-        barH = Window.HEIGHT / (AMOUNT - 2);
+        barH = (int) Math.ceil(Window.HEIGHT * 1.0 / (AMOUNT - 2));
 
         barsX = new int[AMOUNT + 2];
         barsX[AMOUNT] = Window.WIDTH;

@@ -5,6 +5,10 @@ import Util.MyInputEvent;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -12,38 +16,53 @@ import java.awt.event.*;
  */
 class InputManager implements MouseListener, KeyListener, MouseMotionListener {
 
-    private GameStateManager gsm;
+    private BlockingQueue<MyInputEvent> eventQueue;
+    private static final int QUEUE_SIZE = 16;
 
-    InputManager(Canvas canvas, GameStateManager _gsm) {
+    InputManager(Canvas canvas) {
         canvas.addMouseListener(this);
         canvas.addKeyListener(this);
         canvas.addMouseMotionListener(this);
 
-        gsm = _gsm;
+        eventQueue = new ArrayBlockingQueue<>(QUEUE_SIZE);
+    }
+    
+    ArrayList<MyInputEvent> getEvents() {
+        ArrayList<MyInputEvent> events = new ArrayList<>();
+        eventQueue.drainTo(events);
+        return events;
+    }
+
+    private void newEvent(MyInputEvent e) {
+        try {
+           eventQueue.add(e);
+        } catch(Exception exception) {
+            System.err.println("BlockingQueue Exception: queue has overflowed");
+        }
     }
 
     public void mouseMoved(MouseEvent e) {
-        gsm.inputHandle(new MyInputEvent(MyInputEvent.MOUSE_MOVE, e.getX(), e.getY()));
+        newEvent(new MyInputEvent(MyInputEvent.MOUSE_MOVE, e.getX(), e.getY()));
     }
 
-    public void mousePressed(MouseEvent e) {
-        gsm.inputHandle(new MyInputEvent(MyInputEvent.MOUSE_DOWN, e.getButton()));
+    public synchronized void mousePressed(MouseEvent e) {
+        newEvent(new MyInputEvent(MyInputEvent.MOUSE_DOWN, e.getButton()));
     }
 
-    public void mouseReleased(MouseEvent e) {
-        gsm.inputHandle(new MyInputEvent(MyInputEvent.MOUSE_UP, e.getButton()));
+    public synchronized void mouseReleased(MouseEvent e) {
+        newEvent(new MyInputEvent(MyInputEvent.MOUSE_UP, e.getButton()));
     }
 
-    public void keyPressed(KeyEvent e) {
-        gsm.inputHandle(new MyInputEvent(MyInputEvent.KEY_DOWN, e.getKeyCode()));
+    public synchronized void keyPressed(KeyEvent e) {
+        newEvent(new MyInputEvent(MyInputEvent.KEY_DOWN, e.getKeyCode()));
     }
 
-    public void keyReleased(KeyEvent e) {
-        gsm.inputHandle(new MyInputEvent(MyInputEvent.KEY_UP, e.getKeyCode()));
+    public synchronized void keyReleased(KeyEvent e) {
+        newEvent(new MyInputEvent(MyInputEvent.KEY_UP, e.getKeyCode()));
     }
 
-    public void mouseDragged(MouseEvent e) {
-        gsm.inputHandle(new MyInputEvent(MyInputEvent.MOUSE_MOVE, e.getX(), e.getY()));
+    public synchronized void mouseDragged(MouseEvent e) {
+        newEvent(new MyInputEvent(MyInputEvent.MOUSE_MOVE, e.getX(), e.getY()));
     }
 
     public void keyTyped(KeyEvent e) {}

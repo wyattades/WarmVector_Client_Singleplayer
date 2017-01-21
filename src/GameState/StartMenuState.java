@@ -83,8 +83,8 @@ public class StartMenuState extends MenuState {
         if (beginButtonHover) {
             g.setColor(buttonOver);
             g.setFont(FONT_SUBLOGO);
-            g.drawString("ARM", drawX + (int) (72.0 * Window.SCALE), LOGO_HEIGHT + temp_fix);
-            g.drawString("ECTOR", drawX + (int) (30.0 * Window.SCALE), 2 * LOGO_HEIGHT + temp_fix);
+            g.drawString("ARM", drawX + (int) (76.0 * Window.SCALE), LOGO_HEIGHT + temp_fix);
+            g.drawString("ECTOR", drawX + (int) (33.0 * Window.SCALE), 2 * LOGO_HEIGHT + temp_fix);
         } else {
             g.setColor(ButtonC.COLOR_DEFAULT);
         }
@@ -113,7 +113,8 @@ public class StartMenuState extends MenuState {
         if (event.type == MyInputEvent.MOUSE_DOWN && event.code == MouseEvent.BUTTON1) {
             interactiveWave.reactClick();
         } else if (event.type == MyInputEvent.KEY_DOWN && event.code == KeyEvent.VK_ESCAPE) {
-           if (currentPage == CurrentPage.MAIN) gsm.quit();
+           if (currentPage == CurrentPage.MAIN) setPage(CurrentPage.QUIT);
+           else if (currentPage == CurrentPage.QUIT) setPage(CurrentPage.MAIN);
         }
     }
 

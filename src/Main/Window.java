@@ -2,6 +2,7 @@ package Main;
 
 import GameState.GameStateManager;
 import Util.ImageUtils;
+import com.sun.deploy.util.SystemUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,16 +32,25 @@ public class Window {
 
     public Window(WindowAdapter _exitOperation) {
 
+        String OS = System.getProperty("os.name");
+
         // Dimensions
-        WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-        HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-//        WIDTH = 1280;
-//        HEIGHT = 780;
+        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice device = env.getDefaultScreenDevice();
+        if (!device.isFullScreenSupported() || OS.equals("Linux")) {
+            Rectangle winSize = env.getMaximumWindowBounds();
+            WIDTH = winSize.width;
+            HEIGHT = winSize.height;
+        } else {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            WIDTH = (int) screenSize.getWidth();
+            HEIGHT = (int) screenSize.getHeight();
+        }
+
         SCALE = HEIGHT / 1080.0;
 
         // JFrame
-        frame = new JFrame();
-        frame.setTitle("WarmVector");
+        frame = new JFrame("WarmVector");
         frame.addWindowListener(_exitOperation);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setSize(WIDTH, HEIGHT);
@@ -48,6 +58,15 @@ public class Window {
         frame.setResizable(false);
         frame.setUndecorated(true);
         frame.setVisible(true);
+
+        // Fullscreen
+        if (device.isFullScreenSupported() && !OS.equals("Linux")) {
+            try {
+                device.setFullScreenWindow(frame);
+            } finally {
+                device.setFullScreenWindow(null);
+            }
+        }
 
         //Set default mouse cursor to transparent
         Cursor transparentCursor = Toolkit.getDefaultToolkit().createCustomCursor(
@@ -94,11 +113,9 @@ public class Window {
             Toolkit.getDefaultToolkit().sync();
             return (!strategy.contentsLost());
 
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IllegalStateException e) {
             return true;
 
-        } catch (IllegalStateException e) {
-            return true;
         }
     }
 

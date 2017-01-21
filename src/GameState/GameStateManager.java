@@ -6,6 +6,7 @@ import UI.MouseCursor;
 import Util.MyInputEvent;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Directory: WarmVector_Client_Singleplayer/${PACKAGE_NAME}/
@@ -41,7 +42,8 @@ public class GameStateManager {
 
     public boolean running;
 
-    public GameStateManager(AssetManager _assetManager, AudioManager _audioManager, GraphicsManager _graphicsManager, Window _window) {
+    public GameStateManager(AssetManager _assetManager, AudioManager _audioManager,
+                            GraphicsManager _graphicsManager, Window _window) {
         assetManager = _assetManager;
         audioManager = _audioManager;
         graphicsManager = _graphicsManager;
@@ -112,14 +114,16 @@ public class GameStateManager {
     }
 
 
-    public synchronized void inputHandle(MyInputEvent event) {
-        if (layers[LOADING] == null) {
-            if (layers[TOP] != null) {
-                layers[TOP].inputHandle(event);
-            } else if (layers[MAIN] != null) {
-                layers[MAIN].inputHandle(event);
-            } else {
-                System.out.println("Warning: All layers are null during inputHandle()");
+    public void inputHandle(ArrayList<MyInputEvent> events) {
+        for (MyInputEvent event : events) {
+            if (layers[LOADING] == null) {
+                if (layers[TOP] != null) {
+                    layers[TOP].inputHandle(event);
+                } else if (layers[MAIN] != null) {
+                    layers[MAIN].inputHandle(event);
+                } else {
+                    System.out.println("Warning: All layers are null during inputHandle()");
+                }
             }
         }
     }

@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 public class PauseState extends MenuState {
 
     public PauseState(GameStateManager _gsm) {
-        super(_gsm, Main.Window.HEIGHT - 2 * ButtonC.BUTTON_HEIGHT);
+        super(_gsm, Window.HEIGHT - 2 * ButtonC.BUTTON_HEIGHT);
     }
 
     public void load() {}

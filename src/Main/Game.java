@@ -17,6 +17,7 @@ public class Game {
     private GraphicsManager graphicsManager;
     private AudioManager audioManager;
     private Window window;
+    private InputManager inputManager;
 
     private GameStateManager gsm;
 
@@ -35,11 +36,12 @@ public class Game {
             }
         });
 
+        //Create a manager for handling key and mouse inputs
+        inputManager = new InputManager(window.canvas);
+
         //Create a manager for handling the different game states e.g. intro, play, gameOver
         gsm = new GameStateManager(assetManager, audioManager, graphicsManager, window);
 
-        //Create a manager for handling key and mouse inputs
-        new InputManager(window.canvas, gsm);
     }
 
     public void run() {
@@ -57,6 +59,9 @@ public class Game {
             //UPDATE
             if (lag >= MS_PER_UPDATE) {
                 gsm.update(elapsed);
+
+                gsm.inputHandle(inputManager.getEvents());
+
                 lag -= MS_PER_UPDATE;
             }
 

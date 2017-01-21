@@ -36,7 +36,8 @@ public abstract class MenuState extends GameState {
         MAIN,
         HELP,
         CREDITS,
-        OPTIONS
+        OPTIONS,
+        QUIT
     }
     protected CurrentPage currentPage;
 
@@ -64,7 +65,7 @@ public abstract class MenuState extends GameState {
 
     protected abstract void customMainInit();
 
-    private void setPage(CurrentPage page) {
+    protected void setPage(CurrentPage page) {
 
         currentPage = page;
 
@@ -76,7 +77,7 @@ public abstract class MenuState extends GameState {
 
         switch (page) {
             case MAIN:
-                addButton("QUIT", ButtonC.ButtonType.QUIT);
+                addButton("QUIT", ButtonC.ButtonType.QUIT_CONFIRM);
                 addButton("HELP", ButtonC.ButtonType.HELP);
                 addButton("CREDITS", ButtonC.ButtonType.CREDITS);
                 addButton("OPTIONS", ButtonC.ButtonType.OPTIONS);
@@ -96,6 +97,12 @@ public abstract class MenuState extends GameState {
                 addText("LEFT CLICK: shoot", TEXT_FONT);
                 addText("W-A-S-D: move", TEXT_FONT);
                 addText("CONTROLS:", ButtonC.BUTTON_FONT);
+                break;
+
+            case QUIT:
+                addButton("NO", ButtonC.ButtonType.BACK);
+                addButton("YES", ButtonC.ButtonType.QUIT);
+                addText("Quit?", ButtonC.BUTTON_FONT);
                 break;
 
             case CREDITS:
@@ -155,6 +162,9 @@ public abstract class MenuState extends GameState {
                 break;
             case CONTINUE:
                 gsm.setState(GameStateManager.FADEOUT, GameStateManager.TOP);
+                break;
+            case QUIT_CONFIRM:
+                setPage(CurrentPage.QUIT);
                 break;
             case QUIT:
                 gsm.quit();

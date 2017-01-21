@@ -61,16 +61,17 @@ public class AudioManager implements Runnable {
 
             stopBackground();
             backgroundPlayer = Executors.newSingleThreadExecutor();
-            backgroundPlayer.execute(new Thread() {
-                @Override
-                public void run() {
-                    mediaPlayer = new MediaPlayer(source);
-                    // Set song to loop
-                    mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
-                    mediaPlayer.setVolume(musicVolume);
-                    mediaPlayer.play();
-                }
-            });
+            backgroundPlayer.execute(new Thread(() -> {
+
+                mediaPlayer = new MediaPlayer(source);
+
+                // Set song to loop
+                mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
+
+                mediaPlayer.setVolume(musicVolume);
+
+                mediaPlayer.play();
+            }));
         }
     }
 
