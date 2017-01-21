@@ -21,10 +21,10 @@ public class InteractiveWave {
     private static final int
             AMOUNT = 32;
     private static final double
-            tension = 0.007,
-            damp = 0.015,
+            tension = 0.008,
+            damp = 0.019,
             spread = 0.1,
-            splash = 200.0;
+            splash = 120.0;
 
 
     public InteractiveWave(int _rightOffset, Color _color) {
