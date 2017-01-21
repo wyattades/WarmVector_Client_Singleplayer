@@ -103,7 +103,7 @@ public abstract class Player extends Entity implements Hittable {
 //        else if (vy < -topSpeed) vy = -topSpeed;
     }
 
-    public void updatePosition() {
+    public void updatePosition(double deltaTime) {
 
         // Limit total speed to diagSpeed
         if (Math.abs(vx) > diagSpeed && Math.abs(vy) > diagSpeed) {
@@ -115,7 +115,7 @@ public abstract class Player extends Entity implements Hittable {
 
         // If there is no obstacle horizontally
         if (vx != 0.0 && !obstacleX(vx)) {
-            x += vx;
+            x += vx * deltaTime;
         } else {
             // Restrict horizontal movement
             vx = 0;
@@ -123,7 +123,7 @@ public abstract class Player extends Entity implements Hittable {
 
         // If there is no obstacle vertically
         if (vy != 0.0 && !obstacleY(vy)) {
-            y += vy;
+            y += vy * deltaTime;
         } else {
             // Restrict vertical movement
             vy = 0.0;
@@ -211,9 +211,9 @@ public abstract class Player extends Entity implements Hittable {
 
     public int stepTime = Game.currentTimeMillis();
 
-    public void update() {
+    public void update(double deltaTime) {
         updateSpecific();
-        updatePosition();
+        updatePosition(deltaTime);
         updateCollideBox();
     }
 

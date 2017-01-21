@@ -58,7 +58,7 @@ public class Game {
 
             //UPDATE
             if (lag >= MS_PER_UPDATE) {
-                gsm.update(elapsed);
+                gsm.update(elapsed / MS_PER_UPDATE);
 
                 gsm.inputHandle(inputManager.getEvents());
 

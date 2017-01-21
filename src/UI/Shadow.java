@@ -1,11 +1,13 @@
 package UI;
 
+import Main.Window;
 import Util.MyMath;
 import Util.Point;
 
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +19,11 @@ import java.util.List;
 public class Shadow {
 
     // Color of shadow
-    private static final Color shadowFill = new Color(20,20,20);
+    private static final Color shadowFill = new Color(20, 20, 20);
+
+    // Draw region
+    private static final double DRAW_DIST = Window.WIDTH * 1.5;
+    private Rectangle2D drawRegion;
 
     // These represent the map and the light location:
     private List<Segment> segments;
@@ -30,7 +36,7 @@ public class Shadow {
     private List<Segment> open;
 
     // The output is a series of points that forms a visible area polygon
-    public List<Util.Point> output;
+    public List<Point> output;
 
     private Map map;
 
@@ -42,16 +48,22 @@ public class Shadow {
         output = new ArrayList<>();
         center = new Point(0, 0);
 
+        drawRegion = new Rectangle2D.Double();
+
         updateSegments = updateOrigin = true;
         update(_x, _y);
     }
 
     public void update(double x, double y) {
-        if (updateSegments) {
-            updateSegments();
+        if (updateOrigin) {
+            drawRegion.setRect(x - DRAW_DIST * 0.5, y - DRAW_DIST * 0.5, DRAW_DIST, DRAW_DIST);
         }
 
+//        if (updateSegments) {
+//        }
+
         if (updateSegments || updateOrigin) {
+            updateSegments();
             setLightLocation(x, y);
             sweep(0.0, MyMath.TWO_PI);
         }
@@ -65,7 +77,8 @@ public class Shadow {
         endpoints = new ArrayList<>();
 
         for (Line2D w : map.walls) {
-            addSegment(w.getX1() , w.getY1(), w.getX2(), w.getY2());
+            if (drawRegion.contains(w.getP1()) || drawRegion.contains(w.getP2()))
+                addSegment(w.getX1() , w.getY1(), w.getX2(), w.getY2());
         }
     }
 
@@ -140,7 +153,7 @@ public class Shadow {
     }
 
     // A neat algorithm that works for reasons outside of my knowledge (I didn't write this)
-    private boolean _segment_in_front_of(Segment a, Segment b, Point relativeTo) {
+    private boolean segmentInFrontOf(Segment a, Segment b, Point relativeTo) {
 
         boolean A1 = leftOf(a, interpolate(b.p1, b.p2, 0.01));
         boolean A2 = leftOf(a, interpolate(b.p2, b.p1, 0.01));
@@ -156,11 +169,10 @@ public class Shadow {
         return false;
     }
 
-    //Part of above algorithm ^
+    // Interpolate from p to q with scale f
     private Point interpolate(Point p, Point q, double f) {
         return new Point(p.x * (1.0 - f) + q.x * f, p.y * (1.0 - f) + q.y * f);
     }
-
 
     // Run the algorithm, sweeping over all or part of the circle to find
     // the visible area, represented as a set of triangles
@@ -192,7 +204,7 @@ public class Shadow {
                 if (p.begin) {
                     // Insert into the right place in the list
                     Segment node = open.isEmpty() ? null : open.get(0);
-                    while (node != null && _segment_in_front_of(p.segment, node, center)) {
+                    while (node != null && segmentInFrontOf(p.segment, node, center)) {
                         node = open.size() == open.indexOf(node) + 1 ? null : open.get((open.indexOf(node) + 1));
                     }
                     if (node == null) {
@@ -275,6 +287,7 @@ public class Shadow {
     private class Segment {
         public EndPoint p1, p2;
         public double d;
+        public boolean draw;
 
         public Segment(EndPoint p1, EndPoint p2) {
             this.p1 = p1;

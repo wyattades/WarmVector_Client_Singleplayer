@@ -48,14 +48,14 @@ public class EntityManager {
         }
     }
 
-    public void update() {
+    public void update(double deltaTime) {
 
         // Loop through player array
         for (int i = players.size() - 1; i >= 0; i--) {
             Player p = players.get(i);
 
             // Generic player update
-            p.update();
+            p.update(deltaTime);
             // Add projectile if player is shooting
             if (p.shooting && p.weapon != null && p.weapon.ammo > 0 &&
                     Game.currentTimeMillis() - p.shootTime > p.weapon.rate) {
@@ -110,7 +110,7 @@ public class EntityManager {
         for (int i = projectiles.size() - 1; i >= 0; i--) {
             Projectile p = projectiles.get(i);
 
-            p.move();
+            p.move(deltaTime);
             p.updateCollideBox();
 
             if (!p.state) {

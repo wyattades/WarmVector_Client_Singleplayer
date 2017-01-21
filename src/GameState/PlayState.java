@@ -138,7 +138,7 @@ public class PlayState extends GameState {
 
     public void update(double deltaTime) {
 
-        entityManager.update();
+        entityManager.update(deltaTime);
 
         // TODO: should add animations in entityManager
         List<Sprite> hitAnimations = entityManager.getHitAnimations();

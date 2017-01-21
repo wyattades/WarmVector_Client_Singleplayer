@@ -17,25 +17,19 @@ import java.awt.image.MemoryImageSource;
 
 public class Window {
 
-    public static int WIDTH;
-    public static int HEIGHT;
-    public static double SCALE;
+    private static GraphicsDevice device;
+    private static String OS;
 
-    Canvas canvas;
-
-    private BufferStrategy strategy;
-    private BufferedImage background;
-    private Graphics2D backgroundGraphics, graphics;
-    private JFrame frame;
-
-
-    public Window(WindowAdapter _exitOperation) {
-
-        String OS = System.getProperty("os.name");
+    // Dimensions
+    public static final int WIDTH;
+    public static final int HEIGHT;
+    public static final double SCALE;
+    static {
+        OS = System.getProperty("os.name");
 
         // Dimensions
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice device = env.getDefaultScreenDevice();
+        device = env.getDefaultScreenDevice();
         if (!device.isFullScreenSupported() || OS.equals("Linux")) {
             Rectangle winSize = env.getMaximumWindowBounds();
             WIDTH = winSize.width;
@@ -47,6 +41,17 @@ public class Window {
         }
 
         SCALE = HEIGHT / 1080.0;
+    }
+
+    Canvas canvas;
+
+    private BufferStrategy strategy;
+    private BufferedImage background;
+    private Graphics2D backgroundGraphics, graphics;
+    private JFrame frame;
+
+    public Window(WindowAdapter _exitOperation) {
+
 
         // JFrame
         frame = new JFrame("WarmVector");

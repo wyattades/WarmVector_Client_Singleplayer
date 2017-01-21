@@ -47,7 +47,7 @@ public class Projectile extends Entity {
 
     }
 
-    public void move() {
+    public void move(double deltaTime) {
         if (accel != 0) {
             vx += dirX * accel;
             vy += dirY * accel;
@@ -56,8 +56,8 @@ public class Projectile extends Entity {
         lastX = x;
         lastY = y;
 
-        x += vx;
-        y += vy;
+        x += vx * deltaTime;
+        y += vy * deltaTime;
 
         updateCollideBox();
     }

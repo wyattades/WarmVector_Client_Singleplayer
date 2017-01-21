@@ -102,7 +102,7 @@ public abstract class MenuState extends GameState {
             case QUIT:
                 addButton("NO", ButtonUI.ButtonType.BACK);
                 addButton("YES", ButtonUI.ButtonType.QUIT);
-                addText("Quit?", ButtonUI.BUTTON_FONT);
+                addText("Really quit?", ButtonUI.BUTTON_FONT);
                 break;
 
             case CREDITS:

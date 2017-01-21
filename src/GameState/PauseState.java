@@ -1,5 +1,6 @@
 package GameState;
 
+import Main.Window;
 import UI.ButtonUI;
 import UI.MouseCursor;
 import Util.MyInputEvent;
@@ -14,7 +15,7 @@ import java.awt.event.KeyEvent;
 public class PauseState extends MenuState {
 
     public PauseState(GameStateManager _gsm) {
-        super(_gsm, _gsm.window.HEIGHT - 2 * ButtonUI.BUTTON_HEIGHT);
+        super(_gsm, Window.HEIGHT - 2 * ButtonUI.BUTTON_HEIGHT);
     }
 
     public void load() {}
