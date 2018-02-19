@@ -190,10 +190,6 @@ public abstract class MenuState extends GameState {
                 gsm.unloadState(GameStateManager.TOP);
                 gsm.cursor.setSprite(MouseCursor.CURSOR);
                 break;
-            default:
-                System.err.println("Invalid button value: " + value);
-                System.exit(1);
-                break;
         }
     }
 
