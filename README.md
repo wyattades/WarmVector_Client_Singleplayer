@@ -5,12 +5,12 @@ WarmVector was created with my 2D Java game engine, which mainly served as a lea
 ![](https://i.imgur.com/nGcNT4U.gif)  
 
 ## Download and Run
-- [Java Binary](https://drive.google.com/open?id=0BxT-nCrEKjxEWHV3bDJpQkh2b2s) - Unzip and double-click included .jar file (you will need Java 8 runtime)
+- [Java Binary](https://github.com/wyattades/WarmVector_Client_Singleplayer/releases/download/v1.0/WarmVector.zip) - Unzip and double-click the `WarmVector.jar` file (you will need Java 8 runtime)
 
 ## Known Bugs
 - background music is never unloaded
 - deltaTime should be used to ensure consistent game updates
-- Introduction of OpenGL causes very noticeable screen-tearing
+- OpenGL has very noticeable screen-tearing
 - SFX are played back with slight delay, and sometimes not at all
 
 ## Planned Features
