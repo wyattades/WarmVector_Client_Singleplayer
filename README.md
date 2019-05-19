@@ -5,7 +5,7 @@ WarmVector was created with my 2D Java game engine, which mainly served as a lea
 ![](https://i.imgur.com/nGcNT4U.gif)  
 
 ## Download and Run
-- [Java Binary](https://github.com/wyattades/WarmVector_Client_Singleplayer/releases/download/v1.0/WarmVector.zip) - Unzip and double-click the `WarmVector.jar` file (you will need Java 8 runtime)
+- [Java Binary](https://github.com/wyattades/WarmVector_Client_Singleplayer/releases/latest) - Unzip and double-click the `WarmVector.jar` file (you will need Java 8 runtime installed)
 
 ## Known Bugs
 - background music is never unloaded
