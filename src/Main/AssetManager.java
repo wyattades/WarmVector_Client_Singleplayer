@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +29,7 @@ public class AssetManager {
 
     private ExecutorService executor;
 
-    public AssetManager() {
+    AssetManager() {
         assets = new ConcurrentHashMap<>();
     }
 
@@ -78,8 +80,7 @@ public class AssetManager {
             System.exit(1);
         }
         if (asset == null) {
-            System.err.println("Error: asset " + name + " has not been loaded.");
-            System.exit(1);
+            OutputManager.fatalAlert("Error: asset " + name + " has not been loaded.");
         }
         return asset;
     }
@@ -109,62 +110,86 @@ public class AssetManager {
         }
     }
 
+    private static URI ABS_PATH = null;
+    static {
+        try {
+            ABS_PATH = Main.DEBUG ?
+                    Paths.get("").toAbsolutePath().toUri() :
+                    AssetManager.class.getProtectionDomain()
+                            .getCodeSource().getLocation().toURI().resolve(".");
+        } catch(URISyntaxException e) {
+            OutputManager.fatalAlert("Error: Failed to locate class location");
+        }
+    }
+
+    private static File resolveFile(String relativePath) {
+
+        File file = new File(ABS_PATH.resolve(relativePath));
+
+        if (!file.exists())
+            OutputManager.fatalAlert("Error: Failed to locate resource: " + relativePath);
+
+        return file;
+    }
 
     //TODO temp, should be private
     public static AudioClip loadShortAudio(String name) {
 
-        String path = "resources/Audio/" + name;
+        File file = resolveFile("resources/Audio/" + name);
 
-        return new AudioClip(Paths.get(path).toUri().toString());
+        try {
+            return new AudioClip(file.toURI().toString());
+        } catch(Exception e) {
+            e.printStackTrace();
+            OutputManager.fatalAlert("Error: Failed to load AudioClip: " + name);
+        }
+        return null;
     }
 
     private Media loadLongAudio(String name) {
 
-        String path = "resources/Audio/" + name;
+        File file = resolveFile("resources/Audio/" + name);
 
-        return new Media(Paths.get(path).toUri().toString());
+        try {
+            return new Media(file.toURI().toString());
+        } catch(Exception e) {
+            e.printStackTrace();
+            OutputManager.fatalAlert("Error: Failed to load Media: " + name);
+        }
+        return null;
     }
 
     private BufferedImage loadImage(String path) {
         BufferedImage image = null;
         try {
-            image = ImageIO.read(new File(path));
-//            return ImageIO.read(getClass().getResourceAsStream(name));
+            image = ImageIO.read(resolveFile(path));
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Error: failed to load image file: " + path);
-            System.exit(1);
+            OutputManager.fatalAlert("Error: failed to read image file: " + path);
         }
         if (image == null) {
-            System.err.println("Error: image path " + path + " is null");
-            System.exit(1);
+            OutputManager.fatalAlert("Error: image path " + path + " is null");
         }
         return ImageUtils.getCompatableVersion(image);
     }
 
     private BufferedImage[] loadAnimation(String path) {
         List<BufferedImage> frames = new ArrayList<>();
-        try {
-//            File folder = new File(getClass().getResource(path).toURI());
-            File folder = new File(path);
-            if (!folder.exists()) {
-                System.err.println("Error: could not locate animation directory: " + path);
-                System.exit(1);
+
+        File folder = resolveFile(path);
+        if (!folder.isDirectory()) {
+            OutputManager.fatalAlert("Error: path '" + path + "' is not a directory");
+        }
+
+        File[] files = folder.listFiles();
+        if (files == null) {
+            OutputManager.fatalAlert("Error: animation directory " + path + " is empty");
+        }
+
+        for (File file : files) {
+            if (file.isFile()) {
+                frames.add(loadImage(path + "/" + file.getName()));
             }
-            File[] files = folder.listFiles();
-            if (files == null) {
-                System.err.println("Error: animation directory " + path + " is empty");
-                System.exit(1);
-            }
-            for (File file : files) {
-                if (file.isFile()) {
-                    frames.add(loadImage(path + "/" + file.getName()));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error: failed to load animation files: " + path);
-            System.exit(1);
         }
         return frames.toArray(new BufferedImage[frames.size()]);
     }

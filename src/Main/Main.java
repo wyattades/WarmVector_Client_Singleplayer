@@ -6,6 +6,14 @@ package Main;
  */
 class Main {
 
+    public static boolean DEBUG = false;
+    static {
+        try {
+            String prop = System.getProperty("warmvector-debug");
+            if (prop != null && prop.equals("true")) DEBUG = true;
+        } catch (Exception e) {}
+    }
+
     public static void main(String[] args) {
 //        System.setProperty("sun.java2d.opengl","True");
         //-Dsun.java2d.accthreshold=0

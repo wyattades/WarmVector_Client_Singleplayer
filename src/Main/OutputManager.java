@@ -184,4 +184,11 @@ public class OutputManager {
 
     }
 
+    public static void fatalAlert(String msg) {
+        JOptionPane.showMessageDialog(null, msg,
+                "Error", JOptionPane.ERROR_MESSAGE);
+        
+        System.exit(1);
+    }
+
 }
