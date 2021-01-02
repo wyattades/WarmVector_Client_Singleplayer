@@ -2,6 +2,7 @@
 .idea/
 out/
 *.iml
+WarmVector_Client_Singleplayer.jar
 
 #################
 ## Eclipse
